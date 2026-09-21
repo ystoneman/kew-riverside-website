@@ -29,9 +29,11 @@ The GitHub connector used for preparation could write repository files, but coul
 - The live closure consultation pack could not be retrieved; the site does not assert unverified closure dates or deadlines.
 - The six ranked approaches are editorial priorities, not probabilities or demonstrated school-specific solutions.
 - Forecasts and pupil counts keep their dates and geographical definitions.
-- `sources.json` includes the source index, chart values and option rankings.
+- `sources.csv` is the visitor download: all 34 source records, with readable column headings, source URLs and coverage caveats. It uses UTF-8 with a BOM for Excel.
+- `sources.json` retains the structured source index, chart values and option rankings for maintenance.
 - `applications.csv` provides the borough application series.
-- `response-checklist.md` is a downloadable evidence checklist.
+- `response-checklist.pdf` is the visitor download: a two-page A4 checklist with selectable text, tick boxes and clickable links.
+- `response-checklist.md` is the editable source for the PDF.
 
 This collection is not exhaustive. Original documents remain with their publishers. It contains no private correspondence, family records or reproduced pupil photographs.
 
@@ -43,14 +45,16 @@ This collection is not exhaustive. Original documents remain with their publishe
 | styles.css | Responsive screen and print styles |
 | app.js | Search, filters, shareable filter URLs and anchor handling |
 | favicon.svg | Original code-drawn site mark |
-| sources.json | Machine-readable provenance and data |
+| sources.csv | Spreadsheet-friendly source index for visitors |
+| sources.json | Structured provenance and data for maintenance |
 | applications.csv | Chart values with source attribution |
-| response-checklist.md | Public evidence checklist |
+| response-checklist.pdf | Printable evidence checklist for visitors |
+| response-checklist.md | Editable checklist source |
 | .nojekyll | Disables Jekyll processing for branch-based Pages |
 
 ## Maintenance
 
-For a source addition or correction, retain a stable ID, publisher, document date (or explicitly unknown), URL, summary, location and collection coverage. Update both `sources.json` and the static cards in `index.html`. Update counts when coverage changes. Recheck the guidance edition and official notice before changing any process or deadline statement.
+For a source addition or correction, retain a stable ID, publisher, document date (or explicitly unknown), URL, summary, location and collection coverage. Update both `sources.json` and the static cards in `index.html`, then regenerate `sources.csv`. Regenerate `response-checklist.pdf` whenever `response-checklist.md` changes. Update counts when coverage changes. Recheck the guidance edition and official notice before changing any process or deadline statement.
 
 When updating charts, retain the complete data table and specify geography, measure, units and date. Do not silently turn a projection into an actual observation.
 
