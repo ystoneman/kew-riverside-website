@@ -12,21 +12,56 @@
     document.getElementById('reference-display').textContent = reference.value;
     document.getElementById('reference-note').hidden = false;
   }
+  const params = new URLSearchParams(location.search);
+  const fundingQuestions = {
+    'funding-needed': 'the funding needed and the recovery period',
+    'council-assessment': 'how the school and council would assess a funded plan',
+    'sustainability': 'making the school sustainable after initial funding',
+    'recipient': 'who could receive and manage contributions',
+    'outreach': 'reaching supporters beyond current parents',
+    'examples': 'lessons from comparable school rescue campaigns',
+    'appeal-terms': 'conditions and accountability for a future appeal',
+    'expertise': 'expertise that could help assess this option'
+  };
+  const questionId = params.get('question');
+  const fundingSubject = Object.prototype.hasOwnProperty.call(fundingQuestions, questionId)
+    ? fundingQuestions[questionId] : 'assessing whether community funding could work';
+  const fundingPrompt = 'Crowdfunding — ' + fundingSubject + '\n\nMy idea or relevant experience:\n\nSupporting public evidence, if available:\n';
+  const isPrivateKind = () => ['privacy', 'crowdfunding'].includes(kind.value);
   function updateKind() {
-    const privateOnly = kind.value === 'privacy';
+    const privateOnly = isPrivateKind();
+    const funding = kind.value === 'crowdfunding';
     if (privateOnly) permission.checked = false;
     permission.disabled = privateOnly;
     displayName.disabled = privateOnly;
-    document.querySelector('.submission-preview').hidden = privateOnly;
-    document.getElementById('privacy-only').hidden = !privateOnly;
+    document.getElementById('display-name-field').hidden = privateOnly;
+    document.getElementById('publication-choice').hidden = privateOnly;
+    document.getElementById('public-preview').hidden = privateOnly;
+    document.getElementById('funding-context').hidden = !funding;
+    document.getElementById('funding-subject').textContent = 'Crowdfunding — ' + fundingSubject + '.';
+    document.getElementById('feedback-title').textContent = funding ? 'Crowdfunding & funding ideas' : 'Website feedback';
+    const privateNote = document.getElementById('privacy-only');
+    privateNote.hidden = !privateOnly;
+    privateNote.textContent = funding
+      ? 'Funding ideas stay private for Yann to review. Add your email only if you would like a reply.'
+      : 'Privacy and removal requests always stay private.';
+    if (!button.disabled) button.textContent = funding ? 'Send private funding feedback' : 'Send feedback';
   }
-  const params = new URLSearchParams(location.search);
-  if (params.get('kind') === 'privacy') {
+  // Apply links only to a pristine form; restored or already-entered answers win.
+  const pristine = kind.value === 'suggestion' && !permission.checked &&
+    ![message, displayName, document.getElementById('source'), document.getElementById('email')].some(field => field.value);
+  if (pristine && params.get('kind') === 'crowdfunding') {
+    kind.value = 'crowdfunding';
+    message.value = fundingPrompt;
+  } else if (pristine && params.get('kind') === 'privacy') {
     kind.value = 'privacy';
     const letterId = params.get('letter');
-    if (letterId && /^letter-[a-f0-9]{12}$/.test(letterId)) message.value = 'Please review or remove letter ' + letterId + '.\n\n';
     const publicId = params.get('suggestion');
-    if (publicId && /^idea-[a-f0-9]{12}$/.test(publicId)) message.value = 'Please review or remove suggestion ' + publicId + '.\n\n';
+    if (letterId && /^letter-[a-f0-9]{12}$/.test(letterId)) {
+      message.value = 'Please review or remove letter ' + letterId + '.\n\n';
+    } else if (publicId && /^idea-[a-f0-9]{12}$/.test(publicId)) {
+      message.value = 'Please review or remove suggestion ' + publicId + '.\n\n';
+    }
   }
   kind.addEventListener('change', updateKind);
   updateKind();
@@ -39,6 +74,13 @@
   displayName.addEventListener('input', updateCount);
   updateCount();
   form.addEventListener('submit', event => {
+    updateKind();
+    if (kind.value === 'crowdfunding' && message.value.trim() === fundingPrompt.trim()) {
+      event.preventDefault();
+      message.setCustomValidity('Please add your idea, experience or concern before sending.');
+      message.reportValidity();
+      return;
+    }
     if (message.value.trim().length < 10) {
       event.preventDefault();
       message.setCustomValidity('Please enter at least 10 characters of feedback.');
@@ -51,7 +93,8 @@
   message.addEventListener('input', () => message.setCustomValidity(''));
   window.addEventListener('pageshow', () => {
     button.disabled = false;
-    button.textContent = 'Send feedback';
+    updateKind();
+    updateCount();
   });
 
   const boardMessage = document.getElementById('board-message');

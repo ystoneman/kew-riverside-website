@@ -660,7 +660,7 @@
       "temporarilyReducedCapacityPercent": 92
     }
   },
-  "rankingMethod": "Editorial priorities based on decision relevance, potential evidence strength and usefulness before a decision. Not probabilities. School-specific feasibility unproven.",
+  "rankingMethod": "Editorial priorities based on decision relevance, potential evidence strength and usefulness before a decision. Not probabilities. School-specific feasibility unproven. Seven options. Crowdfunding is placed next to the costed recovery plan because they are connected, not because its feasibility or likelihood of success is established.",
   "approaches": [
     {
       "rank": 1,
@@ -680,6 +680,75 @@
     },
     {
       "rank": 2,
+      "id": "option-crowdfunding",
+      "title": "Explore community crowdfunding",
+      "tag": "Exploratory — feasibility to establish",
+      "effort": "High",
+      "evidence": "Needs a recovery budget, donor interest and an agreed recipient",
+      "why": "Could local residents, families and businesses help fund a viable future for Kew Riverside? Community fundraising could contribute to a costed recovery plan and give the school time to make changes.",
+      "next": "Establish the funding needed for an agreed recovery period, identify an organisation able to receive and manage contributions, and seek a written assessment from the school and council of how a funded plan would affect the proposal. Assess donor interest before deciding whether to launch a public appeal.",
+      "limits": "A one-off donation does not resolve a continuing annual shortfall. Fundraising would need a credible plan for pupil demand, costs and future income. Community wealth does not establish donor commitments, and raising money would not itself secure a decision to keep the school open.",
+      "refs": [
+        "consultation-richmond",
+        "consultation-leaflet",
+        "school-finance"
+      ],
+      "forecast": "The council projects a budget deficit of over £400,000 by 2028/29. This is a forecast, not an agreed fundraising target.",
+      "stage": "Ideas and feasibility only; no campaign, donations or pledges.",
+      "feedbackPrivacy": "Private human review; no publication or automatic forwarding.",
+      "questions": [
+        {
+          "id": "funding-needed",
+          "question": "What funding would actually be needed, and for how long?",
+          "help": "Public budgets, an explanation of annual versus accumulated deficits, or financial modelling experience.",
+          "prompt": "the funding needed and the recovery period"
+        },
+        {
+          "id": "council-assessment",
+          "question": "Would a funded recovery plan change the council’s proposal?",
+          "help": "Published decision criteria or statements could help. This needs an answer from the school and council; visitor opinion alone cannot settle it.",
+          "prompt": "how the school and council would assess a funded plan"
+        },
+        {
+          "id": "sustainability",
+          "question": "How could the school become sustainable after the initial funding?",
+          "help": "Costed ideas for shared leadership, use of space, income or realistic pupil recruitment, with assumptions and drawbacks.",
+          "prompt": "making the school sustainable after initial funding"
+        },
+        {
+          "id": "recipient",
+          "question": "Who could receive and manage the money?",
+          "help": "Relevant experience with a school, PTA or suitable charity. No organisation has been agreed as a recipient.",
+          "prompt": "who could receive and manage contributions"
+        },
+        {
+          "id": "outreach",
+          "question": "How could a campaign reach beyond current parents?",
+          "help": "Inclusive outreach, public grants, business partnerships or matching-contribution examples. Please leave out donor names and private contact details.",
+          "prompt": "reaching supporters beyond current parents"
+        },
+        {
+          "id": "examples",
+          "question": "Are there comparable school rescue campaigns to learn from?",
+          "help": "Public links, amounts raised, the eventual school outcome and lessons about sustainability.",
+          "prompt": "lessons from comparable school rescue campaigns"
+        },
+        {
+          "id": "appeal-terms",
+          "question": "What would make a future appeal credible?",
+          "help": "Financial reporting, milestones, surplus funds and what should happen if a target is missed or closure proceeds.",
+          "prompt": "conditions and accountability for a future appeal"
+        },
+        {
+          "id": "expertise",
+          "question": "What expertise could help assess or organise this?",
+          "help": "Your own budgeting, fundraising or administration experience. An offer of help creates no commitment.",
+          "prompt": "expertise that could help assess this option"
+        }
+      ]
+    },
+    {
+      "rank": 3,
       "title": "Test the local demand forecast",
       "tag": "High priority",
       "effort": "Medium–high",
@@ -694,7 +763,7 @@
       ]
     },
     {
-      "rank": 3,
+      "rank": 4,
       "title": "Audit the actual saving from closure",
       "tag": "High priority",
       "effort": "Medium–high",
@@ -709,7 +778,7 @@
       ]
     },
     {
-      "rank": 4,
+      "rank": 5,
       "title": "Document pupil impacts and receiving-school capacity",
       "tag": "High priority",
       "effort": "Medium",
@@ -724,9 +793,9 @@
       ]
     },
     {
-      "rank": 5,
+      "rank": 6,
       "title": "Put the evidence through every formal decision stage",
-      "tag": "Essential alongside 1–4",
+      "tag": "Essential alongside 1–5",
       "effort": "Low–medium",
       "evidence": "Public participation rules available",
       "why": "A concise, referenced case is easier to assess than a signature count alone. Coordinate who addresses budgets, demand, alternatives and pupil impacts, while preserving each person's own views.",
@@ -740,7 +809,7 @@
       ]
     },
     {
-      "rank": 6,
+      "rank": 7,
       "title": "Obtain a focused legal review if a concrete defect emerges",
       "tag": "Conditional",
       "effort": "High / professional costs",

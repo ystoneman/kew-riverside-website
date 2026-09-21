@@ -2,7 +2,7 @@
 
 ## User's goal
 
-Publish this complete static website publicly on GitHub Pages. It centralises public information about the Kew Riverside School Closure, with a searchable document index, historical timeline, infographics and six ranked approaches to retaining provision.
+Publish this complete static website publicly on GitHub Pages. It centralises public information about the Kew Riverside School Closure, with a searchable document index, historical timeline, infographics and seven numbered approaches to retaining provision.
 
 The user has requested public publication. Use available authenticated GitHub capabilities, respecting runtime permissions. Do not claim the site is live until the deployment and public URL have been verified.
 
@@ -50,3 +50,7 @@ Publish only this extracted website folder. Its earlier source was staged inside
 The homepage now states Yann Stoneman’s aim to keep Kew Riverside open and his parent connection. about.html now uses the longer family account supplied by the user from Sofiya’s wording, including the explicitly supplied recent Reception start, school visits, sense of belonging and values. The teacher conversation is paraphrased as a family recollection without a name or unverified role. Nursery name, unverified institutional causes/dates, children’s names, exact ages and home postcode remain excluded. School comparisons are the family’s impressions; no academic-results claim or claim to speak for other parents was added. This is Yann’s personal initiative, not a claim to a group mandate.
 
 supporters.html uses separate consent and requires private confirmation plus human approval. Public supporters.json is initially empty. Do not add anyone automatically, including letter authors, Yann or Sofiya. Contact messages remain private. No outreach, confirmation email or organising meeting has been sent/arranged by this implementation. Existing hourly moderation remains paused pending its delivery test.
+
+## Crowdfunding exploration
+
+The user requested ideas from CROWDFUNDING-OPTION-PLAN.md. The website now explains an exploratory option immediately after the costed recovery plan, with eight question-specific private feedback routes. `kind=crowdfunding` must stay private with human review regardless of permission fields. No fundraiser, pledges, donor identities or third-party contact has been authorised or created. Existing letter/supporter consent workflows are unchanged.

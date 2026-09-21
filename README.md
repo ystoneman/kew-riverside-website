@@ -14,7 +14,7 @@ The evidence pages need no build or API keys. Feedback and community letters use
 - 42 source entries: 37 reviewed, 2 listed in a reviewed index without individual review, and 3 routes not retrieved.
 - Sources: school website, Richmond Council and Schools Forum, Achieving for Children, Ofsted, Department for Education.
 - The school-specific consultation page, leaflet, general FAQ and council-linked form were retrieved. The form states a 16 October 2026 response deadline. Closure effective 1 September 2027 is proposed; November 2026 and April 2027 committee stages are planned, not completed decisions. Wording differences between timetable documents remain explicit.
-- The six ranked approaches are editorial priorities, not probabilities or demonstrated school-specific solutions.
+- The seven numbered approaches are editorial priorities, not probabilities or demonstrated school-specific solutions.
 - Forecasts and pupil counts keep their dates and geographical definitions.
 - `sources.csv` is the visitor download: all 42 source records, with readable column headings, source URLs and coverage caveats. It uses UTF-8 with a BOM for Excel.
 - `sources.json` retains the structured source index, chart values and option rankings for maintenance.
@@ -67,3 +67,7 @@ JavaScript syntax, internal anchor references, local asset references, source ID
 ## Named support and contact
 
 Feedback is the entry point for named support, letters/testimonials and site suggestions. Only kind=suggestion/accessibility may enter routine automatic moderation. kind=supporter always needs contributor confirmation of the exact name/statement and explicit human approval; kind=contact stays private. The supporter notice is 2026-09-21-supporters-v1, statement keep-open-2026-09-21; existing letter and feedback consent tokens remain unchanged. Never infer endorsement from another kind of contribution. The private helper and operating procedure live outside this public repository. Do not publish emails, private references, confirmation replies or unapproved names.
+
+## Exploratory community funding
+
+Option 02 (`index.html#option-crowdfunding`) is linked to the costed recovery plan. The £400,000 figure is the council’s forecast deficit by 2028/29, not a campaign target. Eight fixed question links route to `feedback.html?kind=crowdfunding&question=...#feedback-form`. Funding feedback stays private for human review even if publication permission is submitted; it is never eligible for the automatic board. There are no donations, pledges, donor lists or recipient agreements. Category selection also works without JavaScript. Do not interpret submitted ideas as permission to publish, forward, contact third parties or make financial commitments.
