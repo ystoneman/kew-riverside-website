@@ -75,6 +75,6 @@ Borough charts, their data table and housing note are retained inside #borough-c
 
 ## Participation UX refinement — 21 September 2026
 
-The same header now appears across all eight pages, with outlined Letters and pale-green Contribute actions, plain research links, a native mobile Menu and current-page markers. The mobile header is non-sticky; action links remain exposed while research links are collapsed. Shared navigation.js is in the public deployment allowlist. When editing navigation, maintain both desktop and mobile link groups and all eight headers.
+The same header now appears across all eight pages, with outlined Letters and pale-green Contribute actions, plain research links, a native mobile Menu and current-page markers. The mobile header is non-sticky; action links remain exposed while research links are collapsed. Shared navigation.js and participation.css are in the public deployment allowlist. The latter loads last and uses a fresh asset URL because live testing caught browsers retaining the old shared styles after an HTML refresh. When editing navigation, maintain both desktop and mobile link groups and all eight headers.
 
 The letters page offers Write/Read shortcuts, a form heading, an official-response reminder at the form, a writing route from the board, and bold labels for required private review versus optional publication/council sharing. Consent text, field names, unchecked defaults, private-field disabling and submission destinations are unchanged. No messages or submissions were sent during the UX review.

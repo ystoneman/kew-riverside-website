@@ -36,7 +36,7 @@ This collection is not exhaustive. Original documents remain with their publishe
 | corrections.html / corrections.js | Private corrections and objections, always kind=privacy, no publication option |
 | styles.css / insights.css | Responsive screen/print styles, practical FAQ and school-specific pupil chart |
 | app.js | Search, filters, shareable filter URLs and anchor handling |
-| navigation.js | Optional keyboard and dismissal behavior for the native mobile menu |
+| navigation.js / participation.css | Shared participation navigation, letter shortcuts and optional mobile menu dismissal |
 | favicon.svg | Original code-drawn site mark |
 | sources.csv | Spreadsheet-friendly source index for visitors |
 | sources.json | Structured provenance and data for maintenance |
@@ -96,3 +96,5 @@ Five practical FAQ answers reuse the existing current-proposal panel, including 
 All eight pages share the same header: research links, outlined Letters and a pale-green Contribute action. The council response remains the dark primary homepage action. Below 1,101px, research navigation uses native details; Letters and Contribute remain visible. Below 701px, the action pair spans its own row. The compact header scrolls away rather than covering content. Keep the duplicated desktop/mobile research links in agreement when editing them. Only the visible navigation is exposed to keyboard users; the current destination has aria-current="page".
 
 Navigation JavaScript only adds dismissal on link selection, outside click, Escape, focus leaving the menu and transition to desktop; native disclosure still works without it. Letters has direct writing/reading shortcuts, a writing link at the board and concise consent lead-ins. Full consent wording, separate unchecked permissions and disabled private fields are preserved.
+
+The participation styles use a separate asset URL so the new shared header cannot pick up a cached pre-header version of styles.css. Keep participation.css loaded after the existing page styles.
