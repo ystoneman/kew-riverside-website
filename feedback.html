@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="description" content="Suggest improvements, report a correction and read reviewed suggestions for the independent Kew Riverside evidence hub.">
+  <title>Feedback &amp; suggestions | Kew Riverside evidence hub</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="feedback.css">
+  <script src="feedback.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="independent-bar"><div class="wrap"><span>Independent community information</span><span>Feedback &amp; suggestions</span></div></div>
+  <header class="feedback-header wrap"><a class="brand" href="index.html"><span>Kew Riverside<small>THE EVIDENCE HUB</small></span></a><a href="index.html">← Back to the evidence</a></header>
+  <main id="main" class="feedback-page wrap">
+    <div class="feedback-intro"><p class="eyebrow">Help improve the evidence</p><h1>What would make<br>this more useful?</h1><p>Suggest a website improvement, point out a mistake or share a public source. Your feedback enters a private review queue first.</p><a href="#suggestions">Read reviewed suggestions ↓</a></div>
+    <div class="feedback-layout">
+      <form id="feedback-form" class="feedback-form" action="https://formspree.io/f/mwlpollw" method="post" accept-charset="UTF-8">
+        <input type="hidden" name="notice_version" value="2026-09-21-v1">
+        <input type="hidden" name="reference" id="feedback-reference" value="">
+        <div class="feedback-field"><label for="kind">What would you like to share?</label><select id="kind" name="kind" required><option value="suggestion">A suggestion for the website</option><option value="correction">A factual correction</option><option value="source">A public source to add</option><option value="accessibility">An accessibility problem</option><option value="privacy">A privacy, removal or review request</option><option value="other">Other feedback</option></select></div>
+        <div class="feedback-field"><label for="message">Your feedback</label><textarea id="message" name="message" required minlength="10" maxlength="3000" rows="7" aria-describedby="message-help message-count"></textarea><p class="field-help" id="message-help">10–3,000 characters. Please leave out names of children, personal contact details, health information, allegations and confidential school information.</p><p class="field-help" id="message-count" aria-live="off">0 / 3,000 characters</p></div>
+        <div class="feedback-field"><label for="source">Relevant public link <span>(optional)</span></label><input id="source" name="source" type="url" inputmode="url" maxlength="500" placeholder="https://" aria-describedby="source-help"><p class="field-help" id="source-help">For a correction, tell us which claim needs changing and give the document date. Sources wait for a person to check them.</p></div>
+        <div class="feedback-field"><label for="email">Email for a reply <span>(optional)</span></label><input id="email" name="email" type="email" autocomplete="email" maxlength="254" aria-describedby="email-help"><p class="field-help" id="email-help">Your email stays private. Leave it blank if you do not need a reply.</p></div>
+        <div class="feedback-trap" aria-hidden="true"><label for="website-extra">Leave this field empty</label><input id="website-extra" name="_gotcha" type="text" tabindex="-1" autocomplete="off"></div>
+        <label class="feedback-permission"><input type="checkbox" id="allow-public" name="allow_public" value="yes-publish-anonymously-v1"><span>You may publish my suggestion anonymously on the public board after review, including automatic AI review. Minor formatting changes are OK. This is optional; I can ask for removal.</span></label>
+        <p id="privacy-only" class="field-help" hidden>Privacy and removal requests always stay private.</p>
+        <p class="field-help">Sending shares your feedback with Formspree and the site operator for AI-assisted review using OpenAI. Read <a href="privacy.html">how your information is used</a>.</p>
+        <p class="field-help" id="reference-note" hidden>Keep your private reference for follow-up: <strong id="reference-display"></strong></p>
+        <button class="button primary feedback-submit" type="submit">Send feedback</button>
+        <p class="field-help">You’ll continue to Formspree for a security check and submission confirmation. If it shows an error, your message has not been confirmed; go back and try again later.</p>
+        <noscript><p class="field-help">This form works without JavaScript. To follow up, include the date and a short description of your message.</p></noscript>
+      </form>
+      <aside class="review-note"><h2>Private first.<br>Reviewed before publication.</h2><ol><li><strong>You send feedback.</strong> It arrives in a private inbox, not on this page.</li><li><strong>We review it.</strong> Ordinary website suggestions can be approved by AI. Sensitive or uncertain cases wait for the operator.</li><li><strong>Approved ideas appear here.</strong> Only if you gave permission. Publication does not verify a factual claim or promise a change.</li></ol><p>We aim to check approximately hourly when the reviewer is available. There is no guaranteed response time.</p><p>Constructive criticism is welcome. No accounts, uploads or messages between visitors.</p><p class="feedback-warning">This is an independent website. This form is not a council consultation response, school complaint or safeguarding channel. Use the relevant official route for those matters.</p><p><a href="privacy.html#requests">Request removal or a human review</a></p></aside>
+    </div>
+    <section class="suggestions-board" id="suggestions" aria-labelledby="board-title"><p class="eyebrow">Reviewed suggestions</p><h2 id="board-title">Ideas, in one place.</h2><p>Suggestions below have been approved for display. “Received” means the idea has been recorded; it does not mean a change has been agreed.</p><p id="board-message" role="status">Loading reviewed suggestions…</p><div id="suggestions-list"></div><noscript><p>Enable JavaScript to read the board, or <a href="suggestions.json">read the approved suggestions as JSON</a>.</p></noscript></section>
+  </main>
+  <footer><div class="wrap footer-inner"><div><strong>Kew Riverside · The evidence hub</strong><p>Independent information for an informed community.</p></div><div><a href="index.html">Evidence hub</a><a href="privacy.html">Privacy &amp; moderation</a></div></div></footer>
+</body>
+</html>
