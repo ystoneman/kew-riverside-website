@@ -4,7 +4,7 @@ A dependency-free static website created and maintained by Yann Stoneman, a Kew 
 
 ## Publishing on GitHub Pages
 
-This directory is deployed from `main` at https://github.com/ystoneman/kew-riverside-website to https://ystoneman.github.io/kew-riverside-website/ using GitHub Pages and the validated `.github/workflows/pages.yml` workflow. Only the 27 explicitly listed public assets are deployed; repository notes, workflow code and private working files are excluded from the website artifact.
+This directory is deployed from `main` at https://github.com/ystoneman/kew-riverside-website to https://ystoneman.github.io/kew-riverside-website/ using GitHub Pages and the validated `.github/workflows/pages.yml` workflow. Only the 26 explicitly listed public assets are deployed; repository notes, workflow code and private working files are excluded from the website artifact.
 
 The evidence pages need no build or API keys. Feedback and community letters use the private Formspree inbox behind the public form endpoint. Secrets and private submissions must never enter this repository. Relative asset paths support the repository subpath.
 

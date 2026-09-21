@@ -58,7 +58,7 @@ The user requested ideas from CROWDFUNDING-OPTION-PLAN.md. The website now expla
 
 ## Security review — 21 September 2026
 
-Deployment now uses the checked Pages workflow rather than publishing the repository root directly. Run `.github/scripts/check_site.py` before committing, and inspect named staged files: GitHub source history remains public even when an asset is excluded from the deployed website. The 27-file public artifact excludes these handoff notes and README. Do not switch back to branch-root publishing to bypass a failed check.
+Deployment now uses the checked Pages workflow rather than publishing the repository root directly. Run `.github/scripts/check_site.py` before committing, and inspect named staged files: GitHub source history remains public even when an asset is excluded from the deployed website. The 26-file public artifact excludes these handoff notes and README. Do not switch back to branch-root publishing to bypass a failed check.
 
 All pages have a restrictive meta CSP; maintain local external scripts/styles instead of adding inline code. Private council fields are disabled in HTML. All public boards must pass the shared strict schema used by both private writers and the deployment check. The private helpers remain outside this public repository, now guard state paths (including symlinks), serialize letter publication, and prevent removed letters/supporters being silently recreated from old approvals.
 
