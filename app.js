@@ -1,0 +1,66 @@
+'use strict';
+(() => {
+  const form = document.getElementById('record-filters');
+  const cards = Array.from(document.querySelectorAll('.source-card'));
+  const fields = ['q','topic','year','type','status'];
+  const controls = {
+    q: document.getElementById('record-search'),
+    topic: document.getElementById('topic-filter'),
+    year: document.getElementById('year-filter'),
+    type: document.getElementById('type-filter'),
+    status: document.getElementById('status-filter')
+  };
+  const count = document.getElementById('result-count');
+  const empty = document.getElementById('no-results');
+  const normalise = value => value.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '');
+  function matches(card, state) {
+    const words = normalise(state.q).trim().split(/\s+/).filter(Boolean);
+    return words.every(word => normalise(card.dataset.search).includes(word))
+      && ['topic','year','type','status'].every(key => !state[key] || card.dataset[key] === state[key]);
+  }
+  function apply(updateUrl = true) {
+    const state = Object.fromEntries(fields.map(key => [key, controls[key].value]));
+    let visible = 0;
+    cards.forEach(card => { card.hidden = !matches(card, state); if (!card.hidden) visible++; });
+    count.textContent = visible + ' of ' + cards.length + ' records';
+    empty.hidden = visible > 0;
+    if (updateUrl) {
+      const url = new URL(window.location.href);
+      fields.forEach(key => state[key] ? url.searchParams.set(key, state[key]) : url.searchParams.delete(key));
+      window.history.replaceState(null, '', url.pathname + url.search + url.hash);
+    }
+  }
+  function reset() { fields.forEach(key => controls[key].value = ''); apply(); }
+  function revealAnchor() {
+    const id = window.location.hash.slice(1);
+    if (!id.startsWith('source-')) return;
+    const card = document.getElementById(id);
+    if (card && card.hidden) {
+      reset();
+      card.scrollIntoView({ block: 'start' });
+    }
+  }
+  const initial = new URL(window.location.href);
+  fields.forEach(key => {
+    const value = initial.searchParams.get(key) || '';
+    if (key === 'q' || Array.from(controls[key].options).some(option => option.value === value)) {
+      controls[key].value = value;
+    }
+  });
+  form.addEventListener('submit', event => { event.preventDefault(); apply(); });
+  form.addEventListener('input', () => apply());
+  form.addEventListener('change', () => apply());
+  document.getElementById('clear-filters').addEventListener('click', () => {
+    reset(); controls.q.focus();
+  });
+  window.addEventListener('hashchange', revealAnchor);
+  // A click can repeat an existing hash after filters hid its target.
+  document.addEventListener('click', event => {
+    const anchor = event.target.closest && event.target.closest('a[href^="#source-"]');
+    if (!anchor) return;
+    const card = document.getElementById(anchor.getAttribute('href').slice(1));
+    if (card && card.hidden) reset();
+  });
+  apply(false);
+  revealAnchor();
+})();
