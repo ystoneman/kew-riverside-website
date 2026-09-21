@@ -6,3 +6,5 @@
 @media print{.contact-section form,#supporter-form,.contribute-routes{display:none}.about-page{padding:0}.about-page h1{font-size:30pt}.about-section{padding-block:15px}.supporter-card,.about-panel{break-inside:avoid}.family-card p,.family-card .family-name{color:black}.hero h1{font-size:30pt}}
 
 .hero{padding-block:48px}@media(max-width:560px){.hero{padding-block:30px}}
+
+.family-story{max-width:72ch}.family-story .about-section{padding-block:20px}.family-story .about-section p{line-height:1.8}.site-owner-bridge{max-width:72ch;border-left:3px solid #46603d;padding:8px 0 8px 22px;margin:28px 0;font-size:17px;line-height:1.8}
