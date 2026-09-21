@@ -44,3 +44,9 @@ JavaScript syntax, internal anchor targets, local asset references, unique recor
 ## Deployment boundary
 
 Publish only this extracted website folder. Its earlier source was staged inside a private repository. Never make that parent repository public, copy unrelated files, or transfer its Git history into the public website repository.
+
+## Parent-led identity and contributions (21 September 2026)
+
+The homepage now states Yann Stoneman’s aim to keep Kew Riverside open and his parent connection. about.html uses the short family account explicitly selected by the user; nursery name, unverified institutional causes/dates, children’s names, ages, school year and home postcode remain excluded. This is Yann’s personal initiative, not a claim to a group mandate.
+
+supporters.html uses separate consent and requires private confirmation plus human approval. Public supporters.json is initially empty. Do not add anyone automatically, including letter authors, Yann or Sofiya. Contact messages remain private. No outreach, confirmation email or organising meeting has been sent/arranged by this implementation. Existing hourly moderation remains paused pending its delivery test.

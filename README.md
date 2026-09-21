@@ -1,6 +1,6 @@
-# Kew Riverside evidence hub
+# Kew Riverside: parent-led evidence and action
 
-A dependency-free static website for browsing public information about the Kew Riverside school closure question.
+A dependency-free static website created and maintained by Yann Stoneman, a Kew Riverside parent seeking to keep the school open. It does not claim a mandate from all parents or operate on behalf of the school, council or PTA. Factual sources and editorial positions remain distinct.
 
 ## Publishing on GitHub Pages
 
@@ -28,6 +28,9 @@ This collection is not exhaustive. Original documents remain with their publishe
 
 | File | Purpose |
 | --- | --- |
+| about.html | Named owner, supplied family account, position, update history and private contact form |
+| supporters.html / supporters.js / supporters.json | Specific supporter statement, separate consents, manual confirmation and human-approved public names only |
+| community.css | Parent introduction, contribution routes and supporter styles |
 | index.html | Complete, readable page and source cards; works without JavaScript |
 | proposal.html / proposal.css | Dated proposal, conditional timetable, institutional roles, factual profiles, questions and decision record; no JavaScript required |
 | corrections.html | Private corrections and objections, always kind=privacy, no publication option |
@@ -60,3 +63,7 @@ There are no analytics, advertising scripts or remote fonts. Forms post to Forms
 ## Verification in this environment
 
 JavaScript syntax, internal anchor references, local asset references, source IDs, record counts, chart arithmetic and filtering behaviour are checked during preparation. Browser checks cover desktop/mobile forms, independent permission choices, excluded private fields, plain-text previews and empty public boards. Live delivery remains unverified pending the hosted CAPTCHA; hourly moderation must remain paused until that test is complete.
+
+## Named support and contact
+
+Feedback is the entry point for named support, letters/testimonials and site suggestions. Only kind=suggestion/accessibility may enter routine automatic moderation. kind=supporter always needs contributor confirmation of the exact name/statement and explicit human approval; kind=contact stays private. The supporter notice is 2026-09-21-supporters-v1, statement keep-open-2026-09-21; existing letter and feedback consent tokens remain unchanged. Never infer endorsement from another kind of contribution. The private helper and operating procedure live outside this public repository. Do not publish emails, private references, confirmation replies or unapproved names.

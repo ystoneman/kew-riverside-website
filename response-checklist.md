@@ -1,6 +1,6 @@
 # Kew Riverside: evidence checklist for a consultation response
 
-Research cut-off: 21 September 2026. Independent editorial checklist; not an official consultation form or legal advice.
+Prepared by Yann Stoneman, a Kew Riverside parent seeking to keep the school open. Research checked 21 September 2026. This is not an official consultation form or legal advice.
 
 ## Before submitting
 
