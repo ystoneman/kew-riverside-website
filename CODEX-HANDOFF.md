@@ -58,8 +58,17 @@ The user requested ideas from CROWDFUNDING-OPTION-PLAN.md. The website now expla
 
 ## Security review — 21 September 2026
 
-Deployment now uses the checked Pages workflow rather than publishing the repository root directly. Run `.github/scripts/check_site.py` before committing, and inspect named staged files: GitHub source history remains public even when an asset is excluded from the deployed website. The 26-file public artifact excludes these handoff notes and README. Do not switch back to branch-root publishing to bypass a failed check.
+Deployment now uses the checked Pages workflow rather than publishing the repository root directly. Run `.github/scripts/check_site.py` before committing, and inspect named staged files: GitHub source history remains public even when an asset is excluded from the deployed website. The explicit public artifact excludes these handoff notes and README. Do not switch back to branch-root publishing to bypass a failed check.
 
 All pages have a restrictive meta CSP; maintain local external scripts/styles instead of adding inline code. Private council fields are disabled in HTML. All public boards must pass the shared strict schema used by both private writers and the deployment check. The private helpers remain outside this public repository, now guard state paths (including symlinks), serialize letter publication, and prevent removed letters/supporters being silently recreated from old approvals.
 
 Formspree CAPTCHA, Formshield and required message validation were inspected; its project domain restriction is now `ystoneman.github.io`. Do not submit localhost/file previews to the live inbox. The public endpoint ID is not a secret. The hourly task remains paused. No security test submissions or real community entries were published during this review.
+
+
+## Focused research additions — 21 September 2026
+
+The homepage’s current-proposal panel is now a compact five-question practical FAQ (#quick-answers), and #evidence leads with Kew Riverside’s own reported/forecast pupil series. The council leaflet and FAQ were freshly fetched and matched the previously reviewed PDFs; forecast italics were visually verified. The official response form was rechecked read-only. All source IDs and the 42-record source count remain unchanged. New insights.css is in the deployment allowlist.
+
+The full 11-year table is also in sources.json under charts.schoolRoll. Preserve the split after 2025/26 and the source/date/caveats. The leaflet’s prose percentage does not reconcile with the table endpoints; use the verified counts, not that percentage. Future pupil projections are not a guarantee of continuing operation, and the source does not explicitly identify an operating-school model assumption. The admissions FAQ describes only the current pre-statutory stage.
+
+Borough charts, their data table and housing note are retained inside #borough-context, collapsed by default to reduce clutter. No extra page, new JavaScript dependency, tracker, submission route, public entry, fundraiser or automation was added. The source library remains unchanged.

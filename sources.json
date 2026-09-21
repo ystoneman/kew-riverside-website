@@ -658,6 +658,81 @@
       "sourceId": "planning-nov-2025",
       "permanentCapacityPercent": 83.7,
       "temporarilyReducedCapacityPercent": 92
+    },
+    "schoolRoll": {
+      "geography": "Kew Riverside Primary School",
+      "measure": "Whole-school pupil numbers",
+      "sourceId": "consultation-leaflet",
+      "sourceUrl": "https://www.richmond.gov.uk/media/fxhbilws/kew_riverside_consultation_leaflet.pdf#page=5",
+      "locator": "PDF page 5 (printed page 4); PDF page 4 explains italics mark forecasts.",
+      "accessChecked": "2026-09-21",
+      "forecastStarts": "2026/27",
+      "data": [
+        {
+          "schoolYear": "2021/22",
+          "pupils": 145,
+          "status": "Reported roll"
+        },
+        {
+          "schoolYear": "2022/23",
+          "pupils": 116,
+          "status": "Reported roll"
+        },
+        {
+          "schoolYear": "2023/24",
+          "pupils": 106,
+          "status": "Reported roll"
+        },
+        {
+          "schoolYear": "2024/25",
+          "pupils": 89,
+          "status": "Reported roll"
+        },
+        {
+          "schoolYear": "2025/26",
+          "pupils": 87,
+          "status": "Reported roll"
+        },
+        {
+          "schoolYear": "2026/27",
+          "pupils": 84,
+          "status": "Council forecast"
+        },
+        {
+          "schoolYear": "2027/28",
+          "pupils": 80,
+          "status": "Council forecast"
+        },
+        {
+          "schoolYear": "2028/29",
+          "pupils": 73,
+          "status": "Council forecast"
+        },
+        {
+          "schoolYear": "2029/30",
+          "pupils": 74,
+          "status": "Council forecast"
+        },
+        {
+          "schoolYear": "2030/31",
+          "pupils": 75,
+          "status": "Council forecast"
+        },
+        {
+          "schoolYear": "2031/32",
+          "pupils": 77,
+          "status": "Council forecast"
+        }
+      ],
+      "warnings": [
+        "87 is the reported 2025/26 roll and 84 a forecast for 2026/27, not a verified September 2026 headcount.",
+        "Future pupil forecasts do not assure that the school remains open; the leaflet does not explicitly identify an operating-school scenario.",
+        "No financial break-even pupil number is established. Counts use the table, not the non-reconciling percentage in the leaflet prose."
+      ],
+      "scale": {
+        "minimum": 0,
+        "maximum": 160
+      }
     }
   },
   "rankingMethod": "Editorial priorities based on decision relevance, potential evidence strength and usefulness before a decision. Not probabilities. School-specific feasibility unproven. Seven options. Crowdfunding is placed next to the costed recovery plan because they are connected, not because its feasibility or likelihood of success is established.",

@@ -4,7 +4,7 @@ A dependency-free static website created and maintained by Yann Stoneman, a Kew 
 
 ## Publishing on GitHub Pages
 
-This directory is deployed from `main` at https://github.com/ystoneman/kew-riverside-website to https://ystoneman.github.io/kew-riverside-website/ using GitHub Pages and the validated `.github/workflows/pages.yml` workflow. Only the 26 explicitly listed public assets are deployed; repository notes, workflow code and private working files are excluded from the website artifact.
+This directory is deployed from `main` at https://github.com/ystoneman/kew-riverside-website to https://ystoneman.github.io/kew-riverside-website/ using GitHub Pages and the validated `.github/workflows/pages.yml` workflow. Only the explicitly listed public assets are deployed; repository notes, workflow code and private working files are excluded from the website artifact.
 
 The evidence pages need no build or API keys. Feedback and community letters use the private Formspree inbox behind the public form endpoint. Secrets and private submissions must never enter this repository. Relative asset paths support the repository subpath.
 
@@ -34,7 +34,7 @@ This collection is not exhaustive. Original documents remain with their publishe
 | index.html | Complete, readable page and source cards; works without JavaScript |
 | proposal.html / proposal.css | Dated proposal, conditional timetable, institutional roles, factual profiles, questions and decision record; no JavaScript required |
 | corrections.html / corrections.js | Private corrections and objections, always kind=privacy, no publication option |
-| styles.css | Responsive screen and print styles |
+| styles.css / insights.css | Responsive screen/print styles, practical FAQ and school-specific pupil chart |
 | app.js | Search, filters, shareable filter URLs and anchor handling |
 | favicon.svg | Original code-drawn site mark |
 | sources.csv | Spreadsheet-friendly source index for visitors |
@@ -83,3 +83,9 @@ All eight HTML pages declare a restrictive Content Security Policy before resour
 Public boards have exact field allowlists, bounds, valid dates and unique IDs checked **before deployment**; browser validation also fails closed and renders only text. These checks do not establish real identity, consent or the suitability of free text. Private moderation and human approval requirements remain in force. Council identity inputs are disabled in the initial HTML and require an explicit council-sharing choice and working JavaScript to be enabled.
 
 GitHub Pages does not give this project control over custom HTTP response headers. The HTML policy cannot enforce `frame-ancestors` or `X-Frame-Options`, so full anti-framing protection would require a host or proxy with custom headers. Bot controls reduce spam but cannot eliminate it or guarantee availability within provider quotas. No automatic security scan can guarantee an absence of vulnerabilities.
+
+## School-specific evidence and practical answers
+
+The homepage leads its numbers section with the consultation leaflet’s full eleven-year Kew Riverside pupil series. Five reported years (2021/22–2025/26) use a solid line and filled points; six forecasts (2026/27–2031/32) use a dashed line and hollow points. The zero-based chart, accessible table and sources.json/charts/schoolRoll must stay in agreement. Forecasts are not a verified present headcount, an assurance the school remains open, or an enrolment target sufficient for financial viability. No percentage from the leaflet’s inconsistent prose is copied into this chart.
+
+Five practical FAQ answers reuse the existing current-proposal panel, including the council’s statement that applications and admissions can continue during pre-statutory consultation. Keep that answer stage-specific and recheck the council FAQ when the process changes. Every answer cites its source or the site’s own contribution policy. The existing borough application chart, occupancy comparison and housing context remain available in a collapsed native disclosure. The chart, FAQ and data table work without JavaScript. No source-library count or contribution permissions changed.
