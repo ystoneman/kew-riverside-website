@@ -4,25 +4,25 @@ Research cut-off: 21 September 2026. Independent editorial checklist; not an off
 
 ## Before submitting
 
-- Find the live official proposal and confirm the exact deadline and submission channel.
-- Check whether this is an initial consultation or the formal statutory representation period.
+- Respond by 16 October 2026, the date on the council-linked form. Check for official updates before submitting.
+- This is pre-statutory consultation. A later statutory notice would set a separate representation period.
 - Read the full proposal, options appraisal and supporting evidence.
 - Keep a copy of your response and seek an acknowledgement.
 - State your own position and desired outcome. Do you seek retention of the existing school, teaching on the site, or another specific arrangement?
 
 Official starting points:
-- Richmond Council: https://www.richmond.gov.uk/school_organisation_consultations
-- Achieving for Children: https://kr.afcinfo.org.uk/pages/community-information/information-and-advice/education-and-education-services/richmond-school-organisation
+- Richmond Council: https://www.richmond.gov.uk/services/children_and_family_care/schools_and_colleges/school_organisation_consultations/kew_riverside_consultation
+- Official response form: https://docs.google.com/forms/d/e/1FAIpQLSda5oPsdUlrJkf6vACC_AjvXFR6-ki3iBymNIF5BAWNxf85xQ/viewform
 
-These pages could not be retrieved during this research. This checklist does not confirm a live deadline.
+Checked 21 September 2026. The form states 16 October; the leaflet and general FAQ describe different initial periods. Later dates remain conditional. Recheck official updates.
 
 ## Build a concise case
 
 ### 1. A deliverable alternative
-Ask for an options appraisal comparing realistic arrangements, including smaller intake, shared leadership or appropriate shared use. Identify partners, commitments and a three-year budget, with sensitivity to pupil numbers.
+Read the council’s published reasons for not preferring alternatives. Ask for costed comparisons, delivery partners and a three-year budget, with sensitivity to pupil numbers.
 
 ### 2. Local demand
-Ask for the latest local forecast, actual admissions by cohort and forecast accuracy. Reconcile dated housing assumptions and delivery timescales. Distinguish local evidence from borough totals.
+Test the published local forecast against actual admissions by cohort and forecast accuracy. Reconcile dated housing assumptions and delivery timescales. Distinguish local evidence from borough totals.
 
 ### 3. Net closure savings
 Ask which costs cease, which continue and which are newly incurred. Include private finance initiative (PFI) obligations, transition, redundancy, transport and future site use. Request the comparison on a consistent annual basis.
@@ -46,7 +46,7 @@ Specify the change you seek and which evidence supports it. Make unresolved ques
 ## Other participation routes
 
 Check the current meeting arrangements before registering a speaker or submitting a written question:
-https://www.richmond.gov.uk/participating_in_council_meetings
+https://www.richmond.gov.uk/council/have_your_say/participating_in_council_meetings
 
 Check petition eligibility and handling rules:
 https://www.richmond.gov.uk/council/have_your_say/petitions

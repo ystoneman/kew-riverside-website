@@ -2,7 +2,7 @@
   "title": "Kew Riverside — Independent Evidence Hub",
   "researchChecked": "2026-09-21",
   "scope": "Curated public-record index; not exhaustive. Original documents remain with their publishers.",
-  "currentClosureStatus": "Official live closure pack and timetable not independently verified in this collection.",
+  "currentClosureStatus": "Pre-statutory consultation on closure effective 1 September 2027. Council-linked form states response deadline 16 October 2026. Later committee and statutory stages are planned and conditional; no final closure decision verified. Checked 21 September 2026.",
   "coverageDefinitions": {
     "Reviewed": "The public document or webpage was retrieved and reviewed for the stated summary; this is not validation of all its claims.",
     "Index only": "A reviewed official index lists the item; its individual document was not reviewed.",
@@ -242,7 +242,7 @@
       "type": "Participation",
       "topic": "Taking part",
       "status": "Reviewed",
-      "url": "https://www.richmond.gov.uk/participating_in_council_meetings",
+      "url": "https://www.richmond.gov.uk/council/have_your_say/participating_in_council_meetings",
       "summary": "For eligible borough residents and workers, the page describes speaking and written-question arrangements. Speaking registration closes at noon on the preceding working day; written questions close at noon two working days before. Check the relevant meeting and current rules before relying on a deadline.",
       "locator": "Updated 17 June 2026; speaking slots and question limits apply.",
       "accessChecked": "2026-09-21"
@@ -383,7 +383,7 @@
       "topic": "Decision process",
       "status": "Reviewed",
       "url": "https://cabnet.richmond.gov.uk/mgCommitteeDetails.aspx?ID=800",
-      "summary": "Official committee membership, remit and meeting links. Check the actual agenda and any statutory notice to confirm who will take a particular closure decision.",
+      "summary": "Official directory of Richmond’s Education and Children’s Services Committee. On 21 September 2026 it lists Councillor Julia Cambridge as chair and Councillor Michael Wilson as vice-chair. Membership does not establish an individual’s position or vote on Kew Riverside.",
       "locator": "Live committee directory; committee ID 800.",
       "accessChecked": "2026-09-21"
     },
@@ -459,16 +459,16 @@
     },
     {
       "id": "consultation-richmond",
-      "date": null,
-      "year": "Undated",
-      "title": "Richmond school organisation consultations",
+      "date": "2026-09-21",
+      "year": "2026",
+      "title": "Kew Riverside: official closure consultation",
       "publisher": "Richmond Council",
       "type": "Consultation",
       "topic": "Decision process",
-      "status": "Not retrieved",
-      "url": "https://www.richmond.gov.uk/school_organisation_consultations",
-      "summary": "A council consultation route identified for checking the closure proposal. The page could not be retrieved during collection, so this hub does not verify a Kew Riverside consultation pack, deadline or final decision from it.",
-      "locator": "Retrieval unsuccessful on 21 September 2026; use the official site to confirm the live position.",
+      "status": "Reviewed",
+      "url": "https://www.richmond.gov.uk/services/children_and_family_care/schools_and_colleges/school_organisation_consultations/kew_riverside_consultation",
+      "summary": "Council describes pre-statutory consultation on closure effective 1 September 2027, its financial and pupil-number rationale, a guaranteed Darell place for current pupils and transition support. Links to the leaflet, FAQ and response form. This is a proposal, not a final decision.",
+      "locator": "Page updated 21 September 2026. The 87-pupil figure is dated 2025/26 in the accompanying leaflet; the 2026/27 figure there is a forecast of 84.",
       "accessChecked": "2026-09-21"
     },
     {
@@ -483,6 +483,118 @@
       "url": "https://kr.afcinfo.org.uk/pages/community-information/information-and-advice/education-and-education-services/richmond-school-organisation",
       "summary": "An additional official organisation-information route. The contents could not be retrieved during collection. Check the publisher directly for the live proposal and consultation documents.",
       "locator": "Retrieval unsuccessful on 21 September 2026.",
+      "accessChecked": "2026-09-21"
+    },
+    {
+      "id": "consultation-leaflet",
+      "date": "",
+      "year": "Undated",
+      "title": "Kew Riverside consultation leaflet",
+      "publisher": "London Borough of Richmond upon Thames",
+      "type": "Consultation",
+      "topic": "Decision process",
+      "status": "Reviewed",
+      "url": "https://www.richmond.gov.uk/media/fxhbilws/kew_riverside_consultation_leaflet.pdf",
+      "summary": "School-specific proposal, financial rationale, reported rolls and forecasts, alternatives considered, conditional decision timetable and response instructions. Initial response period wording differs from the general FAQ; the council-linked form gives 16 October 2026.",
+      "locator": "8 PDF pages. PDF pages 3–6: finance, forecasting, pupil series and alternatives; page 7: timetable; page 8: event and response routes. Publication date not stated; current document retrieved 21 September 2026.",
+      "accessChecked": "2026-09-21"
+    },
+    {
+      "id": "consultation-faq",
+      "date": "",
+      "year": "Undated",
+      "title": "School organisation consultations: general FAQ",
+      "publisher": "London Borough of Richmond upon Thames",
+      "type": "Consultation",
+      "topic": "Decision process",
+      "status": "Reviewed",
+      "url": "https://www.richmond.gov.uk/media/prepaqcb/school_organisation_consultation_faq.pdf",
+      "summary": "Council-wide FAQ on school organisation, AfC’s role, pupil forecasts, alternatives and transition. Describes initial consultation ending in October, a November committee stage and planned April 2027 determination. General explanations must not be mistaken for Kew-specific commitments.",
+      "locator": "14 PDF pages. General FAQ supplied by the Kew consultation page. Publication date not stated; checked 21 September 2026.",
+      "accessChecked": "2026-09-21"
+    },
+    {
+      "id": "consultation-response",
+      "date": "",
+      "year": "Undated",
+      "title": "Kew Riverside: official consultation response form",
+      "publisher": "London Borough of Richmond upon Thames",
+      "type": "Consultation",
+      "topic": "Decision process",
+      "status": "Reviewed",
+      "url": "https://docs.google.com/forms/d/e/1FAIpQLSda5oPsdUlrJkf6vACC_AjvXFR6-ki3iBymNIF5BAWNxf85xQ/viewform",
+      "summary": "Council-linked response form states that responses must be submitted by 16 October 2026. It asks respondent capacity, view and reasons, with optional alternatives and comments. As checked, it does not ask for a name or postcode. No response was submitted during verification.",
+      "locator": "Opening description supplies deadline without a closing time. Respondent form linked from the council page; checked 21 September 2026. The initial council /edit link redirects to a readable form; this is its public respondent URL.",
+      "accessChecked": "2026-09-21"
+    },
+    {
+      "id": "committee-remit",
+      "date": "",
+      "year": "Undated",
+      "title": "Education Committee: constitutional remit",
+      "publisher": "London Borough of Richmond upon Thames",
+      "type": "Policy",
+      "topic": "Decision process",
+      "status": "Reviewed",
+      "url": "https://cabnet.richmond.gov.uk/documents/s500003893/02.09%20Education%20and%20Childrens%20Services%20Committee.pdf",
+      "summary": "Committee remit includes school place planning and admissions. Membership provision: 11 councillors, two voting diocesan members and a non-voting parent governor representative. The chair is designated Lead Member for Children’s Services. Check actual attendance, substitutions and entitlement for each meeting.",
+      "locator": "3 PDF pages; membership and functions on PDF page 1; reserved matters and delegations on page 3. No document date stated; current remit linked from the committee directory.",
+      "accessChecked": "2026-09-21"
+    },
+    {
+      "id": "committee-chair",
+      "date": "",
+      "year": "Undated",
+      "title": "Councillor Julia Cambridge: official committee role",
+      "publisher": "London Borough of Richmond upon Thames",
+      "type": "Directory",
+      "topic": "Decision process",
+      "status": "Reviewed",
+      "url": "https://cabnet.richmond.gov.uk/mgUserInfo.aspx?UID=11324",
+      "summary": "Official profile identifies Councillor Julia Cambridge as chair of the Education and Children’s Services Committee. Only this relevant public role is summarised; inclusion does not establish a view on Kew Riverside.",
+      "locator": "Position and committee appointments matched to the committee directory on 21 September 2026. No personal contact information or image is reproduced.",
+      "accessChecked": "2026-09-21"
+    },
+    {
+      "id": "committee-vice-chair",
+      "date": "",
+      "year": "Undated",
+      "title": "Councillor Michael Wilson: official committee role",
+      "publisher": "London Borough of Richmond upon Thames",
+      "type": "Directory",
+      "topic": "Decision process",
+      "status": "Reviewed",
+      "url": "https://cabnet.richmond.gov.uk/mgUserInfo.aspx?UID=10582",
+      "summary": "Official profile identifies Councillor Michael Wilson as vice-chair of the Education and Children’s Services Committee. Only this relevant public role is summarised; inclusion does not establish a view on Kew Riverside.",
+      "locator": "Position and committee appointments matched to the committee directory on 21 September 2026. No personal contact information or image is reproduced.",
+      "accessChecked": "2026-09-21"
+    },
+    {
+      "id": "committee-september-2026",
+      "date": "2026-09-10",
+      "year": "2026",
+      "title": "Education Committee: 10 September 2026 meeting record",
+      "publisher": "London Borough of Richmond upon Thames",
+      "type": "Committee record",
+      "topic": "Decision process",
+      "status": "Reviewed",
+      "url": "https://cabnet.richmond.gov.uk/ieListDocuments.aspx?CId=800&MId=500000747&Ver=4",
+      "summary": "Published agenda and decisions reviewed for the decision trail. No Kew-specific closure resolution was located in this meeting record. A work-programme item is not attributed as a vote to close Kew Riverside.",
+      "locator": "Meeting of 10 September 2026; agenda and decisions page checked 21 September 2026.",
+      "accessChecked": "2026-09-21"
+    },
+    {
+      "id": "committee-november-2026",
+      "date": "",
+      "year": "2026",
+      "title": "Education Committee: 12 November 2026 meeting page",
+      "publisher": "London Borough of Richmond upon Thames",
+      "type": "Directory",
+      "topic": "Decision process",
+      "status": "Reviewed",
+      "url": "https://cabnet.richmond.gov.uk/ieListDocuments.aspx?CId=800&MId=500000748&Ver=4",
+      "summary": "Meeting listed for 12 November 2026. As checked on 21 September, the agenda had not been published. The leaflet plans a November committee stage, but this calendar entry alone does not verify a Kew-specific item or a decision.",
+      "locator": "Future meeting page, checked 21 September 2026; not minutes or evidence that any decision has occurred.",
       "accessChecked": "2026-09-21"
     }
   ],
@@ -562,7 +674,8 @@
       "refs": [
         "guidance-2026",
         "school-finance",
-        "pfi"
+        "pfi",
+        "consultation-leaflet"
       ]
     },
     {
@@ -570,13 +683,14 @@
       "title": "Test the local demand forecast",
       "tag": "High priority",
       "effort": "Medium–high",
-      "evidence": "Good historical evidence; current Kew forecast missing",
+      "evidence": "School and local forecasts published; assumptions need scrutiny",
       "why": "The borough trend is clear, but a borough average cannot settle the case for one school. Compare forecasts with actual admissions, local cohorts and dated housing-delivery assumptions.",
-      "next": "Request the latest Kew-area model, its inputs and forecast errors. Reconcile the 2023 strategy with the later treatment of housing; present credible delivery scenarios.",
+      "next": "Test the published school and Kew-area forecasts against their inputs and past errors. Reconcile dated housing assumptions and examine credible delivery scenarios.",
       "limits": "A historic forecast is not proof that a later forecast is wrong. Proposed homes do not automatically become pupils at Kew Riverside.",
       "refs": [
         "strategy-2023",
-        "planning-nov-2025"
+        "planning-nov-2025",
+        "consultation-leaflet"
       ]
     },
     {
@@ -599,13 +713,14 @@
       "title": "Document pupil impacts and receiving-school capacity",
       "tag": "High priority",
       "effort": "Medium",
-      "evidence": "School-specific impact assessment missing",
+      "evidence": "Transition commitments published; detailed impact evidence still sought",
       "why": "Decision-makers need practical evidence about each year group, additional support, safe journeys, accessibility, continuity and siblings. Aggregate empty places do not answer every family-level question.",
       "next": "Request capacity by year group and provision for special educational needs and disabilities (SEND). Submit anonymised, specific examples with realistic mitigations and alternatives.",
       "limits": "Impact evidence may improve a transition plan without preventing closure. Keep children's identities and individual needs out of public campaign material.",
       "refs": [
         "guidance-2026",
-        "planning-nov-2025"
+        "planning-nov-2025",
+        "consultation-leaflet"
       ]
     },
     {
@@ -615,12 +730,13 @@
       "effort": "Low–medium",
       "evidence": "Public participation rules available",
       "why": "A concise, referenced case is easier to assess than a signature count alone. Coordinate who addresses budgets, demand, alternatives and pupil impacts, while preserving each person's own views.",
-      "next": "Confirm the official submission channel and deadline. Submit evidence, seek acknowledgement, check the committee agenda, and register a speaker or a compliant petition where useful.",
+      "next": "Respond through the official council-linked form by its stated date, 16 October 2026. Keep a copy, check later committee agendas and respond again during any statutory representation period.",
       "limits": "A petition is a route to consideration, not a veto. Public campaigning does not replace a response during the formal representation period.",
       "refs": [
         "participation",
         "petitions",
-        "guidance-2026"
+        "guidance-2026",
+        "consultation-leaflet"
       ]
     },
     {

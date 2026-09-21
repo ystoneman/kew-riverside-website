@@ -11,12 +11,12 @@ The evidence pages need no build or API keys. Feedback and community letters use
 ## Content and provenance
 
 - Research cut-off: **21 September 2026**.
-- 34 source entries: 28 reviewed, 2 listed in a reviewed index without individual review, and 4 routes not retrieved.
+- 42 source entries: 37 reviewed, 2 listed in a reviewed index without individual review, and 3 routes not retrieved.
 - Sources: school website, Richmond Council and Schools Forum, Achieving for Children, Ofsted, Department for Education.
-- The live closure consultation pack could not be retrieved; the site does not assert unverified closure dates or deadlines.
+- The school-specific consultation page, leaflet, general FAQ and council-linked form were retrieved. The form states a 16 October 2026 response deadline. Closure effective 1 September 2027 is proposed; November 2026 and April 2027 committee stages are planned, not completed decisions. Wording differences between timetable documents remain explicit.
 - The six ranked approaches are editorial priorities, not probabilities or demonstrated school-specific solutions.
 - Forecasts and pupil counts keep their dates and geographical definitions.
-- `sources.csv` is the visitor download: all 34 source records, with readable column headings, source URLs and coverage caveats. It uses UTF-8 with a BOM for Excel.
+- `sources.csv` is the visitor download: all 42 source records, with readable column headings, source URLs and coverage caveats. It uses UTF-8 with a BOM for Excel.
 - `sources.json` retains the structured source index, chart values and option rankings for maintenance.
 - `applications.csv` provides the borough application series.
 - `response-checklist.pdf` is the visitor download: a two-page A4 checklist with selectable text, tick boxes and clickable links.
@@ -29,6 +29,8 @@ This collection is not exhaustive. Original documents remain with their publishe
 | File | Purpose |
 | --- | --- |
 | index.html | Complete, readable page and source cards; works without JavaScript |
+| proposal.html / proposal.css | Dated proposal, conditional timetable, institutional roles, factual profiles, questions and decision record; no JavaScript required |
+| corrections.html | Private corrections and objections, always kind=privacy, no publication option |
 | styles.css | Responsive screen and print styles |
 | app.js | Search, filters, shareable filter URLs and anchor handling |
 | favicon.svg | Original code-drawn site mark |
@@ -48,6 +50,8 @@ This collection is not exhaustive. Original documents remain with their publishe
 ## Maintenance
 
 For a source addition or correction, retain a stable ID, publisher, document date (or explicitly unknown), URL, summary, location and collection coverage. Update both `sources.json` and the static cards in `index.html`, then regenerate `sources.csv`. Regenerate `response-checklist.pdf` whenever `response-checklist.md` changes. Update counts when coverage changes. Recheck the guidance edition and official notice before changing any process or deadline statement.
+
+Recheck the proposal, deadline, current public roles and meeting records before updates and after relevant committee meetings. Do not infer a position from office or a vote from attendance. Only add exact motions and individual votes from verified official records. Text-only profiles are deliberate; portraits need separately verified reuse rights. The private public-role assessment is held outside this repository. Corrections are human-reviewed and never auto-published.
 
 When updating charts, retain the complete data table and specify geography, measure, units and date. Do not silently turn a projection into an actual observation.
 
