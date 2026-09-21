@@ -4,22 +4,9 @@ A dependency-free static website for browsing public information about the Kew R
 
 ## Publishing on GitHub Pages
 
-The files in this directory are the complete site. They are currently staged on a task branch in a private repository.
+This directory is deployed from `main` at https://github.com/ystoneman/kew-riverside-website to https://ystoneman.github.io/kew-riverside-website/ using GitHub Pages (repository root, `.nojekyll`).
 
-**Publish only the contents of this directory to a dedicated public repository. Do not make the containing private repository public or copy its history.**
-
-1. Create a public repository such as `kew-riverside-school` and initialise it with a README.
-2. Copy this directory's contents into the new repository root. Include `.nojekyll`.
-3. In the new repository, open **Settings → Pages**.
-4. Select **Deploy from a branch**, then **main** and **/ (root)**. Save.
-5. Wait for the Pages deployment to complete and open the URL shown in Settings.
-6. Verify navigation, source filtering, downloads and mobile layout at the deployed URL.
-
-Official instructions: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
-
-No build, dependency installation, API key or external service is required. Relative asset paths support a repository subpath such as `/kew-riverside-school/`.
-
-The GitHub connector used for preparation could write repository files, but could not create a repository or configure Pages. No deployment is claimed by this source commit.
+The evidence pages need no build or API keys. Feedback and community letters use the private Formspree inbox behind the public form endpoint. Secrets and private submissions must never enter this repository. Relative asset paths support the repository subpath.
 
 ## Content and provenance
 
@@ -50,6 +37,12 @@ This collection is not exhaustive. Original documents remain with their publishe
 | applications.csv | Chart values with source attribution |
 | response-checklist.pdf | Printable evidence checklist for visitors |
 | response-checklist.md | Editable checklist source |
+| feedback.html / feedback.js | Website feedback, optional public display names and reviewed suggestions |
+| letters.html / letters.js | Community letters, separate public and council permissions, private optional council identity fields |
+| feedback.css | Shared form and public-board styles |
+| privacy.html | Versioned privacy and moderation notice |
+| suggestions.json | Approved website suggestions only |
+| letters.json | Human-approved letters only; no council identity fields or reply emails |
 | .nojekyll | Disables Jekyll processing for branch-based Pages |
 
 ## Maintenance
@@ -58,8 +51,8 @@ For a source addition or correction, retain a stable ID, publisher, document dat
 
 When updating charts, retain the complete data table and specify geography, measure, units and date. Do not silently turn a projection into an actual observation.
 
-There are no analytics, cookies, remote fonts, trackers, submission forms or user database. Outgoing links open the publisher's site. Search parameters remain in the page URL so a filtered view can be shared.
+There are no analytics, advertising scripts or remote fonts. Forms post to Formspree, which runs a hosted security check; see `privacy.html`. The letters and suggestions boards render approved data as text, never visitor HTML. Council sharing requires separate, recorded consent and an operator check of the official receiving requirements; it is not an official consultation submission service. Outgoing links open the publisher's site. Search parameters remain in the page URL so a filtered view can be shared.
 
 ## Verification in this environment
 
-JavaScript syntax, internal anchor references, local asset references, source IDs, record counts, chart arithmetic and filtering behaviour are checked during preparation. A browser runtime was unavailable, so visual browser testing and an actual GitHub Pages deployment must be completed when hosting is available.
+JavaScript syntax, internal anchor references, local asset references, source IDs, record counts, chart arithmetic and filtering behaviour are checked during preparation. Browser checks cover desktop/mobile forms, independent permission choices, excluded private fields, plain-text previews and empty public boards. Live delivery remains unverified pending the hosted CAPTCHA; hourly moderation must remain paused until that test is complete.

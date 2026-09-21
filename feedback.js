@@ -3,6 +3,7 @@
   const form = document.getElementById('feedback-form');
   const message = document.getElementById('message');
   const kind = document.getElementById('kind');
+  const displayName = document.getElementById('display-name');
   const permission = document.getElementById('allow-public');
   const button = form.querySelector('button[type="submit"]');
   const reference = document.getElementById('feedback-reference');
@@ -15,20 +16,27 @@
     const privateOnly = kind.value === 'privacy';
     if (privateOnly) permission.checked = false;
     permission.disabled = privateOnly;
+    displayName.disabled = privateOnly;
+    document.querySelector('.submission-preview').hidden = privateOnly;
     document.getElementById('privacy-only').hidden = !privateOnly;
   }
   const params = new URLSearchParams(location.search);
   if (params.get('kind') === 'privacy') {
     kind.value = 'privacy';
+    const letterId = params.get('letter');
+    if (letterId && /^letter-[a-f0-9]{12}$/.test(letterId)) message.value = 'Please review or remove letter ' + letterId + '.\n\n';
     const publicId = params.get('suggestion');
     if (publicId && /^idea-[a-f0-9]{12}$/.test(publicId)) message.value = 'Please review or remove suggestion ' + publicId + '.\n\n';
   }
   kind.addEventListener('change', updateKind);
   updateKind();
   function updateCount() {
+    document.getElementById('preview-name').textContent = displayName.value.trim() || 'Anonymous';
+    document.getElementById('preview-body').textContent = message.value.trim() || 'Your message will appear here.';
     document.getElementById('message-count').textContent = message.value.length.toLocaleString('en-GB') + ' / 3,000 characters';
   }
   message.addEventListener('input', updateCount);
+  displayName.addEventListener('input', updateCount);
   updateCount();
   form.addEventListener('submit', event => {
     if (message.value.trim().length < 10) {
@@ -53,7 +61,7 @@
     .then(data => {
       if (data.version !== 1 || !Array.isArray(data.suggestions)) throw new Error('Invalid board');
       const items = data.suggestions;
-      if (items.some(item => !item || !/^idea-[a-f0-9]{12}$/.test(item.id) || typeof item.body !== 'string' || item.body.length > 3000 || !/^\d{4}-\d{2}-\d{2}$/.test(item.date) || item.status !== 'Received' || item.review !== 'AI reviewed')) throw new Error('Invalid suggestion');
+      if (items.some(item => !item || !/^idea-[a-f0-9]{12}$/.test(item.id) || typeof item.body !== 'string' || item.body.length > 3000 || !/^\d{4}-\d{2}-\d{2}$/.test(item.date) || item.status !== 'Received' || item.review !== 'AI reviewed' || (item.displayName !== undefined && (typeof item.displayName !== 'string' || !item.displayName.trim() || item.displayName.length > 60)))) throw new Error('Invalid suggestion');
       const fragment = document.createDocumentFragment();
       items.forEach(item => {
         const article = document.createElement('article');
@@ -76,7 +84,10 @@
         const removal = document.createElement('a');
         removal.href = 'feedback.html?kind=privacy&suggestion=' + encodeURIComponent(item.id) + '#feedback-form';
         removal.textContent = 'Report this suggestion or request removal';
-        article.append(meta, body, removal);
+        const author = document.createElement('p');
+        author.className = 'public-author';
+        author.textContent = item.displayName || 'Anonymous';
+        article.append(meta, author, body, removal);
         fragment.append(article);
       });
       board.replaceChildren(fragment);
