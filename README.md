@@ -36,6 +36,7 @@ This collection is not exhaustive. Original documents remain with their publishe
 | corrections.html / corrections.js | Private corrections and objections, always kind=privacy, no publication option |
 | styles.css / insights.css | Responsive screen/print styles, practical FAQ and school-specific pupil chart |
 | app.js | Search, filters, shareable filter URLs and anchor handling |
+| navigation.js | Optional keyboard and dismissal behavior for the native mobile menu |
 | favicon.svg | Original code-drawn site mark |
 | sources.csv | Spreadsheet-friendly source index for visitors |
 | sources.json | Structured provenance and data for maintenance |
@@ -89,3 +90,9 @@ GitHub Pages does not give this project control over custom HTTP response header
 The homepage leads its numbers section with the consultation leaflet’s full eleven-year Kew Riverside pupil series. Five reported years (2021/22–2025/26) use a solid line and filled points; six forecasts (2026/27–2031/32) use a dashed line and hollow points. The zero-based chart, accessible table and sources.json/charts/schoolRoll must stay in agreement. Forecasts are not a verified present headcount, an assurance the school remains open, or an enrolment target sufficient for financial viability. No percentage from the leaflet’s inconsistent prose is copied into this chart.
 
 Five practical FAQ answers reuse the existing current-proposal panel, including the council’s statement that applications and admissions can continue during pre-statutory consultation. Keep that answer stage-specific and recheck the council FAQ when the process changes. Every answer cites its source or the site’s own contribution policy. The existing borough application chart, occupancy comparison and housing context remain available in a collapsed native disclosure. The chart, FAQ and data table work without JavaScript. No source-library count or contribution permissions changed.
+
+## Shared navigation and letter entry points
+
+All eight pages share the same header: research links, outlined Letters and a pale-green Contribute action. The council response remains the dark primary homepage action. Below 1,101px, research navigation uses native details; Letters and Contribute remain visible. Below 701px, the action pair spans its own row. The compact header scrolls away rather than covering content. Keep the duplicated desktop/mobile research links in agreement when editing them. Only the visible navigation is exposed to keyboard users; the current destination has aria-current="page".
+
+Navigation JavaScript only adds dismissal on link selection, outside click, Escape, focus leaving the menu and transition to desktop; native disclosure still works without it. Letters has direct writing/reading shortcuts, a writing link at the board and concise consent lead-ins. Full consent wording, separate unchecked permissions and disabled private fields are preserved.

@@ -72,3 +72,9 @@ The homepage’s current-proposal panel is now a compact five-question practical
 The full 11-year table is also in sources.json under charts.schoolRoll. Preserve the split after 2025/26 and the source/date/caveats. The leaflet’s prose percentage does not reconcile with the table endpoints; use the verified counts, not that percentage. Future pupil projections are not a guarantee of continuing operation, and the source does not explicitly identify an operating-school model assumption. The admissions FAQ describes only the current pre-statutory stage.
 
 Borough charts, their data table and housing note are retained inside #borough-context, collapsed by default to reduce clutter. No extra page, new JavaScript dependency, tracker, submission route, public entry, fundraiser or automation was added. The source library remains unchanged.
+
+## Participation UX refinement — 21 September 2026
+
+The same header now appears across all eight pages, with outlined Letters and pale-green Contribute actions, plain research links, a native mobile Menu and current-page markers. The mobile header is non-sticky; action links remain exposed while research links are collapsed. Shared navigation.js is in the public deployment allowlist. When editing navigation, maintain both desktop and mobile link groups and all eight headers.
+
+The letters page offers Write/Read shortcuts, a form heading, an official-response reminder at the form, a writing route from the board, and bold labels for required private review versus optional publication/council sharing. Consent text, field names, unchecked defaults, private-field disabling and submission destinations are unchanged. No messages or submissions were sent during the UX review.
