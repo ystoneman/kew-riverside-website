@@ -4,7 +4,7 @@ A dependency-free static website created and maintained by Yann Stoneman, a Kew 
 
 ## Publishing on GitHub Pages
 
-This directory is deployed from `main` at https://github.com/ystoneman/kew-riverside-website to https://ystoneman.github.io/kew-riverside-website/ using GitHub Pages (repository root, `.nojekyll`).
+This directory is deployed from `main` at https://github.com/ystoneman/kew-riverside-website to https://ystoneman.github.io/kew-riverside-website/ using GitHub Pages and the validated `.github/workflows/pages.yml` workflow. Only the 27 explicitly listed public assets are deployed; repository notes, workflow code and private working files are excluded from the website artifact.
 
 The evidence pages need no build or API keys. Feedback and community letters use the private Formspree inbox behind the public form endpoint. Secrets and private submissions must never enter this repository. Relative asset paths support the repository subpath.
 
@@ -62,7 +62,7 @@ There are no analytics, advertising scripts or remote fonts. Forms post to Forms
 
 ## Verification in this environment
 
-JavaScript syntax, internal anchor references, local asset references, source IDs, record counts, chart arithmetic and filtering behaviour are checked during preparation. Browser checks cover desktop/mobile forms, independent permission choices, excluded private fields, plain-text previews and empty public boards. Live delivery remains unverified pending the hosted CAPTCHA; hourly moderation must remain paused until that test is complete.
+JavaScript syntax, internal anchor references, local asset references, source IDs, record counts, chart arithmetic and filtering behaviour are checked during preparation. Browser checks cover desktop/mobile forms, independent permission choices, excluded private fields, plain-text previews and empty public boards. Two harmless CAPTCHA-protected setup submissions were delivered and verified in the private inbox on 21 September 2026. Hourly moderation remains paused; delivery verification does not authorise starting it.
 
 ## Named support and contact
 
@@ -71,3 +71,15 @@ Feedback is the entry point for named support, letters/testimonials and site sug
 ## Exploratory community funding
 
 Option 02 (`index.html#option-crowdfunding`) is linked to the costed recovery plan. The £400,000 figure is the council’s forecast deficit by 2028/29, not a campaign target. Eight fixed question links route to `feedback.html?kind=crowdfunding&question=...#feedback-form`. Funding feedback stays private for human review even if publication permission is submitted; it is never eligible for the automatic board. There are no donations, pledges, donor lists or recipient agreements. Category selection also works without JavaScript. Do not interpret submitted ideas as permission to publish, forward, contact third parties or make financial commitments.
+
+## Security checks and deployment
+
+Run `python3 .github/scripts/check_site.py` **before committing** and `python3 -m unittest discover -s .github/scripts -p 'test_*.py'` after changing security or public-data handling. A public Git commit already exposes its contents; a later deployment check cannot undo that. Stage named files and inspect the staged diff. Never add inbox exports, private ledgers, confirmation correspondence, council drafts, credentials or local test fixtures. Ignore rules are only a convenience, not a confidentiality boundary.
+
+Every push and pull request runs privacy/schema checks, JavaScript syntax checks and asset validation. Only a passing `main` build can deploy. GitHub Actions are pinned to exact commits, checkout credentials are not retained, and the separate deployment job has only Pages and deployment-identity permissions. The workflow packages an explicit asset list and excludes repository maintenance files. New intended assets must be deliberately added to the list in `.github/scripts/check_site.py`.
+
+All eight HTML pages declare a restrictive Content Security Policy before resources: local scripts/styles/data only, no inline scripts or handlers, no embedded frames/plugins or base-URL changes, and form submissions restricted to this origin and Formspree. External source links still work. Formspree remains responsible for CAPTCHA, spam filtering, intake validation and private storage. Its project is restricted to `ystoneman.github.io`; localhost and file previews should not submit to the live inbox. Keep `strict-origin-when-cross-origin` so the domain check works without sending page query strings.
+
+Public boards have exact field allowlists, bounds, valid dates and unique IDs checked **before deployment**; browser validation also fails closed and renders only text. These checks do not establish real identity, consent or the suitability of free text. Private moderation and human approval requirements remain in force. Council identity inputs are disabled in the initial HTML and require an explicit council-sharing choice and working JavaScript to be enabled.
+
+GitHub Pages does not give this project control over custom HTTP response headers. The HTML policy cannot enforce `frame-ancestors` or `X-Frame-Options`, so full anti-framing protection would require a host or proxy with custom headers. Bot controls reduce spam but cannot eliminate it or guarantee availability within provider quotas. No automatic security scan can guarantee an absence of vulnerabilities.

@@ -1,0 +1,13 @@
+# Private intake and moderation artifacts belong outside this public repository.
+.env
+.env.*
+*.pem
+*.key
+.state/
+feedback-moderation/
+incoming*.json
+*ledger*.json
+*council*draft*.csv
+__pycache__/
+*.pyc
+.DS_Store

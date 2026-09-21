@@ -54,3 +54,12 @@ supporters.html uses separate consent and requires private confirmation plus hum
 ## Crowdfunding exploration
 
 The user requested ideas from CROWDFUNDING-OPTION-PLAN.md. The website now explains an exploratory option immediately after the costed recovery plan, with eight question-specific private feedback routes. `kind=crowdfunding` must stay private with human review regardless of permission fields. No fundraiser, pledges, donor identities or third-party contact has been authorised or created. Existing letter/supporter consent workflows are unchanged.
+
+
+## Security review — 21 September 2026
+
+Deployment now uses the checked Pages workflow rather than publishing the repository root directly. Run `.github/scripts/check_site.py` before committing, and inspect named staged files: GitHub source history remains public even when an asset is excluded from the deployed website. The 27-file public artifact excludes these handoff notes and README. Do not switch back to branch-root publishing to bypass a failed check.
+
+All pages have a restrictive meta CSP; maintain local external scripts/styles instead of adding inline code. Private council fields are disabled in HTML. All public boards must pass the shared strict schema used by both private writers and the deployment check. The private helpers remain outside this public repository, now guard state paths (including symlinks), serialize letter publication, and prevent removed letters/supporters being silently recreated from old approvals.
+
+Formspree CAPTCHA, Formshield and required message validation were inspected; its project domain restriction is now `ystoneman.github.io`. Do not submit localhost/file previews to the live inbox. The public endpoint ID is not a secret. The hourly task remains paused. No security test submissions or real community entries were published during this review.

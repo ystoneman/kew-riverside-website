@@ -58,8 +58,13 @@
     .then(response => { if (!response.ok) throw new Error('Letters unavailable'); return response.json(); })
     .then(data => {
       const allowed = ['id', 'body', 'displayName', 'date', 'review'];
-      if (data.version !== 1 || !Array.isArray(data.letters)) throw new Error('Invalid letters');
-      if (data.letters.some(item => !item || Object.keys(item).some(key => !allowed.includes(key)) || !/^letter-[a-f0-9]{12}$/.test(item.id) || typeof item.body !== 'string' || item.body.length < 10 || item.body.length > 3000 || typeof item.displayName !== 'string' || !item.displayName.trim() || item.displayName.length > 60 || !/^\d{4}-\d{2}-\d{2}$/.test(item.date) || item.review !== 'Human reviewed')) throw new Error('Invalid letter');
+      if (!data || Object.keys(data).sort().join(',') !== 'letters,version' || data.version !== 1 || !Array.isArray(data.letters)) throw new Error('Invalid letters');
+      const seen = new Set();
+      if (data.letters.some(item => !item || Object.values(item).some(value => typeof value !== 'string') || Object.keys(item).some(key => !allowed.includes(key)) || typeof item.id !== 'string' || !/^letter-[a-f0-9]{12}$/.test(item.id) || typeof item.body !== 'string' || item.body.length < 10 || item.body.length > 3000 || typeof item.displayName !== 'string' || !item.displayName.trim() || item.displayName.length > 60 || !/^\d{4}-\d{2}-\d{2}$/.test(item.date) || item.review !== 'Human reviewed')) throw new Error('Invalid letter');
+      data.letters.forEach(item => {
+        if (seen.has(item.id) || Number.isNaN(Date.parse(item.date))) throw new Error('Invalid letter');
+        seen.add(item.id);
+      });
       const fragment = document.createDocumentFragment();
       data.letters.forEach(item => {
         const article = document.createElement('article');

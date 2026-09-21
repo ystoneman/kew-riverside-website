@@ -102,9 +102,14 @@
   fetch('suggestions.json', {cache: 'no-store'})
     .then(response => { if (!response.ok) throw new Error('Board unavailable'); return response.json(); })
     .then(data => {
-      if (data.version !== 1 || !Array.isArray(data.suggestions)) throw new Error('Invalid board');
+      if (!data || Object.keys(data).sort().join(',') !== 'suggestions,version' || data.version !== 1 || !Array.isArray(data.suggestions)) throw new Error('Invalid board');
       const items = data.suggestions;
-      if (items.some(item => !item || !/^idea-[a-f0-9]{12}$/.test(item.id) || typeof item.body !== 'string' || item.body.length > 3000 || !/^\d{4}-\d{2}-\d{2}$/.test(item.date) || item.status !== 'Received' || item.review !== 'AI reviewed' || (item.displayName !== undefined && (typeof item.displayName !== 'string' || !item.displayName.trim() || item.displayName.length > 60)))) throw new Error('Invalid suggestion');
+      const required = ['body', 'date', 'id', 'review', 'status'];
+      const seen = new Set();
+      items.forEach(item => {
+        if (!item || required.some(key => typeof item[key] !== 'string') || Object.keys(item).some(key => !required.includes(key) && key !== 'displayName') || !/^idea-[a-f0-9]{12}$/.test(item.id) || seen.has(item.id) || item.body.trim().length < 10 || item.body.length > 3000 || !/^\d{4}-\d{2}-\d{2}$/.test(item.date) || Number.isNaN(Date.parse(item.date)) || item.status !== 'Received' || item.review !== 'AI reviewed' || (item.displayName !== undefined && (typeof item.displayName !== 'string' || !item.displayName.trim() || item.displayName.length > 60))) throw new Error('Invalid suggestion');
+        seen.add(item.id);
+      });
       const fragment = document.createDocumentFragment();
       items.forEach(item => {
         const article = document.createElement('article');

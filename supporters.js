@@ -32,11 +32,11 @@
   fetch('supporters.json', {cache: 'no-store'})
     .then(response => { if (!response.ok) throw new Error('Unavailable'); return response.json(); })
     .then(data => {
-      if (data.version !== 1 || data.statementVersion !== 'keep-open-2026-09-21' || data.statement !== 'We support keeping Kew Riverside Primary School open.' || !Array.isArray(data.supporters)) throw new Error('Invalid board');
+      if (!data || Object.keys(data).sort().join(',') !== 'statement,statementVersion,supporters,version' || data.version !== 1 || data.statementVersion !== 'keep-open-2026-09-21' || data.statement !== 'We support keeping Kew Riverside Primary School open.' || !Array.isArray(data.supporters)) throw new Error('Invalid board');
       const keys = ['date', 'displayName', 'id', 'review'].sort().join(',');
       const seen = new Set();
       data.supporters.forEach(item => {
-        if (!item || Object.keys(item).sort().join(',') !== keys || !/^supporter-[a-f0-9]{12}$/.test(item.id) || seen.has(item.id) || typeof item.displayName !== 'string' || item.displayName.trim().length < 2 || item.displayName.length > 60 || !/^\d{4}-\d{2}-\d{2}$/.test(item.date) || item.review !== 'Confirmed with contributor; human reviewed') throw new Error('Invalid supporter');
+        if (!item || Object.values(item).some(value => typeof value !== 'string') || Object.keys(item).sort().join(',') !== keys || typeof item.id !== 'string' || !/^supporter-[a-f0-9]{12}$/.test(item.id) || seen.has(item.id) || typeof item.displayName !== 'string' || item.displayName.trim().length < 2 || item.displayName.length > 60 || !/^\d{4}-\d{2}-\d{2}$/.test(item.date) || Number.isNaN(Date.parse(item.date)) || item.review !== 'Confirmed with contributor; human reviewed') throw new Error('Invalid supporter');
         seen.add(item.id);
       });
       const fragment = document.createDocumentFragment();
