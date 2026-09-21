@@ -33,7 +33,7 @@ This collection is not exhaustive. Original documents remain with their publishe
 | community.css | Parent introduction, contribution routes and supporter styles |
 | index.html | Complete, readable page and source cards; works without JavaScript |
 | proposal.html / proposal.css | Dated proposal, conditional timetable, institutional roles, factual profiles, questions and decision record; no JavaScript required |
-| corrections.html | Private corrections and objections, always kind=privacy, no publication option |
+| corrections.html / corrections.js | Private corrections and objections, always kind=privacy, no publication option |
 | styles.css | Responsive screen and print styles |
 | app.js | Search, filters, shareable filter URLs and anchor handling |
 | favicon.svg | Original code-drawn site mark |
