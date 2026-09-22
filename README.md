@@ -43,7 +43,8 @@ This collection is not exhaustive. Original documents remain with their publishe
 | applications.csv | Chart values with source attribution |
 | response-checklist.pdf | Printable evidence checklist for visitors |
 | response-checklist.md | Editable checklist source |
-| feedback.html / feedback.js | Website feedback, optional public display names and reviewed suggestions |
+| feedback.html / feedback.js | Ideas, evidence, meeting questions and corrections; optional publication and reviewed suggestions |
+| faq.html / discovery.js / discovery.css | Sourced practical answers, local FAQ search, homepage discovery routes and shared action styling |
 | letters.html / letters.js | Community letters, separate public and council permissions, private optional council identity fields |
 | feedback.css | Shared form and public-board styles |
 | privacy.html | Versioned privacy and moderation notice |
@@ -95,7 +96,7 @@ Five practical FAQ answers reuse the existing current-proposal panel, including 
 
 ## Shared navigation and letter entry points
 
-All eight pages share the same header: research links, outlined Letters and a pale-green Contribute action. The council response remains the dark primary homepage action. Below 1,101px, research navigation uses native details; Letters and Contribute remain visible. Below 701px, the action pair spans its own row. The compact header scrolls away rather than covering content. Keep the duplicated desktop/mobile research links in agreement when editing them. Only the visible navigation is exposed to keyboard users; the current destination has aria-current="page".
+All ten pages share the same header: research links including FAQ, Community letters / Read or write, and a pale-green Share ideas / Evidence & suggestions action. The council response remains the dark primary homepage action. Below 1,101px, research navigation uses native details; Community letters and Share ideas remain visible. Below 701px, the action pair spans its own row. The compact header scrolls away rather than covering content. Keep the duplicated desktop/mobile research links in agreement when editing them. Only the visible navigation is exposed to keyboard users; the current destination has aria-current="page".
 
 Navigation JavaScript only adds dismissal on link selection, outside click, Escape, focus arriving outside the menu and transition to desktop; native disclosure still works without it. Letters has direct writing/reading shortcuts, a writing link at the board and concise consent lead-ins. Full consent wording, separate unchecked permissions and disabled private fields are preserved.
 
@@ -116,3 +117,9 @@ The compact #visit-school card links to the school’s verified Contact Us page 
 To update the comparisons, check the source definitions, dates and raw records; update the reviewed JSON, then run `python3 .github/scripts/build_understand.py`. Its `--check` mode detects stale HTML or CSV and runs through the data test suite. Do not hand-edit generated `understand.html` or `richmond-schools.csv`. Review `.github/scripts/build_understand.py` for dated narrative and source links when changing dataset editions. Run all checks in TESTING.md. Reconcile source-library changes across JSON, CSV and homepage cards.
 
 Charts are rendered as HTML/SVG, with no third-party chart package, embeds, tracking, live requests or extra visitor data collection. The small local script only switches between already-rendered trend views. Tables and disclosures remain usable without it.
+
+## Change history and design rationale
+
+[CHANGELOG.md](CHANGELOG.md) records visitor-facing changes and significant evidence, privacy, security and publishing changes. Add work under Unreleased, then record the checks actually completed and the publication outcome before moving it into a dated release. Historical commit dates are not proof of deployment dates. Keep references verifiable and private submission contents out of the log.
+
+[UX-DESIGN-DECISIONS.md](UX-DESIGN-DECISIONS.md) records the visitor need, alternatives considered and rationale for material navigation and interaction choices. Update it when those choices change; distinguish a proposed design, observed feedback and completed verification. [TESTING.md](TESTING.md) remains the operational guide for checks. These documentation files are repository maintenance material, not public Pages assets.

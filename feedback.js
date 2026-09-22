@@ -5,6 +5,7 @@
   const kind = document.getElementById('kind');
   const displayName = document.getElementById('display-name');
   const permission = document.getElementById('allow-public');
+  const publicationOptions = document.getElementById('publication-options');
   const button = form.querySelector('button[type="submit"]');
   const reference = document.getElementById('feedback-reference');
   if (globalThis.crypto && crypto.randomUUID) {
@@ -37,23 +38,38 @@
     document.getElementById('display-name-field').hidden = privateOnly;
     document.getElementById('publication-choice').hidden = privateOnly;
     document.getElementById('public-preview').hidden = privateOnly;
+    publicationOptions.hidden = privateOnly;
+    if (privateOnly) publicationOptions.open = false;
     document.getElementById('funding-context').hidden = !funding;
+    document.getElementById('meeting-context').hidden = kind.value !== 'meeting';
     document.getElementById('funding-subject').textContent = 'Crowdfunding — ' + fundingSubject + '.';
-    document.getElementById('feedback-title').textContent = funding ? 'Crowdfunding & funding ideas' : 'Website feedback';
+    const categoryHelp = {
+      suggestion: 'An idea for helping the school or improving this website is welcome.',
+      evidence: 'Tell us what the source shows and why it matters. Add its public link below if you have one.',
+      meeting: 'Share the question you would like considered. Yann will review it privately.',
+      correction: 'Tell us which claim needs changing, why, and the date of any supporting document.',
+      crowdfunding: 'Share an idea or relevant experience. No payment, donation or pledge is collected here.',
+      privacy: 'Tell us what needs reviewing or removing. Include a public link or your private reference if available.'
+    };
+    document.getElementById('kind-help').textContent = categoryHelp[kind.value] || categoryHelp.suggestion;
+    document.getElementById('feedback-title').textContent = funding ? 'Share a private funding idea' : 'Share an idea, evidence or a question';
     const privateNote = document.getElementById('privacy-only');
     privateNote.hidden = !privateOnly;
     privateNote.textContent = funding
       ? 'Funding ideas stay private for Yann to review. Add your email only if you would like a reply.'
       : 'Privacy and removal requests always stay private.';
-    if (!button.disabled) button.textContent = funding ? 'Send private funding feedback' : 'Send feedback';
+    if (!button.disabled) button.textContent = 'Send to Yann for review';
   }
   // Apply links only to a pristine form; restored or already-entered answers win.
   const pristine = kind.value === 'suggestion' && !permission.checked &&
     ![message, displayName, document.getElementById('source'), document.getElementById('email')].some(field => field.value);
-  if (pristine && params.get('kind') === 'crowdfunding') {
+  const aliases = { source: 'evidence', accessibility: 'suggestion', other: 'suggestion' };
+  const requestedKind = params.get('kind');
+  const linkedKind = Object.prototype.hasOwnProperty.call(aliases, requestedKind) ? aliases[requestedKind] : requestedKind;
+  if (pristine && linkedKind === 'crowdfunding') {
     kind.value = 'crowdfunding';
     message.value = fundingPrompt;
-  } else if (pristine && params.get('kind') === 'privacy') {
+  } else if (pristine && linkedKind === 'privacy') {
     kind.value = 'privacy';
     const letterId = params.get('letter');
     const publicId = params.get('suggestion');
@@ -62,6 +78,8 @@
     } else if (publicId && /^idea-[a-f0-9]{12}$/.test(publicId)) {
       message.value = 'Please review or remove suggestion ' + publicId + '.\n\n';
     }
+  } else if (pristine && ['suggestion', 'evidence', 'meeting', 'correction'].includes(linkedKind)) {
+    kind.value = linkedKind;
   }
   kind.addEventListener('change', updateKind);
   updateKind();
@@ -83,7 +101,7 @@
     }
     if (message.value.trim().length < 10) {
       event.preventDefault();
-      message.setCustomValidity('Please enter at least 10 characters of feedback.');
+      message.setCustomValidity('Please enter at least 10 characters in your message.');
       message.reportValidity();
       return;
     }

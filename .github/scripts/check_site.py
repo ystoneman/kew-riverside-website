@@ -11,7 +11,7 @@ from public_data import validate_board
 
 ROOT = Path(__file__).resolve().parents[2]
 PUBLIC_FILES = frozenset('''
-about.html app.js applications.csv community.css corrections.html
+faq.html discovery.css discovery.js about.html app.js applications.csv community.css corrections.html
 corrections.js favicon.svg feedback.css feedback.html feedback.js index.html insights.css navigation.js participation.css enrolment.css
 letters.html letters.js letters.json privacy.html proposal.css proposal.html
 response-checklist.md response-checklist.pdf sources.csv sources.json styles.css
@@ -22,11 +22,11 @@ MAINTENANCE_FILES = frozenset('''
 .nojekyll .gitignore README.md CODEX-HANDOFF.md .github/workflows/pages.yml
 .github/scripts/check_site.py .github/scripts/public_data.py
 .github/scripts/test_security.py .github/scripts/test_site_structure.py
-AGENTS.md TESTING.md package.json package-lock.json playwright.config.js
+AGENTS.md TESTING.md CHANGELOG.md UX-DESIGN-DECISIONS.md package.json package-lock.json playwright.config.js
 tests/browser/fixtures.js tests/browser/server.js tests/browser/mobile.spec.js
 tests/browser/desktop.spec.js tests/browser/no-javascript.spec.js
 tests/browser/contributions.spec.js tests/browser/evidence.spec.js tests/browser/boards.spec.js
-tests/browser/understand.spec.js .github/scripts/build_understand.py .github/scripts/test_understand.py
+tests/browser/visitor-journeys.spec.js tests/browser/understand.spec.js .github/scripts/build_understand.py .github/scripts/test_understand.py
 '''.split())
 CSP = "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; object-src 'none'; frame-src 'none'; form-action 'self' https://formspree.io; upgrade-insecure-requests"
 SECRET_PATTERNS = [

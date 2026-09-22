@@ -17,36 +17,51 @@ function entry(board) {
   return item;
 }
 
+async function readBoard(page, board, hasTouch) {
+  if (board.resource !== 'suggestions') return;
+  const summary = page.locator('#suggestions > summary');
+  await expect(summary).toHaveText('Read reviewed ideas');
+  await expect(page.locator('#suggestions')).not.toHaveAttribute('open', '');
+  if (hasTouch) await summary.tap();
+  else await summary.click();
+  await expect(page.locator('#suggestions')).toHaveAttribute('open', '');
+  await expect(page.locator(board.status)).toBeVisible();
+}
+
 for (const board of boards) {
-  test(`${board.resource}: empty board explains its state without blocking the form`, async ({ page }) => {
+  test(`${board.resource}: empty board explains its state without blocking the form`, async ({ page, hasTouch }) => {
     await page.route(`**/${board.resource}.json`, route => route.fulfill({ json: boardData(board, []) }));
     await page.goto('/' + board.file);
+    await readBoard(page, board, hasTouch);
     await expect(page.locator(board.status)).toContainText(/No .*published yet/);
     await expect(page.locator('form button[type="submit"]')).toBeEnabled();
   });
 
-  test(`${board.resource}: approved entry renders with a removal route`, async ({ page }) => {
+  test(`${board.resource}: approved entry renders with a removal route`, async ({ page, hasTouch }) => {
     await page.route(`**/${board.resource}.json`, route => route.fulfill({ json: boardData(board, [entry(board)]) }));
     await page.goto('/' + board.file);
+    await readBoard(page, board, hasTouch);
     await expect(page.locator(board.list)).toContainText('Test contributor');
     await page.locator(board.list).getByRole('link', { name: /remove|removal/ }).click();
     await expect(page).toHaveURL(new RegExp(board.resource === 'supporters' ? 'corrections.html\\?supporter=' : 'feedback.html\\?kind=privacy'));
     await expect(page.locator('textarea')).toHaveValue(new RegExp(`${board.prefix}-0123456789ab`));
   });
 
-  test(`${board.resource}: unexpected private fields fail closed`, async ({ page }) => {
+  test(`${board.resource}: unexpected private fields fail closed`, async ({ page, hasTouch }) => {
     const invalid = { ...entry(board), email: 'private@example.invalid' };
     await page.route(`**/${board.resource}.json`, route => route.fulfill({ json: boardData(board, [invalid]) }));
     await page.goto('/' + board.file);
+    await readBoard(page, board, hasTouch);
     await expect(page.locator(board.status)).toContainText('could not be loaded');
     await expect(page.locator(board.list)).toBeEmpty();
     await expect(page.locator('body')).not.toContainText('private@example.invalid');
     await expect(page.locator('form button[type="submit"]')).toBeEnabled();
   });
 
-  test(`${board.resource}: server failure leaves private intake usable`, async ({ page }) => {
+  test(`${board.resource}: server failure leaves private intake usable`, async ({ page, hasTouch }) => {
     await page.route(`**/${board.resource}.json`, route => route.fulfill({ status: 503, body: 'Intentional test outage', headers: { 'X-Test-Fixture': 'intentional-error' } }));
     await page.goto('/' + board.file);
+    await readBoard(page, board, hasTouch);
     await expect(page.locator(board.status)).toContainText('could not be loaded');
     await expect(page.locator('form button[type="submit"]')).toBeEnabled();
   });

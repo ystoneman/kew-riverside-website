@@ -14,10 +14,13 @@ for (const file of pages) {
     }
   });
 
-  test(`${file}: visible Letters and Contribute actions work on touch`, async ({ page, baseURL }) => {
-    for (const href of ['letters.html', 'feedback.html']) {
+  test(`${file}: clear participation actions work on touch`, async ({ page, baseURL }) => {
+    for (const [href, label] of [['letters.html', 'Community letters'], ['feedback.html', 'Share ideas']]) {
       await page.goto('/' + file);
-      await page.locator(`.participation-nav a[href="${href}"]`).tap();
+      const link = page.locator(`.participation-nav a[href="${href}"]`);
+      await expect(link).toHaveAccessibleName(new RegExp(label));
+      await expect(link.locator('svg')).toHaveAttribute('aria-hidden', 'true');
+      await link.tap();
       await expectDestination(page, href, baseURL);
     }
   });
@@ -37,7 +40,7 @@ for (const file of pages) {
   });
 }
 
-test('Contribute: a focused menu summary must not swallow a following touch', async ({ page, baseURL }) => {
+test('Share ideas: a focused menu summary must not swallow a following touch', async ({ page, baseURL }) => {
   await page.goto('/feedback.html');
   const summary = page.locator('.mobile-menu summary');
   await summary.tap();
@@ -48,7 +51,7 @@ test('Contribute: a focused menu summary must not swallow a following touch', as
   await expectDestination(page, 'about.html', baseURL);
 });
 
-test('Contribute: outside touch closes the menu', async ({ page }) => {
+test('Share ideas: outside touch closes the menu', async ({ page }) => {
   await page.goto('/feedback.html');
   await page.locator('.mobile-menu summary').tap();
   await expect(page.locator('.mobile-menu')).toHaveAttribute('open', '');

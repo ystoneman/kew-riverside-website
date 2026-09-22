@@ -1,23 +1,35 @@
 const { test, expect, captureSubmissions } = require('./fixtures');
 
-test('Contribution routes lead to the corresponding form', async ({ page }) => {
+async function openPublicationOptions(page, hasTouch) {
+  const summary = page.locator('#publication-options > summary');
+  if (hasTouch) await summary.tap();
+  else await summary.click();
+  await expect(page.locator('#publication-options')).toHaveAttribute('open', '');
+}
+
+test('Share ideas offers distinct routes for letters, named support and private contact', async ({ page }) => {
   for (const [name, destination, form] of [
     ['Add my name as a supporter', /supporters.html$/, '#supporter-form'],
-    ['Share a testimonial or letter', /letters.html$/, '#letter-form'],
-    ['Send website feedback', /feedback.html#feedback-form$/, '#feedback-form'],
+    ['Write a community letter', /letters.html$/, '#letter-form'],
+    ['Send a private message', /about.html#contact$/, '#contact form'],
   ]) {
     await page.goto('/feedback.html');
-    await page.getByRole('link', { name: new RegExp(name) }).click();
+    await page.getByRole('link', { name: new RegExp(name, 'i') }).click();
     await expect(page).toHaveURL(destination);
     await expect(page.locator(form)).toBeVisible();
   }
 });
 
-for (const kind of ['suggestion', 'crowdfunding', 'correction', 'source', 'accessibility', 'privacy', 'other']) {
-  test(`Feedback: ${kind} submits only the applicable publication fields`, async ({ page }) => {
+for (const kind of ['suggestion', 'evidence', 'meeting', 'correction', 'crowdfunding', 'privacy']) {
+  test(`Feedback: ${kind} submits only the applicable publication fields`, async ({ page, hasTouch }) => {
     const submissions = await captureSubmissions(page);
     await page.goto('/feedback.html');
     await page.locator('#message').fill('Synthetic browser test feedback; intercepted locally.');
+    if (['evidence', 'meeting'].includes(kind)) {
+      await page.locator('#source').fill('https://example.invalid/public-source');
+      await page.locator('#email').fill('private-reply@example.invalid');
+    }
+    await openPublicationOptions(page, hasTouch);
     await page.locator('#display-name').fill('Test contributor');
     await page.locator('#allow-public').check();
     await page.locator('#kind').selectOption(kind);
@@ -30,22 +42,73 @@ for (const kind of ['suggestion', 'crowdfunding', 'correction', 'source', 'acces
     } else {
       await expect(page.locator('#preview-name')).toHaveText('Test contributor');
       await expect(page.locator('#preview-body')).toContainText('Synthetic browser test feedback');
+      await expect(page.locator('#public-preview')).not.toContainText('private-reply@example.invalid');
     }
     await page.locator('#feedback-form button[type="submit"]').click();
     await expect.poll(() => submissions.length).toBe(1);
     expect(submissions[0].get('kind')).toBe(kind);
     expect(submissions[0].has('display_name')).toBe(!privateOnly);
     expect(submissions[0].has('allow_public')).toBe(!privateOnly);
+    if (['evidence', 'meeting'].includes(kind)) {
+      expect(submissions[0].get('source')).toBe('https://example.invalid/public-source');
+      expect(submissions[0].get('email')).toBe('private-reply@example.invalid');
+    }
   });
 }
 
-test('Private categories do not restore publication consent when switching back', async ({ page }) => {
+test('Private categories do not restore publication consent when switching back', async ({ page, hasTouch }) => {
   await page.goto('/feedback.html');
+  await openPublicationOptions(page, hasTouch);
   await page.locator('#allow-public').check();
   await page.locator('#kind').selectOption('privacy');
   await page.locator('#kind').selectOption('suggestion');
   await expect(page.locator('#allow-public')).toBeEnabled();
   await expect(page.locator('#allow-public')).not.toBeChecked();
+});
+
+test('Share ideas starts with publication off and accepts a private suggestion without optional details', async ({ page }) => {
+  const submissions = await captureSubmissions(page);
+  await page.goto('/feedback.html');
+  await expect(page.locator('#publication-options')).not.toHaveAttribute('open', '');
+  await expect(page.locator('#allow-public')).not.toBeChecked();
+  await expect(page.locator('#display-name')).toHaveValue('');
+  await page.locator('#message').fill('A synthetic suggestion submitted for private review only.');
+  await page.locator('#feedback-form button[type="submit"]').click();
+  await expect.poll(() => submissions.length).toBe(1);
+  expect(submissions[0].get('kind')).toBe('suggestion');
+  expect(submissions[0].has('allow_public')).toBe(false);
+  expect(submissions[0].get('display_name') || '').toBe('');
+  expect(submissions[0].get('email') || '').toBe('');
+});
+
+for (const [query, expected] of [['evidence', 'evidence'], ['meeting', 'meeting'], ['source', 'evidence'], ['accessibility', 'suggestion'], ['other', 'suggestion']]) {
+  test(`Share ideas deep link ${query} selects ${expected} without inventing a message or consent`, async ({ page }) => {
+    await page.goto(`/feedback.html?kind=${query}#feedback-form`);
+    await expect(page.locator('#kind')).toHaveValue(expected);
+    await expect(page.locator('#message')).toHaveValue('');
+    await expect(page.locator('#allow-public')).not.toBeChecked();
+    await expect(page.locator('#publication-options')).not.toHaveAttribute('open', '');
+    if (expected === 'meeting') {
+      await expect(page.locator('#meeting-context')).toBeVisible();
+      await expect(page.locator('#meeting-context')).toContainText('does not put it on a meeting agenda or send it to the council');
+    } else {
+      await expect(page.locator('#meeting-context')).toBeHidden();
+    }
+  });
+}
+
+test('Share ideas: optional publication disclosure works with a keyboard', async ({ page }) => {
+  await page.goto('/feedback.html');
+  const summary = page.locator('#publication-options > summary');
+  await expect(summary).toHaveText('Let others read your idea (optional)');
+  await summary.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#display-name')).toBeVisible();
+  await expect(page.locator('#allow-public')).toBeVisible();
+  await expect(page.locator('#allow-public')).not.toBeChecked();
+  await page.keyboard.press('Space');
+  await expect(page.locator('#publication-options')).not.toHaveAttribute('open', '');
+  await expect(summary).toBeFocused();
 });
 
 test('Funding deep link selects its question and rejects an untouched template', async ({ page }) => {

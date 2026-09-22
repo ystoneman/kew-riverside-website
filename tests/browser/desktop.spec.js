@@ -10,9 +10,12 @@ for (const file of pages) {
         await expectDestination(page, href, baseURL);
       });
     }
-    for (const href of ['letters.html', 'feedback.html']) {
+    for (const [href, label] of [['letters.html', 'Community letters'], ['feedback.html', 'Share ideas']]) {
       await page.goto('/' + file);
-      await page.locator(`.participation-nav a[href="${href}"]`).click();
+      const link = page.locator(`.participation-nav a[href="${href}"]`);
+      await expect(link).toHaveAccessibleName(new RegExp(label));
+      await expect(link.locator('svg')).toHaveAttribute('aria-hidden', 'true');
+      await link.click();
       await expectDestination(page, href, baseURL);
     }
   });

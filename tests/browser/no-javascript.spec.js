@@ -1,4 +1,4 @@
-const { test, expect, pages, headerLinks, expectDestination } = require('./fixtures');
+const { test, expect, pages, headerLinks, expectDestination, captureSubmissions } = require('./fixtures');
 
 for (const file of pages) {
   test(`${file}: every native mobile menu link works without JavaScript`, async ({ page, baseURL }) => {
@@ -40,4 +40,39 @@ test('No JavaScript: Understand retains charts, underlying data and council cont
   }
   await expect(page.locator('#other-proposals')).toBeVisible();
   await expect(page.locator('#methodology')).toBeVisible();
+});
+
+test('No JavaScript: optional sharing details and reviewed ideas remain usable', async ({ page }) => {
+  const submissions = await captureSubmissions(page);
+  await page.goto('/feedback.html');
+  await expect(page.locator('#publication-options')).not.toHaveAttribute('open', '');
+  await page.locator('#publication-options > summary').tap();
+  await expect(page.locator('#display-name')).toBeVisible();
+  await expect(page.locator('#allow-public')).not.toBeChecked();
+  await page.locator('#suggestions > summary').tap();
+  await expect(page.locator('#suggestions')).toHaveAttribute('open', '');
+  await expect(page.locator('#suggestions a[href="suggestions.json"]')).toBeVisible();
+  await page.locator('#kind').selectOption('evidence');
+  await page.locator('#message').fill('Synthetic source information entered without JavaScript.');
+  await page.locator('#display-name').fill('Optional test alias');
+  await page.locator('#allow-public').check();
+  await page.locator('#feedback-form button[type="submit"]').tap();
+  await expect.poll(() => submissions.length).toBe(1);
+  expect(submissions[0].get('kind')).toBe('evidence');
+  expect(submissions[0].get('display_name')).toBe('Optional test alias');
+  expect(submissions[0].has('allow_public')).toBe(true);
+});
+
+test('No JavaScript: all FAQ answers retain native disclosure and official routes', async ({ page }) => {
+  await page.goto('/faq.html');
+  await expect(page.locator('#faq-search')).toBeHidden();
+  const answers = page.locator('main details');
+  await expect(answers).toHaveCount(12);
+  for (const answer of await answers.all()) {
+    await expect(answer).toBeVisible();
+    await answer.locator(':scope > summary').tap();
+    await expect(answer).toHaveAttribute('open', '');
+    await expect(answer.locator('p').first()).toBeVisible();
+    expect(await answer.locator('a[href]').count()).toBeGreaterThan(0);
+  }
 });
