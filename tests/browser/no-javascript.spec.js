@@ -303,3 +303,12 @@ test('No JavaScript: the exact video QR upload address keeps a working permissio
   await expect(page.locator('#upload')).toBeInViewport();
   await expect(page.locator('main a[href="letters.html"]')).toBeVisible();
 });
+
+test('No JavaScript: video publication purpose and private alternative survive direct arrival', async ({ page, baseURL }) => {
+  await page.goto('/videos.html#upload');
+  await expect(page.locator('#upload')).toContainText('New submissions require your explicit YouTube permission');
+  await expect(page.locator('#upload')).toContainText('News-media permission is optional');
+  await expect(page.locator('#resume-instructions')).toContainText('including any earlier private-only choice');
+  await page.locator('#private-video-alternative a').tap();
+  await expect(page).toHaveURL(/about.html#contact$/);
+});

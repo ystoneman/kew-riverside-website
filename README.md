@@ -153,3 +153,7 @@ The proposed `ENROLMENT-OUTREACH-BRIEF.md` is maintenance-only coordination mate
 The homepage is a short overview. The complete evidence library, charts, history, gaps and method live in `evidence.html`; the eight strategies live in `options.html`. Keep their local contents and the six homepage task links useful. The video flyer QR address is a fixed route: `videos.html#upload`.
 
 The homepage retains each former fragment as a `.legacy-route` with an explicit destination and native Continue link. `homepage.js` uses replacement navigation and preserves query strings, including evidence searches without a fragment. Do not remove these compatibility targets when shortening copy. Update canonical citations in the builders as well as generated pages. The source-library integrity and legacy-route tests live in `test_site_structure.py`; browser interactions and saved searches are checked in `homepage.spec.js` and `evidence.spec.js`.
+
+## Video publication permissions
+
+New Parent Voices submissions require explicit YouTube publication permission and offer separate optional unchecked news-media permission. Receipt/storage/personal review remains a separate required consent. Earlier saved permissions, including delayed uploads, keep their original scope. Use [the permission-version rules](VIDEO-PERMISSIONS.md) before manual publication or media disclosure; store actual records privately outside this repository. Both Google form routes and the Dropbox request retain their existing public URLs.
