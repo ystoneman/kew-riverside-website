@@ -275,7 +275,7 @@ test('Parent plan: homepage invitation and meeting details both lead to preparat
   await expect(invitation.locator('.meeting-plan-steps > li')).toHaveText([
     'Prepare together', 'Attend the meeting', 'Respond with evidence',
   ]);
-  await activate(invitation.getByRole('link', { name: /Our next steps & prep sessions/ }), hasTouch);
+  await activate(invitation.getByRole('link', { name: 'Parent action plan', exact: true }), hasTouch);
   await expect(page).toHaveURL(/proposal\.html#parent-plan$/);
   await expect(page.locator('#parent-plan-title')).toBeInViewport();
   await expect(page.locator('#parent-plan')).toContainText('Closure is proposed, not decided.');
@@ -353,4 +353,34 @@ test('FAQ: action comes first while school-place answers remain searchable and d
   await activate(help.locator('summary'), hasTouch);
   await activate(help.locator('a[href="proposal.html#parent-plan"]'), hasTouch);
   await expect(page.locator('#parent-plan-title')).toBeInViewport();
+});
+
+
+test('Parent plan: a named homepage shortcut is visible before scrolling', async ({ page, hasTouch }) => {
+  await page.setViewportSize({ width: hasTouch ? 320 : 1440, height: hasTouch ? 568 : 1000 });
+  await page.goto('/index.html');
+  const shortcut = page.getByRole('link', { name: 'Parent action plan', exact: true }).filter({ has: page.locator('strong') });
+  await expect(shortcut).toBeInViewport({ ratio: 1 });
+  await expect(shortcut).toHaveAttribute('href', 'proposal.html#parent-plan');
+  await activate(shortcut, hasTouch);
+  await expect(page).toHaveURL(/proposal\.html#parent-plan$/);
+  await expect(page.locator('#parent-plan-title')).toBeInViewport();
+});
+
+test('Parent plan: the shared navigation names the plan at desktop and mobile sizes', async ({ page, hasTouch }) => {
+  for (const width of [390, 1101, 1280, 1440]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto('/feedback.html');
+    const navigation = width <= 1100 ? page.locator('.mobile-menu') : page.locator('.desktop-explore');
+    if (width <= 1100) await activate(navigation.locator('summary'), hasTouch);
+    const link = navigation.getByRole('link', { name: 'Parent action plan', exact: true });
+    await expect(link).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+    const box = await link.boundingBox();
+    expect(box.x).toBeGreaterThanOrEqual(0);
+    expect(box.x + box.width).toBeLessThanOrEqual(width);
+    await activate(link, hasTouch);
+    await expect(page).toHaveURL(/proposal\.html#parent-plan$/);
+    await expect(page.locator('#parent-plan-title')).toBeInViewport();
+  }
 });

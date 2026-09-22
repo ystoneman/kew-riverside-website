@@ -154,3 +154,14 @@ test('No JavaScript: video guidance and external upload route remain available',
   await page.locator('#video-upload-link').tap();
   await expect(page).toHaveURL(destination);
 });
+
+
+test('No JavaScript: the named parent action plan is visible on arrival', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.goto('/index.html');
+  const plan = page.getByRole('complementary', { name: 'Parent action plan', exact: true }).getByRole('link', { name: 'Parent action plan', exact: true });
+  await expect(plan).toBeInViewport({ ratio: 1 });
+  await plan.tap();
+  await expect(page).toHaveURL(/proposal\.html#parent-plan$/);
+  await expect(page.locator('#parent-plan-title')).toBeInViewport();
+});

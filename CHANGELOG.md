@@ -4,6 +4,16 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Make the parent action plan easy to find
+
+- Add an always-visible homepage shortcut named “Parent action plan” before the meeting invitation, with a brief description of its preparation times and practical actions.
+- Use the same name on the meeting invitation button and add the plan to the shared desktop navigation and mobile Menu on every public page.
+- Preserve `proposal.html#parent-plan` and the separate proposal, dates, evidence and official-response routes. Let desktop links wrap at intermediate widths and load the entry-point styling as a new public asset.
+- Add regression checks for discovery before scrolling on a small phone, navigation at mobile/intermediate/desktop widths and access without JavaScript. The new homepage test failed on the old page because the named shortcut was absent.
+
+Validation: all 562 browser checks and 29 Python checks passed; 65 public assets validated. Native iPhone 17 / iOS 26.5 Safari verified the shortcut before scrolling, its destination, Safari Back, the named mobile-menu entry and portrait/landscape layouts. Desktop layout was visually reviewed. No external forms were submitted. Publication: pending.
+
+
 ### Dropbox video uploads without sign-in
 
 - Make a no-account permission form followed by a private Dropbox file request the primary video route. Keep the existing Google upload form live and linked for older flyers.
