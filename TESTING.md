@@ -25,7 +25,7 @@ The browser harness serves the site locally, uses fictional form inputs, and int
 | Shared navigation | Mobile touch links on every public page; participation actions; keyboard focus and dismissal; desktop links; JavaScript-disabled fallback |
 | Responsive layout | Narrow/mobile and desktop layouts; horizontal overflow and usable navigation |
 | Contributions | Entry routes, feedback categories, private-only funding/privacy behaviour, previews, validation and independent letter consents |
-| Discovery and FAQ | Six homepage task routes; deadline links; 12 sourced answers; keyboard/native disclosures; search, no matches and reset; answer links/history; no-JavaScript use; historical record and six conditional future stages |
+| Discovery and FAQ | Parent-plan entry routes, PTA session dates, consent and deadline distinctions, optional further actions, reordered/searchable school-place answers; six homepage task routes; deadline links; 12 sourced answers; keyboard/native disclosures; search, no matches and reset; answer links/history; no-JavaScript use; historical record and six conditional future stages |
 | Evidence | Search/filter/reset journeys and visitor download formats |
 | School comparisons | Dated source sentinels; aggregate-only export; HTML/CSV/JSON agreement; count/percentage controls; local/borough tables; downloads; no-JavaScript and failed-script fallbacks |
 | Historical school lessons | Eight chart/data disclosures and downloads; complete 16-case catalogue; search/outcome filters, empty/reset states; direct links; keyboard and no-JavaScript use; 45 sources / 49 claims; preserved denominators and forecasts |
@@ -83,3 +83,10 @@ All 528 browser checks and 29 Python checks passed; 64 public assets validated. 
 In native iPhone 17 / iOS 26.5 Safari: inspect portrait/landscape page layout; open Menu and navigate to Proposal & dates; expand the permission disclosure; follow the video privacy anchor; tap Upload a video and confirm Google sign-in is required; return with Safari Back. These checks passed against the local allowlisted preview. Google form settings and private Drive folder permissions were inspected separately in the signed-in browser, and empty-form validation was checked. A complete synthetic upload could not be verified because the Chrome extension lacks file-URL permission. Do not report the website handoff tests as proof of backend delivery.
 
 The first full run hit the pre-existing desktop WebKit validation-bubble issue in the supporter form. Dismissing the native bubble with Escape before the desktop label click retains all required-consent, focus, blocked-submit and checked-state assertions. Forty repeated cases and the final full suite passed; no product consent code was changed.
+
+
+## Parent action plan — 22 September 2026
+
+The parent-plan journeys cover the homepage and meeting-detail entries; five native step shortcuts; correct PTA preparation dates/times; separate council meeting and official-response deadline; adult video permission language; written/video/evidence/question routes; an intercepted official response handoff; optional additional actions; and the conditional school-place answer's retained anchor and search synonyms. The no-JavaScript project follows the native links and opens the extra-actions and school-place disclosures.
+
+All 545 browser checks and 29 Python checks passed; 64 public assets validated. Immediate proposal/FAQ anchor navigation resolved the new JavaScript-disabled WebKit failure and passed three focused repetitions. A one-off existing desktop WebKit source-filter failure passed eight unchanged repetitions and the final full suite. Native iPhone 17 / iOS 26.5 Safari separately checked the homepage plan button, session-time shortcut, menu, additional-actions disclosure and school-place answer, with portrait/landscape visual review. No real consultation, video or other form was submitted.

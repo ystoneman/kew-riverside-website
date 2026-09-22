@@ -13,3 +13,35 @@
 @media print{.proposal-header,.proposal-nav{display:none}.proposal-page{padding:0}.proposal-intro h1{font-size:30pt}.proposal-actions{background:#eee;color:black;display:block}.proposal-actions h2,.proposal-actions p,.proposal-actions .eyebrow{color:black}.proposal-actions .button{display:none}.proposal-section{padding-block:20px}.stage-list,.role-grid,.profile-grid{grid-template-columns:1fr 1fr}.stage-list li,.role-profile,.question-list details{break-inside:avoid}.decision-table-wrap{overflow:visible}.decision-table th,.decision-table td{min-width:0;padding:10px}.question-list details>div{display:block}.source-note{font-size:9pt}}
 
 .proposal-page a{overflow-wrap:anywhere}
+
+/* A readable action sequence, separate from the council's formal timetable. */
+.parent-plan{border-bottom:1px solid var(--line)}
+.parent-plan-lead{font-size:18px;line-height:1.65}
+.parent-plan-list{list-style:none;padding:0;margin:28px 0;counter-reset:none;max-width:940px}
+.parent-plan-list>li{display:grid;grid-template-columns:42px minmax(0,1fr);gap:20px;padding:26px 0;border-top:1px solid var(--line);scroll-margin-top:28px}
+.plan-number{display:grid;place-items:center;width:40px;height:40px;background:var(--green);color:#fff;border-radius:50%;font-size:17px;font-weight:700}
+.parent-plan-list .plan-when{font-size:12px;font-weight:700;color:#486144;margin:0 0 8px;letter-spacing:.3px}
+.parent-plan-list h3{margin:0 0 12px;font-size:27px}
+.parent-plan-list p{font-size:15px;line-height:1.7;margin-bottom:14px}
+.parent-plan-list .source-note{font-size:12px;margin-top:14px}
+.parent-plan-list .plan-links{display:flex;flex-wrap:wrap;gap:8px 24px}
+.plan-links a{display:inline-flex;align-items:center;min-height:36px;font-weight:700;font-size:13px}
+.prep-session-dates{display:grid;grid-template-columns:1fr 1fr;gap:12px;list-style:none;padding:0;margin:20px 0}
+.prep-session-dates li{padding:18px 20px;background:#f5ebd6;border:1px solid #dbca9e;border-radius:10px}
+.prep-session-dates strong,.prep-session-dates span{display:block;font-size:15px;line-height:1.6}
+.prep-session-dates span{font-size:14px;margin-top:5px}
+.parent-more{border:1px solid var(--line);border-radius:10px;background:#fff;margin-top:20px}
+.parent-more summary{padding:18px 20px;font-size:15px;line-height:1.6;font-weight:700}
+.parent-more>div{padding:0 20px 12px}
+.parent-more h4{font-size:17px;margin:20px 0 8px}
+.parent-reassurance{background:#edf2e8;border-left:3px solid #63825a;border-radius:0 12px 12px 0;padding:24px 28px;max-width:940px}
+.parent-reassurance h3{margin:0 0 12px}
+.parent-reassurance p{font-size:15px;line-height:1.7}
+.parent-reassurance p:last-child{margin-bottom:0;font-size:12px}
+@media(max-width:600px){.parent-plan-list>li{grid-template-columns:30px minmax(0,1fr);gap:12px;padding-block:23px}.plan-number{width:30px;height:30px;font-size:14px}.parent-plan-list h3{font-size:24px}.prep-session-dates{grid-template-columns:1fr}.prep-session-dates li{padding:16px}.parent-more summary{padding:16px}.parent-more>div{padding-inline:16px}.parent-reassurance{padding:22px}.parent-plan-list .button{font-size:13px;gap:12px}}
+@media print{.parent-plan-list>li,.prep-session-dates li{break-inside:avoid}.parent-more>div{display:block}.parent-plan-list .button{display:none}}
+
+.parent-plan-jumps{display:flex;flex-wrap:wrap;gap:8px 20px;margin:20px 0;max-width:900px}.parent-plan-jumps a{display:inline-flex;align-items:center;min-height:44px;font-size:14px;font-weight:700}
+
+/* Long action-guide jumps should land immediately, including without scripts. */
+html:has(.parent-plan){scroll-behavior:auto}

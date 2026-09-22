@@ -4,6 +4,16 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### A shared parent action plan
+
+- Give the homepage meeting invitation a clear preparation → meeting → response sequence and a prominent link to the parent plan.
+- Add the five-step guide on Proposal & dates, with PTA preparation sessions on Friday 25 September at 9am or 3.20pm and Monday 28 September at 9am, on school grounds. Keep the council meeting on Tuesday 29 September at 3.30pm and the official response deadline of 16 October distinct.
+- Include evidence, voluntary adult videos, community letters, representatives, children’s own letters, friends/family participation and continued work on alternatives. Keep additional actions in a native disclosure and mark the proposed petition as awaiting a verified link.
+- Lead the FAQ with participation; retain all school-place answers, citations, search and incoming links. Reframe transfer timing conditionally, retain normal admissions/SEND instructions, and keep practical questions accessible from the homepage.
+- Add regression journeys for the plan, dates, privacy wording, official-response handoff, optional actions, FAQ order/search and JavaScript-disabled use.
+
+Validation: all 545 browser checks and 29 Python checks passed; 64 public assets validated. The new JavaScript-disabled path exposed unstable animated anchor navigation; immediate section jumps on the proposal/FAQ pages passed three repetitions. One pre-existing desktop WebKit source-filter reset failure did not recur in eight unchanged repetitions or the final full suite. Native iPhone 17 / iOS 26.5 Safari checked menu navigation, the homepage plan link, session-time shortcut, disclosures, school-place answer and portrait/landscape layouts. No external form was submitted. Deployment: pending.
+
 ### Private video submissions
 
 - Add a focused Parent Voices page reached from community letters and Share ideas, with filming prompts, clear Google sign-in/file limits, a private-review explanation and written alternatives.

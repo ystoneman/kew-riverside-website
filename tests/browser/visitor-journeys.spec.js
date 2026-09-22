@@ -8,12 +8,12 @@ const questions = {
 };
 const questionIds = Object.values(questions).flat();
 const entryRoutes = [
-  'faq.html#school-places',
+  'index.html#options',
   'proposal.html#timetable',
   'understand.html',
-  'index.html#options',
   'index.html#records',
   'feedback.html?kind=evidence#feedback-form',
+  'faq.html#school-places',
 ];
 
 async function activate(locator, hasTouch) {
@@ -265,4 +265,92 @@ test('Proposal: the future timeline separates current participation from conditi
   await expect(page.locator('#future-timeline [data-stage="implementation"]')).toContainText(/2027/);
   await expect(page.locator('#future-timeline [data-stage="implementation"] .stage-label')).toContainText('ONLY IF APPROVED');
   await expect(page.locator('#future-timeline [data-stage="decision"]')).toContainText('could still be rejected');
+});
+
+test('Parent plan: homepage invitation and meeting details both lead to preparation', async ({ page, hasTouch }) => {
+  await page.clock.setFixedTime(new Date('2026-09-22T12:00:00Z'));
+  await page.goto('/index.html');
+  const invitation = page.locator('#meeting-invitation');
+  await expect(invitation).toContainText('Prepare. Participate. Make a difference.');
+  await expect(invitation.locator('.meeting-plan-steps > li')).toHaveText([
+    'Prepare together', 'Attend the meeting', 'Respond with evidence',
+  ]);
+  await activate(invitation.getByRole('link', { name: /Our next steps & prep sessions/ }), hasTouch);
+  await expect(page).toHaveURL(/proposal\.html#parent-plan$/);
+  await expect(page.locator('#parent-plan-title')).toBeInViewport();
+  await expect(page.locator('#parent-plan')).toContainText('Closure is proposed, not decided.');
+  for (const [name, id] of [['PTA prep times', 'prep-sessions'], ['Letters & videos', 'plan-share'], ['Council meeting', 'plan-attend'], ['Your response', 'plan-respond'], ['More ways to help', 'plan-keep-going']]) {
+    await activate(page.getByRole('navigation', { name: 'Choose a parent action' }).getByRole('link', { name, exact: true }), hasTouch);
+    await expect(page).toHaveURL(new RegExp('#' + id + '$'));
+    await expect(page.locator('#' + id)).toBeInViewport();
+  }
+  await page.goto('/proposal.html#school-meeting');
+  await activate(page.locator('#school-meeting a[href="#parent-plan"]'), hasTouch);
+  await expect(page.locator('#parent-plan-title')).toBeInViewport();
+});
+
+test('Parent plan: correct PTA dates, independent video permission and official deadline stay distinct', async ({ page, hasTouch, baseURL }) => {
+  await page.goto('/proposal.html#parent-plan');
+  const prep = page.locator('#prep-sessions');
+  await expect(prep).toContainText('school grounds');
+  await expect(prep.locator('.prep-session-dates > li').first()).toContainText('Friday 25 September');
+  await expect(prep.locator('.prep-session-dates > li').first()).toContainText('9am or 3.20pm');
+  await expect(prep.locator('.prep-session-dates > li').last()).toContainText('Monday 28 September');
+  await expect(prep.locator('.prep-session-dates > li').last()).toContainText('9am');
+  await expect(prep).toContainText('separate from the council meeting');
+  await expect(page.locator('#plan-attend')).toContainText('Tuesday 29 September · 3.30pm');
+  await expect(page.locator('#plan-respond')).toContainText('You can respond now if you are ready.');
+  await expect(page.locator('#plan-respond')).toContainText('16 October');
+  await expect(page.locator('#plan-respond')).toContainText('does not replace your own official response');
+  await expect(page.locator('#plan-share')).toContainText('only with your separate permission');
+  await expect(page.locator('.parent-reassurance')).toContainText('Keep following any admissions or SEND instructions');
+  for (const href of ['letters.html', 'videos.html', 'feedback.html?kind=evidence#feedback-form', 'feedback.html?kind=meeting#feedback-form', 'index.html#options']) {
+    await page.goto('/proposal.html#parent-plan');
+    await activate(page.locator(`#parent-plan a[href="${href}"]`), hasTouch);
+    await expectDestination(page, href, baseURL);
+  }
+  await page.goto('/proposal.html#plan-respond');
+  const official = 'https://docs.google.com/forms/d/e/1FAIpQLSda5oPsdUlrJkf6vACC_AjvXFR6-ki3iBymNIF5BAWNxf85xQ/viewform';
+  await page.route(official, route => route.fulfill({ contentType: 'text/html', body: '<h1>Intercepted official consultation</h1>' }));
+  await activate(page.locator('#plan-respond').getByRole('link', { name: /Send your official response/ }), hasTouch);
+  await expect(page).toHaveURL(official);
+  await expect(page.getByRole('heading')).toHaveText('Intercepted official consultation');
+});
+
+test('Parent plan: additional actions are optional native details without an invented petition link', async ({ page, hasTouch }) => {
+  await page.goto('/proposal.html#plan-keep-going');
+  const more = page.locator('#more-parent-actions');
+  await expect(more).not.toHaveAttribute('open', '');
+  await activate(more.locator('summary'), hasTouch);
+  await expect(more).toHaveAttribute('open', '');
+  await expect(more.getByRole('heading', { level: 4 })).toHaveCount(4);
+  await expect(more).toContainText('in their own words');
+  await expect(more).toContainText('A verified link and its wording are not yet available here');
+  await expect(more.getByRole('link', { name: /petition/i })).toHaveCount(0);
+  await more.locator('summary').focus();
+  await page.keyboard.press('Enter');
+  await expect(more).not.toHaveAttribute('open', '');
+  await expect(more.locator('summary')).toBeFocused();
+});
+
+test('FAQ: action comes first while school-place answers remain searchable and directly linked', async ({ page, hasTouch }) => {
+  await page.goto('/faq.html');
+  expect(await page.locator('.faq-group').evaluateAll(groups => groups.map(group => group.id))).toEqual(['taking-part', 'decisions', 'money', 'school-places']);
+  expect(await page.locator('#school-places details').evaluateAll(answers => answers.map(answer => answer.id))).toEqual(['apply-during-consultation', 'school-choice', 'choose-school']);
+  await expect(page.locator('#choose-school > summary')).toHaveText('If closure is approved, when would we need to arrange another school?');
+  await page.getByRole('searchbox', { name: 'Find an answer', exact: true }).fill('choose another school');
+  await expect(page.locator('#choose-school')).toBeVisible();
+  await expect(page.locator('#choose-school')).toHaveAttribute('open', '');
+  await expect(page.locator('#choose-school')).toContainText('Closure has not been decided.');
+  await expect(page.locator('#choose-school')).toContainText('normal admissions');
+  await page.goto('/faq.html#choose-school');
+  await expect(page.locator('#choose-school')).toHaveAttribute('open', '');
+  await expect(page.locator('#choose-school')).toBeInViewport();
+  await activate(page.locator('#choose-school a[href="proposal.html#parent-plan"]'), hasTouch);
+  await expect(page.locator('#parent-plan-title')).toBeInViewport();
+  await page.goto('/index.html');
+  const help = page.locator('#quick-answers details').filter({ hasText: 'What can we do together now?' });
+  await activate(help.locator('summary'), hasTouch);
+  await activate(help.locator('a[href="proposal.html#parent-plan"]'), hasTouch);
+  await expect(page.locator('#parent-plan-title')).toBeInViewport();
 });

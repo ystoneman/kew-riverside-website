@@ -107,6 +107,24 @@ test('No JavaScript: the meeting invitation shows its fixed date and usable deta
   await expect(page.locator('#school-meeting')).toBeInViewport();
 });
 
+test('No JavaScript: the parent plan, session dates and additional actions are available', async ({ page }) => {
+  await page.goto('/index.html');
+  await page.locator('#meeting-invitation a[href="proposal.html#parent-plan"]').tap();
+  await expect(page.locator('#parent-plan-title')).toBeInViewport();
+  await expect(page.locator('#prep-sessions')).toContainText('Friday 25 September');
+  await expect(page.locator('#prep-sessions')).toContainText('Monday 28 September');
+  await expect(page.locator('#plan-respond')).toContainText('16 October');
+  await page.getByRole('navigation', { name: 'Choose a parent action' }).getByRole('link', { name: 'More ways to help' }).tap();
+  await expect(page.locator('#plan-keep-going')).toBeInViewport();
+  await page.locator('#more-parent-actions > summary').tap();
+  await expect(page.locator('#more-parent-actions')).toHaveAttribute('open', '');
+  await expect(page.locator('#more-parent-actions').getByRole('link', { name: 'Find your MP' })).toBeVisible();
+  await page.locator('.parent-reassurance a[href="faq.html#school-places"]').tap();
+  await expect(page.locator('#school-places')).toBeInViewport();
+  await page.locator('#choose-school > summary').tap();
+  await expect(page.locator('#choose-school')).toContainText('normal admissions');
+});
+
 test('No JavaScript: research keeps all cases, graphics, evidence notes and citations available', async ({ page }) => {
   await page.goto('/lessons.html');
   await expect(page.locator('#lesson-filters')).toBeHidden();

@@ -33,12 +33,12 @@ These choices are design judgments to verify, not measured conversion improvemen
 
 Place **Find what you need** near the top, with six routes:
 
-1. **My child's next steps** — practical answers about school places and admissions.
+1. **Could the school stay open?** — alternatives and their necessary conditions.
 2. **What happens when?** — the meeting, response deadline and possible later stages.
 3. **Make sense of the numbers** — the sourced Richmond comparisons.
-4. **Could the school stay open?** — alternatives and their necessary conditions.
-5. **Check the evidence** — the original documents.
-6. **I have something to add** — evidence, ideas and meeting questions.
+4. **Check the evidence** — the original documents.
+5. **I have something to add** — evidence, ideas and meeting questions.
+6. **My child's next steps** — practical answers about school places and admissions.
 
 The persistent Community letters action provides the reading/writing route alongside these cards. A compact upcoming-date strip links to the school meeting and the official council response, with the proposal's current status visible. Review this strip whenever a date passes or the council changes the process. It must not continue advertising an expired action.
 
@@ -123,3 +123,17 @@ Options considered: add a file input to Formspree (current free plan has no uplo
 Google Forms provides private Drive storage and phone-sized files but requires Google sign-in. State this before the handoff and retain private contact and written-letter alternatives. The website does not load a Google or YouTube embed. Start with adults recording themselves. Keep private review consent and optional publication independent; the owner manually reviews and posts only authorised videos. No AI video moderation or YouTube automation is introduced.
 
 The owner explicitly approved the Google Forms/private Drive collection and the form was published. All 528 browser checks and 29 Python checks passed. Native iPhone 17 / iOS 26.5 Safari covered navigation, portrait/landscape layout, a permission disclosure, the privacy anchor and the Google sign-in handoff. The upload picker and empty-form validation were checked; a completed upload remains unverified because the extension blocked the synthetic file transfer. No interviews or usability study are claimed.
+
+## 22 September 2026 — prepare and participate together
+
+Visitor need: understand the next useful action, coordinate with other parents and see that closure remains a proposal, while retaining honest answers for families thinking about contingencies.
+
+Considered a ten-item homepage campaign list, an image containing all instructions, and a compact sequence linking to a fuller guide. Choose the compact sequence within the existing meeting invitation, with the detailed plan on Proposal & dates and additional actions in a native disclosure. This avoids another homepage section, image-only text, a carousel or a new navigation item. The formal council timeline remains separately labelled and directly linked. The existing dated meeting invitation expires after 29 September; the plan remains reachable from the FAQ, homepage quick answers and proposal navigation.
+
+The guide distinguishes PTA preparation sessions, the council meeting, the response deadline and the conditional final decision. Family participation is voluntary; videos retain independent permission, children’s letters stay in appropriate official channels, and a proposed petition is not shown as available until its wording and link are verified. Encourage preparing a response using meeting answers, while making clear that people can respond now and must not miss the deadline waiting for more information.
+
+Move school-place answers below participation, decisions and money; put continued applications first within that group. Keep the original anchors, search synonyms, topic shortcut, source citations and normal admissions/SEND instructions. Lead with conditional wording and reassurance without discouraging practical questions or telling families to postpone decisions regardless of their circumstances.
+
+Add short in-page links for session times, letters/videos, the council meeting, the response and additional actions. Proposal and FAQ anchors jump immediately: long animated scrolling proved unreliable in the JavaScript-disabled WebKit journey. Preserve native links and all test assertions.
+
+Verification: all 545 browser checks and 29 Python checks passed; 64 public assets validated. The previously failing native path passed three repetitions, and a one-off existing source-filter failure passed eight unchanged repetitions and the final full suite. Native iPhone 17 / iOS 26.5 Safari verified the homepage route, prep-session shortcut, native disclosure, menu and conditional school-place answer; portrait and landscape were visually inspected. Publication is tracked in CHANGELOG.md.

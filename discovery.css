@@ -131,3 +131,6 @@
 .ideas-page .ideas-board-content>p{font-size:14px}
 .ideas-page .ideas-other-routes{font-size:14px;text-align:center;margin:24px 0 0;line-height:2}
 @media(max-width:700px){.ideas-page{padding-block:30px 48px}.ideas-page .ideas-form{padding:24px 20px}.ideas-page .ideas-intro>p:not(.eyebrow){font-size:17px}.ideas-page .ideas-intro .ideas-letter-route{font-size:15px}.ideas-page .feedback-disclosure>summary{font-size:15px}.ideas-page .ideas-other-routes span{display:none}.ideas-page .ideas-other-routes a{display:block;min-height:44px}}
+
+/* Topic links should land immediately, including native no-script navigation. */
+html.faq-document{scroll-behavior:auto}
