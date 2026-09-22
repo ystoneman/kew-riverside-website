@@ -4,16 +4,6 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
-### A shared parent action plan
-
-- Give the homepage meeting invitation a clear preparation → meeting → response sequence and a prominent link to the parent plan.
-- Add the five-step guide on Proposal & dates, with PTA preparation sessions on Friday 25 September at 9am or 3.20pm and Monday 28 September at 9am, on school grounds. Keep the council meeting on Tuesday 29 September at 3.30pm and the official response deadline of 16 October distinct.
-- Include evidence, voluntary adult videos, community letters, representatives, children’s own letters, friends/family participation and continued work on alternatives. Keep additional actions in a native disclosure and mark the proposed petition as awaiting a verified link.
-- Lead the FAQ with participation; retain all school-place answers, citations, search and incoming links. Reframe transfer timing conditionally, retain normal admissions/SEND instructions, and keep practical questions accessible from the homepage.
-- Add regression journeys for the plan, dates, privacy wording, official-response handoff, optional actions, FAQ order/search and JavaScript-disabled use.
-
-Validation: all 545 browser checks and 29 Python checks passed; 64 public assets validated. The new JavaScript-disabled path exposed unstable animated anchor navigation; immediate section jumps on the proposal/FAQ pages passed three repetitions. One pre-existing desktop WebKit source-filter reset failure did not recur in eight unchanged repetitions or the final full suite. Native iPhone 17 / iOS 26.5 Safari checked menu navigation, the homepage plan link, session-time shortcut, disclosures, school-place answer and portrait/landscape layouts. No external form was submitted. Deployment: pending.
-
 ### Private video submissions
 
 - Add a focused Parent Voices page reached from community letters and Share ideas, with filming prompts, clear Google sign-in/file limits, a private-review explanation and written alternatives.
@@ -50,6 +40,16 @@ Published and verified on 22 September 2026: implementation commit `86015ea` pas
 Screening update validation: all 453 browser checks passed locally across Chromium, WebKit and JavaScript-disabled projects; all 24 Python security/data/structure checks passed and 40 public assets validated. Separately, all 80 private workflow tests passed with fictional fixtures, including consent, withdrawal, human reconciliation and interrupted-send recovery. The first Linux CI run passed 452 checks but stopped on the existing desktop WebKit supporter consent recovery test while a native validation popup remained visible; deployment was blocked. The test now clicks the full native consent label on desktop, as it already did on touch, retaining every focus, consent and blocked-submission assertion. All 80 repeated cases and the full 453-check local suite passed after this adjustment; the original failure was not reproduced locally. Follow-up deployment verification is pending. No new simulator check was needed; product touch, focus, menu and layout code are unchanged.
 
 Earlier letter-publication validation, before the screening update: 417 browser checks and 22 Python security/data/structure checks passed; 40 public assets validated.
+
+## 22 September 2026 — shared parent action plan
+
+- Give the homepage meeting invitation a clear preparation → meeting → response sequence and a prominent link to the parent plan.
+- Add the five-step guide on Proposal & dates, with PTA preparation sessions on Friday 25 September at 9am or 3.20pm and Monday 28 September at 9am, on school grounds. Keep the council meeting on Tuesday 29 September at 3.30pm and the official response deadline of 16 October distinct.
+- Include evidence, voluntary adult videos, community letters, representatives, children’s own letters, friends/family participation and continued work on alternatives. Keep additional actions in a native disclosure and mark the proposed petition as awaiting a verified link.
+- Lead the FAQ with participation; retain all school-place answers, citations, search and incoming links. Reframe transfer timing conditionally, retain normal admissions/SEND instructions, and keep practical questions accessible from the homepage.
+- Add regression journeys for the plan, dates, privacy wording, official-response handoff, optional actions, FAQ order/search and JavaScript-disabled use.
+
+Validation: all 545 browser checks and 29 Python checks passed; 64 public assets validated. The new JavaScript-disabled path exposed unstable animated anchor navigation; immediate section jumps on the proposal/FAQ pages passed three repetitions. One pre-existing desktop WebKit source-filter reset failure did not recur in eight unchanged repetitions or the final full suite. Native iPhone 17 / iOS 26.5 Safari checked menu navigation, the homepage plan link, session-time shortcut, disclosures, school-place answer and portrait/landscape layouts. No external form was submitted. Published and verified: commit `ab22a97` passed all 545 browser checks and 29 Python checks in [GitHub Actions](https://github.com/ystoneman/kew-riverside-website/actions/runs/35739939328) and deployed successfully. All six changed public assets returned HTTP 200 and matched the tested local files. Native iPhone Safari verified the live homepage button, plan entry and PTA session-time shortcut.
 
 ## Meeting invitation — independent wording
 
