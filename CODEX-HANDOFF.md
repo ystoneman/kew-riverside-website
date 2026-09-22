@@ -1,5 +1,53 @@
 # Codex handoff: publish the Kew Riverside evidence hub
 
+## ACTIVE HANDOFF: video publication consent — 22 September 2026
+
+The user asked to hand this task to Claude Code because of their remaining Codex credits. Stop at this handoff; do not assume the task is deployed. The user authorised updating the existing website, Dropbox request and both Google forms, including ordinary commit/push/deployment. Do not send messages, real form responses or test videos.
+
+### Current state
+
+- Implementation is committed, pushed and merged into `main`: `1cb3f5234d1730af8b01de1055848e29971b8217`, via PR https://github.com/ystoneman/kew-riverside-website/pull/3. Original reviewed branch commit: `cd13be342c55bebcb270112f661fad14de235dd3`.
+- Both live Google forms and the Dropbox file request have already been updated and verified through their ordinary browser UIs. Do not recreate them or repeat edits unnecessarily.
+- **Website deployment is NOT complete.** PR run `35780002723` passed all 671 browser tests, 40 Python tests and validation of 69 public assets. The subsequent main deployment run `35781407831` failed one browser test; `validate` passed, `deploy` was skipped, and 670 browser tests passed.
+- Failure: `[desktop-webkit] tests/browser/lessons.spec.js:21`, “Research: all eight graphics expand with readable data, sources and working downloads”. At line 26, after clicking the summary, `#exhibit-1` lacked the `open` attribute. This research-page code was unchanged by this task. Do not assume the cause or dismiss it as flaky without inspecting the trace.
+- Run: https://github.com/ystoneman/kew-riverside-website/actions/runs/35781407831 . Download `browser-test-failures` to a temporary directory with `gh run download 35781407831 -n browser-test-failures -D /tmp/kew-video-deploy-artifacts`. Failure screenshot, error context and trace are under `test-results/lessons-Research-all-eight-e7413-urces-and-working-downloads-desktop-webkit/` in that artifact.
+- The full failed job log is already at `/tmp/kew-video-deploy-failure.log` on this Mac. Local successful full-suite log: `/tmp/kew-video-tests.log`; focused successful log: `/tmp/kew-video-fixed.log`; Python log: `/tmp/kew-video-python.log`.
+
+### Agreed product and consent model
+
+New video submissions are intended for possible public publication on Kew Riverside Parent Voices on YouTube. Require affirmative, initially unchecked YouTube permission; remove private-review-only as a new submission choice. Keep separate required receipt/storage/personal-review consent and adult/self-recording attestation. Offer separate **optional, unchecked news-media permission**, with a visible private-contact alternative before handoff. No automatic publication.
+
+Media permission covers Yann supplying the video and chosen public credit to news organisations reporting on Kew Riverside’s future, and their use of the recording/excerpts in broadcast and online coverage with accurate captions and edits preserving meaning. Exclude private contact details. Explain recipients control their publications and may require their own release/privacy arrangements. Withdrawal is separate, stops further sharing and prompts contact with known recipients; do not promise recall of copies or broadcasts.
+
+Earlier recorded permissions retain their original scope, even when upload happens later. Old private-only remains private, old YouTube-only grants no media permission, and blank/missing media answers mean no. Unmatched/ambiguous uploads remain private. Match the actual recording to its actual permission record; never infer scope from upload date or the current form schema. See `VIDEO-PERMISSIONS.md` for versions and fictional manual-review cases.
+
+### Provider state already completed
+
+- Main permission-only form: https://docs.google.com/forms/d/e/1FAIpQLScJZ8ZnZWTaPUIoM9l2Vjir7TgNNTHuUyDEF5uLRJolm8iccg/viewform . Notice `2026-09-22-videos-dropbox-v2`; no Google sign-in required. Confirmation retains step 2 Dropbox URL and clearly says the video is not uploaded yet.
+- Original Google upload form: https://docs.google.com/forms/d/e/1FAIpQLSfK3b8XtDJ5_mhKWTqxfZpZwPOJLGXjN1QIQYTKYlJ0dRAHHQ/viewform . Notice `2026-09-22-videos-v2`; Google sign-in, one video up to 1 GB, one response per account retained. Confirmation updated and saved.
+- Dropbox request: https://www.dropbox.com/request/9uaa0fawrtdz6pv8b6hn . Title now “Kew Riverside Parent Voices — video submission”; instructions explain new public intent, optional media permission, private contact, same email matching and preservation of old saved choices. Owner-only destination/access unchanged and verified. Dropbox request descriptions render URLs as text; Google contact/privacy/withdrawal links were made clickable with rich-text paste and verified.
+- Both Google forms have required unchecked YouTube checkbox, answer marker `[YouTube v2]`, plus optional unchecked media checkbox, marker `[Media v2]`, and visible adjacent scope/withdrawal explanation. Storage/review remains a separate required checkbox. Existing response scopes were not expanded. Public credit stays optional.
+- No complete response, file upload, video publication, media disclosure or contributor message was performed. Verification establishes provider UI configuration/navigation, not completed backend file receipt.
+
+### Local code and validation
+
+Read the parent and checkout `AGENTS.md`, then `TESTING.md`, `UX-DESIGN-DECISIONS.md`, and `VIDEO-PERMISSIONS.md`. Website implementation touches `videos.html`, `privacy.html`, `letters.html`, `proposal.html`, `videos.css`, `understand.css`; tests extend `videos.spec.js`, `no-javascript.spec.js`, `visitor-journeys.spec.js`, and the video-consent expectation in `sofiya.spec.js`. Maintenance allowlist includes `VIDEO-PERMISSIONS.md` and excludes it from Pages. No private submissions/correspondence were committed.
+
+Local final result: 671 browser tests / 40 Python tests / 69 assets passed; all 51 focused repetitions passed. The new no-JavaScript private-contact tap failed three repetitions before a scoped `html:has(#upload:target){scroll-behavior:auto}` fix. A recurring existing chart-link click failure was fixed with the analogous `#learning-and-results:target` rule in `understand.css`, retaining assertions. Independent campaign, evidence and UX reviews covered proposal and actual diff; all findings resolved. UX rendered desktop, 390px and 320px. Native iPhone Air / iOS 26.5 Safari checked private contact, Back, signed-out form handoff and portrait/landscape layout. Simulator was restored to portrait.
+
+Use Node 24. On this Mac its executable is `/Users/yannstoneman/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node`. Install/test as described in TESTING.md. Another task used default port 4173 from adjacent `theme-worktree`; do not kill it or overwrite that work. This task used `/tmp/kew-video-playwright.config.cjs` and `/tmp/kew-video-test-server.cjs` at HTTPS port 4287, preserving the real CSP and all original projects/assertions. Command: `PATH=/Users/yannstoneman/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin:$PATH node node_modules/playwright/cli.js test --config /tmp/kew-video-playwright.config.cjs`. The separate public-only preview at 4286 has been stopped. Temporary files are conveniences, not required repository dependencies.
+
+### Finish from here
+
+1. Inspect the failed research-disclosure trace and reproduce the exact desktop WebKit case. Fix an established issue or justify a rerun from evidence; do not weaken assertions or skip required checks. Run focused repetitions, then required checks. Keep the existing video consent design and live provider settings.
+2. Fetch current remote state before changes/pushes. PR #2 (`codex/site-theme`) is concurrent work; preserve it. This handoff was prepared on `codex/video-consent-handoff`; the implementation is already on main. The handoff commit is documentation-only and does not publish anything. No active Codex work should be assumed after this handoff.
+3. Use normal reviewed/validated publication. Main has required checks/review; the documented owner exception permits owner-authored work because the sole owner cannot self-approve. Do not change protection settings. PR #3 was merged only after its checks passed. Pages gates deploy on both validation and browser checks.
+4. Confirm a successful main deployment. A convenience script `/tmp/verify-kew-video-release.py` compares the six changed public files over HTTPS against commit `1cb3f52`; adjust the expected revision if fixes or concurrent work produce a newer deployed commit. Do not mistake a merged commit for a live release.
+5. Verify the live video page, private-contact route, privacy notice and preserved form links, ideally including native Safari. Update delivery notes with actual successful run/revision and give the user a concise completion report. Current public URL: https://ystoneman.github.io/kew-riverside-website/videos.html .
+
+The earlier sections below are historical context, not a second active task. Do not resume WhatsApp archiving, Alice correspondence, council-question planning, letter moderation or other unrelated work as part of this handoff. Private WhatsApp content must remain outside all Git repositories and website assets.
+
+
 ## User's goal
 
 Publish this complete static website publicly on GitHub Pages. It centralises public information about the Kew Riverside School Closure, with a searchable document index, historical timeline, infographics and eight numbered approaches to retaining provision.
