@@ -4,6 +4,14 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Lightweight action-button motion
+
+- Add a brief, single arrow nudge to the prominent homepage Parent action plan link, plus directional feedback on hover and keyboard focus.
+- Give action-link buttons a 2px hover/focus lift and a quick press response. Use CSS transforms, no animation library, and no repeating attention animation.
+- Respect reduced-motion preferences: all new movement is opt-in through the browser's no-preference media query. Labels, focus indicators and native links remain available immediately, including without JavaScript.
+
+Validation: all 570 browser checks and 29 Python checks passed; 66 public assets validated. New coverage checks the finite arrow cue, stable spotlight hit area, hover feedback, reduced-motion behaviour and keyboard activation. Native iPhone 17 / iOS 26.5 Safari separately verified the visible homepage shortcut, meeting action button, both plan destinations and Safari Back against the local preview. No external forms were submitted. Publication: pending.
+
 ### Make the parent action plan easy to find
 
 - Add an always-visible homepage shortcut named “Parent action plan” before the meeting invitation, with a brief description of its preparation times and practical actions.

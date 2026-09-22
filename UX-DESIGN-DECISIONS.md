@@ -153,3 +153,12 @@ The owner could not readily find the action plan from the homepage. Its main but
 Keep the existing plan address. Add a named, always-visible shortcut above the meeting invitation, rename that invitation's button “Parent action plan”, and include the plan in both shared navigation variants. This gives the parent task its own clear entry without requiring familiarity with the proposal page or opening an answer. Keep the longer plan on its current page and preserve the official-response action. Allow the desktop link group to wrap rather than crowding the existing participation actions.
 
 Verification: a regression first demonstrated that the named, immediately visible homepage shortcut was missing. All 562 browser checks and 29 Python checks passed, including no-JavaScript access and 320px arrival/1101px intermediate navigation layouts. Native iPhone 17 / iOS 26.5 Safari verified the visible shortcut, its destination, Back, the mobile-menu entry and portrait/landscape layouts. Desktop layout was visually reviewed. These checks demonstrate access and layout, not measured user discoverability.
+
+
+## Lightweight action feedback
+
+The owner requested a little contemporary motion, especially on Parent action plan. Use a single 900ms decorative-arrow cue after arrival, 180–200ms hover/keyboard feedback and an 80ms press response. The spotlight's text and clickable area stay still; action-link buttons lift just 2px on interaction. Keep navigation links and form controls out of this treatment.
+
+A CSS-only treatment fits the static site and adds no script or third-party dependency. All new transforms, transitions and animation live inside `prefers-reduced-motion: no-preference`, so reduced-motion visitors get the existing static controls, underlines and focus indication. The arrow does not loop and no content is hidden while it animates. This is a design choice, not a measured improvement in discovery or engagement.
+
+This adapts the emphasis on intentional, distinctive interactions in [Webflow's 2026 design review](https://webflow.com/blog/web-design-trends-2026), using the transform and reduced-motion guidance in [web.dev's CSS transitions reference](https://web.dev/learn/css/transitions). Verification and publication are recorded in CHANGELOG.md.

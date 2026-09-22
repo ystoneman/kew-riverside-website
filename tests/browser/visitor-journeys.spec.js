@@ -384,3 +384,58 @@ test('Parent plan: the shared navigation names the plan at desktop and mobile si
     await expect(page.locator('#parent-plan-title')).toBeInViewport();
   }
 });
+
+test('Action motion: the brief invitation keeps the link target still and usable', async ({ page, hasTouch }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/index.html');
+  const shortcut = page.locator('.parent-plan-spotlight a');
+  const arrow = shortcut.locator('span');
+  const box = await shortcut.boundingBox();
+  const motion = await arrow.evaluate(element => {
+    const animation = element.getAnimations()[0];
+    if (!animation) return null;
+    const { delay, duration, iterations } = animation.effect.getTiming();
+    animation.pause();
+    animation.currentTime = delay + duration / 2;
+    return { duration, iterations, transform: getComputedStyle(element).transform };
+  });
+  expect(motion).not.toBeNull();
+  expect(motion.iterations).toBe(1);
+  expect(motion.duration).toBeLessThan(2000);
+  expect(motion.transform).not.toBe('none');
+  expect(await shortcut.boundingBox()).toEqual(box);
+  await expect(shortcut).toBeInViewport();
+  await arrow.evaluate(element => element.getAnimations().forEach(animation => animation.finish()));
+  await expect(arrow).toHaveCSS('transform', 'none');
+  if (!hasTouch) {
+    const button = page.locator('.meeting-links a[href="proposal.html#parent-plan"]');
+    await button.scrollIntoViewIfNeeded();
+    const restingBox = await button.boundingBox();
+    await button.hover();
+    await expect.poll(async () => (await button.boundingBox()).y).toBeLessThan(restingBox.y);
+    await expect(button).toBeVisible();
+  }
+  await activate(shortcut, hasTouch);
+  await expect(page).toHaveURL(/proposal\.html#parent-plan$/);
+  await expect(page.locator('#parent-plan-title')).toBeInViewport();
+});
+
+test('Action motion: reduced-motion links stay still and support keyboard activation', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/index.html');
+  for (const selector of ['.parent-plan-spotlight a', '.meeting-links a[href="proposal.html#parent-plan"]']) {
+    const link = page.locator(selector);
+    const arrow = link.locator('span');
+    await link.focus();
+    await expect(link).toBeFocused();
+    await expect(link).toHaveCSS('transform', 'none');
+    await expect(link).toHaveCSS('transition-duration', '0s');
+    await expect(arrow).toHaveCSS('animation-name', 'none');
+    await expect(arrow).toHaveCSS('transform', 'none');
+    await expect(arrow).toHaveCSS('transition-duration', '0s');
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/proposal\.html#parent-plan$/);
+    await expect(page.locator('#parent-plan-title')).toBeInViewport();
+    await page.goto('/index.html');
+  }
+});
