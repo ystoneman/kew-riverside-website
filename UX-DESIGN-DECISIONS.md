@@ -144,6 +144,8 @@ The owner reported that the Google upload sign-in requirement blocked participat
 
 A phone photo picker may hide the filename. Do not make finding it a prerequisite: the filename question is optional, email is required in both steps, and only one video should accompany each permission form. Yann must resolve an ambiguous match privately before publication.
 
+Contribution forms use immediate scrolling so a native validation focus change does not move the next click target. The Linux WebKit trace showed the email-help paragraph briefly intercepting a consent-label click during the scroll. The regression retains all three independent consent and blocked-submission checks, and also requires the focused checkbox to be in view.
+
 ## Parent action plan discovery - 22 September 2026
 
 The owner could not readily find the action plan from the homepage. Its main button was labelled “Our next steps & prep sessions”, while the explicit plan link was inside a disclosure and the shared navigation labelled its containing page “Proposal & dates”.

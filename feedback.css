@@ -1,3 +1,5 @@
+/* Keep native validation focus and the following click at a stable position. */
+html:has(.feedback-form){scroll-behavior:auto}
 .feedback-header{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-block:28px;border-bottom:1px solid var(--line)}
 .feedback-header>a:last-child{font-size:14px;min-height:44px;display:flex;align-items:center}
 .feedback-page{max-width:1050px;padding-block:48px 72px}.feedback-intro{max-width:690px;margin-bottom:32px}.feedback-intro h1{font-size:clamp(38px,5vw,60px);letter-spacing:-1.7px}.feedback-intro>p:not(.eyebrow){font-size:18px}

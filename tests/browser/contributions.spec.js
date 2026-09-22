@@ -233,6 +233,7 @@ test('Supporter requests require all three independent consent statements', asyn
     else await submit.click();
     // Wait for native validation to identify the missing consent before responding.
     await expect(choice).toBeFocused();
+    await expect(choice).toBeInViewport();
     await expect(choice).not.toBeChecked();
     expect(submissions).toHaveLength(0);
     // Desktop WebKit's native validation bubble can consume the next click.
