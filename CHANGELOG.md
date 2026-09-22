@@ -2,6 +2,13 @@
 
 Visitor-facing changes and significant maintenance changes, newest first. The historical entries below were reconstructed from repository commits on 22 September 2026. Dates are commit dates, not independently verified publication times. A commit records a change; it does not by itself prove a successful deployment or a particular test result.
 
+## Family story — a place to put down roots
+
+- Rename the family-story section to “A place to put down roots” and remove the nursery-disruption paragraph. Keep the focus on deliberately choosing Kew Riverside, moving for the school and hoping for seven years of relationships and continuity.
+- Copy-only change; no interaction, data or permission changes.
+
+Validation: 417 existing browser checks and 22 Python security/data/structure checks passed. Deployment remains gated on GitHub Actions; this entry records the edit without assigning an unverified publication date.
+
 ## 22 September 2026 — meeting invitation and family story
 
 - Put the Tuesday 29 September, 3.30pm school meeting above the homepage introduction, quote the supplied invitation from Ardeep’s letter and encourage broad parent/class/PTA attendance.
