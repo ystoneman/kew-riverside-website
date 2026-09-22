@@ -1,0 +1,178 @@
+"""Render the public comparisons from the reviewed, minimal aggregate dataset.
+
+Run after changes to understand-data.json. --check detects stale HTML/CSV in CI.
+Raw national census files remain outside the public repository.
+"""
+import argparse
+import csv
+import io
+import json
+from html import escape
+from pathlib import Path
+import re
+
+ROOT = Path(__file__).resolve().parents[2]
+K = '133343'
+CAPACITY = 'index.html#source-school-capacity-may-2025'
+CENSUS = 'index.html#source-school-census-jan-2026'
+
+
+def e(value):
+    return escape(str(value), quote=True)
+
+
+def percent(value):
+    return ('+' if value > 0 else '−' if value < 0 else '') + f'{abs(value):.1f}%'
+
+
+def change(values):
+    return (values[-1] / values[0] - 1) * 100
+
+
+def short(school):
+    return 'The King’s' if school['urn'] == '102921' else school['shortName']
+
+
+def featured(school):
+    return ' featured' if school['urn'] == K else ''
+
+
+def table(caption, headers, rows, label):
+    return f'<div class="data-table-scroll" role="region" aria-label="{e(label)}; scroll horizontally if needed" tabindex="0"><table><caption>{e(caption)}</caption><thead><tr>' + ''.join(f'<th scope="col">{e(h)}</th>' for h in headers) + '</tr></thead><tbody>' + ''.join(rows) + '</tbody></table></div>'
+
+
+def row(school, values):
+    name = e(school['name'])
+    phase = school.get('schoolPhaseLabel', 'Mainstream primary phase')
+    return f'<tr class="school-data{featured(school)}" data-school="{school["urn"]}"><th scope="row">{name}<span class="phase-label">{e(phase)}</span></th>' + ''.join(f'<td>{e(v)}</td>' for v in values) + '</tr>'
+
+
+def trend_table(schools, years, caption):
+    return table(caption, ['School'] + [y['label'] for y in years] + ['Change'], [row(s, [h['roll'] for h in s['history']] + [percent(change([h['roll'] for h in s['history']]))]) for s in schools], caption)
+
+
+def trend_chart(school, mode, years):
+    values = [h['roll'] for h in school['history']]
+    plot = values if mode == 'count' else [(n / values[0] - 1) * 100 for n in values]
+    lower, upper = (0, 420) if mode == 'count' else (-50, 25)
+    ticks = [0, 210, 420] if mode == 'count' else [-50, -25, 0, 25]
+    x = lambda i: 60 + i * 62
+    y = lambda n: 161 - (n - lower) / (upper - lower) * 126
+    uid = f'trend-{school["urn"]}-{mode}'
+    label = 'pupil numbers' if mode == 'count' else 'percentage change in pupil numbers'
+    desc = '; '.join(f'{yr["label"]}: {value} pupils' for yr, value in zip(years, values))
+    result = f'{values[0]} → {values[-1]} <small>pupils</small>' if mode == 'count' else f'{percent(change(values))} <small>since {years[0]["label"]}</small>'
+    svg = f'<svg class="comparison-plot" viewBox="0 0 282 210" role="img" aria-labelledby="{uid}-title {uid}-desc"><title id="{uid}-title">{e(short(school))}: {label}</title><desc id="{uid}-desc">{e(desc)}. Overall change {percent(change(values))}. All charts in this view share the same scale.</desc>'
+    for tick in ticks:
+        text = str(tick) if mode == 'count' else f'{tick}%'
+        svg += f'<line x1="60" x2="246" y1="{y(tick):.2f}" y2="{y(tick):.2f}" class="grid{ " baseline" if tick == 0 else ""}"/><text x="35" y="{y(tick)+4:.2f}" text-anchor="end">{text}</text>'
+    svg += '<polyline class="series" points="' + ' '.join(f'{x(i)},{y(n):.2f}' for i, n in enumerate(plot)) + '"/>'
+    for i, n in enumerate(plot):
+        svg += f'<circle class="point" cx="{x(i)}" cy="{y(n):.2f}" r="4"/>'
+        labeltext = str(values[i]) if mode == 'count' else percent(n)
+        svg += f'<text class="end-value" x="{x(i)}" y="{y(n)-10:.2f}" text-anchor="middle">{labeltext}</text>'
+    for i, yr in enumerate(years):
+        svg += f'<text x="{x(i)}" y="189" text-anchor="middle">{e(yr["label"][2:])}</text>'
+    svg += '</svg>'
+    return f'<figure class="school-chart{featured(school)}" data-school="{school["urn"]}"><h3>{e(short(school))}</h3><p class="chart-result">{result}</p>{svg}<figcaption>May census in each academic year · excludes nursery</figcaption></figure>'
+
+
+def occupancy(school):
+    d = school['capacity2025']
+    pct = d['roll'] / d['capacity'] * 100
+    return f'<div class="place-row{featured(school)}" data-school="{school["urn"]}"><div><h3>{e(short(school))}</h3><span class="place-total">{d["roll"]} pupils / {d["capacity"]} reported places</span></div><svg viewBox="0 0 100 8" preserveAspectRatio="none" role="img" aria-label="{e(short(school))}: {pct:.1f}% occupied; {d["unfilledPlaces"]} unfilled places"><rect class="place-empty" width="100" height="8" rx="2"/><rect class="place-filled" width="{min(100,pct):.4f}" height="8" rx="2"/></svg><div class="place-ratio">{pct:.1f}%<small>{d["unfilledPlaces"]} unfilled</small></div></div>'
+
+
+def cohorts(school):
+    c = school['cohorts2026']
+    cells = ''
+    for i, n in enumerate(c['counts']):
+        band = min(5, n // 15 + 1)
+        cells += f'<div class="cohort-cell band-{band}"><span class="year-label">{"Rec" if i == 0 else "Y"+str(i)}</span><strong><span class="sr-only">{e(c["labels"][i])}: </span>{n}</strong></div>'
+    return f'<div class="cohort-row{featured(school)}" data-school="{school["urn"]}"><div><h3>{e(short(school))}</h3><p>{c["totalExcludingNursery"]} pupils · Reception–Year 6</p></div><div class="cohort-cells">{cells}</div></div>'
+
+
+def render(data):
+    schools = data['schools']
+    by_urn = {s['urn']: s for s in schools}
+    local = [by_urn[u] for u in data['nearbyUrns']]
+    allschools = sorted(schools, key=lambda s: s['name'].lower())
+    years = data['years']
+    kew_cohorts = by_urn[K]['cohorts2026']
+    borough_change = change([b['roll'] for b in data['borough']])
+    kew_change = change([h['roll'] for h in by_urn[K]['history']])
+    charts = ''.join(f'<div class="school-charts" data-trend-view="{mode}"'+(' hidden' if mode=='change' else '')+'>'+''.join(trend_chart(s,mode,years) for s in local)+'</div>' for mode in ['count','change'])
+    count_table = trend_table(local,years,'Local pupil numbers · May census, excluding nursery')
+    borough_table = trend_table(allschools,years,'Richmond pupil numbers · May census, excluding nursery')
+    places_table = table('Richmond school places · May 2025', ['School','Pupils','Capacity','Occupied','Unfilled','Above capacity'], [row(s,[s['capacity2025']['roll'],s['capacity2025']['capacity'],f"{s['capacity2025']['occupancyPercent']:.1f}%",s['capacity2025']['unfilledPlaces'],s['capacity2025']['pupilsOverCapacity']]) for s in allschools], 'Richmond school places')
+    cohort_table = table('Richmond year-group counts · January 2026, excluding nursery',['School','Reception','Year 1','Year 2','Year 3','Year 4','Year 5','Year 6','Total'],[row(s,s['cohorts2026']['counts']+[s['cohorts2026']['totalExcludingNursery']]) for s in allschools],'Richmond year-group counts')
+    borough_series = ', '.join(f'{y["label"]}: {b["roll"]:,}' for y,b in zip(years,data['borough']))
+    body = f'''
+<main id="main" class="wrap">
+<section class="understand-hero" id="top"><div><p class="eyebrow">The situation, explained visually</p><h1>See the picture.<br>Ask better questions.</h1><p class="intro">How does Kew Riverside compare with nearby schools? Explore pupil numbers, school places and year groups, then look at the choices Richmond is considering.</p><p class="source-note">Official data · sources checked 22 September 2026<br>Each chart gives its own measurement date. These are historical snapshots.</p></div><nav class="visual-route" aria-label="Explore the comparisons"><p>Start with the question that matters to you.</p><a href="#pupil-trends"><span aria-hidden="true">01</span>Are other schools shrinking?</a><a href="#school-places"><span aria-hidden="true">02</span>Where are the unfilled places?</a><a href="#year-groups"><span aria-hidden="true">03</span>Which year groups are smaller?</a></nav></section>
+<section class="data-section" id="pupil-trends" aria-labelledby="trends-title"><p class="eyebrow">01 / Pupil trends</p><h2 id="trends-title">Is Kew Riverside’s decline unusual?</h2><p class="section-lead">In this four-year series, Kew Riverside’s roll fell by <strong>{abs(kew_change):.1f}%</strong>, compared with <strong>{abs(borough_change):.1f}% across Richmond’s 45 primary-phase schools</strong>. The nearby schools followed different paths.</p><span class="data-date">May 2022 → May 2025 · reported pupils</span><p class="data-context">The three schools shown are in the Kew planning area. The King’s was formerly The Queen’s. Choosing the whole planning area keeps the comparison consistent; different admissions arrangements and circumstances still matter.</p>
+<div class="data-controls" role="group" aria-label="Pupil trend measure" hidden><button type="button" data-measure="count" aria-pressed="true">Pupil numbers</button><button type="button" data-measure="change" aria-pressed="false">Percentage change</button></div><p id="trend-status" class="trend-status" role="status" aria-live="polite">Pupil numbers · the same scale for each school.</p>
+{charts}
+<p class="chart-footnote">Source: <a href="{CAPACITY}">DfE school capacity dataset</a>. Four May census snapshots; nursery excluded. These figures use a different series from the <a href="index.html#evidence">council leaflet’s reported and forecast rolls</a>. The lines do not explain why pupil numbers changed.</p>
+<details class="data-disclosure"><summary>View the local trend data</summary>{count_table}<p>Change = (last year ÷ first year − 1) × 100, rounded to one decimal place. A flat percentage line can still represent a different school size.</p></details>
+<details class="data-disclosure"><summary>Compare all Richmond primary schools</summary><p>Includes separate infant and junior schools. Compare each school’s change over time with care: they serve different age ranges and communities. Schools are alphabetical, with Kew Riverside highlighted.</p>{borough_table}<p><strong>Borough totals:</strong> {borough_series}. The {abs(borough_change):.1f}% fall is the change in the combined pupil total, not the average school’s percentage change.</p></details>
+<aside class="reading-note"><p><strong>A useful question for the council:</strong> what explains the differences within Kew, and which measures could realistically change Kew Riverside’s future intake?</p><p>For the longer borough context, see <a href="index.html#borough-context">Richmond’s Reception applications and capacity figures</a>. Applications and pupils already attending school are different measures.</p></aside></section>
+<section class="data-section" id="school-places" aria-labelledby="places-title"><p class="eyebrow">02 / School places</p><h2 id="places-title">Where are the unfilled places?</h2><p class="section-lead">Kew Riverside and Darell both had substantial unfilled capacity in this snapshot. The King’s was much closer to its reported capacity.</p><span class="data-date">May 2025 pupils + 1 May 2025 capacity</span><div class="places-key" aria-label="Capacity chart legend"><span><i aria-hidden="true"></i>Pupils on roll</span><span><i class="empty-key" aria-hidden="true"></i>Unfilled reported capacity</span></div><div class="place-list">{''.join(occupancy(s) for s in local)}</div>
+<p class="chart-footnote">Source: <a href="{CAPACITY}">DfE school capacity dataset</a>. Each bar represents 100% of that school’s own capacity; the numbers show that the schools differ in size. <strong>Unfilled capacity is not a current vacancy list or a promise of admission.</strong> It does not establish how many staffed places exist in each year group. Capacity in SEN units and resourced provision is reported separately, so these bars cannot establish specialist support capacity.</p>
+<details class="data-disclosure"><summary>Why can different reports give different occupancy rates?</summary><p>Capacity describes the number of school places. An admission number describes how many pupils normally enter a particular year. Temporary intake reductions can change the capacity used in a council planning calculation.</p><p>This chart uses the DfE’s published whole-school capacity for a matched date. It does not substitute a reduced admission number or the newer January 2026 pupil count. See the <a href="index.html#borough-context">borough capacity explanation</a> for the council’s separate permanent and temporarily reduced measures.</p></details>
+<details class="data-disclosure"><summary>Compare all Richmond primary schools</summary><p>Some schools have more pupils than reported capacity. Occupancy can therefore exceed 100%; “above capacity” is shown separately from unfilled places. Infant and junior schools have different age ranges.</p>{places_table}</details>
+<aside class="reading-note"><p><strong>A useful question for the council:</strong> how do these physical capacity figures translate into places by year group, staffing and the support each child would need?</p><p>The Kew consultation offers current pupils a Darell place if closure proceeds. <a href="proposal.html#questions">Read the transition commitments and remaining questions</a>.</p></aside></section>
+<section class="data-section" id="year-groups" aria-labelledby="cohorts-title"><p class="eyebrow">03 / Year groups</p><h2 id="cohorts-title">What sits behind the total?</h2><p class="section-lead">In January 2026, Kew Riverside had <strong>{kew_cohorts["totalExcludingNursery"]} pupils</strong> from Reception to Year 6. Its year groups ranged from <strong>{min(kew_cohorts["counts"])} to {max(kew_cohorts["counts"])}</strong> pupils. A small total can hide a very uneven pattern.</p><span class="data-date">January 2026 census · pupils by curriculum year</span><p class="data-context">Read across each school. Darker shading means more pupils, using the same bands for all three schools. Each number is a year group, not necessarily a separate class.</p><div class="cohort-list">{''.join(cohorts(s) for s in local)}</div><div class="cohort-key" aria-label="Colour bands: 0 to 14, 15 to 29, 30 to 44, 45 to 59, 60 or more pupils"><span>Fewer pupils</span><i class="band-1" aria-hidden="true"></i><i class="band-2" aria-hidden="true"></i><i class="band-3" aria-hidden="true"></i><i class="band-4" aria-hidden="true"></i><i class="band-5" aria-hidden="true"></i><span>More pupils</span></div>
+<p class="chart-footnote">Source: <a href="{CENSUS}">DfE January 2026 school census</a>. Full-time and part-time pupil headcounts are added within each year group; nursery is excluded. <strong>This is not the September 2026 roll.</strong> The January count of 84 is separate from the council leaflet’s 2026/27 forecast of 84.</p>
+<details class="data-disclosure"><summary>Compare all Richmond primary schools</summary><p>Reception–Year 6 only. At separate infant or junior schools, a zero may mean that year is not offered; it must not be read as an empty class. Public counts are shown as published or summed from published counts; no suppressed values have been estimated.</p>{cohort_table}</details>
+<aside class="reading-note"><p><strong>A useful question for the school and council:</strong> what have the September 2026 intake and in-year admissions changed, and what would a realistic recruitment plan achieve over several years?</p><p>For example, Kew’s January Reception group had {kew_cohorts["counts"][0]} pupils and Year 6 had {kew_cohorts["counts"][-1]}. That single comparison cannot predict the next total: the next intake and pupils joining or leaving also matter. <a href="index.html#option-enrolment">Explore the school-awareness campaign idea</a>.</p></aside></section>
+<section class="data-section" id="other-proposals" aria-labelledby="proposals-title"><p class="eyebrow">04 / Different proposals, different circumstances</p><h2 id="proposals-title">What is Richmond considering elsewhere?</h2><p class="section-lead">The council is consulting on two different responses to falling rolls. Both are proposals for September 2027; neither is a final decision.</p><div class="proposal-comparison"><article><span class="proposal-type">Proposed closure</span><h3>Kew Riverside</h3><p>Close the school at the end of 2026/27, effective 1 September 2027. The council offers every current pupil a place at Darell, with other schools subject to availability.</p><p>The leaflet explains why options including reduced intake, shared leadership, amalgamation and academy arrangements were not preferred.</p><a href="proposal.html">Read the Kew proposal and questions →</a></article><article><span class="proposal-type">Proposed amalgamation</span><h3>Hampton Wick Infant &amp; Nursery + St John the Baptist Junior</h3><p>Bring the two schools together into a 210-place primary school, with nursery provision retained. Initially it would operate across both buildings; the longer-term intention is a single site.</p><p>The legal route would close one school and extend the other’s age range. Which school closes, the resulting school’s status and the eventual site remain to be determined.</p><a href="https://www.richmond.gov.uk/media/zaxlziiv/hampton_wick_st_john_the_baptist_consultation_leaflet.pdf">Read the council’s amalgamation leaflet ↗</a></article></div><p class="chart-footnote">Sources checked 22 September 2026: <a href="index.html#source-organisation-overview-2026">council consultation overview</a>; <a href="index.html#source-hampton-wick-proposal-2026">Hampton Wick / St John leaflet, PDF pages 7–10</a>; <a href="index.html#source-consultation-leaflet">Kew leaflet</a>.</p><aside class="reading-note"><p><strong>The comparison opens a question, not a conclusion.</strong> A merger being considered elsewhere does not establish that it would work at Kew or preserve teaching on its site. A fair assessment needs comparable costs, pupil demand, governance and delivery partners.</p><p><a href="proposal.html#questions">See the questions about costed alternatives</a> · <a href="proposal.html#timetable">Follow the decision timetable</a></p></aside></section>
+<section class="data-method" id="methodology" aria-labelledby="method-title"><p class="eyebrow">Sources and method</p><h2 id="method-title">Keep the comparisons fair.</h2><ul><li><strong>Dates stay separate.</strong> May school-roll histories, May 2025 capacity and January 2026 year groups answer different questions. None is a live September headcount.</li><li><strong>Comparable scope.</strong> The borough tables cover 45 mainstream state-funded primary-phase schools, including infant and junior schools, with nursery excluded. They are not a ranking of school quality. Capacity excludes places in SEN units and resourced provision; those are reported separately.</li><li><strong>Local selection.</strong> Kew Riverside, Darell and The King’s are the three schools in Kew planning area 3180007 in the capacity dataset. The King’s name is used in the latest records; older documents call it The Queen’s.</li><li><strong>Reorganisations and sites.</strong> School histories follow the stable school establishment identifier where three schools changed their unique reference number. Thomson House’s two site records are added into one school total. All 45 schools have four years of data.</li><li><strong>Calculated figures.</strong> Occupancy = pupils ÷ reported capacity × 100. Trend change = (last roll ÷ first roll − 1) × 100. Percentages are rounded to one decimal; totals are calculated from unrounded counts.</li><li><strong>Limits.</strong> These charts cannot establish causes, current admissions availability or the number of pupils needed for financial viability. Funding and housing scenarios need further verified evidence.</li></ul><p><a class="text-link" href="richmond-schools.csv" download="richmond-schools.csv">Download the chart data (CSV) ↓</a></p><p>Spreadsheet download includes the values, measurement dates and source links. <a href="understand-data.json">Structured data and provenance (JSON)</a> · <a href="corrections.html">Report a correction privately</a>.</p><p>Contains Department for Education information licensed under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>. Analysis and questions are this parent-led site’s editorial work.</p></section>
+<section class="data-next"><div><h2>Use the evidence in your response.</h2><p>Explain what matters to your family, point to a dated source and ask a specific question. Community letters here are separate from the official consultation.</p></div><a class="button primary" href="response-checklist.pdf">Response checklist (PDF) ↓</a></section>
+</main>'''
+    index = (ROOT / 'index.html').read_text()
+    header = index[index.index('<body>'):index.index('<main')]
+    header = header.replace('href="#top"','href="index.html"').replace('href="#records"','href="index.html#records"')
+    header = header.replace('href="understand.html"','href="understand.html" aria-current="page"')
+    header = header.replace('Research checked 21 September 2026','Comparisons checked 22 September 2026')
+    footer = index[index.index('<footer>'):]
+    csp = re.search(r'<meta http-equiv="Content-Security-Policy"[^>]+>',index).group(0)
+    head = f'''<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8">{csp}
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="strict-origin-when-cross-origin"><meta name="theme-color" content="#143936">
+<title>Understand the situation | Kew Riverside &amp; Richmond school data</title><meta name="description" content="Compare Kew Riverside with Richmond schools through clear, sourced charts of pupil trends, school places and year groups. Understand the different proposals."><meta property="og:title" content="Understand the situation · Kew Riverside"><meta property="og:description" content="Pupil trends, school places and year groups: dated, sourced comparisons across Richmond."><meta property="og:type" content="website"><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="participation.css"><link rel="stylesheet" href="understand.css"><script src="navigation.js?v=2026092202" defer></script><script src="understand.js" defer></script></head>
+'''
+    return head + header + body + footer
+
+
+def csv_text(data):
+    stream = io.StringIO(newline='')
+    writer = csv.writer(stream, lineterminator='\r\n')
+    writer.writerow(['School','Current URN','School establishment number','Measure','Measurement date','Academic year','Year group','Value','Unit','Source URL'])
+    for s in data['schools']:
+        prefix = [s['name'],s['urn'],s['laestab']]
+        for y,h in zip(data['years'],s['history']):
+            for measure,key,unit in [('Pupils excluding nursery','roll','pupils'),('Reported capacity excluding nursery','capacity','places')]:
+                writer.writerow(prefix+[measure,y['censusMonth'],y['label'],'',h[key],unit,data['sources'][0]['url']])
+        for label,n in zip(s['cohorts2026']['labels'],s['cohorts2026']['counts']):
+            writer.writerow(prefix+['Pupils by curriculum year','2026-01','2025/26',label,n,'pupils',data['sources'][1]['url']])
+    return '\ufeff'+stream.getvalue()
+
+
+def outputs():
+    data = json.loads((ROOT/'understand-data.json').read_text())
+    return {'understand.html':render(data),'richmond-schools.csv':csv_text(data)}
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--check', action='store_true')
+    args = parser.parse_args()
+    for name,text in outputs().items():
+        path=ROOT/name
+        if args.check:
+            if not path.exists() or path.read_bytes() != text.encode('utf-8'):
+                raise SystemExit(f'{name} is stale; run python3 .github/scripts/build_understand.py')
+        else:
+            path.write_bytes(text.encode('utf-8'))
+    print('Comparison HTML and CSV match the reviewed data.' if args.check else 'Rendered comparison HTML and CSV.')

@@ -596,6 +596,62 @@
       "summary": "Meeting listed for 12 November 2026. As checked on 21 September, the agenda had not been published. The leaflet plans a November committee stage, but this calendar entry alone does not verify a Kew-specific item or a decision.",
       "locator": "Future meeting page, checked 21 September 2026; not minutes or evidence that any decision has occurred.",
       "accessChecked": "2026-09-21"
+    },
+    {
+      "id": "organisation-overview-2026",
+      "date": "2026-09-21",
+      "year": "2026",
+      "title": "Richmond school organisation: the two current proposals",
+      "publisher": "Richmond Council",
+      "type": "Consultation",
+      "topic": "Decision process",
+      "status": "Reviewed",
+      "url": "https://www.richmond.gov.uk/services/children_and_family_care/schools_and_colleges/school_organisation_consultations",
+      "summary": "Council overview of two pre-statutory proposals intended for 1 September 2027: closing Kew Riverside, and combining Hampton Wick Infant and Nursery with St John the Baptist Junior into a 210-place primary school with nursery. Neither proposal is a final decision.",
+      "locator": "Page updated 21 September 2026. The Hampton Wick proposal involves closing one legal school and extending the age range of the other; it is not a precedent establishing that the same arrangement is viable at Kew.",
+      "accessChecked": "2026-09-22"
+    },
+    {
+      "id": "school-census-jan-2026",
+      "date": "2026-06-04",
+      "year": "2026",
+      "title": "School census: January 2026 school-level pupil data",
+      "publisher": "Department for Education",
+      "type": "Official dataset",
+      "topic": "Demand & housing",
+      "status": "Reviewed",
+      "url": "https://explore-education-statistics.service.gov.uk/find-statistics/school-pupils-and-their-characteristics/2025-26/explore",
+      "summary": "Official school-level underlying data for the January 2026 census. The comparison uses Richmond state-funded primary schools and totals Reception through Year 6 from the full-time and part-time male and female fields; nursery is excluded. Kew Riverside totals 84 pupils in those year groups.",
+      "locator": "Release first published 4 June 2026 and updated 14 July 2026. Supporting files: School level underlying data 2026. Filter new_la_code=E09000027 and phase_type_grouping=State-funded primary; join schools by URN. January 2026 is a measured snapshot, not September 2026 and not the council leaflet’s 2026/27 forecast.",
+      "accessChecked": "2026-09-22"
+    },
+    {
+      "id": "school-capacity-may-2025",
+      "date": "2026-03-19",
+      "year": "2026",
+      "title": "School capacity and pupils on roll: May 2025 comparison",
+      "publisher": "Department for Education",
+      "type": "Official dataset",
+      "topic": "Demand & housing",
+      "status": "Reviewed",
+      "url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/d99443e1-1258-4894-b705-5bfb51751a37",
+      "summary": "Official Capacity – school dataset, including capacity and pupils on roll for individual schools. The 2024/25 snapshot records Kew Riverside at 90 pupils against 210 places. Comparable Richmond primary-school rows support a dated occupancy comparison; recorded capacity does not establish available places in each year group.",
+      "locator": "Dataset published 19 March 2026. Capacity snapshot: 1 May 2025; pupil rolls: May 2025 census. Fields school_urn, school_name, school_places and pupils_on_roll_count; filter new_la_code=E09000027 and education_phase=Primary. Earlier snapshots use time_period 202122 to 202425. Do not combine this denominator with a later census without labelling the different dates.",
+      "accessChecked": "2026-09-22"
+    },
+    {
+      "id": "hampton-wick-proposal-2026",
+      "date": "",
+      "year": "Undated",
+      "title": "Hampton Wick and St John the Baptist: amalgamation proposal",
+      "publisher": "Richmond Council",
+      "type": "Consultation",
+      "topic": "Decision process",
+      "status": "Reviewed",
+      "url": "https://www.richmond.gov.uk/media/zaxlziiv/hampton_wick_st_john_the_baptist_consultation_leaflet.pdf",
+      "summary": "Consultation proposal for one 210-place primary school plus retained nursery, initially using both buildings and later one site when pupil numbers permit. Current pupils would have guaranteed places. School designation, which legal school closes and the eventual site remain matters for the decision process. This is not an approved merger.",
+      "locator": "Pre-statutory consultation leaflet, September/October 2026; publication date not stated. Printed pages 3 and 6–9 (PDF pages 4 and 7–10) explain capacity, legal mechanism, unresolved choices and the conditional 1 September 2027 implementation date. Comparing proposals does not establish that amalgamation or shared leadership would be viable at Kew Riverside.",
+      "accessChecked": "2026-09-22"
     }
   ],
   "charts": {

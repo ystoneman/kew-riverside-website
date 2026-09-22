@@ -21,3 +21,23 @@ test('No JavaScript: evidence is readable and council identity stays disabled', 
   await expect(page.locator('#allow-public')).not.toBeChecked();
   await expect(page.locator('#allow-council')).not.toBeChecked();
 });
+
+test('No JavaScript: Understand retains charts, underlying data and council context', async ({ page }) => {
+  await page.goto('/understand.html');
+  const controls = page.locator('[role="group"][aria-label="Pupil trend measure"]');
+  await expect(controls).toHaveCount(1);
+  await expect(controls).toBeHidden();
+  await expect(page.locator('[data-trend-view="count"]')).toBeVisible();
+  await expect(page.locator('[data-trend-view="count"] svg')).toHaveCount(3);
+  await expect(page.locator('[data-trend-view="change"]')).toBeHidden();
+  const local = page.locator('#pupil-trends summary').filter({ hasText: /^View the local trend data$/ });
+  await local.tap();
+  await expect(local.locator('..').locator('table')).toBeVisible();
+  for (const id of ['pupil-trends', 'school-places', 'year-groups']) {
+    const summary = page.locator('#' + id + ' summary').filter({ hasText: /^Compare all Richmond primary schools$/ });
+    await summary.tap();
+    await expect(summary.locator('..').locator('table')).toBeVisible();
+  }
+  await expect(page.locator('#other-proposals')).toBeVisible();
+  await expect(page.locator('#methodology')).toBeVisible();
+});

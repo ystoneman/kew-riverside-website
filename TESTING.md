@@ -26,6 +26,7 @@ The browser harness serves the site locally, uses fictional form inputs, and int
 | Responsive layout | Narrow/mobile and desktop layouts; horizontal overflow and usable navigation |
 | Contributions | Entry routes, feedback categories, private-only funding/privacy behaviour, previews, validation and independent letter consents |
 | Evidence | Search/filter/reset journeys and visitor download formats |
+| School comparisons | Dated source sentinels; aggregate-only export; HTML/CSV/JSON agreement; count/percentage controls; local/borough tables; downloads; no-JavaScript and failed-script fallbacks |
 | Site integrity | Local links/anchors, source consistency, resource loading and script errors |
 | Security and privacy | Public data schemas, private-field rejection, consent defaults, local script allowlist, restrictive CSP and explicit deployment artifact contents |
 
@@ -37,7 +38,7 @@ Every pull request and push runs the suite. The Pages deployment requires both t
 
 Use the Xcode iPhone simulator and record the model and iOS version. For navigation changes:
 
-1. Open the contribution page in Safari, tap Menu, then test each destination: Home, Proposal & dates, The numbers, Who decides, About and Evidence.
+1. Open the contribution page in Safari, tap Menu, then test each destination: Home, Proposal & dates, Understand, Who decides, About and Evidence.
 2. Confirm the expected page or anchored section appears, and the menu closes after selection. Return with Safari Back and repeat. Also test the same-page anchors on the homepage.
 3. Check Letters and Contribute, tapping outside the menu, reopening/closing it, scrolling and portrait/landscape layouts.
 4. Inspect contribution forms and the onscreen keyboard without sending a real submission. Automated tests cover intercepted form submissions separately.
@@ -50,3 +51,9 @@ For local manual HTTP previews, Safari's `upgrade-insecure-requests` policy upgr
 The original menu closed on `focusout`, even when Safari supplied no next focused element. On an iPhone 17 simulator running iOS 26.5, tapping Proposal & dates from the contribution menu closed the menu without navigating. The fix closes it when focus actually arrives outside the menu instead. Touch activation, outside dismissal, keyboard movement, Escape and desktop resize are regression cases. The navigation script URL is versioned so browsers can fetch the correction even if they have cached the previous script.
 
 The first Linux CI run also caught an outside-tap dismissal failure on a noninteractive area in iPhone WebKit. Outside dismissal now handles pointerdown directly instead of relying only on a synthesized click. Link activation still uses its normal click, and pointerdown inside the menu does not close it. The outside-touch regression remains in the suite.
+
+## School comparisons
+
+The comparison builder’s freshness check runs within the Python tests. After an intentional data update, regenerate with `python3 .github/scripts/build_understand.py` and review independently pinned source expectations before changing them. Tests distinguish May 2025 capacity/roll from January 2026 cohorts, reconcile the two Thomson House sites, and preserve source-year school identifiers.
+
+For manual mobile QA, open Understand from the contribution-page menu, switch Pupil numbers / Percentage change, expand each borough comparison, horizontally scroll a wide table, inspect cohort labels and follow a source link. Confirm date labels remain visible and charts remain readable at narrow widths. Record simulator checks separately from responsive browser screenshots and automated WebKit runs.

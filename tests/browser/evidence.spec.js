@@ -33,7 +33,7 @@ test('Direct evidence references remain visible when URL filters exclude them', 
 });
 
 test('Each source filter independently updates visible records', async ({ page }) => {
-  for (const [label, value] of [['Topic', 'Funding & buildings'], ['Coverage', 'Index only']]) {
+  for (const [label, value] of [['Topic', 'Funding & buildings'], ['Coverage', 'Index only'], ['Record type', 'Official dataset']]) {
     await page.goto('/index.html#records');
     const total = await page.locator('.source-card').count();
     await page.getByLabel(label, { exact: true }).selectOption(value);

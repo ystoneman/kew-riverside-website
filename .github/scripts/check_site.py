@@ -16,6 +16,7 @@ corrections.js favicon.svg feedback.css feedback.html feedback.js index.html ins
 letters.html letters.js letters.json privacy.html proposal.css proposal.html
 response-checklist.md response-checklist.pdf sources.csv sources.json styles.css
 suggestions.json supporters.html supporters.js supporters.json
+understand.html understand.css understand.js understand-data.json richmond-schools.csv
 '''.split())
 MAINTENANCE_FILES = frozenset('''
 .nojekyll .gitignore README.md CODEX-HANDOFF.md .github/workflows/pages.yml
@@ -25,6 +26,7 @@ AGENTS.md TESTING.md package.json package-lock.json playwright.config.js
 tests/browser/fixtures.js tests/browser/server.js tests/browser/mobile.spec.js
 tests/browser/desktop.spec.js tests/browser/no-javascript.spec.js
 tests/browser/contributions.spec.js tests/browser/evidence.spec.js tests/browser/boards.spec.js
+tests/browser/understand.spec.js .github/scripts/build_understand.py .github/scripts/test_understand.py
 '''.split())
 CSP = "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; object-src 'none'; frame-src 'none'; form-action 'self' https://formspree.io; upgrade-insecure-requests"
 SECRET_PATTERNS = [
