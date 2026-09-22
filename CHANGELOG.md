@@ -4,6 +4,10 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Mixed-age class video prompt
+
+Add “What benefits has your child experienced in a mixed-age class?” to the optional recording prompts on the video page and both existing submission forms. Keep it as guidance for a video, with no new required answer or permission change. Validation: all 570 browser checks and 29 Python checks passed; 66 public assets validated. The new optional prompt was verified in both published responder views, with the existing bullet styling retained. Website publication: pending.
+
 ### Lightweight action-button motion
 
 - Add a brief, single arrow nudge to the prominent homepage Parent action plan link, plus directional feedback on hover and keyboard focus.
