@@ -2,6 +2,13 @@
 
 Visitor-facing changes and significant maintenance changes, newest first. The historical entries below were reconstructed from repository commits on 22 September 2026. Dates are commit dates, not independently verified publication times. A commit records a change; it does not by itself prove a successful deployment or a particular test result.
 
+## Meeting invitation — independent wording
+
+- Paraphrase the meeting invitation in the parent-led site’s own voice and remove the staff quotation and personal attribution. Keep the council’s published meeting details as the public source.
+- Update the existing meeting check to cover the paraphrase and absence of quotation/attribution markup.
+
+Validation: all 417 browser checks and 22 Python security/data/structure checks passed; 40 public assets validated. Deployment remains gated on GitHub Actions; this entry records the edit without assigning an unverified publication date.
+
 ## Family story — a place to put down roots
 
 - Rename the family-story section to “A place to put down roots” and remove the nursery-disruption paragraph. Keep the focus on deliberately choosing Kew Riverside, moving for the school and hoping for seven years of relationships and continuity.
@@ -11,7 +18,7 @@ Validation: 417 existing browser checks and 22 Python security/data/structure ch
 
 ## 22 September 2026 — meeting invitation and family story
 
-- Put the Tuesday 29 September, 3.30pm school meeting above the homepage introduction, quote the supplied invitation from Ardeep’s letter and encourage broad parent/class/PTA attendance.
+- Put the Tuesday 29 September, 3.30pm school meeting above the homepage introduction, initially use a supplied letter excerpt and encourage broad parent/class/PTA attendance.
 - Keep the date explicit; adapt the short timing label in London time and retire the invitation after the meeting date. The full proposal timetable stays available.
 - Fix “herefor” in the homepage’s “Why I started this” heading. A literal space now separates the words when the responsive layout hides the line break; correct the same joining issue in the discovery introduction, date note and school-tour note.
 - Add a paragraph before “Two schools in two years” expressing the family’s view of the quality of education alongside warmth, inclusion and high expectations.

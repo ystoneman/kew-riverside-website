@@ -45,7 +45,7 @@ test('Homepage: responsive copy keeps words separated on mobile and desktop', as
   }
 });
 
-test('Homepage: the meeting invitation appears before the hero with its date, provenance and details', async ({ page, hasTouch }) => {
+test('Homepage: the meeting invitation appears before the hero with its date, public source and details', async ({ page, hasTouch }) => {
   await page.clock.setFixedTime(new Date('2026-09-22T12:00:00Z'));
   await page.goto('/index.html');
   const invitation = page.locator('main #meeting-invitation');
@@ -54,9 +54,9 @@ test('Homepage: the meeting invitation appears before the hero with its date, pr
   expect((await invitation.locator('time').innerText()).replace(/\s+/g, ' ')).toContain('Tuesday 29 September 2026');
   await expect(invitation).toContainText(/3[.:]30\s*p\.?m\.?/i);
   await expect(invitation).toContainText('Kew Riverside');
-  await expect(invitation.locator('blockquote')).toContainText(/\S/);
-  await expect(invitation).toContainText(/Ardeep/);
-  await expect(invitation).toContainText(/parent.supplied|supplied by a parent/i);
+  await expect(invitation).toContainText('Meet local authority representatives');
+  await expect(invitation).toContainText('share your views in person');
+  await expect(invitation.locator('blockquote, .meeting-attribution')).toHaveCount(0);
   const position = await invitation.boundingBox();
   const hero = await page.locator('#top').boundingBox();
   expect(position.y + position.height).toBeLessThanOrEqual(hero.y + 1);
