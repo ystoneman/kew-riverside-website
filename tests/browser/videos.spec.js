@@ -7,6 +7,7 @@ for (const source of ['letters.html', 'feedback.html']) {
   test(`Video: discover private upload from ${source}`, async ({ page, baseURL, hasTouch }) => {
     await page.goto('/' + source);
     const entry = page.locator('main a[href="videos.html"]');
+    if (source === 'letters.html') await expect(page.locator('.form-route').filter({ has: page.locator('a[href="videos.html"]') })).toContainText('for possible YouTube publication after review, with optional news-media permission');
     await expect(entry).toBeVisible();
     if (hasTouch) await entry.tap(); else await entry.click();
     await expectDestination(page, 'videos.html', baseURL);
@@ -52,7 +53,7 @@ test('Video: native recording, consent and upload-help disclosures support touch
 test('Video: withdrawal leads to private request and non-Google alternative stays available', async ({ page }) => {
   await page.goto('/videos.html');
   await page.locator('#video-choices summary').click();
-  await expect(page.locator('#video-choices')).toContainText('No. Keep my video private');
+  await expect(page.locator('#video-choices')).toContainText('New submissions require YouTube publication permission');
   await expect(page.locator('#video-choices')).toContainText('filename question is optional');
   await expect(page.locator('#video-choices')).toContainText('Your face and voice can still identify you');
   await page.locator('#video-choices a[href^="feedback.html"]').click();
@@ -94,3 +95,21 @@ for (const [name, selector, destination] of [
     expect(requests).toEqual(['GET']);
   });
 }
+
+
+test('Video: direct arrival explains publication and offers private contact without consent', async ({ page, baseURL, hasTouch }) => {
+  await page.goto('/videos.html#upload');
+  const card = page.locator('#upload');
+  await expect(card).toContainText('New submissions require your explicit YouTube permission');
+  await expect(card).toContainText('News-media permission is optional');
+  await expect(card.locator('#resume-instructions')).toContainText('including any earlier private-only choice, even if you upload later');
+  const contact = card.getByRole('link', { name: 'Contact Yann privately', exact: true });
+  await expect(contact).toBeVisible();
+  if (hasTouch) await contact.tap(); else await contact.click();
+  await expectDestination(page, 'about.html#contact', baseURL);
+  await page.goBack();
+  await expect(page).toHaveURL(/videos.html#upload$/);
+  await page.locator('#video-choices summary').click();
+  await expect(page.locator('#video-choices')).toContainText('News-media permission is optional and unchecked');
+  await expect(page.locator('#video-choices')).toContainText('withdraw YouTube or news-media permission separately');
+});

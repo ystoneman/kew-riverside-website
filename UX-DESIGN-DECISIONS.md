@@ -230,3 +230,10 @@ Append a learning FAQ group after the original four topics and preserve all 12 p
 Keep evidence gap 7 in its familiar position, visibly resolved and linked to the full inspection source. The separate research report stays distinct from the original-source library. Broaden the existing enrolment option’s title and visible channel list together; operational ownership and measurement belong in the maintenance outreach brief. Contribution edits reuse existing evidence/video forms and permission boundaries.
 
 Independent planning reviews supported these placements. Implementation reviews corrected the chart disclosure link and source details; campaign and rendered UX reviews found no further actionable issues. Rendered review covered 320/390px and desktop, retained arrival routes, keyboard tables and FAQ recovery. Regression checks and native Safari outcomes are recorded in `TESTING.md` and release evidence in `CHANGELOG.md`; this rationale is not user-research evidence.
+
+
+## Video submissions for publication — 22 September 2026
+
+J9: new video submissions are intended for possible public YouTube publication. Require explicit YouTube permission, retain separate storage/review consent, and offer optional unchecked news-media permission. A private-only video option would introduce a second intake purpose and later permission follow-up; instead, provide private contact before the handoff. Explain this inside the upload card for direct arrivals and in provider introductions. Earlier saved permissions remain valid even when upload is delayed. Keep existing provider URLs and unmatched uploads private. Version rules are in VIDEO-PERMISSIONS.md; verification is recorded in CHANGELOG.md.
+
+Direct `#upload` arrival uses immediate scrolling so the private-contact link stays still for JavaScript-disabled Safari. A recurring existing chart-link failure was addressed with the same narrow rule at `#learning-and-results`; neither change alters layout or destinations. The earlier video decisions above describe the v1 intake and are superseded by this v2 consent model for new submissions only.
