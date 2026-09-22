@@ -2,6 +2,12 @@
 
 Visitor-facing changes and significant maintenance changes, newest first. The historical entries below were reconstructed from repository commits on 22 September 2026. Dates are commit dates, not independently verified publication times. A commit records a change; it does not by itself prove a successful deployment or a particular test result.
 
+## Unreleased
+
+- Add the first contributor-approved, human-reviewed community letter to the existing public board, preserving the submitted wording and display name.
+
+Validation: 417 browser checks and 22 Python security/data/structure checks passed; 40 public assets validated. Deployment verification is pending.
+
 ## Meeting invitation — independent wording
 
 - Paraphrase the meeting invitation in the parent-led site’s own voice and remove the staff quotation and personal attribution. Keep the council’s published meeting details as the public source.
