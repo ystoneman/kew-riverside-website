@@ -49,7 +49,7 @@ This collection is not exhaustive. Original documents remain with their publishe
 | feedback.css | Shared form and public-board styles |
 | privacy.html | Versioned privacy and moderation notice |
 | suggestions.json | Approved website suggestions only |
-| letters.json | Human-approved letters only; no council identity fields or reply emails |
+| letters.json | Consented, AI-screened or human-reviewed letters; no council identity fields or reply emails |
 | .nojekyll | Disables Jekyll processing for branch-based Pages |
 
 ## Maintenance
@@ -66,11 +66,17 @@ There are no analytics, advertising scripts or remote fonts. Forms post to Forms
 
 See [TESTING.md](TESTING.md) for the automated browser suite, coverage matrix, local commands and manual Xcode iOS Simulator checklist. [AGENTS.md](AGENTS.md) requires future interaction changes to extend the relevant tests. Playwright is a development-only dependency. Both browser regression tests and privacy/security validation must pass before Pages deployment.
 
-JavaScript syntax, internal anchor references, local asset references, source IDs, record counts, chart arithmetic and filtering behaviour are checked during preparation. Browser checks cover desktop/mobile forms, independent permission choices, excluded private fields, plain-text previews and empty public boards. Two harmless CAPTCHA-protected setup submissions were delivered and verified in the private inbox on 21 September 2026. Hourly moderation remains paused; delivery verification does not authorise starting it.
+JavaScript syntax, internal anchor references, local asset references, source IDs, record counts, chart arithmetic and filtering behaviour are checked during preparation. Browser checks cover desktop/mobile forms, independent permission choices, excluded private fields, plain-text previews and empty public boards. Two harmless CAPTCHA-protected setup submissions were delivered and verified in the private inbox on 21 September 2026. The separate hourly suggestion moderation remains paused; its earlier delivery verification did not authorise starting it.
 
 ## Named support and contact
 
-Feedback is the entry point for named support, letters/testimonials and site suggestions. Only kind=suggestion/accessibility may enter routine automatic moderation. kind=supporter always needs contributor confirmation of the exact name/statement and explicit human approval; kind=contact stays private. The supporter notice is 2026-09-21-supporters-v1, statement keep-open-2026-09-21; existing letter and feedback consent tokens remain unchanged. Never infer endorsement from another kind of contribution. The private helper and operating procedure live outside this public repository. Do not publish emails, private references, confirmation replies or unapproved names.
+Feedback is the entry point for named support, letters/testimonials and site suggestions. Routine kind=letter contributions may now be automatically screened and published with the v3 processing and publication permissions described below. The separate kind=suggestion/accessibility workflow is unchanged. kind=supporter always needs contributor confirmation of the exact name/statement and explicit human approval; kind=contact stays private. The supporter notice is 2026-09-21-supporters-v1, statement keep-open-2026-09-21; feedback consent tokens remain unchanged. Never infer endorsement from another kind of contribution. The private helper and operating procedure live outside this public repository. Do not publish emails, private references, confirmation replies or unapproved names.
+
+## Community letter publication
+
+The current notice is `2026-09-22-letters-v3`, with required processing consent `yes-process-my-letter-v3` and optional publication consent `yes-publish-with-display-name-v3`. The independent council-sharing value remains `yes-share-with-richmond-council-v2`; its meaning has not changed. Earlier letters retain their original permissions and require human review before publication.
+
+Routine, relevant letters with the new explicit permissions may publish after automated screening, whether supportive or critical. Specific content, authorship and permission concerns are held for human review. An ordinary parent mention of their child’s first name is not by itself a hold. The public review value is exactly `AI screened` or `Human reviewed`; public data allowlists and private-field exclusions still apply. The private workflow checks periodically and sends one publication email to a supplied reply address only after confirming the letter is live, including the link, displayed name and edit/removal route. Do not promise immediate publication or reuse this permission for marketing, council forwarding or supporter listing.
 
 ## Exploratory community funding
 
@@ -84,7 +90,7 @@ Every push and pull request runs privacy/schema checks, JavaScript syntax checks
 
 All eight HTML pages declare a restrictive Content Security Policy before resources: local scripts/styles/data only, no inline scripts or handlers, no embedded frames/plugins or base-URL changes, and form submissions restricted to this origin and Formspree. External source links still work. Formspree remains responsible for CAPTCHA, spam filtering, intake validation and private storage. Its project is restricted to `ystoneman.github.io`; localhost and file previews should not submit to the live inbox. Keep `strict-origin-when-cross-origin` so the domain check works without sending page query strings.
 
-Public boards have exact field allowlists, bounds, valid dates and unique IDs checked **before deployment**; browser validation also fails closed and renders only text. These checks do not establish real identity, consent or the suitability of free text. Private moderation and human approval requirements remain in force. Council identity inputs are disabled in the initial HTML and require an explicit council-sharing choice and working JavaScript to be enabled.
+Public boards have exact field allowlists, bounds, valid dates and unique IDs checked **before deployment**; browser validation also fails closed and renders only text. These checks do not establish real identity, consent or the suitability of free text. Private moderation and each category's human-review requirements remain in force. Council identity inputs are disabled in the initial HTML and require an explicit council-sharing choice and working JavaScript to be enabled.
 
 GitHub Pages does not give this project control over custom HTTP response headers. The HTML policy cannot enforce `frame-ancestors` or `X-Frame-Options`, so full anti-framing protection would require a host or proxy with custom headers. Bot controls reduce spam but cannot eliminate it or guarantee availability within provider quotas. No automatic security scan can guarantee an absence of vulnerabilities.
 

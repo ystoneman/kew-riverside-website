@@ -5,8 +5,13 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 ## Unreleased
 
 - Add the first contributor-approved, human-reviewed community letter to the existing public board, preserving the submitted wording and display name.
+- Let routine, relevant letters with new explicit publication permission appear after automated screening, with specific concerns held for human review. Update the public form and privacy notice, preserve earlier letters' human-review requirement, and keep council sharing independent.
+- Describe the single publication email sent to a supplied reply address after live confirmation, including the displayed name, link and edit/removal route. Show each letter's actual assessment as `AI screened` or `Human reviewed`.
+- Extend consent, no-JavaScript, mixed-review-label and invalid-label coverage. Keep real published letters out of browser and deployment test fixtures.
 
-Validation: 417 browser checks and 22 Python security/data/structure checks passed; 40 public assets validated. Deployment verification is pending.
+Screening update validation: all 453 browser checks passed across Chromium, WebKit and JavaScript-disabled projects; all 24 Python security/data/structure checks passed and 40 public assets validated. Separately, all 70 private workflow tests passed with fictional fixtures, including consent, withdrawal and interrupted-send recovery. Deployment verification is pending. No new simulator check was needed for this wording and consent-contract change; touch, focus, menus and layout code are unchanged.
+
+Earlier letter-publication validation, before the screening update: 417 browser checks and 22 Python security/data/structure checks passed; 40 public assets validated.
 
 ## Meeting invitation — independent wording
 

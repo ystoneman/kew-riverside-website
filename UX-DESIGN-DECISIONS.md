@@ -73,6 +73,14 @@ The contribution form has these six categories:
 
 Use a single reading order on desktop and mobile. Ask for the main contribution first; make optional contact or display details clear. Reveal publication choices progressively, keep consent explicit and unchecked, and retain the private-only treatment of funding and privacy requests. Explain review before publication and keep the reviewed public board visually separate from the act of submitting. A website suggestion or community letter must not be mistaken for an official consultation response.
 
+### Community letters: routine publication with clear permission
+
+The owner wants ordinary community letters to appear with less manual delay and contributors to receive a publication link with a way to request changes. We considered human approval for every letter and automated publication after screening. Choose automated screening for routine, relevant letters with new explicit processing and publication permissions, while holding specific content, authorship or permission concerns for human review. Treat supportive and critical views equally; an ordinary parent mention of a child's first name alone is not a reason to hold a testimonial.
+
+Keep publication optional and separate from council sharing. The v3 notice explains that a person may not review a letter before publication; submissions under earlier notices retain their human-review requirement. Labels describe the assessment actually used. Only after a letter is confirmed live, send one publication email if the contributor supplied a reply address, with the public link, displayed name and an invitation to request edits or removal. Keep that address private. Check periodically without promising immediate publication. Firm submission guidelines remain visible, and the public explanation must match the workflow.
+
+Verification: 81 focused browser checks passed across Chromium, WebKit and JavaScript-disabled projects, including independent permissions, private-field exclusion, notice wording, mixed review labels and invalid-label failure. Eleven security/schema checks and the 40-asset public-site validation passed. Tests use fictional data. Full integration checks and verified deployment are recorded separately in CHANGELOG.md.
+
 ### Why not tabs on the homepage?
 
 The [GOV.UK tabs guidance](https://design-system.service.gov.uk/components/tabs/) cautions against tabs as page navigation or when users need to read or compare content across panels. Visible route cards and ordinary page links fit the current task better. This does not prohibit tabs everywhere; a future use needs a specific task and verification.

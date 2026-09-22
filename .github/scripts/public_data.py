@@ -1,7 +1,7 @@
 """Fail-closed schemas for the only submission data permitted on the public site.
 
 These checks cannot establish consent or detect all personal details in free text.
-The private moderation workflow and human review remain required.
+The private moderation workflow must establish consent and the stated review.
 """
 import datetime as dt
 import re
@@ -21,7 +21,11 @@ def validate_board(board, kind):
     if kind == 'supporters' and (board['statement'] != STATEMENT or board['statementVersion'] != STATEMENT_VERSION):
         raise ValueError('Unexpected supporter statement.')
     prefix = {'suggestions': 'idea', 'letters': 'letter', 'supporters': 'supporter'}[kind]
-    expected_review = {'suggestions': 'AI reviewed', 'letters': 'Human reviewed', 'supporters': 'Confirmed with contributor; human reviewed'}[kind]
+    allowed_reviews = {
+        'suggestions': {'AI reviewed'},
+        'letters': {'Human reviewed', 'AI screened'},
+        'supporters': {'Confirmed with contributor; human reviewed'},
+    }[kind]
     required = {'id', 'date', 'review'}
     required |= {'displayName'} if kind == 'supporters' else {'body'}
     if kind == 'letters': required.add('displayName')
@@ -37,7 +41,7 @@ def validate_board(board, kind):
         if not re.fullmatch(r'\d{4}-\d{2}-\d{2}', row['date']):
             raise ValueError('Invalid public date.')
         dt.date.fromisoformat(row['date'])
-        if row['review'] != expected_review or (kind == 'suggestions' and row['status'] != 'Received'):
+        if row['review'] not in allowed_reviews or (kind == 'suggestions' and row['status'] != 'Received'):
             raise ValueError('Invalid public review status.')
         if 'body' in row and not 10 <= len(row['body'].strip()) <= 3000:
             raise ValueError('Invalid public message length.')

@@ -22,6 +22,24 @@ test('No JavaScript: evidence is readable and council identity stays disabled', 
   await expect(page.locator('#allow-council')).not.toBeChecked();
 });
 
+for (const [publish, council] of [[false, false], [true, false], [false, true], [true, true]]) {
+  test(`No JavaScript: letter permissions submit independently: public=${publish}, council=${council}`, async ({ page }) => {
+    const submissions = await captureSubmissions(page);
+    await page.goto('/letters.html');
+    await page.locator('#message').fill('A fictional community letter submitted without JavaScript.');
+    await page.locator('#letter-consent').check();
+    if (publish) await page.locator('#allow-public').check();
+    if (council) await page.locator('#allow-council').check();
+    await page.locator('#letter-form button[type="submit"]').tap();
+    await expect.poll(() => submissions.length).toBe(1);
+    expect(submissions[0].get('notice_version')).toBe('2026-09-22-letters-v3');
+    expect(submissions[0].get('letter_consent')).toBe('yes-process-my-letter-v3');
+    expect(submissions[0].get('allow_public')).toBe(publish ? 'yes-publish-with-display-name-v3' : null);
+    expect(submissions[0].get('allow_council')).toBe(council ? 'yes-share-with-richmond-council-v2' : null);
+    for (const field of ['council_name', 'council_postcode']) expect(submissions[0].has(field)).toBe(false);
+  });
+}
+
 test('No JavaScript: Understand retains charts, underlying data and council context', async ({ page }) => {
   await page.goto('/understand.html');
   const controls = page.locator('[role="group"][aria-label="Pupil trend measure"]');

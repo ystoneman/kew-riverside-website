@@ -136,7 +136,7 @@ test('Feedback rejects whitespace-only text and accepts a corrected message', as
   await expect.poll(() => submissions.length).toBe(1);
 });
 
-test('Letter requires private-review consent without requiring public sharing', async ({ page }) => {
+test('Letter requires processing consent without requiring public sharing', async ({ page }) => {
   const submissions = await captureSubmissions(page);
   await page.goto('/letters.html');
   await page.locator('#message').fill('This synthetic community letter is intercepted locally.');
@@ -146,7 +146,8 @@ test('Letter requires private-review consent without requiring public sharing', 
   await page.locator('#letter-consent').check();
   await page.locator('button[type="submit"]').click();
   await expect.poll(() => submissions.length).toBe(1);
-  expect(submissions[0].has('letter_consent')).toBe(true);
+  expect(submissions[0].get('notice_version')).toBe('2026-09-22-letters-v3');
+  expect(submissions[0].get('letter_consent')).toBe('yes-process-my-letter-v3');
   for (const field of ['allow_public', 'allow_council', 'council_name', 'council_postcode']) expect(submissions[0].has(field)).toBe(false);
 });
 
@@ -158,6 +159,7 @@ for (const [publish, council] of [[true, false], [false, true], [true, true]]) {
     await expect(page.locator('#allow-council')).not.toBeChecked();
     await page.locator('#message').fill('Synthetic letter for permission testing; never transmitted.');
     await page.locator('#display-name').fill('Public alias');
+    await page.locator('#email').fill('reply@example.invalid');
     await page.locator('#letter-consent').check();
     if (publish) await page.locator('#allow-public').check();
     if (council) {
@@ -168,14 +170,36 @@ for (const [publish, council] of [[true, false], [false, true], [true, true]]) {
     }
     await expect(page.locator('#preview-name')).toHaveText('Public alias');
     await expect(page.locator('.submission-preview')).not.toContainText('Example adult');
+    await expect(page.locator('.submission-preview')).not.toContainText('reply@example.invalid');
+    if (publish) await expect(page.locator('#sharing-summary')).toContainText('after automated screening or human review');
     await page.locator('button[type="submit"]').click();
     await expect.poll(() => submissions.length).toBe(1);
     expect(submissions[0].has('allow_public')).toBe(publish);
     expect(submissions[0].has('allow_council')).toBe(council);
     expect(submissions[0].has('council_name')).toBe(council);
     expect(submissions[0].has('council_postcode')).toBe(council);
+    expect(submissions[0].get('notice_version')).toBe('2026-09-22-letters-v3');
+    expect(submissions[0].get('letter_consent')).toBe('yes-process-my-letter-v3');
+    expect(submissions[0].get('allow_public')).toBe(publish ? 'yes-publish-with-display-name-v3' : null);
+    expect(submissions[0].get('allow_council')).toBe(council ? 'yes-share-with-richmond-council-v2' : null);
+    expect(submissions[0].get('email')).toBe('reply@example.invalid');
   });
 }
+
+test('Letter explains automated publication and the private publication email before consent', async ({ page }) => {
+  await page.goto('/letters.html');
+  await expect(page.locator('#allow-public').locator('..')).toContainText('without a person reviewing them first');
+  await expect(page.locator('#email')).not.toHaveAttribute('required', '');
+  await expect(page.locator('#email-help')).toContainText('one email after confirming it is live');
+  await expect(page.locator('#email-help')).toContainText('edits or removal at any time');
+  await expect(page.locator('.review-note')).toContainText('held for human review');
+  await expect(page.locator('.review-note')).toContainText('same rules to supportive and critical views');
+  await expect(page.locator('.letter-form-intro')).toContainText('not immediate or guaranteed');
+  await page.locator('#letter-form a[href="privacy.html#letters-privacy"]').click();
+  await expect(page).toHaveURL(/privacy.html#letters-privacy$/);
+  await expect(page.locator('main')).toContainText('Submissions under earlier notices retain their original permissions and require human review before publication');
+  await expect(page.locator('main')).toContainText('Letters are labelled AI screened or Human reviewed');
+});
 
 test('Revoking council sharing excludes previously entered private details', async ({ page }) => {
   const submissions = await captureSubmissions(page);

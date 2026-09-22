@@ -36,6 +36,21 @@ class PublicDataTests(unittest.TestCase):
                     with self.subTest(kind=kind, key=key, root=at_root), self.assertRaises(ValueError):
                         validate_board(board, kind)
 
+    def test_letters_accept_exactly_human_or_ai_screening_labels(self):
+        board = fixture('letters')
+        screened = copy.deepcopy(board['letters'][0])
+        screened.update(id='letter-abcdef012345', review='AI screened')
+        board['letters'].append(screened)
+        self.assertEqual(validate_board(board, 'letters'), board)
+        for review in ('AI reviewed', 'ai screened', 'Human reviewed ', 'Approved', '', None):
+            bad = fixture('letters'); bad['letters'][0]['review'] = review
+            with self.subTest(review=review), self.assertRaises(ValueError):
+                validate_board(bad, 'letters')
+        for kind in ('suggestions', 'supporters'):
+            bad = fixture(kind); bad[kind][0]['review'] = 'AI screened'
+            with self.subTest(kind=kind), self.assertRaises(ValueError):
+                validate_board(bad, kind)
+
     def test_duplicates_invalid_types_dates_review_and_markup_rejected(self):
         for kind in ('suggestions', 'letters', 'supporters'):
             for patch in ({'id': '../invalid'}, {'date': '2026-02-31'}, {'review': 'Approved'}, {'displayName': {'email': 'test@example.invalid'}}, {'displayName': '<svg onload=alert(1)>'}):
@@ -49,7 +64,11 @@ class DeploymentTests(unittest.TestCase):
     def setUp(self):
         temp = tempfile.TemporaryDirectory(); self.addCleanup(temp.cleanup)
         self.base = Path(temp.name); self.root = self.base / 'site'; self.root.mkdir()
-        for name in PUBLIC_FILES: shutil.copyfile(ROOT / name, self.root / name)
+        for name in PUBLIC_FILES:
+            if name in {'letters.json', 'suggestions.json', 'supporters.json'}:
+                (self.root / name).write_text(json.dumps(fixture(Path(name).stem)))
+            else:
+                shutil.copyfile(ROOT / name, self.root / name)
         subprocess.run(['git', 'init', '-q', str(self.root)], check=True)
 
     def test_stage_contains_only_intended_public_assets(self):
@@ -78,6 +97,23 @@ class DeploymentTests(unittest.TestCase):
         with self.assertRaises(ValueError): validate_site(self.root)
         with self.assertRaises(ValueError): Page('<script src="app.js"></script>')
         with self.assertRaises(ValueError): Page('<meta http-equiv="Content-Security-Policy" content="' + CSP + '"><img src="favicon.svg" onerror="alert(1)">')
+
+    def test_letter_notice_and_separate_permissions_are_enforced(self):
+        p = self.root / 'letters.html'; original = p.read_text()
+        for before, after in (
+            ('2026-09-22-letters-v3', '2026-09-21-v2'),
+            ('yes-process-my-letter-v3', 'yes-process-my-letter-v2'),
+            ('yes-publish-with-display-name-v3', 'yes-publish-with-display-name-v2'),
+            ('yes-share-with-richmond-council-v2', 'yes-share-with-richmond-council-v3'),
+            ('type="checkbox" required value="yes-process-my-letter-v3"', 'type="checkbox" value="yes-process-my-letter-v3"'),
+            ('name="allow_public" type="checkbox"', 'name="allow_public" type="checkbox" required'),
+            ('name="allow_council" type="checkbox"', 'name="allow_council" type="checkbox" required'),
+        ):
+            self.assertIn(before, original)
+            p.write_text(original.replace(before, after))
+            with self.subTest(change=after), self.assertRaises(ValueError):
+                validate_site(self.root)
+        p.write_text(original)
 
     def test_script_versions_cannot_escape_public_asset_allowlist(self):
         head = '<meta http-equiv="Content-Security-Policy" content="' + CSP + '"><meta name="referrer" content="strict-origin-when-cross-origin">'

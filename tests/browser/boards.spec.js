@@ -67,6 +67,31 @@ for (const board of boards) {
   });
 }
 
+test('Letters show the actual assessment for mixed human-reviewed and AI-screened entries', async ({ page }) => {
+  const board = boards.find(item => item.resource === 'letters');
+  const human = entry(board);
+  const screened = { ...entry(board), id: 'letter-abcdef012345', review: 'AI screened', displayName: 'Another test contributor' };
+  await page.route('**/letters.json', route => route.fulfill({ json: boardData(board, [human, screened]) }));
+  await page.goto('/letters.html');
+  await expect(page.locator('#letters-message')).toHaveText('2 published letters.');
+  await expect(page.locator('#' + human.id + ' .suggestion-meta')).toContainText('Human reviewed · Opinion');
+  await expect(page.locator('#' + screened.id + ' .suggestion-meta')).toContainText('AI screened · Opinion');
+  await page.locator('#' + screened.id).getByRole('link', { name: /removal/ }).click();
+  await expect(page.locator('textarea')).toHaveValue(/letter-abcdef012345/);
+});
+
+for (const review of ['AI reviewed', 'ai screened', 'Human reviewed ', 'Approved', '', null]) {
+  test(`Letters reject unsupported review label ${JSON.stringify(review)}`, async ({ page }) => {
+    const board = boards.find(item => item.resource === 'letters');
+    const invalid = { ...entry(board), review };
+    await page.route('**/letters.json', route => route.fulfill({ json: boardData(board, [invalid]) }));
+    await page.goto('/letters.html');
+    await expect(page.locator('#letters-message')).toContainText('could not be loaded');
+    await expect(page.locator('#letters-list')).toBeEmpty();
+    await expect(page.locator('form button[type="submit"]')).toBeEnabled();
+  });
+}
+
 test('Letter previews and boards render markup-shaped text as plain text', async ({ page }) => {
   const literal = '<strong>Literal test contribution, never HTML.</strong>';
   const board = boards.find(item => item.resource === 'letters');

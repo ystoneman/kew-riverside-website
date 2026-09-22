@@ -23,7 +23,13 @@ const test = base.extend({
     await context.route('**/*', async route => {
       const request = route.request();
       if (new URL(request.url()).origin === new URL(baseURL).origin && ['GET', 'HEAD'].includes(request.method())) {
-        await route.continue();
+        // Real published letters are not test fixtures or screenshot content.
+        // Board journeys supply their own fictional page-level fixtures.
+        if (new URL(request.url()).pathname === '/letters.json') {
+          await route.fulfill({ json: { version: 1, letters: [] } });
+        } else {
+          await route.continue();
+        }
       } else {
         unexpected.push(`${request.method()} ${request.url()}`);
         await route.abort('blockedbyclient');

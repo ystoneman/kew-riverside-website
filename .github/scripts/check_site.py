@@ -47,6 +47,7 @@ class Page(HTMLParser):
         self.csp = False
         self.referrer = False
         self.inputs = {}
+        self.named_inputs = {}
         self.feed(text)
         require(self.csp and self.referrer, 'Missing security or referrer policy.')
 
@@ -80,6 +81,8 @@ class Page(HTMLParser):
             require(a.get('action') == 'https://formspree.io/f/mwlpollw' and a.get('method', '').lower() == 'post', 'Unexpected form destination or method.')
         if tag == 'input':
             self.inputs[a.get('id', '')] = a
+            if a.get('name'):
+                self.named_inputs[a['name']] = a
             if a.get('type') == 'checkbox':
                 require('checked' not in a, 'Consent must not be preselected.')
 
@@ -98,6 +101,15 @@ def validate_site(root=ROOT):
             page = Page(data)
             if name == 'letters.html':
                 require(all('disabled' in page.inputs.get(field, {}) for field in ('council-name', 'council-postcode')), 'Council identity must be disabled before consent is checked.')
+                for field, value in {
+                    'notice_version': '2026-09-22-letters-v3',
+                    'letter_consent': 'yes-process-my-letter-v3',
+                    'allow_public': 'yes-publish-with-display-name-v3',
+                    'allow_council': 'yes-share-with-richmond-council-v2',
+                }.items():
+                    require(page.named_inputs.get(field, {}).get('value') == value, 'Letter permission or notice version has changed; review its meaning explicitly.')
+                require('required' in page.named_inputs['letter_consent'], 'Letter processing consent must be required.')
+                require(all('required' not in page.named_inputs[field] for field in ('allow_public', 'allow_council')), 'Letter sharing must remain optional.')
         if name.endswith('.js'):
             require(not re.search(r'\b(?:innerHTML|outerHTML|insertAdjacentHTML|eval)\b|document\.write\s*\(', data), 'Unsafe DOM/code execution sink in ' + name)
     for kind in ('suggestions', 'letters', 'supporters'):

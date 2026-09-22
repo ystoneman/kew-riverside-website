@@ -24,7 +24,7 @@
     councilDetails.hidden = !councilPermission.checked;
     privateFields.forEach(field => { field.disabled = !councilPermission.checked; });
     const choices = [];
-    if (publicPermission.checked) choices.push('Public display after human review, using your display name or Anonymous.');
+    if (publicPermission.checked) choices.push('Public display after automated screening or human review, using your display name or Anonymous.');
     if (councilPermission.checked) choices.push('May be included in a reviewed collection for Richmond Council, with any private name and postcode you provide.');
     document.getElementById('sharing-summary').textContent = choices.length ? choices.join(' ') : 'Both sharing choices are off. Your letter will stay in the private review queue.';
   }
@@ -45,7 +45,7 @@
   });
   window.addEventListener('pageshow', () => {
     button.disabled = false;
-    button.textContent = 'Send letter for review';
+    button.textContent = 'Send my letter';
     updateChoices();
     updatePreview();
   });
@@ -60,7 +60,7 @@
       const allowed = ['id', 'body', 'displayName', 'date', 'review'];
       if (!data || Object.keys(data).sort().join(',') !== 'letters,version' || data.version !== 1 || !Array.isArray(data.letters)) throw new Error('Invalid letters');
       const seen = new Set();
-      if (data.letters.some(item => !item || Object.values(item).some(value => typeof value !== 'string') || Object.keys(item).some(key => !allowed.includes(key)) || typeof item.id !== 'string' || !/^letter-[a-f0-9]{12}$/.test(item.id) || typeof item.body !== 'string' || item.body.length < 10 || item.body.length > 3000 || typeof item.displayName !== 'string' || !item.displayName.trim() || item.displayName.length > 60 || !/^\d{4}-\d{2}-\d{2}$/.test(item.date) || item.review !== 'Human reviewed')) throw new Error('Invalid letter');
+      if (data.letters.some(item => !item || Object.values(item).some(value => typeof value !== 'string') || Object.keys(item).some(key => !allowed.includes(key)) || typeof item.id !== 'string' || !/^letter-[a-f0-9]{12}$/.test(item.id) || typeof item.body !== 'string' || item.body.length < 10 || item.body.length > 3000 || typeof item.displayName !== 'string' || !item.displayName.trim() || item.displayName.length > 60 || !/^\d{4}-\d{2}-\d{2}$/.test(item.date) || !['Human reviewed', 'AI screened'].includes(item.review))) throw new Error('Invalid letter');
       data.letters.forEach(item => {
         if (seen.has(item.id) || Number.isNaN(Date.parse(item.date))) throw new Error('Invalid letter');
         seen.add(item.id);
