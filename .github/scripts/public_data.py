@@ -43,8 +43,12 @@ def validate_board(board, kind):
         dt.date.fromisoformat(row['date'])
         if row['review'] not in allowed_reviews or (kind == 'suggestions' and row['status'] != 'Received'):
             raise ValueError('Invalid public review status.')
-        if 'body' in row and not 10 <= len(row['body'].strip()) <= 3000:
-            raise ValueError('Invalid public message length.')
+        if 'body' in row:
+            # Letters match the browser's native maxlength / JavaScript length.
+            length = len(row['body'].encode('utf-16-le', errors='surrogatepass')) // 2 if kind == 'letters' else len(row['body'].strip())
+            minimum = len(row['body'].strip().encode('utf-16-le', errors='surrogatepass')) // 2 if kind == 'letters' else length
+            if minimum < 10 or length > (30000 if kind == 'letters' else 3000):
+                raise ValueError('Invalid public message length.')
         if 'displayName' in row and not (2 if kind == 'supporters' else 1) <= len(row['displayName'].strip()) <= 60:
             raise ValueError('Invalid public name length.')
         for field in ('body', 'displayName'):

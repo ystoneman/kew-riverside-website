@@ -201,6 +201,52 @@ test('Letter explains automated publication and the private publication email be
   await expect(page.locator('main')).toContainText('Letters are labelled AI screened or Human reviewed');
 });
 
+for (const suffix of ['END', '🙂']) {
+  test(`Letter preserves the full 30000-character preview and submission ending ${suffix}`, async ({ page }) => {
+    const submissions = await captureSubmissions(page);
+    const body = 'A fictional family account.\n\n'.repeat(1200).slice(0, 30000 - suffix.length) + suffix;
+    expect(body.length).toBe(30000);
+    await page.goto('/letters.html');
+    await expect(page.locator('#message')).toHaveAttribute('maxlength', '30000');
+    await page.locator('#message').fill(body);
+    await expect(page.locator('#message')).toHaveValue(body);
+    await expect(page.locator('#message-count')).toHaveText('30,000 / 30,000 characters');
+    await page.locator('.submission-preview > summary').click();
+    await expect(page.locator('#preview-body')).toBeVisible();
+    expect(await page.locator('#preview-body').textContent()).toBe(body);
+    await page.locator('#letter-consent').check();
+    await page.locator('#allow-public').check();
+    await page.locator('#letter-form button[type="submit"]').click();
+    await expect.poll(() => submissions.length).toBe(1);
+    expect(submissions[0].get('message').replace(/\r\n/g, '\n')).toBe(body);
+    expect(submissions[0].get('allow_public')).toBe('yes-publish-with-display-name-v3');
+  });
+}
+
+test('Letter rejects 30001 UTF-16 units and allows correction without truncating the text', async ({ page }) => {
+  const submissions = await captureSubmissions(page);
+  const oversized = 'F'.repeat(29999) + '🙂';
+  expect(oversized.length).toBe(30001);
+  await page.goto('/letters.html');
+  await page.locator('#letter-consent').check();
+  // Programmatic input bypasses native maxlength, exercising the submit guard.
+  await page.locator('#message').evaluate((field, value) => {
+    field.value = value;
+    field.dispatchEvent(new Event('input', { bubbles: true }));
+  }, oversized);
+  await expect(page.locator('#message-count')).toHaveText('30,001 / 30,000 characters');
+  await page.locator('#letter-form button[type="submit"]').click();
+  await expect(page.locator('#message')).toBeFocused();
+  await expect(page.locator('#message')).toHaveValue(oversized);
+  expect(submissions).toHaveLength(0);
+  expect(await page.locator('#message').evaluate(field => field.validity.valid)).toBe(false);
+  const corrected = 'F'.repeat(29998) + '🙂';
+  await page.locator('#message').fill(corrected);
+  await page.locator('#letter-form button[type="submit"]').click();
+  await expect.poll(() => submissions.length).toBe(1);
+  expect(submissions[0].get('message')).toBe(corrected);
+});
+
 test('Revoking council sharing excludes previously entered private details', async ({ page }) => {
   const submissions = await captureSubmissions(page);
   await page.goto('/letters.html');

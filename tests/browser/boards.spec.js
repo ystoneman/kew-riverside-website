@@ -104,3 +104,124 @@ test('Letter previews and boards render markup-shaped text as plain text', async
   await expect(page.locator('#preview-body')).toHaveText(literal);
   await expect(page.locator('#preview-body strong')).toHaveCount(0);
 });
+
+function longLetterBody() {
+  const ending = '\n\nFinal fictional paragraph. End of the complete letter.🙂';
+  return 'An entirely fictional community story.\n\n'.repeat(1000).slice(0, 30000 - ending.length) + ending;
+}
+
+for (const review of ['Human reviewed', 'AI screened']) {
+  test(`Long letters preserve all 30000 characters and collapse accessibly: ${review}`, async ({ page, hasTouch }) => {
+    const board = boards.find(item => item.resource === 'letters');
+    const body = longLetterBody();
+    const sample = { ...entry(board), body, review };
+    expect(body.length).toBe(30000);
+    await page.route('**/letters.json', route => route.fulfill({ json: boardData(board, [sample]) }));
+    await page.goto('/letters.html');
+    const article = page.locator('#' + sample.id);
+    const story = article.locator('details');
+    const summary = story.locator(':scope > summary');
+    const full = story.locator('.suggestion-body');
+    const excerpt = article.locator('.letter-excerpt');
+    await expect(article.locator('.suggestion-meta')).toContainText(review + ' · Opinion');
+    await expect(story).not.toHaveAttribute('open', '');
+    await expect(excerpt).toBeVisible();
+    expect((await excerpt.textContent()).length).toBeLessThan(700);
+    await expect(full).toBeHidden();
+    expect(await full.textContent()).toBe(body);
+    await expect(summary).toHaveAccessibleName('Read full letter by Test contributor');
+    if (hasTouch) await summary.tap();
+    else await summary.click();
+    await expect(story).toHaveAttribute('open', '');
+    await expect(full).toBeVisible();
+    expect(await full.textContent()).toBe(body);
+    await expect(excerpt).toBeHidden();
+    await expect(summary).toHaveAccessibleName('Show less of the letter by Test contributor');
+    // The native top control also works with a keyboard and keeps focus.
+    await summary.focus();
+    await page.keyboard.press('Enter');
+    await expect(story).not.toHaveAttribute('open', '');
+    await expect(summary).toBeFocused();
+    await expect(summary).toBeInViewport();
+    await expect(full).toBeHidden();
+    await expect(excerpt).toBeVisible();
+    await page.keyboard.press('Space');
+    await expect(story).toHaveAttribute('open', '');
+    const bottom = story.getByRole('button', { name: 'Show less of the letter by Test contributor' });
+    if (hasTouch) await bottom.tap();
+    else await bottom.click();
+    await expect(story).not.toHaveAttribute('open', '');
+    await expect(summary).toBeFocused();
+    await expect(summary).toBeInViewport();
+    await expect(full).toBeHidden();
+    await expect(excerpt).toBeVisible();
+  });
+}
+
+test('Letters of 1200 characters remain fully readable without disclosure', async ({ page }) => {
+  const board = boards.find(item => item.resource === 'letters');
+  const sample = { ...entry(board), body: 'A short fictional letter. '.repeat(50).slice(0, 1197) + 'END' };
+  expect(sample.body.length).toBe(1200);
+  await page.route('**/letters.json', route => route.fulfill({ json: boardData(board, [sample]) }));
+  await page.goto('/letters.html');
+  const article = page.locator('#' + sample.id);
+  await expect(article.locator('.suggestion-body')).toBeVisible();
+  expect(await article.locator('.suggestion-body').textContent()).toBe(sample.body);
+  await expect(article.locator('details, .letter-excerpt, .letter-collapse')).toHaveCount(0);
+});
+
+for (const suffix of ['E', '🙂']) {
+  test(`Letter board rejects 30001 UTF-16 units ending ${suffix}`, async ({ page }) => {
+    const board = boards.find(item => item.resource === 'letters');
+    const sample = { ...entry(board), body: 'F'.repeat(30001 - suffix.length) + suffix };
+    expect(sample.body.length).toBe(30001);
+    await page.route('**/letters.json', route => route.fulfill({ json: boardData(board, [sample]) }));
+    await page.goto('/letters.html');
+    await expect(page.locator('#letters-message')).toContainText('could not be loaded');
+    await expect(page.locator('#letters-list')).toBeEmpty();
+    await expect(page.locator('#letter-form button[type="submit"]')).toBeEnabled();
+  });
+}
+
+test('A 30000-character letter treats markup in the excerpt and full story as plain text', async ({ page }) => {
+  const board = boards.find(item => item.resource === 'letters');
+  const body = '<img src="missing" onerror="alert(1)">Fictional markup-shaped story. '.padEnd(30000, 'F');
+  const sample = { ...entry(board), body };
+  await page.route('**/letters.json', route => route.fulfill({ json: boardData(board, [sample]) }));
+  await page.goto('/letters.html');
+  const article = page.locator('#' + sample.id);
+  await expect(article.locator('.letter-excerpt')).toContainText('<img src="missing"');
+  await article.locator('summary').click();
+  expect(await article.locator('.suggestion-body').textContent()).toBe(body);
+  await expect(article.locator('img')).toHaveCount(0);
+  await page.locator('#message').fill(body);
+  expect(await page.locator('#preview-body').textContent()).toBe(body);
+  await expect(page.locator('#preview-body img')).toHaveCount(0);
+});
+
+test('Long letter links open the complete story on arrival, hash changes and Back', async ({ page }) => {
+  const board = boards.find(item => item.resource === 'letters');
+  const first = { ...entry(board), body: longLetterBody() };
+  const second = { ...entry(board), id: 'letter-abcdef012345', body: longLetterBody(), review: 'AI screened', displayName: 'Another fictional contributor' };
+  await page.route('**/letters.json', route => route.fulfill({ json: boardData(board, [first, second]) }));
+  await page.goto('/letters.html#' + first.id);
+  const firstArticle = page.locator('#' + first.id);
+  const secondArticle = page.locator('#' + second.id);
+  await expect(firstArticle.locator('details')).toHaveAttribute('open', '');
+  await expect(firstArticle.locator('.public-author')).toBeInViewport();
+  expect(await firstArticle.locator('.suggestion-body').textContent()).toBe(first.body);
+  await firstArticle.locator('summary').click();
+  await expect(firstArticle.locator('details')).not.toHaveAttribute('open', '');
+  await page.locator('a[href="#letters"]').click();
+  await expect(page).toHaveURL(/#letters$/);
+  await page.goto('/letters.html#' + second.id);
+  await expect(secondArticle.locator('details')).toHaveAttribute('open', '');
+  await expect(secondArticle.locator('.public-author')).toBeInViewport();
+  await page.goBack();
+  await expect(page).toHaveURL(/#letters$/);
+  await page.goBack();
+  await expect(page).toHaveURL(new RegExp('#' + first.id + '$'));
+  await expect(firstArticle.locator('details')).toHaveAttribute('open', '');
+  await expect(firstArticle.locator('.public-author')).toBeInViewport();
+  expect(await firstArticle.locator('.suggestion-body').textContent()).toBe(first.body);
+});

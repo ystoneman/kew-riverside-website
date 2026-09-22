@@ -1,6 +1,7 @@
 /* Keep native validation focus and the following click at a stable position. */
 html:has(.feedback-form){scroll-behavior:auto}
 .feedback-header{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-block:28px;border-bottom:1px solid var(--line)}
+.letter-card{scroll-margin-top:110px}.letter-excerpt{font-size:17px;line-height:1.75}.letter-card:has(.letter-story[open])>.letter-excerpt{display:none}.letter-story{margin-block:16px}.letter-story>summary{cursor:pointer;font:700 16px/1.5 Arial,sans-serif;scroll-margin-top:110px;min-height:44px;padding-block:10px;color:var(--ink)}.letter-collapse{font:700 15px/1.5 Arial,sans-serif;min-height:44px;padding:10px 16px;border:1px solid #71847b;border-radius:6px;color:var(--ink);background:#edf1e9;cursor:pointer}.letter-story>summary:focus-visible,.letter-collapse:focus-visible{outline:3px solid #9f4b15;outline-offset:4px}
 .feedback-header>a:last-child{font-size:14px;min-height:44px;display:flex;align-items:center}
 .feedback-page{max-width:1050px;padding-block:48px 72px}.feedback-intro{max-width:690px;margin-bottom:32px}.feedback-intro h1{font-size:clamp(38px,5vw,60px);letter-spacing:-1.7px}.feedback-intro>p:not(.eyebrow){font-size:18px}
 .feedback-layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:28px;align-items:start}

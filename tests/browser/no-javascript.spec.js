@@ -65,6 +65,21 @@ for (const [publish, council] of [[false, false], [true, false], [false, true], 
   });
 }
 
+test('No JavaScript: letter accepts a full 30000-character message including an emoji', async ({ page }) => {
+  const submissions = await captureSubmissions(page);
+  const body = 'F'.repeat(29998) + '🙂';
+  await page.goto('/letters.html');
+  await expect(page.locator('#message')).toHaveAttribute('maxlength', '30000');
+  await page.locator('#message').fill(body);
+  await expect(page.locator('#message')).toHaveValue(body);
+  await page.locator('#letter-consent').check();
+  await page.locator('#allow-public').check();
+  await page.locator('#letter-form button[type="submit"]').tap();
+  await expect.poll(() => submissions.length).toBe(1);
+  expect(submissions[0].get('message')).toBe(body);
+  expect(submissions[0].get('allow_public')).toBe('yes-publish-with-display-name-v3');
+});
+
 test('No JavaScript: Understand retains charts, underlying data and council context', async ({ page }) => {
   await page.goto('/understand.html');
   const controls = page.locator('[role="group"][aria-label="Pupil trend measure"]');

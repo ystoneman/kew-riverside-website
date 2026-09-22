@@ -12,6 +12,14 @@ Validation: all 587 browser checks and 29 Python checks passed; 67 public assets
 
 ## Unreleased
 
+### Longer letters with expandable stories
+
+- Increase the community-letter limit to 30,000 characters across the form, public-data validation and private letter processing; preserve the complete text. Other suggestion forms retain their existing 3,000-character limit.
+- Show a short opening for letters longer than 1,200 characters, with keyboard-accessible “Read full letter” and top/bottom “Show less” controls. Collapse returns the reading control into view. Short letters remain fully visible; letter links open the full story and reporting/removal links remain outside the disclosure.
+- Version the changed letter script and stylesheet. Permit only reviewed local CSS with an optional numeric version in the resource validator.
+
+Validation: all 628 browser checks and 32 Python checks passed; 67 public assets validated. Boundary tests cover 30,000/30,001 characters, emoji, exact preview/intercepted submission text, full public text, disclosure focus, incoming links/history and unchanged permission choices. Independent UX review covered the proposal and rendered desktop/narrow mobile implementation; its offscreen-collapse finding was fixed and rechecked. Native iPhone Air / iOS 26.5 Safari separately verified a fictional near-limit letter, touch expansion, both collapse controls and portrait/landscape layout against a local public-file preview. The saved provider maximum was updated and verified after reload; no external test submission was sent. Deployment is pending.
+
 ### Mixed-age class video prompt
 
 Add “What benefits has your child experienced in a mixed-age class?” to the optional recording prompts on the video page and both existing submission forms. Keep it as guidance for a video, with no new required answer or permission change. Validation: all 570 browser checks and 29 Python checks passed; 66 public assets validated. The new optional prompt was verified in both published responder views, with the existing bullet styling retained. Published and verified on 22 September 2026: commit `87598b4` passed the hosted checks and deployed successfully in [GitHub Actions](https://github.com/ystoneman/kew-riverside-website/actions/runs/35748329219). The public video page returned HTTP 200, matched the tested file byte for byte and displayed the prompt in the refreshed browser tab.

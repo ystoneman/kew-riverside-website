@@ -77,7 +77,14 @@ class Page(HTMLParser):
             resource = a.get('href') if tag == 'link' else a.get('src')
             # Canonical/document metadata links are not loaded resources.
             if tag == 'img' or a.get('rel') in {'stylesheet', 'icon'}:
-                require(resource in PUBLIC_FILES, 'Unexpected external or missing resource.')
+                if tag == 'link' and a.get('rel') == 'stylesheet':
+                    stylesheet = urlsplit(resource or '')
+                    require(not stylesheet.scheme and not stylesheet.netloc and not stylesheet.fragment
+                            and stylesheet.path in PUBLIC_FILES and stylesheet.path.endswith('.css')
+                            and (not stylesheet.query or re.fullmatch(r'v=[0-9]+', stylesheet.query)),
+                            'Only reviewed local stylesheets with optional numeric versions are allowed.')
+                else:
+                    require(resource in PUBLIC_FILES, 'Unexpected external or missing resource.')
         if tag == 'a':
             url = urlsplit(a.get('href', ''))
             require(url.scheme in {'', 'https', 'mailto'}, 'Unsafe link scheme.')

@@ -29,6 +29,14 @@ These choices are design judgments to verify, not measured conversion improvemen
 
 ## Selected page and interaction design
 
+### Longer community letters — 22 September 2026
+
+The owner requested room for 30,000-character letters and a way to expand longer stories (J4). Keep the existing reading/writing entry points, letter IDs and independent permissions. Increasing the input limit alone would make the public board difficult to scan; shortening stored text would lose the contributor's words. Instead, retain the full letter and display a roughly 360-character opening for stories over 1,200 characters, followed by a native “Read full letter” disclosure. Short letters stay fully visible.
+
+Expanding hides the preview and reveals the exact full body with its paragraph spacing. Provide “Show less” at both ends so readers need not scroll back through a long story; collapsing brings the summary into view and the bottom control returns focus to it. Direct letter links, later hash changes and Back reveal the target story. Keep names, review labels and reporting/removal links visible outside the disclosure. No new page or navigation item is needed; existing journey priorities remain unchanged.
+
+Independent UX review before implementation identified the bottom-collapse and direct-link requirements. Final rendered desktop and 320/390-pixel mobile review found that collapse could leave the summary offscreen; the corrected focus/scroll behaviour and shorter preview passed reinspection. All 628 browser checks passed, including exact full text, keyboard controls, narrow layouts, link/history recovery, 30,000-character limits and no-JavaScript form bounds. Native iPhone Air / iOS 26.5 Safari separately verified touch expansion, top/bottom collapse and portrait/landscape rendering with fictional near-limit text. These checks are implementation verification, not user research; publication evidence is recorded in the changelog.
+
 ### Homepage: a clear starting point
 
 Place **Find what you need** near the top, with six routes:
