@@ -1,5 +1,7 @@
 const { test, expect, expectDestination } = require('./fixtures');
-const upload = 'https://docs.google.com/forms/d/e/1FAIpQLSfK3b8XtDJ5_mhKWTqxfZpZwPOJLGXjN1QIQYTKYlJ0dRAHHQ/viewform';
+const upload = 'https://docs.google.com/forms/d/e/1FAIpQLScJZ8ZnZWTaPUIoM9l2Vjir7TgNNTHuUyDEF5uLRJolm8iccg/viewform';
+const dropbox = 'https://www.dropbox.com/request/9uaa0fawrtdz6pv8b6hn';
+const legacy = 'https://docs.google.com/forms/d/e/1FAIpQLSfK3b8XtDJ5_mhKWTqxfZpZwPOJLGXjN1QIQYTKYlJ0dRAHHQ/viewform';
 
 for (const source of ['letters.html', 'feedback.html']) {
   test(`Video: discover private upload from ${source}`, async ({ page, baseURL, hasTouch }) => {
@@ -8,7 +10,7 @@ for (const source of ['letters.html', 'feedback.html']) {
     await expect(entry).toBeVisible();
     if (hasTouch) await entry.tap(); else await entry.click();
     await expectDestination(page, 'videos.html', baseURL);
-    await expect(page.locator('#upload-requirements')).toContainText('Google sign-in required');
+    await expect(page.locator('#upload-requirements')).toContainText('No Google or Dropbox sign-in required');
     await expect(page.locator('#upload-requirements')).toContainText('Adults recording themselves only');
     await expect(page.locator('#video-title')).toHaveText('Some things are best said in your own voice.');
   });
@@ -23,6 +25,9 @@ test('Video: upload is a clear external handoff without embedded trackers or loc
   await page.goto('/videos.html');
   await expect(page.locator('iframe,video,form,input[type="file"]')).toHaveCount(0);
   await expect(page.locator('.video-process')).toContainText('Nothing is published automatically');
+  await expect(page.locator('#upload-requirements')).toContainText('Step 2: follow its confirmation link to Dropbox');
+  await expect(page.locator('#resume-instructions')).toContainText('same email and video filename');
+  await expect(page.locator('.video-process')).toContainText('An unmatched upload stays private');
   await expect(page.locator('#video-upload-link')).toHaveAttribute('aria-describedby', 'upload-requirements');
   await expect(page.locator('.video-process a')).toHaveAttribute('href', 'https://www.youtube.com/@KewParentVoices');
   if (hasTouch) await page.locator('#video-upload-link').tap(); else await page.locator('#video-upload-link').click();
@@ -60,4 +65,31 @@ test('Video: withdrawal leads to private request and non-Google alternative stay
   await page.locator('.video-upload a[href="privacy.html#video-privacy"]').click();
   await expect(page.locator('#video-privacy')).toBeInViewport();
   await expect(page.locator('section[aria-labelledby="video-privacy"]')).toContainText('2026-09-22-videos-v1');
+  await expect(page.locator('section[aria-labelledby="video-privacy"]')).toContainText('2026-09-22-videos-dropbox-v1');
 });
+
+for (const [name, selector, destination] of [
+  ['resume a permitted Dropbox upload', '#dropbox-upload-link', dropbox],
+  ['keep the original Google upload available', '#legacy-google-upload-link', legacy],
+]) {
+  test(`Video: ${name}`, async ({ page, hasTouch }) => {
+    const requests = [];
+    await page.route(destination, async route => {
+      requests.push(route.request().method());
+      await route.fulfill({contentType:'text/html',body:'<!doctype html><title>Fictional external destination</title><p>No data sent.</p>'});
+    });
+    await page.goto('/videos.html');
+    if (selector.includes('legacy')) {
+      const summary = page.locator('#upload-help summary');
+      if (hasTouch) await summary.tap(); else { await summary.focus(); await page.keyboard.press('Enter'); }
+      await expect(page.locator('#upload-help')).toContainText('It requires Google sign-in');
+      await expect(page.locator('#upload-help')).toContainText('you do not need to submit it again');
+    } else {
+      await expect(page.locator('#resume-instructions')).toContainText('Already saved your permissions?');
+    }
+    const link = page.locator(selector);
+    if (hasTouch) await link.tap(); else await link.click();
+    await expect(page).toHaveURL(destination);
+    expect(requests).toEqual(['GET']);
+  });
+}

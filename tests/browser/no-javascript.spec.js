@@ -144,9 +144,9 @@ test('No JavaScript: research keeps all cases, graphics, evidence notes and cita
 test('No JavaScript: video guidance and external upload route remain available', async ({ page }) => {
   await page.goto('/letters.html');
   await page.locator('main a[href="videos.html"]').tap();
-  await expect(page.locator('#upload-requirements')).toContainText('Google sign-in required');
+  await expect(page.locator('#upload-requirements')).toContainText('No Google or Dropbox sign-in required');
   const destination = await page.locator('#video-upload-link').getAttribute('href');
-  await page.route(destination, route => route.fulfill({contentType:'text/html',body:'<!doctype html><title>Fictional Google handoff</title><p>No upload sent.</p>'}));
+  await page.route(destination, route => route.fulfill({contentType:'text/html',body:'<!doctype html><title>Fictional permission handoff</title><p>No upload sent.</p>'}));
   for (const id of ['recording-tips','video-choices','upload-help']) {
     await page.locator('#'+id+' summary').tap();
     await expect(page.locator('#'+id)).toHaveAttribute('open','');
