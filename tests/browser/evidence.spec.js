@@ -21,7 +21,7 @@ test('Report discovery: homepage links reach the web research and download the 4
 });
 
 test('Report discovery: remembered terms find the research and preserve its provenance', async ({ page }) => {
-  await page.goto('/index.html#records');
+  await page.goto('/evidence.html#records');
   const report = page.locator('#source-lessons-report');
   for (const query of ['other schools', '12 schools', 'closure reversals', 'saved schools', 'report', '44-page PDF', '44 page PDF']) {
     await page.getByLabel('Search the records').fill(query);
@@ -44,7 +44,7 @@ test('Report discovery: remembered terms find the research and preserve its prov
 });
 
 test('Report discovery: research filters, separate counts, empty state and reset agree', async ({ page }) => {
-  await page.goto('/index.html#records');
+  await page.goto('/evidence.html#records');
   const report = page.locator('#source-lessons-report');
   await expect(page.locator('#result-count')).toHaveText('47 of 47 records');
   await expect(page.locator('#research-count')).toHaveText('1 of 1 site research reports');
@@ -69,7 +69,7 @@ test('Report discovery: research filters, separate counts, empty state and reset
 });
 
 test('Report discovery: direct and repeated report anchors recover incompatible filters', async ({ page, hasTouch }) => {
-  await page.goto('/index.html?q=impossible-report-search&type=Inspection&year=2003&status=Reviewed#source-lessons-report');
+  await page.goto('/evidence.html?q=impossible-report-search&type=Inspection&year=2003&status=Reviewed#source-lessons-report');
   const report = page.locator('#source-lessons-report');
   await expect(report).toBeVisible();
   await expect(report).toBeInViewport();
@@ -88,7 +88,7 @@ test('Report discovery: direct and repeated report anchors recover incompatible 
 });
 
 test('Source search, combined filters, empty state and clear remain usable', async ({ page }) => {
-  await page.goto('/index.html#records');
+  await page.goto('/evidence.html#records');
   const total = await page.locator('.source-card').count();
   await expect(page.locator('#result-count')).toHaveText(`${total} of ${total} records`);
   await page.getByLabel('Search the records').fill('Ofsted');
@@ -112,7 +112,7 @@ test('Source search, combined filters, empty state and clear remain usable', asy
 });
 
 test('Direct evidence references remain visible when URL filters exclude them', async ({ page }) => {
-  await page.goto('/index.html?q=no-record-can-match-this-test-phrase#source-inspection-2003');
+  await page.goto('/evidence.html?q=no-record-can-match-this-test-phrase#source-inspection-2003');
   await expect(page.locator('#source-inspection-2003')).toBeVisible();
   await expect(page.locator('#source-inspection-2003')).toBeInViewport();
   await expect(page.getByLabel('Search the records')).toHaveValue('');
@@ -120,7 +120,7 @@ test('Direct evidence references remain visible when URL filters exclude them', 
 
 test('Each source filter independently updates visible records', async ({ page }) => {
   for (const [label, value] of [['Topic', 'Funding & buildings'], ['Coverage', 'Index only'], ['Record type', 'Official dataset']]) {
-    await page.goto('/index.html#records');
+    await page.goto('/evidence.html#records');
     const total = await page.locator('.source-card').count();
     await page.getByLabel(label, { exact: true }).selectOption(value);
     expect(await page.locator('.source-card:visible').count()).toBeGreaterThan(0);
@@ -130,11 +130,11 @@ test('Each source filter independently updates visible records', async ({ page }
 });
 
 test('Checklist downloads as PDF and source index as CSV', async ({ page }) => {
-  await page.goto('/index.html');
-  for (const [name, filename, signature] of [
-    ['Download the checklist (PDF)', 'kew-riverside-response-checklist.pdf', '%PDF-'],
-    ['Download the source index (CSV)', 'kew-riverside-source-index.csv', '"Title","Publisher"'],
+  for (const [entry, name, filename, signature] of [
+    ['/options.html#options', 'Download the checklist (PDF)', 'kew-riverside-response-checklist.pdf', '%PDF-'],
+    ['/evidence.html#records', 'Download the source index (CSV)', 'kew-riverside-source-index.csv', '"Title","Publisher"'],
   ]) {
+    await page.goto(entry);
     const [download] = await Promise.all([
       page.waitForEvent('download'),
       page.getByRole('link', { name: new RegExp(name.replace(/[()]/g, '\\$&')) }).click(),
@@ -147,7 +147,7 @@ test('Checklist downloads as PDF and source index as CSV', async ({ page }) => {
 });
 
 test('Charts and option details provide usable nonvisual alternatives', async ({ page }) => {
-  await page.goto('/index.html');
+  await page.goto('/evidence.html#evidence');
   await page.locator('#borough-context > summary').click();
   const tables = page.locator('details.data-table');
   expect(await tables.count()).toBeGreaterThan(0);
@@ -156,6 +156,7 @@ test('Charts and option details provide usable nonvisual alternatives', async ({
     await expect(details.locator('table')).toBeVisible();
     expect(await details.locator('tbody tr').count()).toBeGreaterThan(0);
   }
+  await page.goto('/options.html#option-enrolment');
   const campaign = page.locator('#option-enrolment');
   await campaign.locator('summary').click();
   await expect(campaign.getByRole('heading', { name: 'A practical first step' })).toBeVisible();

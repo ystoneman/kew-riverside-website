@@ -9,10 +9,10 @@ const questions = {
 };
 const questionIds = Object.values(questions).flat();
 const entryRoutes = [
-  'index.html#options',
+  'options.html',
   'proposal.html#timetable',
   'understand.html',
-  'index.html#records',
+  'evidence.html#records',
   'feedback.html?kind=evidence#feedback-form',
   'faq.html#school-places',
 ];
@@ -28,12 +28,11 @@ test('Homepage: responsive copy keeps words separated on mobile and desktop', as
     for (const width of [390, 1440]) {
       await page.setViewportSize({ width, height: 1000 });
       await page.goto('/index.html');
-      const heading = page.locator('#brief-title');
-      await expect(heading).toBeVisible();
-      expect((await heading.innerText()).replace(/\s+/g, ' ').trim(), `Rendered heading at ${width}px`).toBe('We moved here for this school.');
+      const story = page.locator('#top a[href="about.html#our-story"]');
+      await expect(story).toBeVisible();
+      await expect(story).toHaveAccessibleName(/family|story|chose/i);
       for (const [selector, wording] of [
         ['.discovery-heading > p', 'the evidence or a way'],
-        ['#next-dates > p', 'proposed. No final'],
         ['#visit-school .visit-school-action > p', 'page. Tour invitation'],
       ]) {
         const copy = page.locator(selector);
@@ -46,7 +45,7 @@ test('Homepage: responsive copy keeps words separated on mobile and desktop', as
   }
 });
 
-test('Homepage: the meeting invitation appears before the hero with its date, public source and details', async ({ page, hasTouch }) => {
+test('Homepage: orientation leads to a compact meeting invitation with its date, public source and details', async ({ page, hasTouch }) => {
   await page.clock.setFixedTime(new Date('2026-09-22T12:00:00Z'));
   await page.goto('/index.html');
   const invitation = page.locator('main #meeting-invitation');
@@ -56,11 +55,13 @@ test('Homepage: the meeting invitation appears before the hero with its date, pu
   await expect(invitation).toContainText(/3[.:]30\s*p\.?m\.?/i);
   await expect(invitation).toContainText('Kew Riverside');
   await expect(invitation).toContainText('Meet local authority representatives');
-  await expect(invitation).toContainText('share your views in person');
+  await expect(invitation).toContainText('share your views');
   await expect(invitation.locator('blockquote, .meeting-attribution')).toHaveCount(0);
   const position = await invitation.boundingBox();
   const hero = await page.locator('#top').boundingBox();
-  expect(position.y + position.height).toBeLessThanOrEqual(hero.y + 1);
+  const chooser = await page.locator('#find-your-way').boundingBox();
+  expect(hero.y + hero.height).toBeLessThanOrEqual(position.y + 1);
+  expect(position.y + position.height).toBeLessThanOrEqual(chooser.y + 1);
   await expect(invitation.locator('a[href="https://www.richmond.gov.uk/media/fxhbilws/kew_riverside_consultation_leaflet.pdf#page=8"]')).toBeVisible();
   await activate(invitation.locator('a[href="proposal.html#school-meeting"]'), hasTouch);
   await expect(page).toHaveURL(/proposal\.html#school-meeting$/);
@@ -113,14 +114,15 @@ test('Homepage: six clear entry routes lead to answers, dates, evidence and part
   }
 });
 
-test('Homepage: the next dates lead to the school meeting and official response route', async ({ page, hasTouch }) => {
+test('Homepage: compact dates lead to the school meeting and official response route', async ({ page, hasTouch }) => {
   await page.goto('/index.html');
-  const notice = page.locator('#next-dates');
+  const notice = page.locator('#meeting-invitation');
   await expect(notice).toBeVisible();
   await expect(notice).toContainText(/29\s+Sep(?:tember)?/i);
   await expect(notice).toContainText(/3[.:]30\s*p\.?m\.?/i);
-  await expect(notice).toContainText(/16\s+Oct(?:ober)?/i);
-  const official = notice.locator('a[href^="https://"]');
+  await expect(page.locator('#top')).toContainText(/16\s+Oct(?:ober)?/i);
+  await expect(page.locator('#top')).toContainText(/propos/i);
+  const official = page.locator('#top a[href^="https://docs.google.com/forms/"]');
   await expect(official).toHaveCount(1);
   await expect(official).toHaveAttribute('href', 'https://docs.google.com/forms/d/e/1FAIpQLSda5oPsdUlrJkf6vACC_AjvXFR6-ki3iBymNIF5BAWNxf85xQ/viewform');
   await activate(notice.locator('a[href="proposal.html#school-meeting"]'), hasTouch);
@@ -231,8 +233,8 @@ test('FAQ: topic links restore answers hidden by a previous search', async ({ pa
   await expect(page.locator('#faq-empty')).toBeHidden();
 });
 
-test('Homepage: the earlier public record stays available behind its disclosure and direct link', async ({ page, hasTouch }) => {
-  await page.goto('/index.html#timeline');
+test('Evidence: the earlier public record stays available behind its disclosure and direct link', async ({ page, hasTouch }) => {
+  await page.goto('/evidence.html#timeline');
   const history = page.locator('#earlier-record');
   await expect(history).not.toHaveAttribute('open', '');
   await activate(history.locator(':scope > summary'), hasTouch);
@@ -240,7 +242,7 @@ test('Homepage: the earlier public record stays available behind its disclosure 
   await expect(history.locator('.timeline')).toBeVisible();
   await activate(history.locator('a[href="#source-inspection-2003"]'), hasTouch);
   await expect(page.locator('#source-inspection-2003')).toBeInViewport();
-  await page.goto('/index.html#earlier-record');
+  await page.goto('/evidence.html#earlier-record');
   await expect(history).toHaveAttribute('open', '');
   await expect(history.locator('.timeline')).toBeVisible();
 });
@@ -272,10 +274,8 @@ test('Parent plan: homepage invitation and meeting details both lead to preparat
   await page.clock.setFixedTime(new Date('2026-09-22T12:00:00Z'));
   await page.goto('/index.html');
   const invitation = page.locator('#meeting-invitation');
-  await expect(invitation).toContainText('Prepare. Participate. Make a difference.');
-  await expect(invitation.locator('.meeting-plan-steps > li')).toHaveText([
-    'Prepare together', 'Attend the meeting', 'Respond with evidence',
-  ]);
+  // The short invitation delegates preparation details to the named plan.
+  await expect(invitation.getByRole('link', { name: 'Parent action plan', exact: true })).toBeVisible();
   await activate(invitation.getByRole('link', { name: 'Parent action plan', exact: true }), hasTouch);
   await expect(page).toHaveURL(/proposal\.html#parent-plan$/);
   await expect(page.locator('#parent-plan-title')).toBeInViewport();
@@ -305,7 +305,7 @@ test('Parent plan: correct PTA dates, independent video permission and official 
   await expect(page.locator('#plan-respond')).toContainText('does not replace your own official response');
   await expect(page.locator('#plan-share')).toContainText('only with your separate permission');
   await expect(page.locator('.parent-reassurance')).toContainText('Keep following any admissions or SEND instructions');
-  for (const href of ['letters.html', 'videos.html', 'feedback.html?kind=evidence#feedback-form', 'feedback.html?kind=meeting#feedback-form', 'index.html#options']) {
+  for (const href of ['letters.html', 'videos.html', 'feedback.html?kind=evidence#feedback-form', 'feedback.html?kind=meeting#feedback-form', 'options.html#options']) {
     await page.goto('/proposal.html#parent-plan');
     await activate(page.locator(`#parent-plan a[href="${href}"]`), hasTouch);
     await expectDestination(page, href, baseURL);

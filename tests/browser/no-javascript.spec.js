@@ -12,7 +12,7 @@ for (const file of pages) {
 }
 
 test('No JavaScript: evidence is readable and council identity stays disabled', async ({ page }) => {
-  await page.goto('/index.html');
+  await page.goto('/evidence.html#records');
   expect(await page.locator('.source-card:visible').count()).toBeGreaterThan(0);
   await page.goto('/letters.html');
   await expect(page.locator('#council-name')).toBeDisabled();
@@ -30,7 +30,7 @@ test('No JavaScript: homepage and Evidence expose the full report and web resear
   await expect(page).toHaveURL(/lessons\.html$/);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('What can other schools teach us?');
   await page.goBack();
-  await shortcut.locator('a[href="#source-lessons-report"]').tap();
+  await shortcut.locator('a[href="evidence.html#source-lessons-report"]').tap();
   const report = page.locator('#source-lessons-report');
   await expect(report).toBeInViewport();
   await expect(report).toContainText(/site research/i);
@@ -41,7 +41,7 @@ test('No JavaScript: homepage and Evidence expose the full report and web resear
   ]);
   expect(download.suggestedFilename()).toBe('lessons-report.pdf');
   expect(await download.failure()).toBeNull();
-  await page.goto('/index.html?q=impossible-report-search&type=Inspection#source-lessons-report');
+  await page.goto('/evidence.html?q=impossible-report-search&type=Inspection#source-lessons-report');
   await expect(report).toBeVisible();
   await expect(report).toBeInViewport();
   await expect(page.locator('.source-card:visible')).toHaveCount(47);
@@ -102,7 +102,7 @@ test('No JavaScript: Understand retains charts, underlying data and council cont
 
 test('No JavaScript: contextual learning entry exposes the results, native tables and downloads', async ({ page }) => {
   await page.goto('/index.html');
-  await page.getByRole('complementary', { name: 'How does Kew Riverside compare?' }).locator('a[href="understand.html#learning-and-results"]').tap();
+  await page.locator('#visit-school a[href="understand.html#learning-and-results"]').tap();
   const section = page.locator('#learning-and-results');
   await expect(section).toBeInViewport();
   await expect(page.locator('svg#attainment-chart')).toBeVisible();
@@ -122,7 +122,7 @@ test('No JavaScript: contextual learning entry exposes the results, native table
     expect(download.suggestedFilename()).toBe(filename);
     expect(await download.failure()).toBeNull();
   }
-  await section.locator('#inspection-summary a[href="index.html#source-inspection-2026"]').tap();
+  await section.locator('#inspection-summary a[href="evidence.html#source-inspection-2026"]').tap();
   await expect(page.locator('#source-inspection-2026')).toBeInViewport();
   await expect(page.locator('#source-inspection-2026')).toContainText('Reviewed');
 });
@@ -146,7 +146,7 @@ test('No JavaScript: prospective families can follow learning and open the sourc
     await expect(answer.locator('p').first()).toBeVisible();
     expect(await answer.locator('a[href]').count()).toBeGreaterThan(0);
   }
-  await page.locator('#latest-inspection a[href="index.html#source-inspection-2026"]').tap();
+  await page.locator('#latest-inspection a[href="evidence.html#source-inspection-2026"]').tap();
   await expect(page.locator('#source-inspection-2026')).toBeInViewport();
 });
 
@@ -254,4 +254,52 @@ test('No JavaScript: the named parent action plan is visible on arrival', async 
   await plan.tap();
   await expect(page).toHaveURL(/proposal\.html#parent-plan$/);
   await expect(page.locator('#parent-plan-title')).toBeInViewport();
+});
+
+test('No JavaScript: former homepage fragments offer an explicit route to the moved content', async ({ page }) => {
+  // Independently pinned public links, including a detail nested in a disclosure.
+  for (const [id, destination] of [
+    ['records', 'evidence.html'],
+    ['source-inspection-2026', 'evidence.html'],
+    ['source-lessons-report', 'evidence.html'],
+    ['earlier-record', 'evidence.html'],
+    ['gaps', 'evidence.html'],
+    ['method', 'evidence.html'],
+    ['options', 'options.html'],
+    ['option-enrolment', 'options.html'],
+    ['crowdfunding-recipient', 'options.html'],
+  ]) {
+    await page.goto('/index.html#' + id);
+    const fallback = page.locator('.legacy-route#' + id);
+    await expect(fallback).toBeInViewport();
+    const link = fallback.locator(`a[href="${destination}#${id}"]`);
+    await expect(link).toHaveAccessibleName(/Continue/i);
+    await link.tap();
+    await expect(page).toHaveURL(new RegExp(destination.replace('.', '\\.') + '#' + id + '$'));
+    if (id === 'crowdfunding-recipient') {
+      const details = page.locator('#crowdfunding-recipient').locator('xpath=ancestor::details[1]');
+      if (!(await details.evaluate(element => element.open))) await details.locator(':scope > summary').tap();
+    }
+    if (id === 'earlier-record' && !(await page.locator('#earlier-record').evaluate(element => element.open))) {
+      await page.locator('#earlier-record > summary').tap();
+    }
+    await expect(page.locator('#' + id)).toBeVisible();
+  }
+});
+
+test('No JavaScript: the exact video QR upload address keeps a working permission handoff', async ({ page }) => {
+  await page.goto('/videos.html#upload');
+  await expect(page).toHaveURL(/\/videos\.html#upload$/);
+  await expect(page.locator('#upload')).toBeInViewport();
+  await expect(page.locator('#upload-requirements')).toContainText('Adults recording themselves only');
+  await expect(page.locator('#upload-requirements')).toContainText('No Google or Dropbox sign-in required');
+  const link = page.locator('#video-upload-link');
+  const destination = await link.getAttribute('href');
+  await page.route(destination, route => route.fulfill({ contentType: 'text/html', body: '<h1>Fictional video permission handoff</h1><p>No upload sent.</p>' }));
+  await link.tap();
+  await expect(page).toHaveURL(destination);
+  await page.goBack();
+  await expect(page).toHaveURL(/\/videos\.html#upload$/);
+  await expect(page.locator('#upload')).toBeInViewport();
+  await expect(page.locator('main a[href="letters.html"]')).toBeVisible();
 });

@@ -1,3 +1,30 @@
+# Current handoff — 22 September 2026
+
+The user requested a clean pause, with all work from the shorter-homepage task committed and pushed so Claude Code can continue. This section supersedes the historical handoff below.
+
+## Ready work
+
+- Branch: `codex/shorter-homepage`, based on `d2d9c09`. Local checkout: the sibling `shorter-homepage-worktree` directory.
+- Implemented a shorter homepage, dedicated `evidence.html` and `options.html`, canonical internal links and generator updates. The measured desktop homepage is about 89% shorter (19,794 → 2,205 CSS pixels at 1280×720).
+- Protected Parent Action Plan, Letters, Share ideas, official response/deadline, all six task routes, research PDF/HTML and school enquiry. All 86 moved homepage anchors have automatic replacement routing and native no-JavaScript Continue links; saved evidence searches retain query values.
+- **Keep the exact shared video QR URL: `https://ystoneman.github.io/kew-riverside-website/videos.html#upload`.** The page/path/fragment, providers and permission content are unchanged by this task. `videos.css` adds immediate scrolling for that fragment to fix a pre-existing, reproduced WebKit tap/Back issue.
+- All **718 browser checks**, **41 Python checks** and **73-public-file validation** passed. Independent campaign, evidence and rendered UX reviews found no unresolved issues. Native iPhone 17 / iOS 26.5 Safari checks passed, including the QR handoff and Back. No forms were submitted. Details are in CHANGELOG.md and TESTING.md.
+
+## Continue safely
+
+1. Read AGENTS.md and the protected visitor journeys in UX-DESIGN-DECISIONS.md. Check the working tree, remote branches and pull requests before editing.
+2. Inspect the shorter-homepage pull request and hosted check results. **This task has not merged or deployed the redesign.** Do not describe local tests as a deployment.
+3. Coordinate integration with the concurrent theme PR #2 (`codex/site-theme`) and video-permissions PR #3 (`codex/video-publication-permissions`). Both modify shared pages. Preserve their work when resolving conflicts; new Evidence/Options pages may need the theme assets/controls, and homepage routing must not restore older permission wording. Check current PR state; these notes are a snapshot.
+4. The standard checkout was on the video-permissions branch at pause. Do not reset it or overwrite its work. Continue this change on `codex/shorter-homepage` or its own worktree.
+5. After integrating other changes, run the documented Python, public-file and full browser checks again. Verify shared links and the exact QR URL. Keep production CSP and the explicit deployment allowlist.
+6. Use the repository's PR/check workflow for release. After deployment, verify the live homepage, both new pages, an old source URL and `videos.html#upload`. Record actual hosted/deployment results separately.
+
+Node 24 is available locally at `/Users/yannstoneman/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node`. The standard browser harness port 4173 was occupied by concurrent work; the successful full run used a temporary equivalent config on port 33719, with the same submission interception. Repository config/server files were not changed. Temporary log files are optional local evidence, not required source artifacts.
+
+---
+
+# Historical handoff (superseded where it conflicts with the current section)
+
 # Codex handoff: publish the Kew Riverside evidence hub
 
 ## User's goal

@@ -146,3 +146,10 @@ The homepage research shortcut and the separate Site research entry in Evidence 
 `attainment-data.json` contains only reviewed aggregate results, cohort counts and source provenance. Rebuild the educational section and `attainment.csv` through `python3 .github/scripts/build_understand.py`; `.github/scripts/build_learning.py` supplies its renderer. Keep final DfE results, the inspection’s older subject table and the school-reported/provisional 2026 update distinct. Null is missing/unverified, never zero. Any update needs the independent source-sentinel review in `test_learning.py`, not just regeneration. The inspection remains an original record in `sources.json`/CSV/HTML; the four learning FAQs preserve existing question IDs.
 
 The proposed `ENROLMENT-OUTREACH-BRIEF.md` is maintenance-only coordination material. It does not authorize outreach or commit partners, money or volunteers. No tracking was added.
+
+
+## Homepage and reference routes
+
+The homepage is a short overview. The complete evidence library, charts, history, gaps and method live in `evidence.html`; the eight strategies live in `options.html`. Keep their local contents and the six homepage task links useful. The video flyer QR address is a fixed route: `videos.html#upload`.
+
+The homepage retains each former fragment as a `.legacy-route` with an explicit destination and native Continue link. `homepage.js` uses replacement navigation and preserves query strings, including evidence searches without a fragment. Do not remove these compatibility targets when shortening copy. Update canonical citations in the builders as well as generated pages. The source-library integrity and legacy-route tests live in `test_site_structure.py`; browser interactions and saved searches are checked in `homepage.spec.js` and `evidence.spec.js`.
