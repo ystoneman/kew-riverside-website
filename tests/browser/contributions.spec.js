@@ -235,10 +235,10 @@ test('Supporter requests require all three independent consent statements', asyn
     await expect(choice).toBeFocused();
     await expect(choice).not.toBeChecked();
     expect(submissions).toHaveLength(0);
-    // A touch user can select the full consent label. Keep the gesture and the
-    // observable result separate while the browser dismisses its validation UI.
+    // Select the full consent label on touch and desktop. Keep the gesture and
+    // the checked-state assertion separate after native validation moves focus.
     if (hasTouch) await labels.nth(index).tap();
-    else await choice.check();
+    else await labels.nth(index).click();
     await expect(choice).toBeChecked();
   }
   if (hasTouch) await submit.tap();
