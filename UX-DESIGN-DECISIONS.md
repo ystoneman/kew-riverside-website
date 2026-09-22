@@ -88,3 +88,9 @@ After release, useful task checks include finding the official response deadline
 ## Maintaining this record
 
 For a material change, record the visitor problem, options considered, chosen behaviour, source or evidence, and verification status. Update the affected decision when it changes rather than leaving contradictory current guidance. Record the dated delivery in [CHANGELOG.md](CHANGELOG.md); keep private messages, submission content and personal data out of both files.
+
+## Meeting invitation — 22 September 2026
+
+Parents need to notice the imminent face-to-face meeting before reading the longer evidence guide. Put a compact, high-contrast invitation above the homepage hero, showing Tuesday 29 September 2026, 3.30pm and the school location. Quote the parent-supplied excerpt of Ardeep’s letter and link the council’s published meeting details. Encourage attendance across families, classes and the PTA community without implying that turnout determines the decision.
+
+The absolute date remains readable without JavaScript. A small local script uses London calendar dates for “Next week”, “Tomorrow” and “Today”, and removes the invitation from 30 September; the full timetable remains available. This avoids an out-of-date relative invitation without a countdown or tracking. Regression coverage includes the London midnight boundary, no-JavaScript fallback, source/details links and placement before the introduction.

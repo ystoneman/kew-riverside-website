@@ -11,7 +11,7 @@ from public_data import validate_board
 
 ROOT = Path(__file__).resolve().parents[2]
 PUBLIC_FILES = frozenset('''
-faq.html discovery.css discovery.js about.html app.js applications.csv community.css corrections.html
+meeting.css meeting.js faq.html discovery.css discovery.js about.html app.js applications.csv community.css corrections.html
 corrections.js favicon.svg feedback.css feedback.html feedback.js index.html insights.css navigation.js participation.css enrolment.css
 letters.html letters.js letters.json privacy.html proposal.css proposal.html
 response-checklist.md response-checklist.pdf sources.csv sources.json styles.css

@@ -76,3 +76,15 @@ test('No JavaScript: all FAQ answers retain native disclosure and official route
     expect(await answer.locator('a[href]').count()).toBeGreaterThan(0);
   }
 });
+
+test('No JavaScript: the meeting invitation shows its fixed date and usable details link', async ({ page }) => {
+  await page.goto('/index.html');
+  const invitation = page.locator('#meeting-invitation');
+  await expect(invitation).toBeVisible();
+  await expect(page.locator('#meeting-relative')).toHaveText('School meeting');
+  expect((await invitation.locator('time').innerText()).replace(/\s+/g, ' ')).toContain('Tuesday 29 September 2026');
+  await expect(invitation).toContainText(/3[.:]30\s*p\.?m\.?/i);
+  await invitation.locator('a[href="proposal.html#school-meeting"]').tap();
+  await expect(page).toHaveURL(/proposal\.html#school-meeting$/);
+  await expect(page.locator('#school-meeting')).toBeInViewport();
+});

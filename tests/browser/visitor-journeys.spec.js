@@ -21,6 +21,79 @@ async function activate(locator, hasTouch) {
   else await locator.click();
 }
 
+test('Homepage: responsive copy keeps words separated on mobile and desktop', async ({ page }) => {
+  const originalViewport = page.viewportSize();
+  try {
+    for (const width of [390, 1440]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await page.goto('/index.html');
+      const heading = page.locator('#brief-title');
+      await expect(heading).toBeVisible();
+      expect((await heading.innerText()).replace(/\s+/g, ' ').trim(), `Rendered heading at ${width}px`).toBe('We moved here for this school.');
+      for (const [selector, wording] of [
+        ['.discovery-heading > p', 'the evidence or a way'],
+        ['#next-dates > p', 'proposed. No final'],
+        ['#visit-school .visit-school-action > p', 'page. Tour invitation'],
+      ]) {
+        const copy = page.locator(selector);
+        await expect(copy).toBeVisible();
+        expect((await copy.innerText()).replace(/\s+/g, ' ').trim(), `${selector} rendered at ${width}px`).toContain(wording);
+      }
+    }
+  } finally {
+    if (originalViewport) await page.setViewportSize(originalViewport);
+  }
+});
+
+test('Homepage: the meeting invitation appears before the hero with its date, provenance and details', async ({ page, hasTouch }) => {
+  await page.clock.setFixedTime(new Date('2026-09-22T12:00:00Z'));
+  await page.goto('/index.html');
+  const invitation = page.locator('main #meeting-invitation');
+  await expect(invitation).toBeVisible();
+  await expect(invitation.getByRole('heading', { name: 'Come and speak with the council.', exact: true })).toBeVisible();
+  expect((await invitation.locator('time').innerText()).replace(/\s+/g, ' ')).toContain('Tuesday 29 September 2026');
+  await expect(invitation).toContainText(/3[.:]30\s*p\.?m\.?/i);
+  await expect(invitation).toContainText('Kew Riverside');
+  await expect(invitation.locator('blockquote')).toContainText(/\S/);
+  await expect(invitation).toContainText(/Ardeep/);
+  await expect(invitation).toContainText(/parent.supplied|supplied by a parent/i);
+  const position = await invitation.boundingBox();
+  const hero = await page.locator('#top').boundingBox();
+  expect(position.y + position.height).toBeLessThanOrEqual(hero.y + 1);
+  await expect(invitation.locator('a[href="https://www.richmond.gov.uk/media/fxhbilws/kew_riverside_consultation_leaflet.pdf#page=8"]')).toBeVisible();
+  await activate(invitation.locator('a[href="proposal.html#school-meeting"]'), hasTouch);
+  await expect(page).toHaveURL(/proposal\.html#school-meeting$/);
+  await expect(page.locator('#school-meeting')).toBeInViewport();
+});
+
+test.describe('Meeting invitation uses the London calendar date', () => {
+  // A visitor outside the UK must still see the label for the school's day.
+  test.use({ timezoneId: 'America/Los_Angeles' });
+  for (const [date, label] of [
+    ['2026-09-22T12:00:00Z', 'Next week’s meeting'],
+    ['2026-09-28T12:00:00Z', 'Tomorrow’s meeting'],
+    ['2026-09-29T12:00:00Z', 'Today’s meeting'],
+    ['2026-09-30T12:00:00Z', null],
+    ['2026-09-29T23:30:00Z', null],
+  ]) {
+    test(`${date}: ${label || 'invitation is over'}`, async ({ page }) => {
+      await page.clock.setFixedTime(new Date(date));
+      await page.goto('/index.html');
+      const invitation = page.locator('#meeting-invitation');
+      await expect(invitation).toHaveCount(1);
+      if (label) {
+        await expect(invitation).toBeVisible();
+        await expect(page.locator('#meeting-relative')).toHaveText(label);
+      } else {
+        await expect(invitation).toBeHidden();
+        await page.goto('/proposal.html#school-meeting');
+        await expect(page.locator('#school-meeting')).toBeVisible();
+        await expect(page.locator('#school-meeting')).toContainText(/29\s+September\s+2026/);
+      }
+    });
+  }
+});
+
 test('Homepage: six clear entry routes lead to answers, dates, evidence and participation', async ({ page, hasTouch, baseURL }) => {
   await page.goto('/index.html');
   const routes = page.locator('#find-your-way .route-card');
