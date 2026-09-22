@@ -2,7 +2,7 @@
 
 ## User's goal
 
-Publish this complete static website publicly on GitHub Pages. It centralises public information about the Kew Riverside School Closure, with a searchable document index, historical timeline, infographics and seven numbered approaches to retaining provision.
+Publish this complete static website publicly on GitHub Pages. It centralises public information about the Kew Riverside School Closure, with a searchable document index, historical timeline, infographics and eight numbered approaches to retaining provision.
 
 The user has requested public publication. Use available authenticated GitHub capabilities, respecting runtime permissions. Do not claim the site is live until the deployment and public URL have been verified.
 
@@ -78,3 +78,9 @@ Borough charts, their data table and housing note are retained inside #borough-c
 The same header now appears across all eight pages, with outlined Letters and pale-green Contribute actions, plain research links, a native mobile Menu and current-page markers. The mobile header is non-sticky; action links remain exposed while research links are collapsed. Shared navigation.js and participation.css are in the public deployment allowlist. The latter loads last and uses a fresh asset URL because live testing caught browsers retaining the old shared styles after an HTML refresh. When editing navigation, maintain both desktop and mobile link groups and all eight headers.
 
 The letters page offers Write/Read shortcuts, a form heading, an official-response reminder at the form, a writing route from the board, and bold labels for required private review versus optional publication/council sharing. Consent text, field names, unchecked defaults, private-field disabling and submission destinations are unchanged. No messages or submissions were sent during the UX review.
+
+## Enrolment campaign option — 22 September 2026
+
+Option 04 (#option-enrolment) proposes school-coordinated local outreach, authentic adult parent stories and a measured enquiries → visits → applications → enrolments journey. YouTube, TikTok and Instagram are labelled suggested channels, drawn as local SVG icons with adjacent text; they are not links to campaign accounts. There are now eight numbered approaches; later numbers and the formal-participation cross-reference were updated. No campaign was launched, third parties contacted or pupil target invented.
+
+The compact #visit-school card links to the school’s verified Contact Us page for guided-tour enquiries. The campaign details cite school tour/admissions information and the council FAQ’s stage-specific admissions statement. Older admissions criteria or dates on the school page are not reproduced. The 42-record curated source library is unchanged; the new school links are cited directly and stored with the approach in sources.json. enrolment.css is loaded only on the homepage and is in the public deployment allowlist. No new JavaScript, embeds, trackers or intake form was added.

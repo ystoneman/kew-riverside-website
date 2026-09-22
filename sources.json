@@ -735,7 +735,7 @@
       }
     }
   },
-  "rankingMethod": "Editorial priorities based on decision relevance, potential evidence strength and usefulness before a decision. Not probabilities. School-specific feasibility unproven. Seven options. Crowdfunding is placed next to the costed recovery plan because they are connected, not because its feasibility or likelihood of success is established.",
+  "rankingMethod": "Editorial priorities based on decision relevance, potential evidence strength and usefulness before a decision. Not probabilities. School-specific feasibility unproven. Eight options. Crowdfunding is placed next to the costed recovery plan because they are connected, not because its feasibility or likelihood of success is established. The enrolment campaign follows demand testing and must be developed with the school and tested against a recovery budget.",
   "approaches": [
     {
       "rank": 1,
@@ -839,6 +839,47 @@
     },
     {
       "rank": 4,
+      "id": "option-enrolment",
+      "title": "Grow enrolment through a local campaign",
+      "tag": "An idea to develop with the school",
+      "effort": "Medium–high",
+      "evidence": "Needs available places, school coordination and a recovery budget",
+      "why": "Help more families discover Kew Riverside through authentic parent stories, short videos and local networks. Turn interest into school visits and applications, then connect any increase in pupil numbers to a costed recovery plan.",
+      "next": "Agree a time-limited recruitment pilot with the school; establish available year groups, previous recruitment results, owners and costs. Seek a school/council assessment of what sustained increase, by when, would change the recovery plan.",
+      "limits": "Viral reach is not guaranteed. Views, enquiries and applications do not establish enrolments or viability. No agreed pupil target guarantees continued operation. Normal admissions arrangements and the closure proposal remain relevant.",
+      "suggestedChannels": [
+        "YouTube",
+        "TikTok",
+        "Instagram"
+      ],
+      "measures": [
+        "Enquiries",
+        "School visits",
+        "Applications",
+        "Enrolments"
+      ],
+      "stage": "Editorial proposal to develop with the school; no campaign accounts or endorsement implied.",
+      "refs": [
+        "school-home",
+        "consultation-faq",
+        "consultation-leaflet",
+        "school-finance"
+      ],
+      "sourceLinks": [
+        {
+          "title": "School: personalised tours and admissions route",
+          "url": "https://www.kewriverside.richmond.sch.uk/page/?pid=349&title=Admissions",
+          "checked": "2026-09-22"
+        },
+        {
+          "title": "School: contact for a guided tour",
+          "url": "https://www.kewriverside.richmond.sch.uk/page/?pid=525&title=Contact+Us",
+          "checked": "2026-09-22"
+        }
+      ]
+    },
+    {
+      "rank": 5,
       "title": "Audit the actual saving from closure",
       "tag": "High priority",
       "effort": "Medium–high",
@@ -853,7 +894,7 @@
       ]
     },
     {
-      "rank": 5,
+      "rank": 6,
       "title": "Document pupil impacts and receiving-school capacity",
       "tag": "High priority",
       "effort": "Medium",
@@ -868,9 +909,9 @@
       ]
     },
     {
-      "rank": 6,
+      "rank": 7,
       "title": "Put the evidence through every formal decision stage",
-      "tag": "Essential alongside 1–5",
+      "tag": "Essential alongside 1–6",
       "effort": "Low–medium",
       "evidence": "Public participation rules available",
       "why": "A concise, referenced case is easier to assess than a signature count alone. Coordinate who addresses budgets, demand, alternatives and pupil impacts, while preserving each person's own views.",
@@ -884,7 +925,7 @@
       ]
     },
     {
-      "rank": 7,
+      "rank": 8,
       "title": "Obtain a focused legal review if a concrete defect emerges",
       "tag": "Conditional",
       "effort": "High / professional costs",

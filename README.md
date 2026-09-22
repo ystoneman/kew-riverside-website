@@ -14,7 +14,7 @@ The evidence pages need no build or API keys. Feedback and community letters use
 - 42 source entries: 37 reviewed, 2 listed in a reviewed index without individual review, and 3 routes not retrieved.
 - Sources: school website, Richmond Council and Schools Forum, Achieving for Children, Ofsted, Department for Education.
 - The school-specific consultation page, leaflet, general FAQ and council-linked form were retrieved. The form states a 16 October 2026 response deadline. Closure effective 1 September 2027 is proposed; November 2026 and April 2027 committee stages are planned, not completed decisions. Wording differences between timetable documents remain explicit.
-- The seven numbered approaches are editorial priorities, not probabilities or demonstrated school-specific solutions.
+- The eight numbered approaches are editorial priorities, not probabilities or demonstrated school-specific solutions.
 - Forecasts and pupil counts keep their dates and geographical definitions.
 - `sources.csv` is the visitor download: all 42 source records, with readable column headings, source URLs and coverage caveats. It uses UTF-8 with a BOM for Excel.
 - `sources.json` retains the structured source index, chart values and option rankings for maintenance.
@@ -98,3 +98,9 @@ All eight pages share the same header: research links, outlined Letters and a pa
 Navigation JavaScript only adds dismissal on link selection, outside click, Escape, focus leaving the menu and transition to desktop; native disclosure still works without it. Letters has direct writing/reading shortcuts, a writing link at the board and concise consent lead-ins. Full consent wording, separate unchecked permissions and disabled private fields are preserved.
 
 The participation styles use a separate asset URL so the new shared header cannot pick up a cached pre-header version of styles.css. Keep participation.css loaded after the existing page styles.
+
+## Enrolment campaign option — 22 September 2026
+
+Option 04 (#option-enrolment) proposes school-coordinated local outreach, authentic adult parent stories and a measured enquiries → visits → applications → enrolments journey. YouTube, TikTok and Instagram are labelled suggested channels, drawn as local SVG icons with adjacent text; they are not links to campaign accounts. There are now eight numbered approaches; later numbers and the formal-participation cross-reference were updated. No campaign was launched, third parties contacted or pupil target invented.
+
+The compact #visit-school card links to the school’s verified Contact Us page for guided-tour enquiries. The campaign details cite school tour/admissions information and the council FAQ’s stage-specific admissions statement. Older admissions criteria or dates on the school page are not reproduced. The 42-record curated source library is unchanged; the new school links are cited directly and stored with the approach in sources.json. enrolment.css is loaded only on the homepage and is in the public deployment allowlist. No new JavaScript, embeds, trackers or intake form was added.
