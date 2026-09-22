@@ -1,5 +1,27 @@
 'use strict';
 (() => {
+  function revealLinkedDetails() {
+    let id;
+    try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
+    const target = document.getElementById(id);
+    if (!target) return;
+    let element = target;
+    let revealed = false;
+    while (element) {
+      if (element.tagName === 'DETAILS') {
+        element.open = true;
+        revealed = true;
+      }
+      element = element.parentElement;
+    }
+    if (revealed) target.scrollIntoView({ behavior: 'instant', block: 'start' });
+  }
+  window.addEventListener('hashchange', revealLinkedDetails);
+  document.addEventListener('click', event => {
+    const link = event.target.closest('a[href^="#"]');
+    if (link && link.hash === location.hash) revealLinkedDetails();
+  });
+  revealLinkedDetails();
   const controls = document.querySelector('[aria-label="Pupil trend measure"]');
   const views = Array.from(document.querySelectorAll('[data-trend-view]'));
   const status = document.getElementById('trend-status');

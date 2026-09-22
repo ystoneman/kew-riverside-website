@@ -221,7 +221,8 @@ class UnderstandDataTests(unittest.TestCase):
         self.assertCountEqual(actual, expected)
 
     def test_accessible_html_tables_match_counts_and_calculated_values(self):
-        tables = Tables((ROOT / 'understand.html').read_text(encoding='utf-8')).tables
+        # Attainment tables have a separate schema and tests; preserve these four school-roll tables.
+        tables = [table for table in Tables((ROOT / 'understand.html').read_text(encoding='utf-8')).tables if table['rows']]
         self.assertEqual(len(tables), 4)
         trends = [table for table in tables if 'pupil numbers' in table['caption']]
         self.assertEqual(len(trends), 2)

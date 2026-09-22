@@ -2,6 +2,27 @@
 
 Visitor-facing changes and significant maintenance changes, newest first. The historical entries below were reconstructed from repository commits on 22 September 2026. Dates are commit dates, not independently verified publication times. A commit records a change; it does not by itself prove a successful deployment or a particular test result.
 
+## Unreleased
+
+### Sofiya feedback: educational evidence and existing visitor routes
+
+- Add the school-hosted full 8 July 2026 inspection, all category judgements and improvement areas; resolve gap 7 visibly and reconcile history, newsletter/index records, HTML/JSON/CSV. The original-source library now contains 47 records (42 reviewed, two index-only, three not retrieved); the site-research report keeps its separate identity/count.
+- Add `understand.html#learning-and-results` after the existing substantive comparisons. Keep national/borough context, small cohorts, fluctuating results and Darell’s newer recovery visible. Provide responsive chart facets, accessible optional tables, final/provisional/school-reported provenance, and matching aggregate CSV/JSON downloads. Do not infer missing 2024 eligible counts.
+- Explain the school’s two-year curriculum with its current alternating-topic example; distinguish inspection observations, personal experience and mixed-age/tutoring research. Hold the conflicting current class count. Append four sourced FAQ answers after the original school-place answers; add contextual family-story and consultation-question links.
+- Preserve Letters, Share ideas, the complete Parent action plan arrival shortcut, six task cards, existing anchors and all report/download routes. Add learning links inside the existing comparison preview and visit card. Broaden the existing enrolment option and retain direct school enquiry, proposal context and current official admissions guidance.
+- Clarify the contextual evidence route from letters and use a neutral optional mixed-age prompt on the website video page. External permission forms and their prompts are unchanged. Prepare `ENROLMENT-OUTREACH-BRIEF.md` as maintenance material only; no outreach or tracking is launched.
+- Reveal linked result disclosures on incoming, repeated and history navigation. Make direct visit-card arrival immediate to fix a reproducible JavaScript-disabled WebKit tap failure. Keep native disclosure fallback and independent publication permissions.
+
+Review: independent campaign/community, UX/discovery and evidence/editorial reviews occurred before implementation and on the actual changes. Source findings corrected inspection locators and added six available 2026 higher-standard cells. UX found the closed-disclosure chart link; it is fixed and rechecked. No remaining actionable review findings. Validation: all 666 browser checks passed under Node 24.19.0; all 40 Python checks passed and 69 public assets validated. The first focused no-JavaScript visit-card test failed in three unchanged repetitions; the scoped immediate-scroll correction passed the same regression and the full suite. One initial desktop WebKit chart-link check did not recur in four unchanged repetitions or the full run. Native iPhone Air / iOS 26.5 Safari separately verified the learning-section arrival, readable chart, direct table URL opening, touch collapse, inspection-source navigation, Safari Back, portrait/landscape inspection-card layout and temporarily enlarged text (then reset). Native horizontal table swiping was not established; labelled table scrolling was verified in rendered/browser checks. No external form was submitted. Publication is pending; this entry does not yet claim deployment.
+
+### Project specialist reviews and protected journeys
+
+- Add campaign/community, UX/discovery and evidence/editorial review skills, with scoped routing before substantive implementation and before release. Reviewers return read-only findings; the lead integrates them. Routine corrections use the criteria without requiring a panel.
+- Establish one current journey register in `UX-DESIGN-DECISIONS.md`, protecting prominent participation actions and existing evidence, family, utility and download routes.
+- Allowlist the six skill files as maintenance material only. The public asset set and visitor-facing files are unchanged. The surrounding school workspace routes tasks to the same repository instructions and skills without duplicating them.
+
+Validation: all three skills passed the bundled skill validator; UI metadata and 17 local document references/anchors were checked. An independent, source-only scenario review exercised a substantive homepage/claim change, a meaning-neutral typo and a small school-visit factual update; it confirmed relevant routing, proportional review and parent-workspace access, with no material instruction defect found. All 29 existing Python checks passed. A temporary staged artifact contained exactly the same 67 public files, byte-identical to HEAD, with no instructions or skills included. No visitor interaction changed, so no new browser or native iOS run was performed. No deployment is part of this maintenance task.
+
 ## 22 September 2026 — find the 44-page other-schools report
 
 - Add a compact homepage route with direct links to the existing PDF, readable web research and its Evidence entry.
@@ -10,7 +31,9 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 Validation: all 587 browser checks and 29 Python checks passed; 67 public assets validated. New journeys cover remembered search terms, both report formats, provenance, separate counts, filters/reset, direct and repeated anchors, and no-JavaScript access. Native iPhone Air / iOS 26.5 Safari separately verified the homepage web link, Safari Back, the PDF opening with 44 pages, the Evidence link and portrait/landscape layouts against a local public-file preview. No external forms were submitted. Published and verified: commit `3d14a7e` passed the hosted checks and deployed successfully in [GitHub Actions](https://github.com/ystoneman/kew-riverside-website/actions/runs/35750966395). The homepage, search script, new stylesheet, PDF, both research pages and existing proposal page returned HTTP 200 and matched that commit byte for byte. The live Evidence search found the report for “44-page PDF”; native iPhone Air Safari verified the published homepage shortcut and opened the 44-page PDF.
 
-## Unreleased
+## 22 September 2026 — additional verified releases
+
+Previously listed under Unreleased. The seven linked Actions runs were rechecked on 22 September: all completed successfully with the recorded implementation SHAs. Their original validation and live-verification records are preserved below.
 
 ### Longer letters with expandable stories
 
@@ -76,7 +99,7 @@ Validation: all 496 browser checks and 29 Python security/data/structure checks 
 
 Published and verified on 22 September 2026: implementation commit `86015ea` passed the same 496 browser checks and 29 Python checks in [GitHub Actions](https://github.com/ystoneman/kew-riverside-website/actions/runs/35727959355), then deployed successfully. All 23 changed public pages, scripts/data, graphics and PDF returned HTTP 200 and matched the tested local files byte for byte. The published financial graphic and deep-link disclosure were also checked in native iPhone Safari. This later log-only commit changes no deployed assets.
 
-### Earlier work awaiting release documentation
+## Earlier work awaiting release documentation
 
 - Add the first contributor-approved, human-reviewed community letter to the existing public board, preserving the submitted wording and display name.
 - Let routine, relevant letters with new explicit publication permission appear after automated screening, with specific concerns held for human review. Update the public form and privacy notice, preserve earlier letters' human-review requirement, and keep council sharing independent.

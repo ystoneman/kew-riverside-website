@@ -10,6 +10,44 @@ The owner's feedback identified practical needs: make participation easier to fi
 
 Keep the static site, working incoming links, source citations, accessible tables and separate publication permissions. The site takes no donations. A funding idea is a suggestion, not a payment or pledge.
 
+## Protected visitor journeys
+
+Adopted 22 September 2026 for ongoing change review. Owner: Yann Stoneman; the implementing agent maintains this register when an intentional change affects it. These priorities reflect the owner's goals and inspection of the site, not a measured ranking from a visitor study. This section is the canonical current register; the dated decisions below explain its history.
+
+Priority allocates attention; every existing task retains usable access. Visitors may start with an action, evidence or a family question. Do not require them to follow a learning sequence before reaching their destination. The ranking of campaign options on the homepage is separate from journey priority.
+
+| ID / emphasis | Visitor outcome | Protected entry and destination |
+| --- | --- | --- |
+| J1 · Essential orientation | Understand the proposal, current decision status and relevant dates | Homepage status/date information, `proposal.html`, `faq.html` and directly cited official records; distinguish proposed, conditional and decided outcomes. |
+| J2 · Prominent action | Find what I can usefully do now | Named Parent action plan shortcut visible on homepage arrival, plus shared navigation to `proposal.html#parent-plan`; no disclosure or familiarity with the containing page required for the shortcut. |
+| J3 · Prominent action | Give my views to the decision-maker | Explicit official-response links and current verified deadline/stage; a website letter, idea or video does not replace an official response. |
+| J4 · Prominent participation | Read community experience or write a letter | Exposed Community letters / Read or write header action to `letters.html`, with reading and writing shortcuts and independent permissions. |
+| J5 · Prominent participation | Offer an idea, evidence, question or correction | Exposed Share ideas / Evidence & suggestions header action to `feedback.html`, with contextual category links and clear private/public choices. |
+| J6 · Easy to discover | Understand and check the case | All six homepage task destinations; Understand, options, Evidence navigation and `index.html#records`; the full report and readable research through the homepage shortcut, Evidence and existing proposal route. Educational evidence at `understand.html#learning-and-results`, reached through the existing comparison/visit areas and `faq.html#learning`. Preserve sources, charts/tables, filters, direct anchors and downloads. |
+| J7 · Protected family task | Understand my child's practical next steps | Homepage child-next-steps card and `faq.html#school-places`; distinguish current-family contingencies from prospective-family admissions and preserve both. |
+| J8 · Contextual recruitment | Decide whether to enquire about the school | `index.html#visit-school` with a direct current school enquiry route and proposal context; related `#option-enrolment` route. Reading campaign strategy is not a prerequisite. |
+| J9 · Contextual participation | Contribute in another format or offer further help | Existing Parent plan, letters and ideas links to `videos.html`, `supporters.html` and relevant help categories; preserve written alternatives and older shared links. |
+
+Across all journeys, preserve About/contact, corrections/removal, privacy, the checklist, source CSV, research source register, accessible tables and source links. Lower visual emphasis does not justify hiding or removing these routes. Maintain readable text, keyboard operation, useful no-JavaScript access and recovery through Back, clear/reset and incoming anchors.
+
+### Placement and change criteria
+
+- Keep Letters and Share ideas outside the collapsed mobile Menu. Protect the Parent action plan shortcut's arrival visibility at the established normal-text 320 × 568 baseline and check wider layouts. Enlarged text may reflow; do not shrink it to satisfy a first-screen assertion.
+- Prefer an existing destination and short contextual entry for new material. For the remaining Sofiya feedback plan, start with no additional global navigation items or standalone homepage bands. This is a scoped design budget, not an absolute ban: any exception needs a concrete visitor need, the cost to existing tasks and a tested rationale.
+- Keep essential meaning, dates, consent and claim-changing limitations visible at the point of use. Disclose optional depth with descriptive labels. Keep the official response distinct from site contributions and recruitment enquiries.
+- Preserve canonical URLs, anchors, remembered search terms and the original-source/site-synthesis distinction. Keeping a URL alive is insufficient if its entry point disappears or filters conceal it.
+- Use the completed report-discovery release as the starting baseline for later changes. Inspect the current checkout and verified release in `CHANGELOG.md`; do not treat a dated screenshot or pre-release review as the current layout.
+
+For each material change, record the visitor need and journey IDs; canonical destination and entry label; existing tasks potentially displaced; added space/attention/interactions and how those costs are contained; retained links/search terms/downloads; actual checks; and owner/review trigger. The specialist workflow in [AGENTS.md](AGENTS.md#specialist-reviews) supplies the relevant review lenses.
+
+### Verification and maintenance
+
+Start journey checks at realistic entry points, not only known destination URLs. Automatic all-page/link discovery tests must be supplemented by independent expectations for protected entries: a removed link must not disappear silently from the test's own input. Review relative emphasis and scroll depth as well as clicks; avoid a universal click-count rule or pixel-perfect snapshots as the sole usability test.
+
+Follow `TESTING.md` for changed behaviour. Inspect narrow and desktop rendering, keyboard/focus, no-results recovery, direct links, Back and no-JavaScript paths where relevant. Run native iOS checks for affected touch/focus/menu/mobile changes when available and distinguish them from browser emulation. Use fictional data and intercepted submissions. Record checks actually run; automated success is not proof that unfamiliar visitors can find something.
+
+Review this register when user evidence changes a priority, an official process stage/date changes, a provider changes the contribution experience, or a new feature would displace an existing route. Verify date-sensitive content from its maintained sources. Update the current register deliberately and record the reason below; do not copy live dates or entire source findings into specialist skills. No new analytics or scheduled automation is required by this process.
+
 ## Options considered
 
 | Option | Decision and reason |
@@ -178,3 +216,17 @@ Visitor need: find the previously published 44-page PDF without knowing which pr
 The Evidence search includes a separate Site research card, with remembered search terms and its own count. Adding the synthesis to the original-source dataset was considered but would blur its provenance and change the source export. Keeping it outside search would preserve the discovery problem. The chosen design shares the search/filter controls, identifies the item as Synthesis, and leaves all 46 original records and their CSV unchanged. Empty-state messaging considers both collections; direct anchors recover from incompatible filters. The static card and links work without JavaScript. A small dedicated stylesheet avoids stale cached styles for the new route, and the updated Evidence script URL is versioned.
 
 Verification: all 587 browser checks, 29 Python checks and 67-asset validation passed. Native iPhone Air / iOS 26.5 Safari checked both report formats, Back, the Evidence route and portrait/landscape layout on the local preview. Publication is recorded separately in CHANGELOG.md.
+
+## Sofiya feedback: learning within the existing hierarchy
+
+Visitor needs: find the retrieved inspection, understand educational provision/results, contribute evidence and enquire about a school visit (J5–J9), without displacing J1–J4 or current-family school-place guidance.
+
+Keep the canonical priorities above. Add learning/results after the existing substantive Understand sections and before methodology, with a local jump and short links inside the existing comparison preview and visit card. No new global navigation item or homepage band is introduced. The six homepage task cards retain their destinations; Letters, Share ideas and the Parent plan keep their arrival positions. The visit card grows modestly to expose educational context and current official admissions alongside direct enquiry and the closure caveat. It does not require reading campaign strategy.
+
+An always-expanded results appendix would lengthen every visit. Instead, keep the conclusion, small-cohort and attainment/progress limits, sources and newer Darell context visible, with optional labelled tables and method. Responsive chart facets share a zero-to-100 scale, direct value labels and accessible descriptions; they stack on phones. Tables scroll within keyboard-focusable labelled regions. A chart link opens the relevant disclosure with JavaScript, including direct/history/repeated anchors; without JavaScript its descriptive jump reaches the native summary. Underlying CSV/JSON remain downloadable in both cases.
+
+Append a learning FAQ group after the original four topics and preserve all 12 previous answer IDs. Its four answers use the same search/hash/reset controller. The mixed-age account distinguishes school curriculum, inspection observations, family experience and mixed research. Leave only the unresolved class count and unverified 2024 eligible counts unasserted, rather than deferring verified material.
+
+Keep evidence gap 7 in its familiar position, visibly resolved and linked to the full inspection source. The separate research report stays distinct from the original-source library. Broaden the existing enrolment option’s title and visible channel list together; operational ownership and measurement belong in the maintenance outreach brief. Contribution edits reuse existing evidence/video forms and permission boundaries.
+
+Independent planning reviews supported these placements. Implementation reviews corrected the chart disclosure link and source details; campaign and rendered UX reviews found no further actionable issues. Rendered review covered 320/390px and desktop, retained arrival routes, keyboard tables and FAQ recovery. Regression checks and native Safari outcomes are recorded in `TESTING.md` and release evidence in `CHANGELOG.md`; this rationale is not user-research evidence.

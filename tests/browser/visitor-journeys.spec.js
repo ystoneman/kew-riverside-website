@@ -2,6 +2,7 @@ const { test, expect, expectDestination } = require('./fixtures');
 
 const questions = {
   'school-places': ['choose-school', 'school-choice', 'apply-during-consultation'],
+  learning: ['school-results', 'latest-inspection', 'mixed-age-learning', 'mixed-age-research'],
   money: ['deficit-meaning', 'deficit-build-up', 'crowdfunding-target'],
   decisions: ['decided', 'next-meeting', 'respond-deadline'],
   'taking-part': ['useful-response', 'letters-official', 'share-evidence'],
@@ -335,7 +336,7 @@ test('Parent plan: additional actions are optional native details without an inv
 
 test('FAQ: action comes first while school-place answers remain searchable and directly linked', async ({ page, hasTouch }) => {
   await page.goto('/faq.html');
-  expect(await page.locator('.faq-group').evaluateAll(groups => groups.map(group => group.id))).toEqual(['taking-part', 'decisions', 'money', 'school-places']);
+  expect(await page.locator('.faq-group').evaluateAll(groups => groups.map(group => group.id))).toEqual(['taking-part', 'decisions', 'money', 'school-places', 'learning']);
   expect(await page.locator('#school-places details').evaluateAll(answers => answers.map(answer => answer.id))).toEqual(['apply-during-consultation', 'school-choice', 'choose-school']);
   await expect(page.locator('#choose-school > summary')).toHaveText('If closure is approved, when would we need to arrange another school?');
   await page.getByRole('searchbox', { name: 'Find an answer', exact: true }).fill('choose another school');

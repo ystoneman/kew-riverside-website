@@ -23,3 +23,6 @@
 @media(max-width:800px){.visit-school{grid-template-columns:1fr;gap:20px}.visit-school-action{text-align:left}.visit-school-action p br{display:none}.visit-school-action p{max-width:45ch}}
 @media(max-width:560px){.visit-school{padding:24px 20px;margin-bottom:48px}.visit-school h2{font-size:27px}.visit-school-action .button{white-space:normal;width:100%;font-size:13px;gap:12px}.visit-school-action p{font-size:11px}.campaign-channels ul{gap:14px 20px}.campaign-channels li{font-size:13px}.campaign-channels svg{width:23px;height:23px}.campaign-journey{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.campaign-journey li{padding:12px 10px;font-size:13px}.campaign-actions{gap:4px 20px}}
 @media print{.visit-school{break-inside:avoid;margin-bottom:24px}.campaign-actions{display:none}.campaign-journey{grid-template-columns:repeat(4,1fr)}}
+
+/* A shared visit link must settle before touch activation, including without JS. */
+html:has(#visit-school:target){scroll-behavior:auto}

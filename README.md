@@ -11,12 +11,12 @@ The evidence pages need no build or API keys. Feedback and community letters use
 ## Content and provenance
 
 - Original research cut-off: **21 September 2026**. School comparison datasets and the council proposal comparison were checked on **22 September 2026**; individual source access dates are recorded.
-- 46 source entries: 41 reviewed, 2 listed in a reviewed index without individual review, and 3 routes not retrieved.
+- 47 source entries: 42 reviewed, 2 listed in a reviewed index without individual review, and 3 routes not retrieved.
 - Sources: school website, Richmond Council and Schools Forum, Achieving for Children, Ofsted, Department for Education.
 - The school-specific consultation page, leaflet, general FAQ and council-linked form were retrieved. The form states a 16 October 2026 response deadline. Closure effective 1 September 2027 is proposed; November 2026 and April 2027 committee stages are planned, not completed decisions. Wording differences between timetable documents remain explicit.
 - The eight numbered approaches are editorial priorities, not probabilities or demonstrated school-specific solutions.
 - Forecasts and pupil counts keep their dates and geographical definitions.
-- `sources.csv` is the visitor download: all 46 source records, with readable column headings, source URLs and coverage caveats. It uses UTF-8 with a BOM for Excel.
+- `sources.csv` is the visitor download: all 47 source records, with readable column headings, source URLs and coverage caveats. It uses UTF-8 with a BOM for Excel.
 - `sources.json` retains the structured source index, chart values and option rankings for maintenance.
 - `applications.csv` provides the borough application series.
 - `response-checklist.pdf` is the visitor download: a two-page A4 checklist with selectable text, tick boxes and clickable links.
@@ -53,6 +53,8 @@ This collection is not exhaustive. Original documents remain with their publishe
 | .nojekyll | Disables Jekyll processing for branch-based Pages |
 
 ## Maintenance
+
+Project review guidance is in [AGENTS.md](AGENTS.md#specialist-reviews), with the single current [journey register](UX-DESIGN-DECISIONS.md#protected-visitor-journeys) and three repository skills under `.agents/skills/`: `kew-campaign-review`, `kew-ux-review` and `kew-evidence-review`. Relevant substantial changes receive planning and implementation reviews; routine corrections use the criteria directly. The lead integrates findings and retains the normal required checks. These files are repository maintenance material and are excluded from the website deployment artifact. Project skills are discoverable when working in this checkout; tasks started in the surrounding school workspace use its `AGENTS.md` to load the same skills directly.
 
 For a source addition or correction, retain a stable ID, publisher, document date (or explicitly unknown), URL, summary, location and collection coverage. Update both `sources.json` and the static cards in `index.html`, then regenerate `sources.csv`. Regenerate `response-checklist.pdf` whenever `response-checklist.md` changes. Update counts when coverage changes. Recheck the guidance edition and official notice before changing any process or deadline statement.
 
@@ -132,4 +134,11 @@ Charts are rendered as HTML/SVG, with no third-party chart package, embeds, trac
 
 ## Finding the other-schools report
 
-The homepage research shortcut and the separate Site research entry in Evidence link to the existing `lessons-report.pdf`, `lessons.html` and source appendix. Evidence search includes remembered terms such as other schools, saved schools and 44-page PDF. Research filtering uses the same controls but keeps a separate count and Synthesis label; the 46 original records in HTML, JSON and CSV remain unchanged. Keep the report outside `.source-card` unless the original-source data contract is deliberately revised. Preserve `#source-lessons-report` for shared links; anchor recovery must reveal it even when filters exclude it. `research-discovery.css` styles these entry points and is included in the public asset allowlist.
+The homepage research shortcut and the separate Site research entry in Evidence link to the existing `lessons-report.pdf`, `lessons.html` and source appendix. Evidence search includes remembered terms such as other schools, saved schools and 44-page PDF. Research filtering uses the same controls but keeps a separate count and Synthesis label; the original-source records keep their own HTML/JSON/CSV contract (now 47 after the July inspection was added). Keep the report outside `.source-card` unless the original-source data contract is deliberately revised. Preserve `#source-lessons-report` for shared links; anchor recovery must reveal it even when filters exclude it. `research-discovery.css` styles these entry points and is included in the public asset allowlist.
+
+
+## Learning and attainment maintenance
+
+`attainment-data.json` contains only reviewed aggregate results, cohort counts and source provenance. Rebuild the educational section and `attainment.csv` through `python3 .github/scripts/build_understand.py`; `.github/scripts/build_learning.py` supplies its renderer. Keep final DfE results, the inspection’s older subject table and the school-reported/provisional 2026 update distinct. Null is missing/unverified, never zero. Any update needs the independent source-sentinel review in `test_learning.py`, not just regeneration. The inspection remains an original record in `sources.json`/CSV/HTML; the four learning FAQs preserve existing question IDs.
+
+The proposed `ENROLMENT-OUTREACH-BRIEF.md` is maintenance-only coordination material. It does not authorize outreach or commit partners, money or volunteers. No tracking was added.

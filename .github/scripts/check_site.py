@@ -18,9 +18,14 @@ corrections.js favicon.svg feedback.css feedback.html feedback.js index.html ins
 letters.html letters.js letters.json privacy.html proposal.css proposal.html
 response-checklist.md response-checklist.pdf sources.csv sources.json styles.css
 suggestions.json supporters.html supporters.js supporters.json
+attainment-data.json attainment.csv
 understand.html understand.css understand.js understand-data.json richmond-schools.csv
 '''.split())
 MAINTENANCE_FILES = frozenset('''
+.agents/skills/kew-campaign-review/SKILL.md .agents/skills/kew-campaign-review/agents/openai.yaml
+.agents/skills/kew-ux-review/SKILL.md .agents/skills/kew-ux-review/agents/openai.yaml
+.agents/skills/kew-evidence-review/SKILL.md .agents/skills/kew-evidence-review/agents/openai.yaml
+ENROLMENT-OUTREACH-BRIEF.md .github/scripts/build_learning.py .github/scripts/test_learning.py tests/browser/sofiya.spec.js
 tests/browser/videos.spec.js
 .github/scripts/build_lessons.py .github/scripts/test_lessons.py tests/browser/lessons.spec.js
 .nojekyll .gitignore .gitattributes README.md CODEX-HANDOFF.md .github/workflows/pages.yml

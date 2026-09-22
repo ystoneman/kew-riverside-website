@@ -44,7 +44,7 @@ test('No JavaScript: homepage and Evidence expose the full report and web resear
   await page.goto('/index.html?q=impossible-report-search&type=Inspection#source-lessons-report');
   await expect(report).toBeVisible();
   await expect(report).toBeInViewport();
-  await expect(page.locator('.source-card:visible')).toHaveCount(46);
+  await expect(page.locator('.source-card:visible')).toHaveCount(47);
 });
 
 for (const [publish, council] of [[false, false], [true, false], [false, true], [true, true]]) {
@@ -100,6 +100,56 @@ test('No JavaScript: Understand retains charts, underlying data and council cont
   await expect(page.locator('#methodology')).toBeVisible();
 });
 
+test('No JavaScript: contextual learning entry exposes the results, native tables and downloads', async ({ page }) => {
+  await page.goto('/index.html');
+  await page.getByRole('complementary', { name: 'How does Kew Riverside compare?' }).locator('a[href="understand.html#learning-and-results"]').tap();
+  const section = page.locator('#learning-and-results');
+  await expect(section).toBeInViewport();
+  await expect(page.locator('svg#attainment-chart')).toBeVisible();
+  for (const value of ['75%', '67%', '73%', '60%', '61%', '62%', '74%', '76%', '78%']) {
+    await expect(section).toContainText(value);
+  }
+  await page.locator('#attainment-tables > summary').tap();
+  await expect(page.locator('#attainment-tables')).toHaveAttribute('open', '');
+  expect(await page.locator('#attainment-tables table:visible').count()).toBeGreaterThan(0);
+  await page.locator('#attainment-method > summary').tap();
+  await expect(page.locator('#attainment-method')).toHaveAttribute('open', '');
+  for (const filename of ['attainment.csv', 'attainment-data.json']) {
+    const [download] = await Promise.all([
+      page.waitForEvent('download'),
+      section.locator(`a[href="${filename}"][download]`).tap(),
+    ]);
+    expect(download.suggestedFilename()).toBe(filename);
+    expect(await download.failure()).toBeNull();
+  }
+  await section.locator('#inspection-summary a[href="index.html#source-inspection-2026"]').tap();
+  await expect(page.locator('#source-inspection-2026')).toBeInViewport();
+  await expect(page.locator('#source-inspection-2026')).toContainText('Reviewed');
+});
+
+test('No JavaScript: prospective families can follow learning and open the sourced FAQ answers', async ({ page }) => {
+  await page.goto('/index.html#visit-school');
+  const visit = page.locator('#visit-school');
+  await expect(visit.locator('a[href^="https://www.kewriverside.richmond.sch.uk/"]')).toBeVisible();
+  await expect(visit.locator('a[href="proposal.html"]')).toBeVisible();
+  await expect(visit.locator('a[href^="https://www.richmond.gov.uk/"][href*="primary"]')).toBeVisible();
+  await visit.locator('a[href="understand.html#learning-and-results"]').tap();
+  await expect(page.locator('#learning-and-results')).toBeInViewport();
+  await page.goBack();
+  await expect(visit).toBeInViewport();
+  await page.goto('/faq.html#learning');
+  await expect(page.locator('#learning')).toBeInViewport();
+  for (const id of ['school-results', 'latest-inspection', 'mixed-age-learning', 'mixed-age-research']) {
+    const answer = page.locator('details#' + id);
+    await answer.locator(':scope > summary').tap();
+    await expect(answer).toHaveAttribute('open', '');
+    await expect(answer.locator('p').first()).toBeVisible();
+    expect(await answer.locator('a[href]').count()).toBeGreaterThan(0);
+  }
+  await page.locator('#latest-inspection a[href="index.html#source-inspection-2026"]').tap();
+  await expect(page.locator('#source-inspection-2026')).toBeInViewport();
+});
+
 test('No JavaScript: optional sharing details and reviewed ideas remain usable', async ({ page }) => {
   const submissions = await captureSubmissions(page);
   await page.goto('/feedback.html');
@@ -125,7 +175,7 @@ test('No JavaScript: all FAQ answers retain native disclosure and official route
   await page.goto('/faq.html');
   await expect(page.locator('#faq-search')).toBeHidden();
   const answers = page.locator('main details');
-  await expect(answers).toHaveCount(12);
+  await expect(answers).toHaveCount(16);
   for (const answer of await answers.all()) {
     await expect(answer).toBeVisible();
     await answer.locator(':scope > summary').tap();

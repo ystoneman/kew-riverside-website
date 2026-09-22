@@ -13,3 +13,6 @@
 /* Fixed chart values; keep inline styles blocked by the security policy. */
 .capacity-current { width: 83.7%; }
 .capacity-forecast { width: 92%; }
+
+/* Resolved evidence remains readable on the existing dark gap panel. */
+.gaps-grid a{color:var(--lime)}

@@ -1,6 +1,6 @@
 {
   "title": "Kew Riverside — Parent-led evidence and action, maintained by Yann Stoneman",
-  "researchChecked": "2026-09-21",
+  "researchChecked": "2026-09-22",
   "scope": "Curated public-record index; not exhaustive. Original documents remain with their publishers.",
   "currentClosureStatus": "Pre-statutory consultation on closure effective 1 September 2027. Council-linked form states response deadline 16 October 2026. Later committee and statutory stages are planned and conditional; no final closure decision verified. Checked 21 September 2026.",
   "coverageDefinitions": {
@@ -106,6 +106,20 @@
       "summary": "The report says the school continued to be Good and records 145 pupils on roll. That pupil count belongs to the 2021 inspection; it is not a verified September 2026 roll.",
       "locator": "Inspection 25 November 2021; published 19 January 2022. School details on page 5.",
       "accessChecked": "2026-09-21"
+    },
+    {
+      "id": "inspection-2026",
+      "date": "2026-07-08",
+      "year": "2026",
+      "title": "Ofsted inspection: full July 2026 report (school-hosted)",
+      "publisher": "Ofsted",
+      "type": "Inspection",
+      "topic": "School history",
+      "status": "Reviewed",
+      "url": "https://www.kewriverside.richmond.sch.uk/attachments/download.asp?file=3619&type=pdf",
+      "summary": "Strong standard in early years, inclusion, and personal development and wellbeing; Expected standard in achievement, curriculum and teaching, and leadership and governance. Attendance and behaviour Needs attention: persistent absence is the concern, while behaviour is praised. Safeguarding Standards met. Next steps include attendance and consistent teaching approaches. These are category judgements, not a single overall grade.",
+      "locator": "16-page report for URN 133343. 8 July 2026 is the inspection date; publication date not inferred. School-hosted copy linked from its Ofsted page. Judgements: PDF pages 1–5; next steps and pupil leadership/younger readers: page 6; attainment: pages 9–10. Central index still lists 2021 latest on 22 September 2026.",
+      "accessChecked": "2026-09-22"
     },
     {
       "id": "strategy-2023",
@@ -285,7 +299,7 @@
       "topic": "School history",
       "status": "Reviewed",
       "url": "https://www.kewriverside.richmond.sch.uk/attachments/download.asp?file=3621&type=pdf",
-      "summary": "The school reports six of seven inspection categories at expected standard or above and safeguarding met. It says attendance and behaviour needs attention, distinguishing attendance concerns from positive behaviour. This is the school's account; the full new Ofsted report has not been retrieved for this collection.",
+      "summary": "The school's account reports six of seven inspection categories at expected standard or above and safeguarding met. It distinguishes attendance concerns from positive behaviour. The full July 2026 report has now been reviewed separately in record inspection-2026; this newsletter remains a distinct school account.",
       "locator": "Document dated Friday 18 September 2026; homepage listing used a different date.",
       "accessChecked": "2026-09-21"
     },
@@ -355,9 +369,9 @@
       "topic": "School history",
       "status": "Reviewed",
       "url": "https://reports.ofsted.gov.uk/provider/21/133343",
-      "summary": "Official report index for unique reference number 133343. The retrieved index showed the 2021 inspection as its latest full report; a later school newsletter refers to a 2026 inspection. The newer full report remains a collection gap.",
-      "locator": "Checked 21 September 2026; a changing index is not a frozen historical dataset.",
-      "accessChecked": "2026-09-21"
+      "summary": "Official report index for unique reference number 133343. On 22 September 2026 it still listed the 2021 inspection as its latest full report. The full 8 July 2026 report is available on the school website and reviewed separately in record inspection-2026.",
+      "locator": "Checked 22 September 2026; a changing central index can lag the school-hosted report. Its absence here does not mean the newer report is unpublished.",
+      "accessChecked": "2026-09-22"
     },
     {
       "id": "newsletter-index",
@@ -896,17 +910,19 @@
     {
       "rank": 4,
       "id": "option-enrolment",
-      "title": "Grow enrolment through a local campaign",
+      "title": "Raise awareness to boost enrolment",
       "tag": "An idea to develop with the school",
       "effort": "Medium–high",
       "evidence": "Needs available places, school coordination and a recovery budget",
-      "why": "Help more families discover Kew Riverside through authentic parent stories, short videos and local networks. Turn interest into school visits and applications, then connect any increase in pupil numbers to a costed recovery plan.",
+      "why": "Help local families discover the school through nurseries, parent groups, community notices, word of mouth and social media. Give them verified school information and a direct route to enquire about a visit; assess any sustained increase in enrolment against a costed recovery plan.",
       "next": "Agree a time-limited recruitment pilot with the school; establish available year groups, previous recruitment results, owners and costs. Seek a school/council assessment of what sustained increase, by when, would change the recovery plan.",
       "limits": "Viral reach is not guaranteed. Views, enquiries and applications do not establish enrolments or viability. No agreed pupil target guarantees continued operation. Normal admissions arrangements and the closure proposal remain relevant.",
       "suggestedChannels": [
-        "YouTube",
-        "TikTok",
-        "Instagram"
+        "Nurseries",
+        "Parent groups",
+        "Community notices",
+        "Word of mouth",
+        "Social media"
       ],
       "measures": [
         "Enquiries",
@@ -930,6 +946,11 @@
         {
           "title": "School: contact for a guided tour",
           "url": "https://www.kewriverside.richmond.sch.uk/page/?pid=525&title=Contact+Us",
+          "checked": "2026-09-22"
+        },
+        {
+          "title": "Richmond: official primary admissions route",
+          "url": "https://www.richmond.gov.uk/primary_school_admissions",
           "checked": "2026-09-22"
         }
       ]
