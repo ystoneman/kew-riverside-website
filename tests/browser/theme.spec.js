@@ -18,6 +18,11 @@ for (const file of pages) {
     await page.emulateMedia({ colorScheme: 'dark' });
     await page.goto('/' + file);
     await appearance(page, dark);
+    const sheets = await page.locator('link[rel=stylesheet]').evaluateAll(links => links.map(link => link.href));
+    for (const href of sheets) {
+      const url = new URL(href);
+      if (!url.pathname.endsWith('/button-motion.css')) expect(url.searchParams.get('v'), 'Theme-dependent CSS must bypass older cached palettes').toMatch(/^\d+$/);
+    }
     await expect(page.getByLabel('Appearance', { exact: true })).toHaveValue('system');
     await expect(page.getByLabel('Appearance', { exact: true })).toHaveCSS('min-height','44px');
     await expect(page.locator('.participation-nav .nav-letters')).toBeVisible();

@@ -11,13 +11,13 @@ def table(headers,rows,caption):
 def money(n):return ('−' if n<0 else '')+'£'+f'{abs(n):,}'
 # Same shared navigation, security policy and local assets as the proposal page.
 base=(ROOT/'proposal.html').read_text()
-header=base[:base.index('<main')].replace(' aria-current="page"','').replace('<link rel="stylesheet" href="lessons.css">','')
+header=base[:base.index('<main')].replace(' aria-current="page"','').replace('<link rel="stylesheet" href="lessons.css?v=2026092203">','')
 footer=base[base.index('<footer'):]
 def page(title,body):
  h=header.replace('Timetable checked','Research checked')
  h=re.sub(r'<title>.*?</title>','<title>'+esc(title)+' | Kew Riverside</title>',h)
  h=re.sub(r'<meta name="description" content="[^"]*">','<meta name="description" content="Selected school closure reprieves and comparisons, with eight graphics, a full case catalogue and complete citations. Evidence and limits for Kew Riverside families.">',h)
- h=h.replace('</head>','<link rel="stylesheet" href="lessons.css"><script src="lessons.js" defer></script></head>')
+ h=h.replace('</head>','<link rel="stylesheet" href="lessons.css?v=2026092203"><script src="lessons.js" defer></script></head>')
  return h+'<main id="main" class="lessons-page wrap">'+body+'</main>'+footer
 method=[]
 for block in D['methodology'].strip().split('\n\n'):
