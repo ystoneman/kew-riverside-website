@@ -26,7 +26,7 @@ test('Video: upload is a clear external handoff without embedded trackers or loc
   await expect(page.locator('iframe,video,form,input[type="file"]')).toHaveCount(0);
   await expect(page.locator('.video-process')).toContainText('Nothing is published automatically');
   await expect(page.locator('#upload-requirements')).toContainText('Step 2: follow its confirmation link to Dropbox');
-  await expect(page.locator('#resume-instructions')).toContainText('same email and video filename');
+  await expect(page.locator('#resume-instructions')).toContainText('same email in both steps');
   await expect(page.locator('.video-process')).toContainText('An unmatched upload stays private');
   await expect(page.locator('#video-upload-link')).toHaveAttribute('aria-describedby', 'upload-requirements');
   await expect(page.locator('.video-process a')).toHaveAttribute('href', 'https://www.youtube.com/@KewParentVoices');
@@ -53,6 +53,7 @@ test('Video: withdrawal leads to private request and non-Google alternative stay
   await page.goto('/videos.html');
   await page.locator('#video-choices summary').click();
   await expect(page.locator('#video-choices')).toContainText('No. Keep my video private');
+  await expect(page.locator('#video-choices')).toContainText('filename question is optional');
   await expect(page.locator('#video-choices')).toContainText('Your face and voice can still identify you');
   await page.locator('#video-choices a[href^="feedback.html"]').click();
   await expect(page.locator('#kind')).toHaveValue('privacy');

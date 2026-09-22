@@ -7,10 +7,10 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 ### Dropbox video uploads without sign-in
 
 - Make a no-account permission form followed by a private Dropbox file request the primary video route. Keep the existing Google upload form live and linked for older flyers.
-- Preserve the styled prompts, adult/self-recording declaration, independent YouTube choice and private-review permissions. Match the two steps by email and filename; a permission response alone is not an uploaded video, and unmatched files are never publication permission.
+- Preserve the styled prompts, adult/self-recording declaration, independent YouTube choice and private-review permissions. Match the two steps by email and upload details (filename is optional for phone users); a permission response alone is not an uploaded video, and unmatched files are never publication permission.
 - Explain the two storage providers, limited storage, continuation link, legacy route and withdrawal process. Add intercepted handoff coverage for all three links.
 
-Validation: all 553 browser checks and 29 Python checks passed; 64 public assets validated. Native iPhone 17 / iOS 26.5 Safari verified the permission handoff without Google sign-in, Dropbox continuation and the account-free file picker, Safari Back, and portrait/landscape layout. Signed-out desktop checks verified required-field validation; the new editor is Restricted and its response summaries are off. Dropbox request details confirmed private ownership and zero uploaded items. The original Google form remains published and accepting responses. No completed test upload was submitted, so backend receipt is not claimed. Deployment: pending.
+Validation: all 553 browser checks and 29 Python checks passed; 64 public assets validated. Native iPhone 17 / iOS 26.5 Safari verified the permission handoff without Google sign-in, Dropbox continuation and the account-free file picker, Safari Back, and portrait/landscape layout. Signed-out desktop checks verified required-field validation; the new editor is Restricted and its response summaries are off. Dropbox request details confirmed private ownership and zero uploaded items. The original Google form remains published and accepting responses. No completed test upload was submitted, so backend receipt is not claimed. A one-off existing desktop WebKit funding-template check passed eight unchanged repetitions and the final full suite; no funding behavior or assertions were changed. Deployment: pending.
 
 ### Private video submissions
 
