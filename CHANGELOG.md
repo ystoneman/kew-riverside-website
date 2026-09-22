@@ -2,15 +2,15 @@
 
 Visitor-facing changes and significant maintenance changes, newest first. The historical entries below were reconstructed from repository commits on 22 September 2026. Dates are commit dates, not independently verified publication times. A commit records a change; it does not by itself prove a successful deployment or a particular test result.
 
-## Unreleased
-
-### Find the 44-page other-schools report
+## 22 September 2026 — find the 44-page other-schools report
 
 - Add a compact homepage route with direct links to the existing PDF, readable web research and its Evidence entry.
 - Make the report searchable by remembered terms including other schools, 12 schools, saved schools, closure reversals and 44-page PDF. Give the site's synthesis its own labelled card and result count; retain the 46 original source records and their CSV unchanged.
 - Preserve `lessons-report.pdf`, `lessons.html` and the proposal's existing report links. Direct and repeated Evidence anchors clear incompatible filters to reveal the report; all report routes also work without JavaScript.
 
-Validation: all 587 browser checks and 29 Python checks passed; 67 public assets validated. New journeys cover remembered search terms, both report formats, provenance, separate counts, filters/reset, direct and repeated anchors, and no-JavaScript access. Native iPhone Air / iOS 26.5 Safari separately verified the homepage web link, Safari Back, the PDF opening with 44 pages, the Evidence link and portrait/landscape layouts against a local public-file preview. No external forms were submitted. Deployment: pending.
+Validation: all 587 browser checks and 29 Python checks passed; 67 public assets validated. New journeys cover remembered search terms, both report formats, provenance, separate counts, filters/reset, direct and repeated anchors, and no-JavaScript access. Native iPhone Air / iOS 26.5 Safari separately verified the homepage web link, Safari Back, the PDF opening with 44 pages, the Evidence link and portrait/landscape layouts against a local public-file preview. No external forms were submitted. Published and verified: commit `3d14a7e` passed the hosted checks and deployed successfully in [GitHub Actions](https://github.com/ystoneman/kew-riverside-website/actions/runs/35750966395). The homepage, search script, new stylesheet, PDF, both research pages and existing proposal page returned HTTP 200 and matched that commit byte for byte. The live Evidence search found the report for “44-page PDF”; native iPhone Air Safari verified the published homepage shortcut and opened the 44-page PDF.
+
+## Unreleased
 
 ### Mixed-age class video prompt
 
