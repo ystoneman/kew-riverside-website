@@ -79,5 +79,14 @@ class DeploymentTests(unittest.TestCase):
         with self.assertRaises(ValueError): Page('<script src="app.js"></script>')
         with self.assertRaises(ValueError): Page('<meta http-equiv="Content-Security-Policy" content="' + CSP + '"><img src="favicon.svg" onerror="alert(1)">')
 
+    def test_script_versions_cannot_escape_public_asset_allowlist(self):
+        head = '<meta http-equiv="Content-Security-Policy" content="' + CSP + '"><meta name="referrer" content="strict-origin-when-cross-origin">'
+        Page(head + '<script src="navigation.js?v=20260922"></script>')
+        for src in ('https://example.invalid/navigation.js?v=1', '//example.invalid/navigation.js',
+                    '../navigation.js', 'unreviewed.js?v=1', 'navigation.js?v=1&amp;extra=2',
+                    'navigation.js#fragment', 'navigation.js?v=not-a-version'):
+            with self.subTest(src=src), self.assertRaises(ValueError):
+                Page(head + '<script src="' + src + '"></script>')
+
 
 if __name__ == '__main__': unittest.main()

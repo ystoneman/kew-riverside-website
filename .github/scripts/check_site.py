@@ -20,7 +20,11 @@ suggestions.json supporters.html supporters.js supporters.json
 MAINTENANCE_FILES = frozenset('''
 .nojekyll .gitignore README.md CODEX-HANDOFF.md .github/workflows/pages.yml
 .github/scripts/check_site.py .github/scripts/public_data.py
-.github/scripts/test_security.py
+.github/scripts/test_security.py .github/scripts/test_site_structure.py
+AGENTS.md TESTING.md package.json package-lock.json playwright.config.js
+tests/browser/fixtures.js tests/browser/server.js tests/browser/mobile.spec.js
+tests/browser/desktop.spec.js tests/browser/no-javascript.spec.js
+tests/browser/contributions.spec.js tests/browser/evidence.spec.js tests/browser/boards.spec.js
 '''.split())
 CSP = "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; object-src 'none'; frame-src 'none'; form-action 'self' https://formspree.io; upgrade-insecure-requests"
 SECRET_PATTERNS = [
@@ -57,7 +61,11 @@ class Page(HTMLParser):
         if tag in {'script', 'link', 'img', 'form'}:
             require(self.csp, 'Policy must precede all resources and forms.')
         if tag == 'script':
-            require(a.get('src') in PUBLIC_FILES and a['src'].endswith('.js'), 'Only reviewed local scripts are allowed.')
+            script = urlsplit(a.get('src', ''))
+            require(not script.scheme and not script.netloc and not script.fragment
+                    and script.path in PUBLIC_FILES and script.path.endswith('.js')
+                    and (not script.query or re.fullmatch(r'v=[0-9]+', script.query)),
+                    'Only reviewed local scripts with optional numeric versions are allowed.')
         if tag in {'link', 'img'}:
             resource = a.get('href') if tag == 'link' else a.get('src')
             # Canonical/document metadata links are not loaded resources.

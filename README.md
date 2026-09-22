@@ -1,6 +1,6 @@
 # Kew Riverside: parent-led evidence and action
 
-A dependency-free static website created and maintained by Yann Stoneman, a Kew Riverside parent seeking to keep the school open. It does not claim a mandate from all parents or operate on behalf of the school, council or PTA. Factual sources and editorial positions remain distinct.
+A static website with no runtime dependencies, created and maintained by Yann Stoneman, a Kew Riverside parent seeking to keep the school open. It does not claim a mandate from all parents or operate on behalf of the school, council or PTA. Factual sources and editorial positions remain distinct.
 
 ## Publishing on GitHub Pages
 
@@ -63,6 +63,8 @@ There are no analytics, advertising scripts or remote fonts. Forms post to Forms
 
 ## Verification in this environment
 
+See [TESTING.md](TESTING.md) for the automated browser suite, coverage matrix, local commands and manual Xcode iOS Simulator checklist. [AGENTS.md](AGENTS.md) requires future interaction changes to extend the relevant tests. Playwright is a development-only dependency. Both browser regression tests and privacy/security validation must pass before Pages deployment.
+
 JavaScript syntax, internal anchor references, local asset references, source IDs, record counts, chart arithmetic and filtering behaviour are checked during preparation. Browser checks cover desktop/mobile forms, independent permission choices, excluded private fields, plain-text previews and empty public boards. Two harmless CAPTCHA-protected setup submissions were delivered and verified in the private inbox on 21 September 2026. Hourly moderation remains paused; delivery verification does not authorise starting it.
 
 ## Named support and contact
@@ -75,9 +77,9 @@ Option 02 (`index.html#option-crowdfunding`) is linked to the costed recovery pl
 
 ## Security checks and deployment
 
-Run `python3 .github/scripts/check_site.py` **before committing** and `python3 -m unittest discover -s .github/scripts -p 'test_*.py'` after changing security or public-data handling. A public Git commit already exposes its contents; a later deployment check cannot undo that. Stage named files and inspect the staged diff. Never add inbox exports, private ledgers, confirmation correspondence, council drafts, credentials or local test fixtures. Ignore rules are only a convenience, not a confidentiality boundary.
+Run `python3 .github/scripts/check_site.py` **before committing** and `python3 -m unittest discover -s .github/scripts -p 'test_*.py'` after changing security or public-data handling. A public Git commit already exposes its contents; a later deployment check cannot undo that. Stage named files and inspect the staged diff. Never add inbox exports, private ledgers, confirmation correspondence, council drafts, credentials or fixtures derived from private submissions. Committed browser fixtures must contain only fictional test data. Ignore rules are only a convenience, not a confidentiality boundary.
 
-Every push and pull request runs privacy/schema checks, JavaScript syntax checks and asset validation. Only a passing `main` build can deploy. GitHub Actions are pinned to exact commits, checkout credentials are not retained, and the separate deployment job has only Pages and deployment-identity permissions. The workflow packages an explicit asset list and excludes repository maintenance files. New intended assets must be deliberately added to the list in `.github/scripts/check_site.py`.
+Every push and pull request runs privacy/schema checks, JavaScript syntax checks, asset validation and browser regression tests. Only a passing `main` build can deploy. GitHub Actions are pinned to exact commits, checkout credentials are not retained, and the separate deployment job has only Pages and deployment-identity permissions. The workflow packages an explicit asset list and excludes repository maintenance files. New intended assets must be deliberately added to the list in `.github/scripts/check_site.py`.
 
 All eight HTML pages declare a restrictive Content Security Policy before resources: local scripts/styles/data only, no inline scripts or handlers, no embedded frames/plugins or base-URL changes, and form submissions restricted to this origin and Formspree. External source links still work. Formspree remains responsible for CAPTCHA, spam filtering, intake validation and private storage. Its project is restricted to `ystoneman.github.io`; localhost and file previews should not submit to the live inbox. Keep `strict-origin-when-cross-origin` so the domain check works without sending page query strings.
 
@@ -95,7 +97,7 @@ Five practical FAQ answers reuse the existing current-proposal panel, including 
 
 All eight pages share the same header: research links, outlined Letters and a pale-green Contribute action. The council response remains the dark primary homepage action. Below 1,101px, research navigation uses native details; Letters and Contribute remain visible. Below 701px, the action pair spans its own row. The compact header scrolls away rather than covering content. Keep the duplicated desktop/mobile research links in agreement when editing them. Only the visible navigation is exposed to keyboard users; the current destination has aria-current="page".
 
-Navigation JavaScript only adds dismissal on link selection, outside click, Escape, focus leaving the menu and transition to desktop; native disclosure still works without it. Letters has direct writing/reading shortcuts, a writing link at the board and concise consent lead-ins. Full consent wording, separate unchecked permissions and disabled private fields are preserved.
+Navigation JavaScript only adds dismissal on link selection, outside click, Escape, focus arriving outside the menu and transition to desktop; native disclosure still works without it. Letters has direct writing/reading shortcuts, a writing link at the board and concise consent lead-ins. Full consent wording, separate unchecked permissions and disabled private fields are preserved.
 
 The participation styles use a separate asset URL so the new shared header cannot pick up a cached pre-header version of styles.css. Keep participation.css loaded after the existing page styles.
 
