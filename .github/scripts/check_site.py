@@ -24,7 +24,7 @@ understand.html understand.css understand.js understand-data.json richmond-schoo
 '''.split())
 MAINTENANCE_FILES = frozenset('''
 tests/browser/theme.spec.js
-CONTRIBUTING.md .github/CODEOWNERS .github/pull_request_template.md .github/branch-protection.json
+VIDEO-PERMISSIONS.md CONTRIBUTING.md .github/CODEOWNERS .github/pull_request_template.md .github/branch-protection.json
 .agents/skills/kew-campaign-review/SKILL.md .agents/skills/kew-campaign-review/agents/openai.yaml
 .agents/skills/kew-ux-review/SKILL.md .agents/skills/kew-ux-review/agents/openai.yaml
 .agents/skills/kew-evidence-review/SKILL.md .agents/skills/kew-evidence-review/agents/openai.yaml

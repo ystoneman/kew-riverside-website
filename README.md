@@ -146,3 +146,8 @@ The homepage research shortcut and the separate Site research entry in Evidence 
 `attainment-data.json` contains only reviewed aggregate results, cohort counts and source provenance. Rebuild the educational section and `attainment.csv` through `python3 .github/scripts/build_understand.py`; `.github/scripts/build_learning.py` supplies its renderer. Keep final DfE results, the inspection’s older subject table and the school-reported/provisional 2026 update distinct. Null is missing/unverified, never zero. Any update needs the independent source-sentinel review in `test_learning.py`, not just regeneration. The inspection remains an original record in `sources.json`/CSV/HTML; the four learning FAQs preserve existing question IDs.
 
 The proposed `ENROLMENT-OUTREACH-BRIEF.md` is maintenance-only coordination material. It does not authorize outreach or commit partners, money or volunteers. No tracking was added.
+
+
+## Video publication permissions
+
+New Parent Voices submissions require explicit YouTube publication permission and offer separate optional unchecked news-media permission. Receipt/storage/personal review remains a separate required consent. Earlier saved permissions, including delayed uploads, keep their original scope. Use [the permission-version rules](VIDEO-PERMISSIONS.md) before manual publication or media disclosure; store actual records privately outside this repository. Both Google form routes and the Dropbox request retain their existing public URLs.
