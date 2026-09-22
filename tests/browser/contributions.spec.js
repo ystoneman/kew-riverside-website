@@ -235,8 +235,10 @@ test('Supporter requests require all three independent consent statements', asyn
     await expect(choice).toBeFocused();
     await expect(choice).not.toBeChecked();
     expect(submissions).toHaveLength(0);
-    // Select the full consent label on touch and desktop. Keep the gesture and
-    // the checked-state assertion separate after native validation moves focus.
+    // Desktop WebKit's native validation bubble can consume the next click.
+    // Dismiss it with the ordinary keyboard action before selecting the label;
+    // retain the focus, unchecked, blocked-submit and checked-state assertions.
+    if (!hasTouch) await page.keyboard.press('Escape');
     if (hasTouch) await labels.nth(index).tap();
     else await labels.nth(index).click();
     await expect(choice).toBeChecked();

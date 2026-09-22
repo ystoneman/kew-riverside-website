@@ -113,3 +113,13 @@ The research page starts with three paired lessons, explicitly distinguishing re
 Graphic decisions: use a shared zero baseline for the Fletching forecasts, separate raised money from promised support, show the third-year range as pupil scenarios, group suggested actions by timing rather than implied efficacy, and retain the extra transition term among the closure comparisons. Use vector charts in the report and website, with 4800 × 3000 exports for reuse. These are clarity improvements, not measured engagement or persuasion gains.
 
 Verification: 496 browser checks and 29 Python checks passed. Native iPhone 17 / iOS 26.5 Safari checked the entry, menu, disclosures, search, outcome filter, reset and orientation. The test suite caught and now guards the table overflow; the simulator review caught and now guards missing mobile heading spaces. PDF pages and desktop/mobile previews were inspected visually. Publication is recorded separately in the changelog.
+
+## 22 September 2026 — a dedicated video route
+
+Visitor need: share a natural spoken testimonial without getting lost in the written contribution form or mistaking upload for public posting.
+
+Options considered: add a file input to Formspree (current free plan has no upload; paid limit 25 MB per file); embed another form in the existing page; or use a short dedicated page and an external Google upload form. Choose the dedicated page, linked from letters and ideas, without another global navigation item. The page leads with a single upload action and puts recording/permission/troubleshooting details in native disclosures.
+
+Google Forms provides private Drive storage and phone-sized files but requires Google sign-in. State this before the handoff and retain private contact and written-letter alternatives. The website does not load a Google or YouTube embed. Start with adults recording themselves. Keep private review consent and optional publication independent; the owner manually reviews and posts only authorised videos. No AI video moderation or YouTube automation is introduced.
+
+The owner explicitly approved the Google Forms/private Drive collection and the form was published. All 528 browser checks and 29 Python checks passed. Native iPhone 17 / iOS 26.5 Safari covered navigation, portrait/landscape layout, a permission disclosure, the privacy anchor and the Google sign-in handoff. The upload picker and empty-form validation were checked; a completed upload remains unverified because the extension blocked the synthetic file transfer. No interviews or usability study are claimed.

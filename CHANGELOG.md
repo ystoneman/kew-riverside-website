@@ -4,6 +4,17 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Private video submissions
+
+- Add a focused Parent Voices page reached from community letters and Share ideas, with filming prompts, clear Google sign-in/file limits, a private-review explanation and written alternatives.
+- Configure a separate Google Forms intake: verified email, adult/self-recording declaration, required explicit private-review consent, separate unselected Yes/No YouTube permission, optional public credit, one video up to 1 GB, one response per account and 10 GB total cap. Keep editor access restricted and response summaries off.
+- Add the video privacy notice and withdrawal route. Explain account metadata, manual review/retention, identifiable face/voice, limited editing permission and public-copy limits. Do not send videos to AI screening or publish them automatically.
+- Add journey tests for entry routes, external handoff, privacy/removal, recording/help disclosures and no-JavaScript access; include the new page in existing navigation/layout/link checks.
+
+Validation: all 528 browser checks and 29 Python checks passed; 64 public assets validated. The first suite run exposed the existing desktop WebKit native validation bubble consuming a consent-label click. The test now dismisses that bubble with Escape before the ordinary label click, retaining every focus, consent and blocked-submission assertion; 40 repetitions and the full suite passed. Product consent behavior is unchanged. Native iPhone 17 / iOS 26.5 Safari verified portrait/landscape layout, menu-to-proposal navigation, the permission disclosure, the video privacy anchor, the Google sign-in handoff and Safari Back.
+
+The owner explicitly approved Google Forms/private Drive collection and the intake was published. The upload folder is private to the owner; form editor access is restricted, response summaries are off, and all declared limits were checked. Empty Google form submission is rejected. A synthetic file upload could not be completed because the Chrome extension lacks file-URL access; receipt of a completed upload is not yet verified. No parent video or YouTube post was created. Website deployment verification is pending.
+
 ### Lessons from other schools
 
 - Add a concise, cited proposal summary linking to optional historical research, keeping the eight graphics and full catalogue off the main proposal page.
