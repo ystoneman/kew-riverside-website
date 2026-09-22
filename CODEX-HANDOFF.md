@@ -13,6 +13,12 @@ The user asked to hand this task to Claude Code because of their remaining Codex
 - Run: https://github.com/ystoneman/kew-riverside-website/actions/runs/35781407831 . Download `browser-test-failures` to a temporary directory with `gh run download 35781407831 -n browser-test-failures -D /tmp/kew-video-deploy-artifacts`. Failure screenshot, error context and trace are under `test-results/lessons-Research-all-eight-e7413-urces-and-working-downloads-desktop-webkit/` in that artifact.
 - The full failed job log is already at `/tmp/kew-video-deploy-failure.log` on this Mac. Local successful full-suite log: `/tmp/kew-video-tests.log`; focused successful log: `/tmp/kew-video-fixed.log`; Python log: `/tmp/kew-video-python.log`.
 
+### Claude Code continuation — 22 September 2026
+
+- Diagnosed from the retained trace: arrival at `lessons.html#visual-guide` was still smooth-scrolling when the first graphic's summary was clicked (`scrollTop` 1,568 at the click, 1,904 at rest). `lessons.css` now makes research-page jumps immediate. The failing test and its assertions are unchanged. New `expectStillArrival` regressions (JavaScript and no-JavaScript) failed on the old CSS in all five projects. Details are in TESTING.md, “Research arrival”.
+- Local validation: 270 focused research repetitions passed. The second full run passed all 676 checks. The first full run had one rare, unrelated homepage recovery failure, explained in TESTING.md and left for separate follow-up. All 40 Python checks passed and 69 public assets validated.
+- Remaining: publish through a PR from this branch after hosted checks pass, confirm the main deployment and live files, then record the verified release. Provider settings were not changed again.
+
 ### Agreed product and consent model
 
 New video submissions are intended for possible public publication on Kew Riverside Parent Voices on YouTube. Require affirmative, initially unchecked YouTube permission; remove private-review-only as a new submission choice. Keep separate required receipt/storage/personal-review consent and adult/self-recording attestation. Offer separate **optional, unchecked news-media permission**, with a visible private-contact alternative before handoff. No automatic publication.

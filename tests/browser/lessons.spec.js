@@ -1,4 +1,4 @@
-const { test, expect } = require('./fixtures');
+const { test, expect, expectStillArrival } = require('./fixtures');
 const { readFileSync } = require('node:fs');
 const data = JSON.parse(readFileSync(require('node:path').join(__dirname, '../../lessons-data.json'), 'utf8'));
 async function activate(locator, hasTouch) { if (hasTouch) await locator.tap(); else await locator.click(); }
@@ -44,6 +44,18 @@ test('Research: all eight graphics expand with readable data, sources and workin
     }
     await activate(exhibit.locator(':scope > summary'), hasTouch);
   }
+});
+
+// Main run 35781407831: a long smooth jump moved #exhibit-1 beneath an immediate click in desktop WebKit.
+test('Research: shared graphic, case and source links land still before a disclosure is opened', async ({ page, hasTouch }) => {
+  for (const [url, selector] of [['/lessons.html#visual-guide', '#visual-guide'], ['/lessons.html#case-hazlewood', '#case-hazlewood'], ['/lessons-sources.html#X04', '#X04']]) {
+    await page.goto(url);
+    await expectStillArrival(page, selector);
+  }
+  await page.goto('/lessons.html#visual-guide');
+  const exhibit = page.locator('#exhibit-1');
+  await activate(exhibit.locator(':scope > summary'), hasTouch);
+  await expect(exhibit).toHaveAttribute('open', '');
 });
 
 test('Research: search and outcome filters combine, show no results and clear accessibly', async ({ page }) => {
