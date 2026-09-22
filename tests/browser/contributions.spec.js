@@ -130,22 +130,36 @@ test('Revoking council sharing excludes previously entered private details', asy
   for (const field of ['allow_council', 'council_name', 'council_postcode']) expect(submissions[0].has(field)).toBe(false);
 });
 
-test('Supporter requests require all three independent consent statements', async ({ page }) => {
+test('Supporter requests require all three independent consent statements', async ({ page, hasTouch }) => {
   const submissions = await captureSubmissions(page);
   await page.goto('/supporters.html');
   await page.locator('#public-name').fill('Test supporter');
   await page.locator('#supporter-email').fill('test@example.invalid');
   const choices = page.locator('#supporter-form input[type="checkbox"]');
+  const labels = page.locator('#supporter-form .feedback-permission');
+  const submit = page.locator('button[type="submit"]');
   expect(await choices.count()).toBe(3);
   for (let index = 0; index < await choices.count(); index++) {
-    await page.locator('button[type="submit"]').click();
+    const choice = choices.nth(index);
+    await expect(choice).not.toBeChecked();
+    if (hasTouch) await submit.tap();
+    else await submit.click();
+    // Wait for native validation to identify the missing consent before responding.
+    await expect(choice).toBeFocused();
+    await expect(choice).not.toBeChecked();
     expect(submissions).toHaveLength(0);
-    await choices.nth(index).check();
+    // A touch user can select the full consent label. Keep the gesture and the
+    // observable result separate while the browser dismisses its validation UI.
+    if (hasTouch) await labels.nth(index).tap();
+    else await choice.check();
+    await expect(choice).toBeChecked();
   }
-  await page.locator('button[type="submit"]').click();
+  if (hasTouch) await submit.tap();
+  else await submit.click();
   await expect.poll(() => submissions.length).toBe(1);
   expect(submissions[0].get('kind')).toBe('supporter');
   expect(submissions[0].get('email')).toBe('test@example.invalid');
+  for (const name of ['adult_self', 'supporter_consent', 'allow_supporter']) expect(submissions[0].has(name)).toBe(true);
 });
 
 for (const [file, kind] of [['about.html', 'contact'], ['corrections.html', 'privacy']]) {
