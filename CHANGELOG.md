@@ -12,11 +12,6 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 Validation: all 553 browser checks and 29 Python checks passed; 64 public assets validated. Native iPhone 17 / iOS 26.5 Safari verified the permission handoff without Google sign-in, Dropbox continuation and the account-free file picker, Safari Back, and portrait/landscape layout. Signed-out desktop checks verified required-field validation; the new editor is Restricted and its response summaries are off. Dropbox request details confirmed private ownership and zero uploaded items. The original Google form remains published and accepting responses. No completed test upload was submitted, so backend receipt is not claimed. Deployment: pending.
 
-### Family story wording
-
-- Correct the role description to “Our Reception teacher and SENDCo lead” and put “like cousins” in quotation marks, preserving the personal family account.
-- Validation: all 545 browser checks and 29 Python checks passed; 64 public assets validated. This is a wording-only change; no visitor interaction has changed. Deployment: pending.
-
 ### Private video submissions
 
 - Add a focused Parent Voices page reached from community letters and Share ideas, with filming prompts, clear Google sign-in/file limits, a private-review explanation and written alternatives.
@@ -53,6 +48,11 @@ Published and verified on 22 September 2026: implementation commit `86015ea` pas
 Screening update validation: all 453 browser checks passed locally across Chromium, WebKit and JavaScript-disabled projects; all 24 Python security/data/structure checks passed and 40 public assets validated. Separately, all 80 private workflow tests passed with fictional fixtures, including consent, withdrawal, human reconciliation and interrupted-send recovery. The first Linux CI run passed 452 checks but stopped on the existing desktop WebKit supporter consent recovery test while a native validation popup remained visible; deployment was blocked. The test now clicks the full native consent label on desktop, as it already did on touch, retaining every focus, consent and blocked-submission assertion. All 80 repeated cases and the full 453-check local suite passed after this adjustment; the original failure was not reproduced locally. Follow-up deployment verification is pending. No new simulator check was needed; product touch, focus, menu and layout code are unchanged.
 
 Earlier letter-publication validation, before the screening update: 417 browser checks and 22 Python security/data/structure checks passed; 40 public assets validated.
+
+## 22 September 2026 — family story wording
+
+- Correct the role description to “Our Reception teacher and SENDCo lead” and put “like cousins” in quotation marks, preserving the personal family account.
+- Validation: all 545 browser checks and 29 Python checks passed; 64 public assets validated. This is a wording-only change; no visitor interaction has changed. Published and verified: commit `95ee6b1` passed [GitHub Actions](https://github.com/ystoneman/kew-riverside-website/actions/runs/35742072428) and deployed successfully. The live About page returned HTTP 200, matched the tested file exactly, and contained both requested corrections.
 
 ## 22 September 2026 — shared parent action plan
 
