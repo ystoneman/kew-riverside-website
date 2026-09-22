@@ -2,6 +2,14 @@
 
 Visitor-facing changes and significant maintenance changes, newest first. The historical entries below were reconstructed from repository commits on 22 September 2026. Dates are commit dates, not independently verified publication times. A commit records a change; it does not by itself prove a successful deployment or a particular test result.
 
+## Unreleased
+
+### Developer contributions and main-branch protection
+
+Add a fork-to-PR contribution guide, pull-request template and repository-wide code ownership by `@ystoneman`. Document fictional test data, source attribution, private reporting routes, required validation and the distinction between public repository files and deployed assets. Record the intended main-branch protection: one code-owner approval, stale-review dismissal, resolved conversations, current-branch checks from GitHub Actions, and no force-pushes or branch deletion. Keep the owner administrator exception explicit to avoid self-review deadlock and preserve the existing private letter-publication workflow. External-contributor workflows require maintainer approval. The new guidance and configuration are maintenance files only; no visitor-facing asset changes.
+
+Validation: all 40 Python checks passed; the staged artifact contains exactly the same 69 public files, byte-identical to the preceding release, with the contribution files excluded. Local documentation links and protection JSON were checked. On 22 September 2026, the main-branch rules and external-contributor workflow approval policy were applied and read back from GitHub. Administrator enforcement remains explicitly off. This maintenance change adds no visitor interaction; browser/PR results are recorded with the setup pull request, and no new native iOS check is required.
+
 ## 22 September 2026 — educational evidence and protected journeys
 
 ### Sofiya feedback: educational evidence and existing visitor routes

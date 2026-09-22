@@ -2,6 +2,10 @@
 
 A static website with no runtime dependencies, created and maintained by Yann Stoneman, a Kew Riverside parent seeking to keep the school open. It does not claim a mandate from all parents or operate on behalf of the school, council or PTA. Factual sources and editorial positions remain distinct.
 
+## Contributing
+
+School-community developers are welcome to contribute through fork-based pull requests. Start with [CONTRIBUTING.md](CONTRIBUTING.md) for setup, tests, privacy rules and review requirements. Yann is the code owner; contributors do not need repository write access or access to private submissions. The guide explains the protected `main` branch and the current owner-administrator exception.
+
 ## Publishing on GitHub Pages
 
 This directory is deployed from `main` at https://github.com/ystoneman/kew-riverside-website to https://ystoneman.github.io/kew-riverside-website/ using GitHub Pages and the validated `.github/workflows/pages.yml` workflow. Only the explicitly listed public assets are deployed; repository notes, workflow code and private working files are excluded from the website artifact.
