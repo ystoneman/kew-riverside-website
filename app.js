@@ -2,6 +2,7 @@
 (() => {
   const form = document.getElementById('record-filters');
   const cards = Array.from(document.querySelectorAll('.source-card'));
+  const researchCards = Array.from(document.querySelectorAll('.research-card'));
   const fields = ['q','topic','year','type','status'];
   const controls = {
     q: document.getElementById('record-search'),
@@ -11,6 +12,7 @@
     status: document.getElementById('status-filter')
   };
   const count = document.getElementById('result-count');
+  const researchCount = document.getElementById('research-count');
   const empty = document.getElementById('no-results');
   const normalise = value => value.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '');
   function matches(card, state) {
@@ -22,8 +24,11 @@
     const state = Object.fromEntries(fields.map(key => [key, controls[key].value]));
     let visible = 0;
     cards.forEach(card => { card.hidden = !matches(card, state); if (!card.hidden) visible++; });
+    let visibleResearch = 0;
+    researchCards.forEach(card => { card.hidden = !matches(card, state); if (!card.hidden) visibleResearch++; });
     count.textContent = visible + ' of ' + cards.length + ' records';
-    empty.hidden = visible > 0;
+    researchCount.textContent = visibleResearch + ' of ' + researchCards.length + ' site research reports';
+    empty.hidden = visible + visibleResearch > 0;
     if (updateUrl) {
       const url = new URL(window.location.href);
       fields.forEach(key => state[key] ? url.searchParams.set(key, state[key]) : url.searchParams.delete(key));

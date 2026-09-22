@@ -4,6 +4,14 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Find the 44-page other-schools report
+
+- Add a compact homepage route with direct links to the existing PDF, readable web research and its Evidence entry.
+- Make the report searchable by remembered terms including other schools, 12 schools, saved schools, closure reversals and 44-page PDF. Give the site's synthesis its own labelled card and result count; retain the 46 original source records and their CSV unchanged.
+- Preserve `lessons-report.pdf`, `lessons.html` and the proposal's existing report links. Direct and repeated Evidence anchors clear incompatible filters to reveal the report; all report routes also work without JavaScript.
+
+Validation: all 587 browser checks and 29 Python checks passed; 67 public assets validated. New journeys cover remembered search terms, both report formats, provenance, separate counts, filters/reset, direct and repeated anchors, and no-JavaScript access. Native iPhone Air / iOS 26.5 Safari separately verified the homepage web link, Safari Back, the PDF opening with 44 pages, the Evidence link and portrait/landscape layouts against a local public-file preview. No external forms were submitted. Deployment: pending.
+
 ### Mixed-age class video prompt
 
 Add “What benefits has your child experienced in a mixed-age class?” to the optional recording prompts on the video page and both existing submission forms. Keep it as guidance for a video, with no new required answer or permission change. Validation: all 570 browser checks and 29 Python checks passed; 66 public assets validated. The new optional prompt was verified in both published responder views, with the existing bullet styling retained. Published and verified on 22 September 2026: commit `87598b4` passed the hosted checks and deployed successfully in [GitHub Actions](https://github.com/ystoneman/kew-riverside-website/actions/runs/35748329219). The public video page returned HTTP 200, matched the tested file byte for byte and displayed the prompt in the refreshed browser tab.

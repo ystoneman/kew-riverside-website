@@ -1,6 +1,92 @@
 const fs = require('node:fs/promises');
 const { test, expect } = require('./fixtures');
 
+test('Report discovery: homepage links reach the web research and download the 44-page report', async ({ page, hasTouch }) => {
+  await page.goto('/index.html');
+  const shortcut = page.locator('#research-shortcut');
+  await expect(shortcut).toContainText('44-page PDF');
+  const web = shortcut.locator('a[href="lessons.html"]');
+  if (hasTouch) await web.tap(); else await web.click();
+  await expect(page).toHaveURL(/lessons\.html$/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('What can other schools teach us?');
+  await page.goBack();
+  const [download] = await Promise.all([
+    page.waitForEvent('download'),
+    shortcut.locator('a[href="lessons-report.pdf"]').click(),
+  ]);
+  expect(download.suggestedFilename()).toBe('lessons-report.pdf');
+  expect(await download.failure()).toBeNull();
+  const contents = await fs.readFile(await download.path());
+  expect(contents.subarray(0, 5).toString()).toBe('%PDF-');
+});
+
+test('Report discovery: remembered terms find the research and preserve its provenance', async ({ page }) => {
+  await page.goto('/index.html#records');
+  const report = page.locator('#source-lessons-report');
+  for (const query of ['other schools', '12 schools', 'closure reversals', 'saved schools', 'report', '44-page PDF', '44 page PDF']) {
+    await page.getByLabel('Search the records').fill(query);
+    await expect(report).toBeVisible();
+    await expect(page.locator('#research-count')).toHaveText('1 of 1 site research reports');
+    await expect(page.locator('#no-results')).toBeHidden();
+    await expect(report.locator('a[href="lessons.html"]')).toBeVisible();
+    await expect(report.locator('a[href="lessons-report.pdf"]')).toBeVisible();
+  }
+  await expect(report).toContainText(/site research/i);
+  await expect(report).toContainText(/synthesis/i);
+  await expect(report).toContainText(/12 selected school reprieves/i);
+  await expect(report).toContainText(/four closure comparisons/i);
+  await expect(report).toContainText(/not an official record or a representative dataset/i);
+  await expect(report).not.toHaveClass(/\bsource-card\b/);
+  await expect(page.locator('.source-card')).toHaveCount(46);
+  await page.reload();
+  await expect(page.getByLabel('Search the records')).toHaveValue('44 page PDF');
+  await expect(report).toBeVisible();
+});
+
+test('Report discovery: research filters, separate counts, empty state and reset agree', async ({ page }) => {
+  await page.goto('/index.html#records');
+  const report = page.locator('#source-lessons-report');
+  await expect(page.locator('#result-count')).toHaveText('46 of 46 records');
+  await expect(page.locator('#research-count')).toHaveText('1 of 1 site research reports');
+  await page.getByLabel('Record type', { exact: true }).selectOption('Site research');
+  await expect(report).toBeVisible();
+  await expect(page.locator('.source-card:visible')).toHaveCount(0);
+  await expect(page.locator('#result-count')).toHaveText('0 of 46 records');
+  await expect(page.locator('#no-results')).toBeHidden();
+  await page.getByLabel('Coverage', { exact: true }).selectOption('Synthesis');
+  await expect(report).toBeVisible();
+  await page.getByLabel('Year', { exact: true }).selectOption('2003');
+  await expect(report).toBeHidden();
+  await expect(page.locator('#research-count')).toHaveText('0 of 1 site research reports');
+  await expect(page.locator('#no-results')).toBeVisible();
+  await page.getByRole('button', { name: 'Clear filters' }).click();
+  await expect(report).toBeVisible();
+  await expect(page.locator('.source-card:visible')).toHaveCount(46);
+  await expect(page.locator('#result-count')).toHaveText('46 of 46 records');
+  await expect(page.locator('#research-count')).toHaveText('1 of 1 site research reports');
+  await expect(page.locator('#no-results')).toBeHidden();
+  await expect(page.getByLabel('Search the records')).toBeFocused();
+});
+
+test('Report discovery: direct and repeated report anchors recover incompatible filters', async ({ page, hasTouch }) => {
+  await page.goto('/index.html?q=impossible-report-search&type=Inspection&year=2003&status=Reviewed#source-lessons-report');
+  const report = page.locator('#source-lessons-report');
+  await expect(report).toBeVisible();
+  await expect(report).toBeInViewport();
+  await expect(page.getByLabel('Search the records')).toHaveValue('');
+  await expect(page.getByLabel('Record type', { exact: true })).toHaveValue('');
+  await expect(page.getByLabel('Year', { exact: true })).toHaveValue('');
+  await expect(page.getByLabel('Coverage', { exact: true })).toHaveValue('');
+  await page.getByLabel('Record type', { exact: true }).selectOption('Inspection');
+  await expect(report).toBeHidden();
+  await expect(page).toHaveURL(/#source-lessons-report$/);
+  const shortcut = page.locator('#research-shortcut a[href="#source-lessons-report"]');
+  if (hasTouch) await shortcut.tap(); else await shortcut.click();
+  await expect(report).toBeVisible();
+  await expect(report).toBeInViewport();
+  await expect(page.getByLabel('Record type', { exact: true })).toHaveValue('');
+});
+
 test('Source search, combined filters, empty state and clear remain usable', async ({ page }) => {
   await page.goto('/index.html#records');
   const total = await page.locator('.source-card').count();

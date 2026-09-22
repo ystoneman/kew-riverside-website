@@ -22,6 +22,31 @@ test('No JavaScript: evidence is readable and council identity stays disabled', 
   await expect(page.locator('#allow-council')).not.toBeChecked();
 });
 
+test('No JavaScript: homepage and Evidence expose the full report and web research', async ({ page }) => {
+  await page.goto('/index.html');
+  const shortcut = page.locator('#research-shortcut');
+  await expect(shortcut).toContainText('44-page PDF');
+  await shortcut.locator('a[href="lessons.html"]').tap();
+  await expect(page).toHaveURL(/lessons\.html$/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('What can other schools teach us?');
+  await page.goBack();
+  await shortcut.locator('a[href="#source-lessons-report"]').tap();
+  const report = page.locator('#source-lessons-report');
+  await expect(report).toBeInViewport();
+  await expect(report).toContainText(/site research/i);
+  await expect(report.locator('a[href="lessons.html"]')).toBeVisible();
+  const [download] = await Promise.all([
+    page.waitForEvent('download'),
+    report.locator('a[href="lessons-report.pdf"]').tap(),
+  ]);
+  expect(download.suggestedFilename()).toBe('lessons-report.pdf');
+  expect(await download.failure()).toBeNull();
+  await page.goto('/index.html?q=impossible-report-search&type=Inspection#source-lessons-report');
+  await expect(report).toBeVisible();
+  await expect(report).toBeInViewport();
+  await expect(page.locator('.source-card:visible')).toHaveCount(46);
+});
+
 for (const [publish, council] of [[false, false], [true, false], [false, true], [true, true]]) {
   test(`No JavaScript: letter permissions submit independently: public=${publish}, council=${council}`, async ({ page }) => {
     const submissions = await captureSubmissions(page);

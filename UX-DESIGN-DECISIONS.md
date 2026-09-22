@@ -162,3 +162,11 @@ The owner requested a little contemporary motion, especially on Parent action pl
 A CSS-only treatment fits the static site and adds no script or third-party dependency. All new transforms, transitions and animation live inside `prefers-reduced-motion: no-preference`, so reduced-motion visitors get the existing static controls, underlines and focus indication. The arrow does not loop and no content is hidden while it animates. This is a design choice, not a measured improvement in discovery or engagement.
 
 This adapts the emphasis on intentional, distinctive interactions in [Webflow's 2026 design review](https://webflow.com/blog/web-design-trends-2026), using the transform and reduced-motion guidance in [web.dev's CSS transitions reference](https://web.dev/learn/css/transitions). Verification and publication are recorded in CHANGELOG.md.
+
+## Other-schools report discovery — 22 September 2026
+
+Visitor need: find the previously published 44-page PDF without knowing which proposal section contains it. A compact strip beside the homepage task routes offers direct PDF and web links, plus a stable Evidence reference. The existing proposal route and file URLs remain intact.
+
+The Evidence search includes a separate Site research card, with remembered search terms and its own count. Adding the synthesis to the original-source dataset was considered but would blur its provenance and change the source export. Keeping it outside search would preserve the discovery problem. The chosen design shares the search/filter controls, identifies the item as Synthesis, and leaves all 46 original records and their CSV unchanged. Empty-state messaging considers both collections; direct anchors recover from incompatible filters. The static card and links work without JavaScript. A small dedicated stylesheet avoids stale cached styles for the new route, and the updated Evidence script URL is versioned.
+
+Verification: all 587 browser checks, 29 Python checks and 67-asset validation passed. Native iPhone Air / iOS 26.5 Safari checked both report formats, Back, the Evidence route and portrait/landscape layout on the local preview. Publication is recorded separately in CHANGELOG.md.
