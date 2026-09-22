@@ -4,6 +4,10 @@
   if (!menu) return;
   const toggle = menu.querySelector('summary');
   // Native details remains usable if JavaScript is unavailable.
+  // Non-interactive areas do not always produce a synthetic click in Safari.
+  document.addEventListener('pointerdown', event => {
+    if (menu.open && !menu.contains(event.target)) menu.open = false;
+  });
   document.addEventListener('click', event => {
     if (menu.open && (!menu.contains(event.target) || event.target.closest('a'))) menu.open = false;
   });

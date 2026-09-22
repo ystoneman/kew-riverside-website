@@ -51,6 +51,7 @@ test('Contribute: a focused menu summary must not swallow a following touch', as
 test('Contribute: outside touch closes the menu', async ({ page }) => {
   await page.goto('/feedback.html');
   await page.locator('.mobile-menu summary').tap();
+  await expect(page.locator('.mobile-menu')).toHaveAttribute('open', '');
   await page.locator('.independent-bar').tap({ position: { x: 10, y: 10 } });
   await expect(page.locator('.mobile-menu')).not.toHaveAttribute('open', '');
 });
