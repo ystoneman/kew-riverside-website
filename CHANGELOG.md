@@ -4,6 +4,12 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### System-aware appearance
+
+Follow the visitor’s device appearance by default, with a labelled System / Light / Dark selector in the footer. Remember a manual choice in this browser only; System removes that override. Keep navigation and the protected parent-plan arrival in place. Add a deep-green screen palette for text, surfaces, forms, chart series, keys and forecast markers; preserve print styling and downloadable graphics. Document the local preference in Privacy. Storage failures leave the current page usable; Back and other-tab changes recover the current saved preference.
+
+Independent UX planning and implementation reviews covered the actual diff plus supplied 320px/390px, desktop dark/light, chart, form and native footer screenshots. Fixes included preview-button contrast, restored-page preference refresh and a 44px Safari picker. The contrast audit exposed WebKit root-variable inheritance inconsistencies; declaring the same palette on body fixed the repeated footer failures. The audit paints the page and retains its original thresholds. Test/deployment completion will be recorded after verification.
+
 ### Developer contributions and main-branch protection
 
 Add a fork-to-PR contribution guide, pull-request template and repository-wide code ownership by `@ystoneman`. Document fictional test data, source attribution, private reporting routes, required validation and the distinction between public repository files and deployed assets. Record the intended main-branch protection: one code-owner approval, stale-review dismissal, resolved conversations, current-branch checks from GitHub Actions, and no force-pushes or branch deletion. Keep the owner administrator exception explicit to avoid self-review deadlock and preserve the existing private letter-publication workflow. External-contributor workflows require maintainer approval. The new guidance and configuration are maintenance files only; no visitor-facing asset changes.

@@ -10,8 +10,8 @@
 .quick-answers-intro > p { max-width: 28ch; margin-bottom: 16px; }
 .quick-answers-intro .text-link { display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; }
 .quick-answers .proposal-status { font-size: 11px; line-height: 1.5; }
-.quick-faq details { border-bottom: 1px solid #c3cfba; }
-.quick-faq details:first-child { border-top: 1px solid #c3cfba; }
+.quick-faq details { border-bottom: 1px solid var(--theme-border, #c3cfba); }
+.quick-faq details:first-child { border-top: 1px solid var(--theme-border, #c3cfba); }
 .quick-faq summary { padding: 16px 2px; font-size: 16px; line-height: 1.5; }
 .quick-faq details > div { padding: 0 4px 18px 20px; }
 .quick-faq details p { margin: 0 0 12px; font-size: 15px; line-height: 1.7; }
@@ -19,13 +19,13 @@
 .quick-faq .source-note { font-size: 13px; }
 .quick-faq a { text-decoration: underline; text-underline-offset: 3px; }
 .quick-faq summary:focus-visible, .borough-context > summary:focus-visible,
-.roll-data > summary:focus-visible { outline: 3px solid #0e6470; outline-offset: 4px; border-radius: 3px; }
+.roll-data > summary:focus-visible { outline: 3px solid var(--theme-focus, #0e6470); outline-offset: 4px; border-radius: 3px; }
 .school-roll-chart {
   margin: 0;
   padding: 32px 36px 0;
-  border: 1px solid #ccd7c7;
+  border: 1px solid var(--theme-border, #ccd7c7);
   border-radius: 16px;
-  background: #fff;
+  background: var(--theme-surface, #fff);
   overflow: hidden;
 }
 .roll-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; }
@@ -36,21 +36,21 @@
 .roll-key-number dd { margin: 6px 0 0; font: 60px/1.1 Georgia, serif; color: var(--ink); }
 .roll-key-number dd span { font: 14px Arial, sans-serif; }
 .roll-legend { display: flex; flex-wrap: wrap; gap: 12px 28px; margin: 28px 0 0; }
-.roll-legend span { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; color: #425a51; }
-.roll-legend i { width: 28px; border-top: 3px solid #0e6470; }
-.roll-legend i.legend-forecast { border-color: #866629; border-top-style: dashed; }
+.roll-legend span { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; color: var(--theme-readable, #425a51); }
+.roll-legend i { width: 28px; border-top: 3px solid var(--theme-border, #0e6470); }
+.roll-legend i.legend-forecast { border-color: var(--theme-border, #866629); border-top-style: dashed; }
 .roll-plot { display: block; width: 100%; max-width: 760px; height: auto; margin: 8px auto 12px; overflow: visible; }
 .forecast-region { fill: #f8f1e3; }
 .forecast-caption { fill: #785b26; font: 18px Arial, sans-serif; }
-.roll-grid { stroke: #d9e0d5; stroke-width: 1; }
+.roll-grid { stroke: var(--theme-border, #d9e0d5); stroke-width: 1; }
 .roll-axis { fill: #596a60; font: 19px Arial, sans-serif; }
-.roll-value { fill: #143936; font: 700 25px Arial, sans-serif; }
+.roll-value { fill: var(--theme-readable, #143936); font: 700 25px Arial, sans-serif; }
 .roll-reported, .roll-forecast { fill: none; stroke-linejoin: round; stroke-width: 3; }
-.roll-reported { stroke: #0e6470; }
-.roll-forecast { stroke: #866629; stroke-dasharray: 8 6; }
+.roll-reported { stroke: var(--theme-chart-main, #0e6470); }
+.roll-forecast { stroke: var(--theme-chart-third, #866629); stroke-dasharray: 8 6; }
 .roll-point { stroke-width: 2.5; }
-.roll-point.reported { fill: #0e6470; stroke: #0e6470; }
-.roll-point.forecast { fill: #fff; stroke: #866629; }
+.roll-point.reported { fill: var(--theme-chart-main, #0e6470); stroke: var(--theme-chart-main, #0e6470); }
+.roll-point.forecast { fill: #fff; stroke: var(--theme-chart-third, #866629); }
 .school-roll-chart figcaption { max-width: 86ch; font-size: 14px; line-height: 1.7; }
 .school-roll-chart figcaption strong { font-weight: 600; }
 .roll-source { font-size: 12px; line-height: 1.7; color: var(--muted); max-width: 90ch; }
@@ -63,12 +63,12 @@
 .roll-data table caption { text-align: left; padding: 12px 0; font-weight: 700; }
 .roll-data th, .roll-data td { padding: 10px 14px; }
 .roll-data td:last-child { white-space: nowrap; }
-.roll-takeaway { margin: 0 -36px; padding: 24px 36px; background: #edf3e8; border-top: 1px solid #d1ddc8; }
+.roll-takeaway { margin: 0 -36px; padding: 24px 36px; background: var(--theme-soft, #edf3e8); border-top: 1px solid var(--theme-border, #d1ddc8); }
 .roll-takeaway > p:not(.eyebrow):not(.roll-editorial) { max-width: 78ch; color: var(--ink); font-size: 17px; line-height: 1.65; margin: 8px 0; }
 .roll-takeaway > div { display: flex; flex-wrap: wrap; gap: 6px 26px; }
 .roll-takeaway a { display: inline-flex; gap: 5px; align-items: center; min-height: 44px; font-size: 14px; font-weight: 700; }
 .roll-editorial { font-size: 12px; color: var(--muted); margin: 8px 0 0; }
-.borough-context { border: 1px solid #c4d1bd; border-radius: 12px; margin-top: 20px; background: #f7faf3; }
+.borough-context { border: 1px solid var(--theme-border, #c4d1bd); border-radius: 12px; margin-top: 20px; background: var(--theme-soft, #f7faf3); }
 .borough-context > summary { padding: 22px 26px; font-size: 18px; line-height: 1.5; }
 .borough-context > summary > span { vertical-align: middle; }
 .borough-context > summary small { display: block; font-size: 13px; font-weight: 400; color: var(--muted); padding-left: 20px; margin-top: 5px; }
@@ -76,7 +76,7 @@
 .borough-intro { font-size: 15px; max-width: 75ch; margin: 0 0 22px; }
 .borough-context .chart-card { padding: 26px; }
 .borough-capacity { margin: 24px 0; }
-.borough-capacity .small-chart { background: #fff; border-radius: 12px; }
+.borough-capacity .small-chart { background: var(--theme-surface, #fff); border-radius: 12px; }
 .borough-context .housing-note { margin-bottom: 0; }
 #option-demand { scroll-margin-top: 160px; }
 @media (max-width: 850px) {

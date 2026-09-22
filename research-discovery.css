@@ -1,7 +1,7 @@
 /* Direct routes to the existing research report and its separate Evidence entry. */
-.research-shortcut,.research-card{border:1px solid #b7c9ac;border-radius:14px;background:#f1f5eb;padding:24px;min-width:0;scroll-margin-top:24px}
+.research-shortcut,.research-card{border:1px solid var(--theme-border, #b7c9ac);border-radius:14px;background:var(--theme-soft, #f1f5eb);padding:24px;min-width:0;scroll-margin-top:24px}
 .research-shortcut{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:18px}
-.research-shortcut h3,.research-card h3{font-family:Georgia,serif;font-weight:400;font-size:26px;line-height:1.25;color:var(--green);margin:8px 0 12px}
+.research-shortcut h3,.research-card h3{font-family:Georgia,serif;font-weight:400;font-size:26px;line-height:1.25;color:var(--theme-strong, var(--green));margin:8px 0 12px}
 .research-shortcut p,.research-card p{font-size:14px;line-height:1.7;margin:0;max-width:760px}
 .research-shortcut .eyebrow,.research-card .eyebrow{font-size:10px}
 .research-links{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;font-size:14px}

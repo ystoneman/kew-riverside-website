@@ -11,6 +11,7 @@ from public_data import validate_board
 
 ROOT = Path(__file__).resolve().parents[2]
 PUBLIC_FILES = frozenset('''
+theme.css theme.js
 videos.html videos.css
 lessons.html lessons-sources.html lessons-data.json lessons.css lessons.js lessons-report.pdf lessons-01-where-proposals-stopped.png lessons-01-where-proposals-stopped.svg lessons-02-recorded-reasons-matrix.png lessons-02-recorded-reasons-matrix.svg lessons-03-isle-of-wight-cohort.png lessons-03-isle-of-wight-cohort.svg lessons-04-fletching-funding-and-budget.png lessons-04-fletching-funding-and-budget.svg lessons-05-reprieve-versus-recovery.png lessons-05-reprieve-versus-recovery.svg lessons-06-where-to-focus-effort.png lessons-06-where-to-focus-effort.svg lessons-07-efforts-that-did-not-prevent-closure.png lessons-07-efforts-that-did-not-prevent-closure.svg lessons-08-petitions-and-outcomes.png lessons-08-petitions-and-outcomes.svg
 meeting.css meeting.js faq.html discovery.css discovery.js research-discovery.css about.html app.js applications.csv community.css corrections.html
@@ -22,6 +23,7 @@ attainment-data.json attainment.csv
 understand.html understand.css understand.js understand-data.json richmond-schools.csv
 '''.split())
 MAINTENANCE_FILES = frozenset('''
+tests/browser/theme.spec.js
 CONTRIBUTING.md .github/CODEOWNERS .github/pull_request_template.md .github/branch-protection.json
 .agents/skills/kew-campaign-review/SKILL.md .agents/skills/kew-campaign-review/agents/openai.yaml
 .agents/skills/kew-ux-review/SKILL.md .agents/skills/kew-ux-review/agents/openai.yaml
