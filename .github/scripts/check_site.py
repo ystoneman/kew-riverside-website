@@ -22,6 +22,7 @@ attainment-data.json attainment.csv
 understand.html understand.css understand.js understand-data.json richmond-schools.csv
 '''.split())
 MAINTENANCE_FILES = frozenset('''
+CONTRIBUTING.md .github/CODEOWNERS .github/pull_request_template.md .github/branch-protection.json
 .agents/skills/kew-campaign-review/SKILL.md .agents/skills/kew-campaign-review/agents/openai.yaml
 .agents/skills/kew-ux-review/SKILL.md .agents/skills/kew-ux-review/agents/openai.yaml
 .agents/skills/kew-evidence-review/SKILL.md .agents/skills/kew-evidence-review/agents/openai.yaml
