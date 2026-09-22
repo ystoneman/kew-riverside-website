@@ -29,7 +29,7 @@ for (const file of pages) {
     await expect(page.locator('.participation-nav .nav-contribute')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
     // Measure only after the complete document has been painted.
-    await page.screenshot({fullPage:true});
+    await page.screenshot({fullPage:true, scale:'css'});
     await expect.poll(() => page.evaluate(() => {
       const parse = value => (value.match(/[\d.]+/g) || []).map(Number);
       const lum = rgb => rgb.slice(0,3).map(v => v / 255).map(v => v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4).reduce((sum,v,i) => sum + v * [.2126,.7152,.0722][i], 0);
