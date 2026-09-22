@@ -4,6 +4,11 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Family story wording
+
+- Correct the role description to “Our Reception teacher and SENDCo lead” and put “like cousins” in quotation marks, preserving the personal family account.
+- Validation: all 545 browser checks and 29 Python checks passed; 64 public assets validated. This is a wording-only change; no visitor interaction has changed. Deployment: pending.
+
 ### Private video submissions
 
 - Add a focused Parent Voices page reached from community letters and Share ideas, with filming prompts, clear Google sign-in/file limits, a private-review explanation and written alternatives.
