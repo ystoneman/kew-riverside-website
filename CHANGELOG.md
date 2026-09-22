@@ -4,6 +4,19 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Lessons from other schools
+
+- Add a concise, cited proposal summary linking to optional historical research, keeping the eight graphics and full catalogue off the main proposal page.
+- Provide 12 selected reprieves, four closure comparisons, eight expandable vector graphics, readable chart data, search/outcome filters, complete methodology and a 45-source / 49-claim citations appendix.
+- Redesign the financial comparison with a zero baseline and explicit forecast/scenario labels; separate cash, pledges and resolutions. Replace implied effort rankings with timing groups, highlight the transition concession, and separate paper from online petition counts.
+- Offer 4800 × 3000 PNG downloads and a 44-page PDF with vector charts, searchable text and clickable source URLs. Preserve evidence limitations, current-status caveats and the distinction between 12 schools and nine grouped episodes.
+- Recheck all 16 school statuses. Of 45 source URLs, 42 were retrievable; S04, S05 and S28 returned HTTP 403. Preserve their earlier inspection record and explicitly disclose the integration access limit.
+- Add regression coverage for research routes, every graphic/data disclosure and download, keyboard controls, filters/reset/no results, direct links, citations and no-JavaScript use. Correct an initial table-container class mismatch exposed by the iPhone WebKit overflow check, and mobile heading word spacing found in native Safari.
+
+Validation: all 496 browser checks and 29 Python security/data/structure checks passed; 62 public assets validated. The updated standalone pack passed its viewport, filter, citation and SVG-bounds checks. All 44 PDF pages were rendered and reviewed, with the final source-access note inspected again after its update. Native Safari on iPhone 17 / iOS 26.5 verified the menu-to-proposal route, proposal summary, chart expand/collapse, search (three Lambeth cases), outcome filter (four closures), reset (16 cases) and portrait/landscape layouts. Automated WebKit separately verified horizontal table scrolling and no page overflow. Deployment verification is pending.
+
+### Earlier work awaiting release documentation
+
 - Add the first contributor-approved, human-reviewed community letter to the existing public board, preserving the submitted wording and display name.
 - Let routine, relevant letters with new explicit publication permission appear after automated screening, with specific concerns held for human review. Update the public form and privacy notice, preserve earlier letters' human-review requirement, and keep council sharing independent.
 - Describe the single publication email sent to a supplied reply address after live confirmation, including the displayed name, link and edit/removal route. Show each letter's actual assessment as `AI screened` or `Human reviewed`.

@@ -11,6 +11,7 @@ from public_data import validate_board
 
 ROOT = Path(__file__).resolve().parents[2]
 PUBLIC_FILES = frozenset('''
+lessons.html lessons-sources.html lessons-data.json lessons.css lessons.js lessons-report.pdf lessons-01-where-proposals-stopped.png lessons-01-where-proposals-stopped.svg lessons-02-recorded-reasons-matrix.png lessons-02-recorded-reasons-matrix.svg lessons-03-isle-of-wight-cohort.png lessons-03-isle-of-wight-cohort.svg lessons-04-fletching-funding-and-budget.png lessons-04-fletching-funding-and-budget.svg lessons-05-reprieve-versus-recovery.png lessons-05-reprieve-versus-recovery.svg lessons-06-where-to-focus-effort.png lessons-06-where-to-focus-effort.svg lessons-07-efforts-that-did-not-prevent-closure.png lessons-07-efforts-that-did-not-prevent-closure.svg lessons-08-petitions-and-outcomes.png lessons-08-petitions-and-outcomes.svg
 meeting.css meeting.js faq.html discovery.css discovery.js about.html app.js applications.csv community.css corrections.html
 corrections.js favicon.svg feedback.css feedback.html feedback.js index.html insights.css navigation.js participation.css enrolment.css
 letters.html letters.js letters.json privacy.html proposal.css proposal.html
@@ -19,7 +20,8 @@ suggestions.json supporters.html supporters.js supporters.json
 understand.html understand.css understand.js understand-data.json richmond-schools.csv
 '''.split())
 MAINTENANCE_FILES = frozenset('''
-.nojekyll .gitignore README.md CODEX-HANDOFF.md .github/workflows/pages.yml
+.github/scripts/build_lessons.py .github/scripts/test_lessons.py tests/browser/lessons.spec.js
+.nojekyll .gitignore .gitattributes README.md CODEX-HANDOFF.md .github/workflows/pages.yml
 .github/scripts/check_site.py .github/scripts/public_data.py
 .github/scripts/test_security.py .github/scripts/test_site_structure.py
 AGENTS.md TESTING.md CHANGELOG.md UX-DESIGN-DECISIONS.md package.json package-lock.json playwright.config.js

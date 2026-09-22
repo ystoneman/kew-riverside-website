@@ -106,3 +106,19 @@ test('No JavaScript: the meeting invitation shows its fixed date and usable deta
   await expect(page).toHaveURL(/proposal\.html#school-meeting$/);
   await expect(page.locator('#school-meeting')).toBeInViewport();
 });
+
+test('No JavaScript: research keeps all cases, graphics, evidence notes and citations available', async ({ page }) => {
+  await page.goto('/lessons.html');
+  await expect(page.locator('#lesson-filters')).toBeHidden();
+  await expect(page.locator('.lesson-case')).toHaveCount(16);
+  await page.locator('#exhibit-4 > summary').tap();
+  await expect(page.locator('#exhibit-4 img')).toBeVisible();
+  await page.locator('#exhibit-4 .lesson-data > summary').tap();
+  await expect(page.locator('#exhibit-4 .lesson-data')).toContainText('£74,368');
+  await page.locator('#case-st-bartholomew > summary').tap();
+  await expect(page.locator('#case-st-bartholomew')).toContainText(/extra school term/);
+  await page.goto('/lessons-sources.html');
+  await expect(page.locator('.lesson-source')).toHaveCount(45);
+  await page.locator('#X04 > summary').tap();
+  await expect(page.locator('#X04')).toHaveAttribute('open','');
+});
