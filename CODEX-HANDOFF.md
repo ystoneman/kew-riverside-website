@@ -16,7 +16,7 @@ Claude Code completed and published the shorter-homepage PR (#4) at the owner's 
    - Its own appearance checks were failing at last inspection.
 2. **Test-harness failures to investigate separately** (see TESTING.md):
    - the WebKit legacy-homepage redirect stall, which has blocked two main deployments until rerun (priority);
-   - repeated same-hash source-link recovery under Chromium scroll anchoring.
+   - resolved: repeated same-hash source-link recovery. No failure has been seen since Evidence's jumps became immediate (`homepage.css`), and `sofiya.spec.js` now fails (38 of 40 runs) if this Evidence jump animates; keep that rule when merging theme CSS.
 
 3. **Participation invitation (branch `claude/participation-invitation`).** Owner decisions and dated follow-ups:
    - **Formspree plan.** The thank-you page `sent.html` needs Formspree's redirect, which is a paid-plan feature. If the owner upgrades, set the form's redirect to `https://ystoneman.github.io/kew-riverside-website/sent.html`. Until then the letters page's “Did your letter arrive?” panel carries the official step. Do not change provider settings or buy a plan without the owner.

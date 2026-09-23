@@ -1,5 +1,10 @@
 const { test, expect } = require('./fixtures');
 
+// Legacy links redirect while the homepage is still loading. These tests run without
+// request routing, which in WebKit left requests in flight to be cancelled and could
+// lose the redirected navigation (TESTING.md); the network guard still checks them.
+const legacyTest = test.extend({ routeRequests: [false, { option: true }] });
+
 // Independently pinned public destinations from the former homepage. These are
 // not derived from the new alias map, so removing a mapping cannot remove its test.
 const legacyDestinations = [
@@ -76,7 +81,7 @@ test('Dedicated pages: local navigation exposes depth and retains a homepage rec
   await expect(page.locator('#find-your-way')).toBeVisible();
 });
 
-test('Legacy homepage: representative shared fragments reach their original content', async ({ page }) => {
+legacyTest('Legacy homepage: representative shared fragments reach their original content', async ({ page }) => {
   for (const [id, destination] of legacyDestinations) {
     await test.step(id, async () => {
       await page.goto('/index.html#' + id);
@@ -90,7 +95,7 @@ test('Legacy homepage: representative shared fragments reach their original cont
   }
 });
 
-test('Legacy homepage: saved search without a fragment survives migration and reload', async ({ page }) => {
+legacyTest('Legacy homepage: saved search without a fragment survives migration and reload', async ({ page }) => {
   await page.goto('/index.html?q=Ofsted&type=Inspection&year=2003');
   await expect(page).toHaveURL(/evidence\.html\?q=Ofsted&type=Inspection&year=2003#records$/);
   await expect(page.getByLabel('Search the records')).toHaveValue('Ofsted');
@@ -103,7 +108,7 @@ test('Legacy homepage: saved search without a fragment survives migration and re
   await expect(page.locator('.source-card:visible')).toHaveCount(1);
 });
 
-test('Legacy homepage: source links recover conflicting filters and do not trap Back', async ({ page }) => {
+legacyTest('Legacy homepage: source links recover conflicting filters and do not trap Back', async ({ page }) => {
   await page.goto('/faq.html#school-places');
   await page.goto('/index.html?q=unfindable-source&type=Inspection&year=2003#source-inspection-2026');
   await expect(page).toHaveURL(/evidence\.html#source-inspection-2026$/);
@@ -118,7 +123,7 @@ test('Legacy homepage: source links recover conflicting filters and do not trap 
   await expect(page.locator('#source-inspection-2026')).toBeInViewport();
 });
 
-test('Legacy homepage: a fragment added after arrival routes without changing unrelated homepage links', async ({ page }) => {
+legacyTest('Legacy homepage: a fragment added after arrival routes without changing unrelated homepage links', async ({ page }) => {
   await page.goto('/index.html#visit-school');
   await expect(page).toHaveURL(/index\.html#visit-school$/);
   await expect(page.locator('#visit-school')).toBeInViewport();
