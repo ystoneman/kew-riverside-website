@@ -4,6 +4,10 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Deep-linked video upload keeps its Back position
+
+The participation tile cue changed the document's root class on direct `videos.html#upload` arrival. In iPhone WebKit, returning from the intercepted permission-form handoff then left `#upload` in the URL but showed the top of the page (J9). Skip that decorative cue on shared fragment arrivals so the requested target takes precedence. The upload link, permissions, analytics choices and existing QR/Back assertions are unchanged. A new check pins the cue's absence on direct fragment arrival; the cue still runs on ordinary eligible page arrivals. In an isolated copy of the combined branch, the QR/Back test failed 13 of the first 14 focused repetitions before the guard; removing the cue script or its root-class change passed 3/3 and 5/5 respectively, while removing only its stylesheet still failed 3/3. The guard passed 20/20 focused iPhone WebKit repetitions. These are Playwright checks, not native Safari verification; no deployment is claimed.
+
 ### Warmer invitations to write, ask and suggest, and optional quotes from letters
 
 - **Header tiles.** Community letters (“Read & add yours”) and Share ideas (“Ask or suggest”) become warm tiles with decorative medallions on every page. On the first page of a visit from another site, their icons move once for about a second, never on the homepage, their own page or with reduced motion. Nothing is stored.

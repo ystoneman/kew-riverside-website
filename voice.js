@@ -3,7 +3,8 @@
 // Nothing is stored: "first page" means the visitor arrived from another site.
 (() => {
   const nav = document.querySelector('.participation-nav');
-  if (!nav || nav.querySelector('[aria-current="page"]')) return;
+  // A shared fragment must keep its target in view on arrival and after Back.
+  if (!nav || nav.querySelector('[aria-current="page"]') || location.hash) return;
   // The homepage already cues the Parent action plan; don't compete with it.
   if (document.querySelector('.parent-plan-spotlight')) return;
   if (!matchMedia('(prefers-reduced-motion: no-preference)').matches) return;

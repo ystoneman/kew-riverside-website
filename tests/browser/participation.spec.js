@@ -83,6 +83,13 @@ test('The tile cue plays once on arrival from elsewhere, never on internal navig
   await expect(page.locator('html')).not.toHaveClass(/\bvoice-cue\b/);
 });
 
+test('A shared fragment skips the tile cue and lands on its intended content', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/videos.html#upload');
+  await expect(page.locator('html')).not.toHaveClass(/\bvoice-cue\b/);
+  await expect(page.locator('#upload')).toBeInViewport();
+});
+
 // ---------- Letters: write first ----------
 
 test('Letters: writing comes first, and Next explains a too-short letter before revealing the choices', async ({ page }) => {
