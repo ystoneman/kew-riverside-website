@@ -15,12 +15,16 @@ function headerLinks(file, selector) {
   return links;
 }
 
+// The analytics collector is the only other origin a page's policy allows. analytics.js
+// contacts it only from the production host (analytics.spec.js), never from this server.
+const productionOnly = { 'connect-src': ['https://cloud.umami.is/api/send'] };
+
 // True when the page's policy, including the default that other fetch directives fall
-// back to, lets it load resources only from the site itself.
-function loadsOnlyFromSite(file) {
+// back to, lets it reach no other origin when served by this test harness.
+function staysOnSite(file) {
   const policy = readFileSync(path.join(root, file), 'utf8').match(/http-equiv="Content-Security-Policy" content="([^"]*)"/)?.[1]?.toLowerCase() || '';
   const sources = policy.split(';').map(directive => directive.trim().split(/\s+/)).filter(([name]) => /-src(?:-elem|-attr)?$/.test(name));
-  return sources.some(([name]) => name === 'default-src') && sources.every(([, ...allowed]) => allowed.every(source => ["'self'", "'none'"].includes(source)));
+  return sources.some(([name]) => name === 'default-src') && sources.every(([name, ...allowed]) => allowed.every(source => ["'self'", "'none'", ...(productionOnly[name] || [])].includes(source)));
 }
 
 const test = base.extend({
@@ -35,10 +39,10 @@ const test = base.extend({
       // In WebKit any route pauses every request until Playwright continues it, which keeps
       // more homepage requests in flight when a legacy link redirects. Cancelling them trips
       // a network-process defect that can lose the redirected navigation (TESTING.md).
-      // Without routes nothing can abort a request: every page's policy must keep its loads
-      // on this site, and the journey must not submit forms or leave the site. Requests to
-      // other origins, local writes and the letters board are still reported.
-      for (const file of pages) expect(loadsOnlyFromSite(file), `${file} loads nothing from other origins`).toBe(true);
+      // Without routes nothing can abort a request: no page's policy may let it reach another
+      // origin from this server, and the journey must not submit forms or leave the site.
+      // Requests to other origins, local writes and the letters board are still reported.
+      for (const file of pages) expect(staysOnSite(file), `${file} can reach no other origin from this server`).toBe(true);
       context.on('request', request => {
         const url = new URL(request.url());
         if (url.origin !== new URL(baseURL).origin || !['GET', 'HEAD'].includes(request.method()) || url.pathname === '/letters.json') unexpected.push(`${request.method()} ${request.url()}`);

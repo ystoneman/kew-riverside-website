@@ -11,6 +11,7 @@ from public_data import validate_board
 
 ROOT = Path(__file__).resolve().parents[2]
 PUBLIC_FILES = frozenset('''
+analytics.js analytics.css analytics-config.json
 videos.html videos.css evidence.html options.html homepage.css homepage.js
 lessons.html lessons-sources.html lessons-data.json lessons.css lessons.js lessons-report.pdf lessons-01-where-proposals-stopped.png lessons-01-where-proposals-stopped.svg lessons-02-recorded-reasons-matrix.png lessons-02-recorded-reasons-matrix.svg lessons-03-isle-of-wight-cohort.png lessons-03-isle-of-wight-cohort.svg lessons-04-fletching-funding-and-budget.png lessons-04-fletching-funding-and-budget.svg lessons-05-reprieve-versus-recovery.png lessons-05-reprieve-versus-recovery.svg lessons-06-where-to-focus-effort.png lessons-06-where-to-focus-effort.svg lessons-07-efforts-that-did-not-prevent-closure.png lessons-07-efforts-that-did-not-prevent-closure.svg lessons-08-petitions-and-outcomes.png lessons-08-petitions-and-outcomes.svg
 meeting.css meeting.js faq.html discovery.css discovery.js research-discovery.css about.html app.js applications.csv community.css corrections.html
@@ -26,6 +27,7 @@ VIDEO-PERMISSIONS.md CONTRIBUTING.md .github/CODEOWNERS .github/pull_request_tem
 .agents/skills/kew-campaign-review/SKILL.md .agents/skills/kew-campaign-review/agents/openai.yaml
 .agents/skills/kew-ux-review/SKILL.md .agents/skills/kew-ux-review/agents/openai.yaml
 .agents/skills/kew-evidence-review/SKILL.md .agents/skills/kew-evidence-review/agents/openai.yaml
+ANALYTICS.md tests/browser/analytics.spec.js
 ENROLMENT-OUTREACH-BRIEF.md .github/scripts/build_learning.py .github/scripts/test_learning.py tests/browser/sofiya.spec.js
 tests/browser/videos.spec.js tests/browser/homepage.spec.js tests/browser/harness.spec.js
 .github/scripts/build_lessons.py .github/scripts/test_lessons.py tests/browser/lessons.spec.js
@@ -38,7 +40,7 @@ tests/browser/desktop.spec.js tests/browser/no-javascript.spec.js
 tests/browser/contributions.spec.js tests/browser/evidence.spec.js tests/browser/boards.spec.js
 tests/browser/visitor-journeys.spec.js tests/browser/understand.spec.js .github/scripts/build_understand.py .github/scripts/test_understand.py
 '''.split())
-CSP = "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; object-src 'none'; frame-src 'none'; form-action 'self' https://formspree.io; upgrade-insecure-requests"
+CSP = "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self' https://cloud.umami.is/api/send; base-uri 'none'; object-src 'none'; frame-src 'none'; form-action 'self' https://formspree.io; upgrade-insecure-requests"
 SECRET_PATTERNS = [
     r'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----',
     r'\b(?:gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{50,})\b',
@@ -129,6 +131,9 @@ def validate_site(root=ROOT):
                 require(all('required' not in page.named_inputs[field] for field in ('allow_public', 'allow_council')), 'Letter sharing must remain optional.')
         if name.endswith('.js'):
             require(not re.search(r'\b(?:innerHTML|outerHTML|insertAdjacentHTML|eval)\b|document\.write\s*\(', data), 'Unsafe DOM/code execution sink in ' + name)
+    analytics = json.loads((root / 'analytics-config.json').read_text())
+    require(set(analytics) == {'enabled', 'websiteId'} and type(analytics['enabled']) is bool, 'Invalid analytics configuration.')
+    require((analytics['enabled'] and isinstance(analytics['websiteId'], str) and re.fullmatch(r'[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}', analytics['websiteId'])) or (analytics['enabled'] is False and analytics['websiteId'] == ''), 'Analytics must have a valid public website ID or stay disabled.')
     for kind in ('suggestions', 'letters', 'supporters'):
         validate_board(json.loads((root / (kind + '.json')).read_text()), kind)
     return len(PUBLIC_FILES)
