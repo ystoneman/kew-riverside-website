@@ -123,7 +123,8 @@ async function controlledAttention(page) {
 }
 
 async function freezeAfterLoad(page) {
-  await expect(page.locator('#analytics-panel')).toBeAttached();
+  // The choices panel is created but stays detached until someone opens it.
+  await expect(page.locator('#analytics-panel')).toHaveCount(0);
 }
 
 test('A basic page view is sent without a banner, stored choice or detailed events', async ({ page, context }) => {

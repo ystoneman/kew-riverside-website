@@ -178,7 +178,7 @@
       current === 'deny' ? 'Current setting: analytics off.' : 'Current setting: basic page counts only.';
   }
   function close() { panel.hidden = true; update(); if (opener?.isConnected && !opener.closest('[hidden]')) opener.focus({ preventScroll: true }); }
-  function open(from) { opener = from; panel.hidden = false; update(); panel.querySelector('h2').focus({ preventScroll: true }); }
+  function open(from) { if (!panel.isConnected) document.body.append(panel); opener = from; panel.hidden = false; update(); panel.querySelector('h2').focus({ preventScroll: true }); }
   function buildChoices() {
     // No banner: the panel opens only from the footer or privacy-page links.
     panel = node('section', '', 'analytics-panel'); panel.hidden = true; panel.id = 'analytics-panel';
@@ -201,7 +201,6 @@
       deny: button('Turn analytics off', choose('deny'))
     };
     actions.append(...Object.values(buttons)); panel.append(actions);
-    document.body.append(panel);
     document.querySelectorAll('a[data-analytics-choices]').forEach(link => link.addEventListener('click', event => { event.preventDefault(); open(link); }));
     panel.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
     update();
