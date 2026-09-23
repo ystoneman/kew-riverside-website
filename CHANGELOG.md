@@ -4,6 +4,10 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Deep-linked video upload keeps its Back position
+
+The participation tile cue changed the document's root class on direct `videos.html#upload` arrival. In iPhone WebKit, returning from the intercepted permission-form handoff then left `#upload` in the URL but showed the top of the page (J9). Skip that decorative cue on shared fragment arrivals so the requested target takes precedence. The upload link, permissions, analytics choices and existing QR/Back assertions are unchanged. A new check pins the cue's absence on direct fragment arrival; the cue still runs on ordinary eligible page arrivals. In an isolated copy of the combined branch, the QR/Back test failed 13 of the first 14 focused repetitions before the guard; removing the cue script or its root-class change passed 3/3 and 5/5 respectively, while removing only its stylesheet still failed 3/3. The guard passed 20/20 focused iPhone WebKit repetitions. These are Playwright checks, not native Safari verification; no deployment is claimed.
+
 ### System-aware appearance
 
 Follow the visitor’s device appearance by default, with a labelled System / Light / Dark selector in the footer. Remember a manual choice in this browser only; System removes that override. Keep navigation and the protected parent-plan arrival in place. Add a deep-green screen palette for text, surfaces, forms, chart series, keys and forecast markers; preserve print styling and downloadable graphics. Version the updated stylesheet URLs so returning visitors do not mix older cached light-only components with the new palette. Document the local preference in Privacy. Storage failures leave the current page usable; Back and other-tab changes recover the current saved preference.
@@ -21,6 +25,9 @@ Independent UX planning and implementation reviews covered the actual diff plus 
 - **Link previews.** Open Graph images and tags for the homepage, letters, Share ideas and videos. The calendar reminder follows RFC 5545 (CRLF, folded lines); `.gitattributes` keeps its line endings.
 
 Planning research, a clickable prototype and three specialist planning reviews are recorded in the owner's workspace plan, outside this repository. Quote permission had separate campaign and evidence/privacy reviews and follows their scope, nesting, end-date and record-keeping conclusions. Verification is recorded below once complete.
+### Video QR Back position after analytics
+
+The analytics script attached its hidden choices panel while `videos.html#upload` loaded. In iPhone WebKit, returning from the intercepted permission-form handoff then kept the fragment in the URL but showed the top of the page, outside the upload card (J9). Keep the panel detached until someone opens Analytics choices. The existing QR and analytics controls retain their assertions; the analytics test now checks the panel's deferred insertion. The pre-analytics commit passed three QR repetitions, while the analytics commit and later main failed repeatedly; removing only the initial panel insertion restored Back position in a diagnostic copy. On this branch, the unchanged QR test passed 10 iPhone WebKit repetitions and all 120 analytics tests passed across the four scripted browser projects. These were Playwright browser checks, not native Safari verification. No real form or analytics call was sent. PR #13 merged as `cedf22d` and main run `35881231460` passed validation, browser tests and deployment on 23 September 2026; all 76 public files matched the validated artifact byte for byte over HTTPS.
 
 ### External-link arrows render as text on iPhone
 
