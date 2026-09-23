@@ -261,3 +261,12 @@ J9: a visitor opening upload help or following an in-page video link should be a
 ## Research shortcut wording — 23 September 2026
 
 J6: the owner judged that “Looking for the 44-page report?” means nothing to visitors who have not heard of the report. The homepage shortcut now leads with its subject, “What happened to other schools proposed for closure?”, under a “Historical research” label. The Evidence jump link uses the destination card's name, “Find lessons from other schools”. The page count stays on the download button, where it helps people choose between the PDF and the web version. Placement, links, destinations and the research description are unchanged. This is a lead-agent review; verification is recorded in CHANGELOG.md.
+
+
+## Website analytics — 23 September 2026
+
+Need: learn which existing journeys people reach, without treating counts as named supporters, completed responses or enrolments. Applies across all protected journeys; no priority, destination or arrival position changes, and no public dashboard is added.
+
+Options: opt-in for everything behind a banner (the unpublished 22 September candidate), opt-in without a banner, or basic page counts by default with detailed usage opt-in. The owner chose the last: an opt-in-only design would undercount heavily, and a banner competes with the Parent action plan, Letters and Share ideas on arrival. Basic counts set no cookie and store nothing; detailed usage keeps consent. The choice stays one tap away in every footer, with three equal options and the current one marked. Browser privacy signals and private routes send nothing.
+
+Verification status is recorded in TESTING.md and CHANGELOG.md. This rationale is not user research. Revisit if the provider, data fields, ICO guidance or the interaction changes.
