@@ -127,10 +127,11 @@ def validate_site(root=ROOT):
                     'letter_consent': 'yes-process-my-letter-v3',
                     'allow_public': 'yes-publish-with-display-name-v3',
                     'allow_council': 'yes-share-with-richmond-council-v2',
+                    'allow_quotes': 'yes-quote-published-letter-v1',
                 }.items():
                     require(page.named_inputs.get(field, {}).get('value') == value, 'Letter permission or notice version has changed; review its meaning explicitly.')
                 require('required' in page.named_inputs['letter_consent'], 'Letter processing consent must be required.')
-                require(all('required' not in page.named_inputs[field] for field in ('allow_public', 'allow_council')), 'Letter sharing must remain optional.')
+                require(all('required' not in page.named_inputs[field] for field in ('allow_public', 'allow_council', 'allow_quotes')), 'Letter sharing must remain optional.')
         if name.endswith('.js'):
             require(not re.search(r'\b(?:innerHTML|outerHTML|insertAdjacentHTML|eval)\b|document\.write\s*\(', data), 'Unsafe DOM/code execution sink in ' + name)
     analytics = json.loads((root / 'analytics-config.json').read_text())

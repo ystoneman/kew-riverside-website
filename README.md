@@ -49,7 +49,12 @@ This collection is not exhaustive. Original documents remain with their publishe
 | response-checklist.md | Editable checklist source |
 | feedback.html / feedback.js | Ideas, evidence, meeting questions and corrections; optional publication and reviewed suggestions |
 | faq.html / discovery.js / discovery.css | Sourced practical answers, local FAQ search, homepage discovery routes and shared action styling |
-| letters.html / letters.js | Community letters, separate public and council permissions, private optional council identity fields |
+| letters.html / letters.js | Community letters written first, device drafts, separate public, quote and council permissions, private optional council identity fields |
+| contribute.css | Letters, Share ideas and thank-you page layout: invitation hero, choice cards, steps and returning-visitor panel |
+| sent.html / sent.js | Thank-you page for the form service's redirect: neutral by default, official-response step after a letter |
+| respond-reminder.ics | Calendar reminder for the official response (13 October, London time) |
+| voice.css / voice.js | Header tiles for Community letters and Share ideas, with a one-time arrival cue |
+| og-home.png / og-letters.png / og-ideas.png / og-videos.png | Link-preview images (1200 × 630) |
 | feedback.css | Shared form and public-board styles |
 | privacy.html | Versioned privacy and moderation notice |
 | suggestions.json | Approved website suggestions only |

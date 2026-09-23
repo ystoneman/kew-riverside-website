@@ -61,9 +61,48 @@ for (const [publish, council] of [[false, false], [true, false], [false, true], 
     expect(submissions[0].get('letter_consent')).toBe('yes-process-my-letter-v3');
     expect(submissions[0].get('allow_public')).toBe(publish ? 'yes-publish-with-display-name-v3' : null);
     expect(submissions[0].get('allow_council')).toBe(council ? 'yes-share-with-richmond-council-v2' : null);
-    for (const field of ['council_name', 'council_postcode']) expect(submissions[0].has(field)).toBe(false);
+    for (const field of ['council_name', 'council_postcode', 'allow_quotes']) expect(submissions[0].has(field)).toBe(false);
   });
 }
+
+test('No JavaScript: the letter form shows every step, the written starter and an unticked quote choice', async ({ page }) => {
+  await page.goto('/letters.html');
+  await expect(page.locator('#to-choices')).toBeHidden();
+  await expect(page.locator('#starters')).toBeHidden();
+  await expect(page.locator('#starter-static')).toBeVisible();
+  for (const id of ['#step-choose', '#step-send', '#quote-choice']) await expect(page.locator(id), id).toBeVisible();
+  await expect(page.locator('#allow-quotes')).not.toBeChecked();
+  await expect(page.locator('#allow-quotes')).toBeEnabled();
+  await expect(page.locator('#sent-return')).toBeHidden();
+  await expect(page.locator('#official-line')).toBeVisible();
+});
+
+for (const publish of [true, false]) {
+  test(`No JavaScript: a ticked quote choice submits its exact value (publication ${publish ? 'chosen' : 'not chosen'})`, async ({ page }) => {
+    const submissions = await captureSubmissions(page);
+    await page.goto('/letters.html');
+    await page.locator('#message').fill('A fictional community letter with quote permission, sent without JavaScript.');
+    await page.locator('#letter-consent').check();
+    if (publish) await page.locator('#allow-public').check();
+    await page.locator('#allow-quotes').check();
+    await page.locator('#letter-form button[type="submit"]').tap();
+    await expect.poll(() => submissions.length).toBe(1);
+    // Without publication the value is not permission; the privacy notice and operations rules say so.
+    expect(submissions[0].get('allow_quotes')).toBe('yes-quote-published-letter-v1');
+    expect(submissions[0].get('allow_public')).toBe(publish ? 'yes-publish-with-display-name-v3' : null);
+  });
+}
+
+test('No JavaScript: the thank-you page and the participation tiles work without scripts', async ({ page }) => {
+  await page.goto('/sent.html');
+  await expect(page.locator('#sent-title')).toHaveText('Thank you.');
+  await expect(page.locator('#sent-lead')).toBeVisible();
+  for (const id of ['#official-card', '#share-card', '#sent-more']) await expect(page.locator(id), id).toBeHidden();
+  const nav = page.getByRole('navigation', { name: 'Take part' });
+  await expect(nav.getByRole('link', { name: /^Community letters/ })).toBeVisible();
+  await expect(nav.getByRole('link', { name: /^Share ideas/ })).toBeVisible();
+  await expect(page.locator('html')).not.toHaveClass(/voice-cue/);
+});
 
 test('No JavaScript: letter accepts a full 30000-character message including an emoji', async ({ page }) => {
   const submissions = await captureSubmissions(page);

@@ -1,4 +1,4 @@
-const { test, expect, captureSubmissions } = require('./fixtures');
+const { test, expect, captureSubmissions, revealLetterChoices } = require('./fixtures');
 const { readFileSync, readdirSync } = require('node:fs');
 const path = require('node:path');
 
@@ -317,6 +317,7 @@ test('Typed letter content and a successful intercepted submission are never ana
   await allowAnalytics(page);
   await expect.poll(() => sent.length).toBe(1);
   await page.locator('#message').fill('An entirely fictional test letter: ' + sentinel);
+  await revealLetterChoices(page);
   await page.locator('#display-name').fill(sentinel);
   await page.locator('#email').fill(sentinel + '@example.invalid');
   await page.locator('#letter-consent').check();
@@ -517,6 +518,9 @@ test('At 320px, the choices panel fits, keeps letter fields unobstructed and ret
   await page.setViewportSize({ width: 320, height: 568 });
   await page.goto(site + 'letters.html#letter-form');
   await expect.poll(() => sent.length).toBe(1);
+  // The choices and Send step follow a written letter.
+  await page.locator('#message').fill('An entirely fictional test letter for the layout check.');
+  await revealLetterChoices(page);
   // With no banner, nothing fixed covers a keyboard-focused form field.
   await page.locator('#email').focus();
   await expect(page.locator('#email')).toBeInViewport();

@@ -184,6 +184,7 @@ for (const [publish, council] of [[true, false], [false, true], [true, true]]) {
     expect(submissions[0].get('letter_consent')).toBe('yes-process-my-letter-v3');
     expect(submissions[0].get('allow_public')).toBe(publish ? 'yes-publish-with-display-name-v3' : null);
     expect(submissions[0].get('allow_council')).toBe(council ? 'yes-share-with-richmond-council-v2' : null);
+    expect(submissions[0].has('allow_quotes')).toBe(false);
     expect(submissions[0].get('email')).toBe('reply@example.invalid');
   });
 }

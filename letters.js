@@ -6,6 +6,8 @@
   const consent = document.getElementById('letter-consent');
   const publicPermission = document.getElementById('allow-public');
   const councilPermission = document.getElementById('allow-council');
+  const quotePermission = document.getElementById('allow-quotes');
+  const quoteChoice = document.getElementById('quote-choice');
   const councilDetails = document.getElementById('council-details');
   const privateFields = [...councilDetails.querySelectorAll('input')];
   const button = form.querySelector('button[type="submit"]');
@@ -26,12 +28,14 @@
     const values = Object.fromEntries(parts.map(part => [part.type, part.value]));
     return `${values.year}-${values.month}-${values.day}`;
   };
-  if (globalThis.crypto && crypto.randomUUID) {
+  function newReference() {
+    if (!(globalThis.crypto && crypto.randomUUID)) return;
     const reference = 'KR-' + crypto.randomUUID();
     document.getElementById('letter-reference').value = reference;
     document.getElementById('reference-display').textContent = reference;
     document.getElementById('reference-note').hidden = false;
   }
+  newReference();
   function updatePreview() {
     document.getElementById('preview-name').textContent = displayName.value.trim() || 'Anonymous';
     document.getElementById('preview-body').textContent = message.value.trim() || 'Your letter will appear here.';
@@ -43,16 +47,22 @@
   function updateChoices() {
     councilDetails.hidden = !councilPermission.checked;
     privateFields.forEach(field => { field.disabled = !councilPermission.checked; });
+    // Quoting builds on publication: without it the choice is hidden, unticked and never sent.
+    if (!publicPermission.checked) quotePermission.checked = false;
+    quoteChoice.hidden = !publicPermission.checked;
+    quotePermission.disabled = !publicPermission.checked;
     const choices = [];
     if (publicPermission.checked) choices.push('Public display after automated screening or human review, using your display name or Anonymous.');
+    if (quotePermission.checked) choices.push('Short word-for-word extracts may also be quoted in Yann’s own campaign materials beyond this website until 30 September 2028, with the same name.');
     if (councilPermission.checked) choices.push('May be included in a reviewed collection for Richmond Council, with any private name and postcode you provide.');
-    document.getElementById('sharing-summary').textContent = choices.length ? choices.join(' ') : 'Both sharing choices are off. Your letter will stay in the private review queue.';
+    document.getElementById('sharing-summary').textContent = choices.length ? choices.join(' ') : 'All sharing choices are off. Your letter will stay in the private review queue.';
   }
   const input = () => message.dispatchEvent(new Event('input', { bubbles: true }));
   message.addEventListener('input', updatePreview);
   displayName.addEventListener('input', updatePreview);
   publicPermission.addEventListener('change', updateChoices);
   councilPermission.addEventListener('change', updateChoices);
+  quotePermission.addEventListener('change', updateChoices);
 
   // With scripts, the device draft replaces the browser's own form restoring, which
   // could otherwise refill a letter that was already sent. Without scripts, it still helps.
@@ -88,7 +98,9 @@
   function forgetDraft(note) {
     store.remove(DRAFT);
     message.value = '';
+    displayName.value = ''; // The draft held the public name too.
     input();
+    newReference(); // A new letter gets its own reference.
     returnPanel.hidden = true;
     if (note) showStatus(note, false); else { status.hidden = true; clear.hidden = true; }
   }
@@ -102,6 +114,24 @@
     if (message.value.trim().length < 3) { store.remove(DRAFT); status.hidden = true; clear.hidden = true; return; }
     if (store.set(DRAFT, { v: 1, text: message.value, name: displayName.value, saved: Date.now(), pending })) showStatus('Draft saved on this device');
   }
+  // Back from the form service without the thank-you page: ask whether the letter
+  // arrived, where the visitor will see it, and retire the official ask after its deadline.
+  function showReturn(focus) {
+    returnPanel.hidden = false;
+    status.hidden = true;
+    clear.hidden = true;
+    const closed = londonDate() > '2026-10-16';
+    for (const id of ['return-official', 'return-copy', 'return-official-link']) document.getElementById(id).hidden = closed;
+    if (!focus) return;
+    const bring = () => {
+      const box = returnPanel.getBoundingClientRect();
+      if (box.top < 0 || box.top > innerHeight * 0.66) returnPanel.scrollIntoView({ block: 'center', behavior: 'instant' });
+      returnPanel.focus({ preventScroll: true });
+    };
+    bring();
+    // Some browsers restore the old scroll position (near Send) as loading finishes.
+    if (document.readyState !== 'complete') addEventListener('load', () => requestAnimationFrame(bring), { once: true });
+  }
   const saved = store.get(DRAFT);
   if (saved && saved.v === 1 && typeof saved.text === 'string' && typeof saved.saved === 'number' && Date.now() - saved.saved < WEEK) {
     if (!message.value) {
@@ -109,20 +139,27 @@
       if (typeof saved.name === 'string') displayName.value = saved.name;
       input();
     }
-    if (saved.pending) returnPanel.hidden = false;
-    else showStatus('Draft restored from this device');
+    if (saved.pending && !confirmed(message.value)) showReturn(!location.hash);
+    else if (!saved.pending) showStatus('Draft restored from this device');
   } else if (saved) {
     store.remove(DRAFT);
   }
   for (const field of [message, displayName]) {
     field.addEventListener('input', () => { sent = false; clearTimeout(timer); timer = setTimeout(saveDraft, 600); });
   }
-  addEventListener('pagehide', () => { if (message.value.trim().length >= 3) saveDraft(); });
+  addEventListener('pagehide', () => {
+    if (message.value.trim().length >= 3) saveDraft();
+    // Only a Send skips scroll restoration (see the submit handler); other exits keep it.
+    if (!sent) { try { history.scrollRestoration = 'auto'; } catch { /* unsupported */ } }
+  });
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && message.value.trim().length >= 3) saveDraft(); });
   // Coming back to a letter the thank-you page confirmed: clear it rather than invite a duplicate.
   const forgetConfirmed = () => { if (confirmed(message.value)) forgetDraft('Your letter was sent. You can write another here'); };
   forgetConfirmed();
-  addEventListener('pageshow', forgetConfirmed);
+  addEventListener('pageshow', event => {
+    forgetConfirmed();
+    if (event.persisted && sent && !confirmed(message.value)) showReturn(true);
+  });
 
   // Returning after pressing Send without the thank-you page: copy for the official form, or clear.
   document.getElementById('return-copy').addEventListener('click', async () => {
@@ -144,6 +181,10 @@
   const next = document.getElementById('to-choices');
   const stepError = document.getElementById('step-error');
   function reveal(focus) {
+    if (focus) {
+      form.classList.add('is-revealing');
+      setTimeout(() => form.classList.remove('is-revealing'), 400);
+    }
     form.classList.remove('is-staged');
     later.forEach(section => section.classList.remove('is-waiting'));
     next.hidden = true;
@@ -200,6 +241,9 @@
     // marked pending, and this tab keeps a copy for the "make it official" step.
     saveDraft(true);
     sent = true;
+    // Coming Back to this page should show the arrival question, not the old scroll
+    // position near Send, which browsers restore after the page has loaded.
+    try { history.scrollRestoration = 'manual'; } catch { /* unsupported */ }
     store.set('kr-sent-letter', { text: message.value, at: Date.now() }, sessionStorage);
     store.set('kr-sent-kind', { kind: 'letter', at: Date.now() }, sessionStorage);
   });

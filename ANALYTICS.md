@@ -30,7 +30,7 @@ Detailed viewing accrues only while the tab is visible and focused, the analytic
 
 Umami itself groups technical requests into session histories using hashed identifiers; its current documentation describes monthly visitor grouping. The deployment does not identify people, enable replay/heatmaps, enrich profiles or infer opinions/personal circumstances. Do not connect dashboard sessions to named correspondence. Umami's DPA restricts special-category data; adding such data would require a different assessment and provider agreement, not just another checkbox.
 
-When adding or renaming a public page, deliberately review its entry in `PAGES`; unknown pages are unmeasured by default. Add section and action labels only for broad public editorial content, with privacy and browser regressions. Do not derive labels automatically from new content or forms. Existing source, family-information and participation routes remain protected even if their measured use is low.
+When adding or renaming a public page, deliberately review its entry in `PAGES`; unknown pages are unmeasured by default. The thank-you page `sent.html` is deliberately not in `PAGES`: it follows every form, including private requests, so a count would measure submissions, and its kind comes from the visitor's tab. Add section and action labels only for broad public editorial content, with privacy and browser regressions. Do not derive labels automatically from new content or forms. Existing source, family-information and participation routes remain protected even if their measured use is low.
 
 ## Account and activation checklist
 
