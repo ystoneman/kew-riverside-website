@@ -1,30 +1,22 @@
 # Current handoff — 23 September 2026
 
-Claude Code completed and published the shorter-homepage PR (#4) at the owner's request. This section supersedes the historical handoff below. The owner allows Claude Code to merge PRs itself after required checks and project reviews pass, using the documented owner exception; branch protection settings stay unchanged.
+This section supersedes the historical handoff below. The current source of truth for visitor priorities is the protected-journey register in `UX-DESIGN-DECISIONS.md`; completed releases and verification are in `CHANGELOG.md` and `TESTING.md`.
 
 ## State
 
-- **Live and verified: `921cc5a` (#7).** It includes the shorter homepage (#4), video publication consent (#3), research-arrival (#5) and video-page scrolling changes, plus plainer research shortcut labels. All 73 public files matched it byte for byte. Live browser and native iPhone Air / iOS 26.5 Safari checks are recorded in CHANGELOG.md.
-- **Unchanged:** Google Forms, the Dropbox request and permission records. No real form or video was submitted.
-- **Keep the exact shared video QR URL:** `https://ystoneman.github.io/kew-riverside-website/videos.html#upload`.
+- The shorter homepage, video consent, analytics, external-link arrow, WebKit test-harness, participation and appearance releases have merged. PRs #11, #12, #13, #14 and #2 passed their main deployment gates; the public files for #12, #13, #14 and #2 passed byte-for-byte artifact checks. The latest deployed commit is `c87d033` (#2), with all 89 public files verified over HTTPS. See the dated release record for run IDs and test counts.
+- The shared video QR URL remains `https://ystoneman.github.io/kew-riverside-website/videos.html#upload`. The analytics-panel and participation-cue fixes protect its Back position in scripted iPhone WebKit tests.
+- Google Forms, the Dropbox request and earlier permission records were not changed by these releases. No real form, video or council response was submitted in testing.
+- The `codex/letter-photos` branch is an unpublished draft with placeholder intake URLs. Resolve the real permission and upload arrangements before considering publication.
 
-## Open items
+## Follow-ups
 
-1. **Theme PR #2 (`codex/site-theme`)** must merge `main`.
-   - The new `evidence.html` and `options.html` need its theme assets and controls.
-   - Its notes will conflict at the Unreleased insertion points in CHANGELOG.md, TESTING.md and UX-DESIGN-DECISIONS.md.
-   - Its own appearance checks were failing at last inspection.
-2. **Test-harness failures to investigate separately** (see TESTING.md):
-   - the WebKit legacy-homepage redirect stall, which has blocked two main deployments until rerun (priority);
-   - resolved: repeated same-hash source-link recovery. No failure has been seen since Evidence's jumps became immediate (`homepage.css`), and `sofiya.spec.js` now fails (38 of 40 runs) if this Evidence jump animates; keep that rule when merging theme CSS.
+1. **Formspree redirect:** `sent.html` is ready, but a custom redirect requires a paid plan. If the owner upgrades, configure the form redirect to `https://ystoneman.github.io/kew-riverside-website/sent.html`. Until then, the letters page carries the official step. Do not buy a plan or change provider settings without the owner.
+2. **Dated content:** after 29 September, update the static meeting card in `feedback.html` for visitors without JavaScript (scripts already retitle it). After 16 October, replace dated official-response copy with the next process step (scripts already retire it).
+3. **Quote records:** for `allow_quotes=yes-quote-published-letter-v1`, record each permission privately within 30 days, following “Quote permission” in the private `feedback-moderation/LETTERS-OPERATIONS.md`. The five-minute letters heartbeat does not handle quotes.
+4. **Native Safari:** integrated participation and appearance interactions have scripted and rendered WebKit coverage; the final integrated release was not fully operated through native iPhone Safari controls. Earlier native appearance-picker checks and the limited participation page load are recorded in `TESTING.md`.
 
-3. **Participation invitation (branch `claude/participation-invitation`).** Owner decisions and dated follow-ups:
-   - **Formspree plan.** The thank-you page `sent.html` needs Formspree's redirect, which is a paid-plan feature. If the owner upgrades, set the form's redirect to `https://ystoneman.github.io/kew-riverside-website/sent.html`. Until then the letters page's “Did your letter arrive?” panel carries the official step. Do not change provider settings or buy a plan without the owner.
-   - **After 29 September:** update the static meeting card in `feedback.html` for visitors without JavaScript (scripts already retitle it).
-   - **After 16 October:** replace dated official-response copy with the next process step (scripts already retire it).
-   - **Quote permission** (`allow_quotes=yes-quote-published-letter-v1`): record each permission privately within 30 days, following “Quote permission” in the private `feedback-moderation/LETTERS-OPERATIONS.md`. The five-minute letters heartbeat is unchanged and never handles quotes.
-
-Node 24 is available locally at `/Users/yannstoneman/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node`. Local runs used temporary configs outside the repository on separate ports; repository config and server files were not changed.
+Node 24 is available locally at `/Users/yannstoneman/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node`. Keep this handoff free of private submissions and correspondence.
 
 ---
 
