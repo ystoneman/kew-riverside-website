@@ -298,7 +298,7 @@ test('Contributions: letters lead to contextual evidence and optional video with
   await expect(page.locator('#allow-council')).not.toBeChecked();
   await activate(page.locator('main .form-route a[href="feedback.html?kind=evidence#feedback-form"]'), hasTouch);
   await expect(page).toHaveURL(/feedback\.html\?kind=evidence#feedback-form$/);
-  await expect(page.locator('#kind')).toHaveValue('evidence');
+  await expect(page.locator('input[name="kind"][value="evidence"]')).toBeChecked();
   await expect(page.locator('#allow-public')).not.toBeChecked();
   await expect(page.locator('#message')).toHaveValue('');
   await page.goBack();

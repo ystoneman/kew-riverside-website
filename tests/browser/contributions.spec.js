@@ -1,4 +1,4 @@
-const { test, expect, captureSubmissions } = require('./fixtures');
+const { test, expect, captureSubmissions, chooseKind, revealLetterChoices } = require('./fixtures');
 
 async function openPublicationOptions(page, hasTouch) {
   const summary = page.locator('#publication-options > summary');
@@ -32,7 +32,7 @@ for (const kind of ['suggestion', 'evidence', 'meeting', 'correction', 'crowdfun
     await openPublicationOptions(page, hasTouch);
     await page.locator('#display-name').fill('Test contributor');
     await page.locator('#allow-public').check();
-    await page.locator('#kind').selectOption(kind);
+    await chooseKind(page, kind);
     const privateOnly = ['crowdfunding', 'privacy'].includes(kind);
     if (privateOnly) {
       await expect(page.locator('#allow-public')).not.toBeChecked();
@@ -60,8 +60,8 @@ test('Private categories do not restore publication consent when switching back'
   await page.goto('/feedback.html');
   await openPublicationOptions(page, hasTouch);
   await page.locator('#allow-public').check();
-  await page.locator('#kind').selectOption('privacy');
-  await page.locator('#kind').selectOption('suggestion');
+  await chooseKind(page, 'privacy');
+  await chooseKind(page, 'suggestion');
   await expect(page.locator('#allow-public')).toBeEnabled();
   await expect(page.locator('#allow-public')).not.toBeChecked();
 });
@@ -84,7 +84,7 @@ test('Share ideas starts with publication off and accepts a private suggestion w
 for (const [query, expected] of [['evidence', 'evidence'], ['meeting', 'meeting'], ['source', 'evidence'], ['accessibility', 'suggestion'], ['other', 'suggestion']]) {
   test(`Share ideas deep link ${query} selects ${expected} without inventing a message or consent`, async ({ page }) => {
     await page.goto(`/feedback.html?kind=${query}#feedback-form`);
-    await expect(page.locator('#kind')).toHaveValue(expected);
+    await expect(page.locator(`input[name="kind"][value="${expected}"]`)).toBeChecked();
     await expect(page.locator('#message')).toHaveValue('');
     await expect(page.locator('#allow-public')).not.toBeChecked();
     await expect(page.locator('#publication-options')).not.toHaveAttribute('open', '');
@@ -114,7 +114,7 @@ test('Share ideas: optional publication disclosure works with a keyboard', async
 test('Funding deep link selects its question and rejects an untouched template', async ({ page }) => {
   const submissions = await captureSubmissions(page);
   await page.goto('/feedback.html?kind=crowdfunding&question=recipient#feedback-form');
-  await expect(page.locator('#kind')).toHaveValue('crowdfunding');
+  await expect(page.locator('input[name="kind"][value="crowdfunding"]')).toBeChecked();
   await expect(page.locator('#message')).toHaveValue(/who could receive and manage contributions/);
   await page.locator('button[type="submit"]').click();
   expect(submissions).toHaveLength(0);
@@ -140,6 +140,7 @@ test('Letter requires processing consent without requiring public sharing', asyn
   const submissions = await captureSubmissions(page);
   await page.goto('/letters.html');
   await page.locator('#message').fill('This synthetic community letter is intercepted locally.');
+  await revealLetterChoices(page);
   await page.locator('button[type="submit"]').click();
   expect(submissions).toHaveLength(0);
   await expect(page.locator('#letter-consent')).toBeFocused();
@@ -158,6 +159,7 @@ for (const [publish, council] of [[true, false], [false, true], [true, true]]) {
     await expect(page.locator('#allow-public')).not.toBeChecked();
     await expect(page.locator('#allow-council')).not.toBeChecked();
     await page.locator('#message').fill('Synthetic letter for permission testing; never transmitted.');
+    await revealLetterChoices(page);
     await page.locator('#display-name').fill('Public alias');
     await page.locator('#email').fill('reply@example.invalid');
     await page.locator('#letter-consent').check();
@@ -188,6 +190,8 @@ for (const [publish, council] of [[true, false], [false, true], [true, true]]) {
 
 test('Letter explains automated publication and the private publication email before consent', async ({ page }) => {
   await page.goto('/letters.html');
+  await page.locator('#message').fill('Synthetic letter used to reach the choices; never transmitted.');
+  await revealLetterChoices(page);
   await expect(page.locator('#allow-public').locator('..')).toContainText('without a person reviewing them first');
   await expect(page.locator('#email')).not.toHaveAttribute('required', '');
   await expect(page.locator('#email-help')).toContainText('one email after confirming it is live');
@@ -213,6 +217,7 @@ for (const suffix of ['END', '🙂']) {
     await page.locator('#message').fill(body, { timeout: 20_000 });
     await expect(page.locator('#message')).toHaveValue(body);
     await expect(page.locator('#message-count')).toHaveText('30,000 / 30,000 characters');
+    await revealLetterChoices(page);
     await page.locator('.submission-preview > summary').click();
     await expect(page.locator('#preview-body')).toBeVisible();
     expect(await page.locator('#preview-body').textContent()).toBe(body);
@@ -230,13 +235,14 @@ test('Letter rejects 30001 UTF-16 units and allows correction without truncating
   const oversized = 'F'.repeat(29999) + '🙂';
   expect(oversized.length).toBe(30001);
   await page.goto('/letters.html');
-  await page.locator('#letter-consent').check();
   // Programmatic input bypasses native maxlength, exercising the submit guard.
   await page.locator('#message').evaluate((field, value) => {
     field.value = value;
     field.dispatchEvent(new Event('input', { bubbles: true }));
   }, oversized);
   await expect(page.locator('#message-count')).toHaveText('30,001 / 30,000 characters');
+  await revealLetterChoices(page);
+  await page.locator('#letter-consent').check();
   await page.locator('#letter-form button[type="submit"]').click();
   await expect(page.locator('#message')).toBeFocused();
   await expect(page.locator('#message')).toHaveValue(oversized);
@@ -253,6 +259,7 @@ test('Revoking council sharing excludes previously entered private details', asy
   const submissions = await captureSubmissions(page);
   await page.goto('/letters.html');
   await page.locator('#message').fill('Synthetic letter demonstrating withdrawn council permission.');
+  await revealLetterChoices(page);
   await page.locator('#letter-consent').check();
   await page.locator('#allow-council').check();
   await page.locator('#council-name').fill('Example adult');

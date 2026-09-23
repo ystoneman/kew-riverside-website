@@ -102,4 +102,21 @@ async function captureSubmissions(page) {
   return submissions;
 }
 
-module.exports = { test, expect, pages, headerLinks, expectDestination, expectScrollSettled, expectStillArrival, captureSubmissions };
+// Share ideas categories are visible radio cards; funding and privacy sit under "More options".
+async function chooseKind(page, value) {
+  const radio = page.locator(`input[name="kind"][value="${value}"]`);
+  const more = page.locator('#kind-more');
+  if (['crowdfunding', 'privacy'].includes(value) && await more.getAttribute('open') === null) {
+    await more.locator(':scope > summary').click();
+  }
+  await radio.check();
+}
+
+// The letters form asks for the words first; where scripts run, "Next" reveals the choices and Send.
+async function revealLetterChoices(page) {
+  const next = page.locator('#to-choices');
+  if (await next.isVisible()) await next.click();
+  await expect(page.locator('#letter-consent')).toBeVisible();
+}
+
+module.exports = { test, expect, pages, headerLinks, expectDestination, expectScrollSettled, expectStillArrival, captureSubmissions, chooseKind, revealLetterChoices };

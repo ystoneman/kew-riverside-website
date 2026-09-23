@@ -107,7 +107,7 @@ test('Homepage: six clear entry routes lead to answers, dates, evidence and part
     await activate(link, hasTouch);
     await expectDestination(page, href, baseURL);
     if (href.includes('kind=evidence')) {
-      await expect(page.locator('#kind')).toHaveValue('evidence');
+      await expect(page.locator('input[name="kind"][value="evidence"]')).toBeChecked();
       await expect(page.locator('#message')).toHaveValue('');
       await expect(page.locator('#allow-public')).not.toBeChecked();
     }
@@ -131,7 +131,7 @@ test('Homepage: compact dates lead to the school meeting and official response r
   await expect(page.locator('#school-meeting')).toContainText(/29\s+September/i);
   await activate(page.locator('#school-meeting a[href="feedback.html?kind=meeting#feedback-form"]'), hasTouch);
   await expect(page).toHaveURL(/feedback\.html\?kind=meeting#feedback-form$/);
-  await expect(page.locator('#kind')).toHaveValue('meeting');
+  await expect(page.locator('input[name="kind"][value="meeting"]')).toBeChecked();
   await expect(page.locator('#meeting-context')).toBeVisible();
   await expect(page.locator('#meeting-context')).toContainText('does not put it on a meeting agenda or send it to the council');
   await expect(page.locator('#allow-public')).not.toBeChecked();

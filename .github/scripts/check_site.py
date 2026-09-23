@@ -20,6 +20,8 @@ response-checklist.md response-checklist.pdf sources.csv sources.json styles.css
 suggestions.json supporters.html supporters.js supporters.json
 attainment-data.json attainment.csv
 understand.html understand.css understand.js understand-data.json richmond-schools.csv
+voice.css voice.js contribute.css sent.html sent.js respond-reminder.ics
+og-home.png og-letters.png og-ideas.png og-videos.png
 '''.split())
 MAINTENANCE_FILES = frozenset('''
 VIDEO-PERMISSIONS.md CONTRIBUTING.md .github/CODEOWNERS .github/pull_request_template.md .github/branch-protection.json
@@ -36,7 +38,7 @@ AGENTS.md CLAUDE.md TESTING.md CHANGELOG.md UX-DESIGN-DECISIONS.md package.json 
 tests/browser/fixtures.js tests/browser/server.js tests/browser/mobile.spec.js
 tests/browser/desktop.spec.js tests/browser/no-javascript.spec.js
 tests/browser/contributions.spec.js tests/browser/evidence.spec.js tests/browser/boards.spec.js
-tests/browser/visitor-journeys.spec.js tests/browser/understand.spec.js .github/scripts/build_understand.py .github/scripts/test_understand.py
+tests/browser/visitor-journeys.spec.js tests/browser/understand.spec.js tests/browser/participation.spec.js .github/scripts/build_understand.py .github/scripts/test_understand.py
 '''.split())
 CSP = "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; object-src 'none'; frame-src 'none'; form-action 'self' https://formspree.io; upgrade-insecure-requests"
 SECRET_PATTERNS = [

@@ -160,7 +160,7 @@ test('No JavaScript: optional sharing details and reviewed ideas remain usable',
   await page.locator('#suggestions > summary').tap();
   await expect(page.locator('#suggestions')).toHaveAttribute('open', '');
   await expect(page.locator('#suggestions a[href="suggestions.json"]')).toBeVisible();
-  await page.locator('#kind').selectOption('evidence');
+  await page.locator('input[name="kind"][value="evidence"]').check();
   await page.locator('#message').fill('Synthetic source information entered without JavaScript.');
   await page.locator('#display-name').fill('Optional test alias');
   await page.locator('#allow-public').check();
