@@ -4,7 +4,11 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
-No entries.
+### Video QR landing: council response route
+
+Add a concise reminder inside the `videos.html#upload` card, before video submission, that a video is separate from an official council response. It links directly to the council-linked response form with the initial consultation's stated 16 October 2026 deadline; the existing process and written-routes link remains later on the page. This protects J3 when someone opens the shared video QR route directly while preserving the video contribution route (J9). The note was shortened after UX review to limit how far it moves the video button on a narrow screen.
+
+The lead inspected the live Home, Letters and Videos mobile entries at 320 and 390 px and the live `#upload` landing. The linked live council form displayed “All responses must be submitted by 16 October 2026” on 23 September. The changed local page could not be opened for a manual screenshot because the browser blocked the local URL. The complete local Playwright suite passed on Node 25: 1,247 passed, 15 expected skips. All 48 Python checks passed; the source and Understand builders reported current outputs, and the 91-file public artifact validator and `git diff --check` passed. No external form was submitted. Pre-implementation UX and campaign/evidence reviews informed the placement and wording; implementation reviews inspected the actual diff. Hosted Node 24 checks and deployment verification are pending.
 
 ## 23 September 2026 — dated case evidence and response questions
 

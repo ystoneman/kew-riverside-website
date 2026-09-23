@@ -2,6 +2,7 @@ const { test, expect, expectDestination, expectScrollSettled } = require('./fixt
 const upload = 'https://docs.google.com/forms/d/e/1FAIpQLScJZ8ZnZWTaPUIoM9l2Vjir7TgNNTHuUyDEF5uLRJolm8iccg/viewform';
 const dropbox = 'https://www.dropbox.com/request/9uaa0fawrtdz6pv8b6hn';
 const legacy = 'https://docs.google.com/forms/d/e/1FAIpQLSfK3b8XtDJ5_mhKWTqxfZpZwPOJLGXjN1QIQYTKYlJ0dRAHHQ/viewform';
+const official = 'https://docs.google.com/forms/d/e/1FAIpQLSda5oPsdUlrJkf6vACC_AjvXFR6-ki3iBymNIF5BAWNxf85xQ/viewform';
 
 for (const source of ['letters.html', 'feedback.html']) {
   test(`Video: discover private upload from ${source}`, async ({ page, baseURL, hasTouch }) => {
@@ -109,10 +110,21 @@ for (const [name, selector, destination] of [
 
 
 test('Video: direct arrival explains publication and offers private contact without consent', async ({ page, baseURL, hasTouch }) => {
+  await page.route(official, route => route.fulfill({ contentType: 'text/html', body: '<h1>Fictional official response destination</h1><p>No response sent.</p>' }));
   await page.goto('/videos.html#upload');
   const card = page.locator('#upload');
   await expect(card).toContainText('New submissions require your explicit YouTube permission');
   await expect(card).toContainText('News-media permission is optional');
+  const councilNote = card.locator('.video-council-note');
+  await expect(councilNote).toContainText('not an official council response');
+  await expect(councilNote).toContainText('16 October 2026');
+  await expect(councilNote.locator('a')).toHaveAttribute('href', official);
+  expect(await councilNote.evaluate(element => Boolean(element.compareDocumentPosition(document.querySelector('#video-upload-link')) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
+  if (hasTouch) await councilNote.locator('a').tap(); else await councilNote.locator('a').click();
+  await expect(page).toHaveURL(official);
+  await page.goBack();
+  await expect(page).toHaveURL(/videos.html#upload$/);
+  await expect(page.locator('#video-upload-link')).toBeVisible();
   await expect(card.locator('#resume-instructions')).toContainText('including any earlier private-only choice, even if you upload later');
   const contact = card.getByRole('link', { name: 'Contact Yann privately', exact: true });
   await expect(contact).toBeVisible();

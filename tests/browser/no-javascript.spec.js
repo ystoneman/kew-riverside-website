@@ -383,6 +383,7 @@ test('No JavaScript: the exact video QR upload address keeps a working permissio
   await page.goto('/videos.html#upload');
   await expect(page).toHaveURL(/\/videos\.html#upload$/);
   await expect(page.locator('#upload')).toBeInViewport();
+  await expect(page.locator('#upload .video-council-note')).toContainText('not an official council response');
   await expect(page.locator('#upload-requirements')).toContainText('Adults recording themselves only');
   await expect(page.locator('#upload-requirements')).toContainText('No Google or Dropbox sign-in required');
   const link = page.locator('#video-upload-link');
