@@ -1,5 +1,5 @@
 const fs = require('node:fs/promises');
-const { test, expect } = require('./fixtures');
+const { test, expect, expectScrollSettled } = require('./fixtures');
 
 // Independently pinned to the reviewed, rounded DfE combined expected-standard
 // figures. Neither the page nor a generated download supplies these expectations.
@@ -216,7 +216,10 @@ test('Inspection: original-source counts, search and the resolved gap agree', as
   await page.getByLabel('Year', { exact: true }).selectOption('2003');
   await expect(inspection).toBeHidden();
   // Repeating the current hash must still recover a source hidden by filters.
+  // The reset re-expands the list above the link. An animated jump let Chromium scroll
+  // anchoring hold the page at the link despite explicit scroll requests, so it must land at once.
   await activate(gap.locator('a[href="#source-inspection-2026"]'), hasTouch);
+  await expectScrollSettled(page, 'Repeated source link');
   await expect(inspection).toBeVisible();
   await expect(inspection).toBeInViewport();
   await expect(page.getByLabel('Year', { exact: true })).toHaveValue('');
