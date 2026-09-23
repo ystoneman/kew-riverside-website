@@ -1,25 +1,22 @@
-# Current handoff — 22 September 2026
+# Current handoff — 23 September 2026
 
-The user requested a clean pause, with all work from the shorter-homepage task committed and pushed so Claude Code can continue. This section supersedes the historical handoff below.
+Claude Code continued the shorter-homepage PR (#4) at the owner's request. This section supersedes the historical handoff below. The owner allows Claude Code to merge PRs itself after required checks and project reviews pass, using the documented owner exception; branch protection settings stay unchanged.
 
-## Ready work
+## State at this commit
 
-- Branch: `codex/shorter-homepage`, based on `d2d9c09`. Local checkout: the sibling `shorter-homepage-worktree` directory.
-- Implemented a shorter homepage, dedicated `evidence.html` and `options.html`, canonical internal links and generator updates. The measured desktop homepage is about 89% shorter (19,794 → 2,205 CSS pixels at 1280×720).
-- Protected Parent Action Plan, Letters, Share ideas, official response/deadline, all six task routes, research PDF/HTML and school enquiry. All 86 moved homepage anchors have automatic replacement routing and native no-JavaScript Continue links; saved evidence searches retain query values.
-- **Keep the exact shared video QR URL: `https://ystoneman.github.io/kew-riverside-website/videos.html#upload`.** The page/path/fragment, providers and permission content are unchanged by this task. `videos.css` adds immediate scrolling for that fragment to fix a pre-existing, reproduced WebKit tap/Back issue.
-- All **718 browser checks**, **41 Python checks** and **73-public-file validation** passed. Independent campaign, evidence and rendered UX reviews found no unresolved issues. Native iPhone 17 / iOS 26.5 Safari checks passed, including the QR handoff and Back. No forms were submitted. Details are in CHANGELOG.md and TESTING.md.
+- **Video consent release:** live and verified. Rerun attempt 2 of main run `35781407831` deployed `1cb3f52`, and all 69 live public files matched it byte for byte.
+- **Research-arrival fix:** PR #5 merged as `74ce73e`, but its main run `35823364131` failed a video-page check and did not deploy.
+- **Branch `codex/shorter-homepage`:** local worktree is `shorter-homepage-worktree`. It now includes `main` through `74ce73e`, plus a page-level `videos.css` rule so jumps and focus changes on the video page land immediately. That fixes the failed check above; see TESTING.md, “Video page scrolling and homepage integration”. The research fix therefore publishes with this PR.
+- **Unchanged shorter-homepage work:** a shorter homepage; the full evidence library on `evidence.html`; all eight strategies on `options.html`; all 86 moved anchors routed, with no-JavaScript links. **Keep the exact shared video QR URL `https://ystoneman.github.io/kew-riverside-website/videos.html#upload`.** Its earlier campaign, evidence and rendered UX reviews and native iPhone 17 Safari checks still apply.
 
-## Continue safely
+## Next steps
 
-1. Read AGENTS.md and the protected visitor journeys in UX-DESIGN-DECISIONS.md. Check the working tree, remote branches and pull requests before editing.
-2. Inspect the shorter-homepage pull request and hosted check results. **This task has not merged or deployed the redesign.** Do not describe local tests as a deployment.
-3. Coordinate integration with the concurrent theme PR #2 (`codex/site-theme`) and video-permissions PR #3 (`codex/video-publication-permissions`). Both modify shared pages. Preserve their work when resolving conflicts; new Evidence/Options pages may need the theme assets/controls, and homepage routing must not restore older permission wording. Check current PR state; these notes are a snapshot.
-4. The standard checkout was on the video-permissions branch at pause. Do not reset it or overwrite its work. Continue this change on `codex/shorter-homepage` or its own worktree.
-5. After integrating other changes, run the documented Python, public-file and full browser checks again. Verify shared links and the exact QR URL. Keep production CSP and the explicit deployment allowlist.
-6. Use the repository's PR/check workflow for release. After deployment, verify the live homepage, both new pages, an old source URL and `videos.html#upload`. Record actual hosted/deployment results separately.
+1. Confirm hosted PR checks, merge, and confirm the main deployment. **A merge is not a deployment.**
+2. Compare every live public file with the deployed commit. Then check the live homepage, `evidence.html`, `options.html`, an old homepage source URL such as `index.html#source-inspection-2026`, a research anchor and `videos.html#upload`, including native Safari.
+3. Record verified results in CHANGELOG.md (date the Unreleased entries) and TESTING.md.
+4. Theme PR #2 (`codex/site-theme`) must merge `main` again. The new Evidence and Options pages need its theme assets and controls, and its notes will conflict at the Unreleased insertion points.
 
-Node 24 is available locally at `/Users/yannstoneman/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node`. The standard browser harness port 4173 was occupied by concurrent work; the successful full run used a temporary equivalent config on port 33719, with the same submission interception. Repository config/server files were not changed. Temporary log files are optional local evidence, not required source artifacts.
+Node 24 is available locally at `/Users/yannstoneman/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node`. Local runs used temporary configs outside the repository on separate ports; repository config and server files were not changed.
 
 ---
 
@@ -27,7 +24,7 @@ Node 24 is available locally at `/Users/yannstoneman/.cache/codex-runtimes/codex
 
 # Codex handoff: publish the Kew Riverside evidence hub
 
-## ACTIVE HANDOFF: video publication consent — 22 September 2026
+## Completed handoff: video publication consent — 22 September 2026
 
 The user asked to hand this task to Claude Code because of their remaining Codex credits. Stop at this handoff; do not assume the task is deployed. The user authorised updating the existing website, Dropbox request and both Google forms, including ordinary commit/push/deployment. Do not send messages, real form responses or test videos.
 
