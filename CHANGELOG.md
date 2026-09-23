@@ -8,6 +8,13 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 Add a regression for a rare desktop Chromium failure. Following gap 7's source link a second time, after a filter had hidden the inspection record, left the page at the link instead of the record. Clearing the filters re-expands the list above the link, scroll anchoring keeps the link in place, and the animated jump to the record did not take effect. Since the shorter-homepage release the library has been on `evidence.html`, whose jumps are immediate. No failure has been seen there: 0 of 160 stressed runs, against 36 of 240 on the homepage version. With animation restored on Evidence it returned in 2 of 79 runs, both with an extra explicit scroll in `app.js`, so that change was not made. The test now requires the repeated jump to land at once; it failed 38 of 40 runs with the animation restored. Its existing assertions are unchanged, and no visitor-facing file changed. Validation: 160 focused repetitions and all 732 browser checks passed locally, as did all 41 Python checks and the 73-file validation; hosted PR run `35854258428` passed the same checks. Details are in TESTING.md.
 
+### Website analytics: basic page counts by default, detailed usage opt-in
+
+- Add a local Umami collector, sending to the operator's Umami Cloud website, in two tiers. **Basic page counts** are on without a banner: one page-view event with a fixed page label and grouped referrer, no cookies and nothing written to the device. **Detailed usage** (section reached/viewed, active-time milestones, named link/download opens) stays off unless the visitor chooses “Allow detailed usage”; that permission expires after 180 days.
+- “Turn analytics off” stops both tiers and is remembered. Do Not Track, Global Privacy Control, unreadable storage, private request/Share ideas routes, localhost and other paths on the GitHub host send nothing. Queries, fragments, searches, form values and names never leave the page. CSP permits only the exact collection endpoint; all scripts stay local.
+- Add “Analytics choices” to every footer (three equal options, current one marked) and replace the Evidence page's “no analytics” statement. Rewrite the privacy section: legitimate interests for basic counts, consent for detailed usage, Umami's derived location/device and hashed monthly session grouping, six-month retention, objection and deletion routes, and measurement limits.
+- Rebased from the unpublished opt-in-only branch (`codex/site-analytics`) onto current main, including the new Evidence and Options pages. Rebuilt Understand and research pages from their generators.
+
 ## 23 September 2026 — plainer research shortcut labels
 
 ### Plainer research shortcut labels
