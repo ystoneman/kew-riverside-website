@@ -257,3 +257,7 @@ J6: a visitor following a shared or in-page link to a research graphic, case or 
 ## Video page scrolling — 23 September 2026
 
 J9: a visitor opening upload help or following an in-page video link should be able to use the link they can see. Smooth scrolling after focusing the help summary moved the original-form link beneath a click in hosted testing. Options were more `:target` rules for individual anchors, or immediate scrolling for the whole contribution page. Choose the page-level rule, matching the contribution forms and research pages; it also keeps the exact QR arrival at `videos.html#upload` immediate. URL, providers, permission wording and layout are unchanged. This is a lead-agent review applying the kew-ux-review criteria. The same page-level choice for the research pages had an independent review with no actionable findings.
+
+## Research shortcut wording — 23 September 2026
+
+J6: the owner judged that “Looking for the 44-page report?” means nothing to visitors who have not heard of the report. The homepage shortcut now leads with its subject, “What happened to other schools proposed for closure?”, under a “Historical research” label. The Evidence jump link uses the destination card's name, “Find lessons from other schools”. The page count stays on the download button, where it helps people choose between the PDF and the web version. Placement, links, destinations and the research description are unchanged. This is a lead-agent review; verification is recorded in CHANGELOG.md.
