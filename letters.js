@@ -89,8 +89,8 @@
   clear.hidden = true;
   status.after(clear);
   const returnPanel = document.getElementById('sent-return');
-  function showStatus(text, withClear = true) {
-    const next = '✓ ' + text;
+  function showStatus(text, withClear = true, prefix = '✓ ') {
+    const next = prefix + text;
     if (status.textContent !== next) status.textContent = next;
     status.hidden = false;
     clear.hidden = !withClear;
@@ -119,6 +119,7 @@
     if (!pending && explicitlyCleared(message.value)) return;
     if (message.value.trim().length < 3) { store.remove(DRAFT); status.hidden = true; clear.hidden = true; return; }
     if (store.set(DRAFT, { v: 1, text: message.value, name: displayName.value, saved: Date.now(), pending })) showStatus('Draft saved on this device');
+    else showStatus('Draft could not be saved on this device', true, '! ');
   }
   // Back from the form service without the thank-you page: ask whether the letter
   // arrived, where the visitor will see it, and retire the official ask after its deadline.
@@ -151,7 +152,15 @@
     store.remove(DRAFT);
   }
   for (const field of [message, displayName]) {
-    field.addEventListener('input', () => { sent = false; clearTimeout(timer); timer = setTimeout(saveDraft, 600); });
+    field.addEventListener('input', () => {
+      sent = false;
+      clearTimeout(timer);
+      // Reserve the status and Clear draft space as soon as writing begins. A
+      // delayed insertion can move Send between touch down and release.
+      if (message.value.trim().length >= 3 && !explicitlyCleared(message.value)) showStatus('Saving draft on this device', true, '… ');
+      else { status.hidden = true; clear.hidden = true; }
+      timer = setTimeout(saveDraft, 600);
+    });
   }
   addEventListener('pagehide', () => {
     if (message.value.trim().length >= 3) saveDraft();

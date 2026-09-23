@@ -174,6 +174,23 @@ test('Letters: a draft keeps only the letter and public name on this device, and
   expect(await readDraft(page)).toBeNull();
 });
 
+test('Letters: a delayed draft save does not move Send under a waiting tap', async ({ page }) => {
+  await page.clock.install();
+  for (const width of [320, 390]) {
+    await page.setViewportSize({ width, height: 664 });
+    await page.goto('/letters.html');
+    await page.locator('#message').fill(LETTER);
+    await revealLetterChoices(page);
+    await page.locator('#letter-consent').check();
+    const send = page.locator('#letter-form button[type="submit"]');
+    const documentTop = () => send.evaluate(el => el.getBoundingClientRect().top + scrollY);
+    const before = await documentTop();
+    await page.clock.runFor(650);
+    await expect(page.locator('#draft-status')).toHaveText('✓ Draft saved on this device');
+    expect(await documentTop(), `${width}px: Send stays still while the draft saves`).toBeCloseTo(before, 0);
+  }
+});
+
 test('Letters: Clear draft erases private fields, choices and a pending tab copy', async ({ page }) => {
   await page.goto('/letters.html');
   await page.locator('#message').fill(LETTER);
