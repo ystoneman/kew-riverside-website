@@ -1,8 +1,7 @@
 // Serve the real CSP over local HTTPS, including upgrade-insecure-requests.
-// Browsers get HTTP/2, as on GitHub Pages: cancelling a page's in-flight requests then
-// resets streams instead of closing HTTP/1.1 connections, which made WebKit lose
-// redirected navigations far more often (TESTING.md). HTTP/1.1 remains for Playwright's
-// request client and readiness check.
+// Browsers get HTTP/2, as on GitHub Pages. WebKit lost redirected navigations far more
+// often over HTTP/1.1, where cancelling a page's in-flight requests closes connections
+// (TESTING.md). HTTP/1.1 remains for Playwright's request client and readiness check.
 // Test certificates live only in an OS temporary directory and are removed at exit.
 const http2 = require('node:http2');
 const fs = require('node:fs');
