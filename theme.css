@@ -5,6 +5,19 @@
  * descendants during initial parsing, despite inheriting older colour tokens. */
 :root { color-scheme: light; background:var(--paper); }
 @media screen {
+  /* Give body its own light values. Linux WebKit can retain a computed dark
+   * body custom property after the matching dark rule stops applying. The
+   * theme-* reset preserves each component's existing light fallback. */
+  :root:not([data-theme]), :root:not([data-theme]) body,
+  :root[data-theme="light"], :root[data-theme="light"] body {
+    color-scheme: light;
+    --ink:#183733; --body:#354b48; --muted:#62726e; --paper:#fbfaf6;
+    --white:#fff; --line:#dce3da; --teal:#0e6470; --amber:#fbf0d6;
+    --theme-surface:initial; --theme-soft:initial; --theme-warm-surface:initial;
+    --theme-readable:initial; --theme-strong:initial; --theme-warm-text:initial;
+    --theme-border:initial; --theme-focus:initial; --theme-header:initial;
+    --theme-chart-main:initial; --theme-chart-secondary:initial; --theme-chart-third:initial;
+  }
   :root[data-theme="dark"], :root[data-theme="dark"] body {
     color-scheme: dark;
     --ink:#eef4ec; --body:#d0dcd4; --muted:#a9bcb0; --paper:#101e1b;

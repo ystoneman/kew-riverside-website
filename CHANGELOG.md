@@ -24,6 +24,8 @@ Independent UX planning and implementation reviews covered the actual diff plus 
 
 The independent review also found that the expanded borough chart had a malformed background variable and rendered transparent. Correct the chart surface in both appearances and pin its computed background and heading colour in a browser regression. The final integrated local run passed 1,202 browser checks with 15 deliberate skips; hosted verification remains pending.
 
+Integrated hosted run `35886209568` passed 1,200 browser checks but failed two WebKit cases of the unchanged manual Light persistence assertion: after navigating to Letters under a dark device setting, the page's computed body background retained the dark custom property. Define the light values directly on body as well as root when Light is chosen or the device uses light appearance; preserve each component's light fallback and the existing computed-colour assertion. Add a fresh-page regression under a saved Light choice. The updated candidate awaits hosted verification.
+
 ### Warmer invitations to write, ask and suggest, and optional quotes from letters
 
 - **Header tiles.** Community letters (“Read & add yours”) and Share ideas (“Ask or suggest”) become warm tiles with decorative medallions on every page. On the first page of a visit from another site, their icons move once for about a second, never on the homepage, their own page or with reduced motion. Nothing is stored.

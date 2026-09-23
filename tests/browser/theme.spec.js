@@ -83,6 +83,19 @@ test('Manual choices persist across pages and Back; System resumes live device c
   expect(await page.evaluate(() => localStorage.getItem('kew-appearance-v1'))).toBeNull();
 });
 
+test('A saved Light choice paints a fresh page under a dark device setting', async ({ page, context }) => {
+  await page.emulateMedia({ colorScheme:'dark' });
+  await page.goto('/index.html');
+  await page.getByLabel('Appearance', { exact:true }).selectOption('light');
+  const fresh = await context.newPage();
+  await fresh.emulateMedia({ colorScheme:'dark' });
+  await fresh.goto('/letters.html');
+  await appearance(fresh, light);
+  await expect(fresh.locator('body')).toHaveCSS('color', 'rgb(53, 75, 72)');
+  await expect(fresh.getByLabel('Appearance', { exact:true })).toHaveValue('light');
+  await fresh.close();
+});
+
 test('Another open tab receives a changed or removed override', async ({ page, context }) => {
   await page.emulateMedia({ colorScheme:'light' }); await page.goto('/index.html');
   const second=await context.newPage(); await second.emulateMedia({colorScheme:'light'}); await second.goto('/faq.html');

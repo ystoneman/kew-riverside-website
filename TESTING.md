@@ -133,6 +133,8 @@ After integration with the shorter homepage and participation invitation, all 16
 
 Independent review found a transparent background on the expanded Evidence borough chart, caused by a malformed CSS variable. A new computed-style check failed on the prior declaration and passed in light and dark modes across all four browser projects after correction. The reviewer rechecked the expanded chart in light/dark Chromium and WebKit at 390 and 1280 px. The final integrated local suite passed 1,202 browser checks with 15 deliberate skips across four projects (`npx playwright test --workers=2 --reporter=dot`); 42 Python checks and the 89-file public artifact validation also passed. Hosted verification of this integrated theme branch remains pending.
 
+Hosted PR #2 run `35886209568` passed validation and 1,200 browser checks with 15 deliberate skips, but failed the manual Light persistence test in iPhone and desktop WebKit. On arrival at Letters under a dark device setting, the computed body background stayed dark although the HTML canvas was light. Explicit light tokens on body/root address that WebKit state; the existing body colour assertion remains. A new test opens a fresh page with a saved Light preference under system dark. The two transition tests passed 80/80 repeated local WebKit checks; 42 Python checks and 89-file validation passed. A new full local and hosted run are pending.
+
 
 ## Short homepage and stable shared links — 22 September 2026
 
