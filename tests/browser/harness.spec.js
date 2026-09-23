@@ -44,11 +44,15 @@ test('Harness: tests see an empty letters board instead of published letters', a
 unroutedTest('Harness: without routing, other origins, local writes and the real letters board are still reported', async ({ page, networkGuard, baseURL }) => {
   await otherOrigin(async url => {
     await page.goto('/index.html');
+    // HEAD keeps the published letters out of any failure trace.
+    await page.evaluate(() => fetch('letters.json', { method: 'HEAD', cache: 'no-store' }));
+    // Only the write is fulfilled locally, and the route is removed straight afterwards.
     await page.route('**/guard-write-probe', route => route.fulfill({ status: 204 }));
-    await page.evaluate(() => Promise.all([fetch('letters.json', { cache: 'no-store' }), fetch('guard-write-probe', { method: 'POST', body: 'Fictional' })]));
+    await page.evaluate(() => fetch('guard-write-probe', { method: 'POST', body: 'Fictional' }));
+    await page.unroute('**/guard-write-probe');
     await page.goto(url);
     expect(networkGuard).toHaveLength(3);
-    expect(networkGuard).toEqual(expect.arrayContaining([`GET ${baseURL}/letters.json`, `POST ${baseURL}/guard-write-probe`, probeRequest(url)]));
+    expect(networkGuard).toEqual(expect.arrayContaining([`HEAD ${baseURL}/letters.json`, `POST ${baseURL}/guard-write-probe`, probeRequest(url)]));
     networkGuard.splice(0); // Deliberate probes, reported above.
   });
 });
