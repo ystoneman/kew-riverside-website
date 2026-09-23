@@ -1,4 +1,4 @@
-const { test, expect, pages, headerLinks, expectDestination, captureSubmissions } = require('./fixtures');
+const { test, expect, pages, headerLinks, expectDestination, expectStillArrival, captureSubmissions } = require('./fixtures');
 
 for (const file of pages) {
   test(`${file}: every native mobile menu link works without JavaScript`, async ({ page, baseURL }) => {
@@ -227,6 +227,17 @@ test('No JavaScript: research keeps all cases, graphics, evidence notes and cita
   await expect(page.locator('#case-st-bartholomew')).toContainText(/extra school term/);
   await page.goto('/lessons-sources.html');
   await expect(page.locator('.lesson-source')).toHaveCount(45);
+  await page.locator('#X04 > summary').tap();
+  await expect(page.locator('#X04')).toHaveAttribute('open','');
+});
+
+test('No JavaScript: shared research links land still before a graphic or source is opened', async ({ page }) => {
+  await page.goto('/lessons.html#visual-guide');
+  await expectStillArrival(page, '#visual-guide');
+  await page.locator('#exhibit-1 > summary').tap();
+  await expect(page.locator('#exhibit-1')).toHaveAttribute('open','');
+  await page.goto('/lessons-sources.html#X04');
+  await expectStillArrival(page, '#X04');
   await page.locator('#X04 > summary').tap();
   await expect(page.locator('#X04')).toHaveAttribute('open','');
 });

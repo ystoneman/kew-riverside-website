@@ -66,6 +66,25 @@ async function expectDestination(page, href, baseURL) {
   }
 }
 
+// A shared fragment must already be in view when the page loads and stay still,
+// so an immediate click or tap cannot land on content that is still scrolling.
+async function expectStillArrival(page, selector) {
+  // Page timers never run without JavaScript; the load position is then final.
+  const sample = test.info().project.use.javaScriptEnabled !== false;
+  const arrival = await page.evaluate(async ({ selector, sample }) => {
+    const top = document.querySelector(selector).getBoundingClientRect().top;
+    const positions = new Set([Math.round(scrollY)]);
+    for (const start = performance.now(); sample && performance.now() - start < 600;) {
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      positions.add(Math.round(scrollY));
+    }
+    return { top, viewport: innerHeight, positions: positions.size };
+  }, { selector, sample });
+  expect(arrival.top, `${selector} is in view on arrival`).toBeGreaterThanOrEqual(0);
+  expect(arrival.top, `${selector} is in view on arrival`).toBeLessThan(arrival.viewport / 2);
+  expect(arrival.positions, `${selector} arrival does not keep scrolling`).toBe(1);
+}
+
 async function captureSubmissions(page) {
   const submissions = [];
   await page.route('https://formspree.io/**', async route => {
@@ -78,4 +97,4 @@ async function captureSubmissions(page) {
   return submissions;
 }
 
-module.exports = { test, expect, pages, headerLinks, expectDestination, captureSubmissions };
+module.exports = { test, expect, pages, headerLinks, expectDestination, expectStillArrival, captureSubmissions };
