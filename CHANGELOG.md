@@ -4,6 +4,10 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### External-link arrows render as text on iPhone
+
+In iOS Safari a bare “↗” (U+2197) renders as a blue emoji square, including on the homepage’s main “Respond by 16 October ↗” button. Every ↗ on the site is now followed by the text-presentation selector U+FE0E (`&#xFE0E;`), which keeps the plain arrow. The change covers 84 arrows across the homepage, Evidence, FAQ, Proposal, Understand and Videos pages, plus the two page builders that generate some of them. Link text, accessible names and destinations are unchanged. A new structural test fails if any public page or script contains a ↗ without the selector. It failed on the previous `faq.html` and passes now. Found in the iPhone Air / iOS 26.5 simulator on the live site. The same simulator showed plain arrows on the homepage and Evidence pages of a local preview of this change. Review: lead-agent UX check. This is a rendering fix with no change in meaning or behaviour.
+
 ## 23 September 2026 — plainer research shortcut labels
 
 ### Plainer research shortcut labels
