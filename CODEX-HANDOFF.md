@@ -1,20 +1,22 @@
 # Current handoff — 23 September 2026
 
-Claude Code continued the shorter-homepage PR (#4) at the owner's request. This section supersedes the historical handoff below. The owner allows Claude Code to merge PRs itself after required checks and project reviews pass, using the documented owner exception; branch protection settings stay unchanged.
+Claude Code completed and published the shorter-homepage PR (#4) at the owner's request. This section supersedes the historical handoff below. The owner allows Claude Code to merge PRs itself after required checks and project reviews pass, using the documented owner exception; branch protection settings stay unchanged.
 
-## State at this commit
+## State
 
-- **Video consent release:** live and verified. Rerun attempt 2 of main run `35781407831` deployed `1cb3f52`, and all 69 live public files matched it byte for byte.
-- **Research-arrival fix:** PR #5 merged as `74ce73e`, but its main run `35823364131` failed a video-page check and did not deploy.
-- **Branch `codex/shorter-homepage`:** local worktree is `shorter-homepage-worktree`. It now includes `main` through `74ce73e`, plus a page-level `videos.css` rule so jumps and focus changes on the video page land immediately. That fixes the failed check above; see TESTING.md, “Video page scrolling and homepage integration”. The research fix therefore publishes with this PR.
-- **Unchanged shorter-homepage work:** a shorter homepage; the full evidence library on `evidence.html`; all eight strategies on `options.html`; all 86 moved anchors routed, with no-JavaScript links. **Keep the exact shared video QR URL `https://ystoneman.github.io/kew-riverside-website/videos.html#upload`.** Its earlier campaign, evidence and rendered UX reviews and native iPhone 17 Safari checks still apply.
+- **Live and verified: `01fc2d3` (#4).** It includes the video publication consent (#3), research-arrival (#5) and video-page scrolling changes. All 73 public files matched it byte for byte. Live browser checks and native iPhone Air / iOS 26.5 Safari checks are recorded in CHANGELOG.md.
+- **Unchanged:** Google Forms, the Dropbox request and permission records. No real form or video was submitted.
+- **Keep the exact shared video QR URL:** `https://ystoneman.github.io/kew-riverside-website/videos.html#upload`.
 
-## Next steps
+## Open items
 
-1. Confirm hosted PR checks, merge, and confirm the main deployment. **A merge is not a deployment.**
-2. Compare every live public file with the deployed commit. Then check the live homepage, `evidence.html`, `options.html`, an old homepage source URL such as `index.html#source-inspection-2026`, a research anchor and `videos.html#upload`, including native Safari.
-3. Record verified results in CHANGELOG.md (date the Unreleased entries) and TESTING.md.
-4. Theme PR #2 (`codex/site-theme`) must merge `main` again. The new Evidence and Options pages need its theme assets and controls, and its notes will conflict at the Unreleased insertion points.
+1. **Theme PR #2 (`codex/site-theme`)** must merge `main`.
+   - The new `evidence.html` and `options.html` need its theme assets and controls.
+   - Its notes will conflict at the Unreleased insertion points in CHANGELOG.md, TESTING.md and UX-DESIGN-DECISIONS.md.
+   - Its own appearance checks were failing at last inspection.
+2. **Rare test-harness failures to investigate separately** (see TESTING.md):
+   - the WebKit legacy-homepage redirect stall;
+   - repeated same-hash source-link recovery under Chromium scroll anchoring.
 
 Node 24 is available locally at `/Users/yannstoneman/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node`. Local runs used temporary configs outside the repository on separate ports; repository config and server files were not changed.
 

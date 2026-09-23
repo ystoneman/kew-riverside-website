@@ -208,7 +208,9 @@ for (const suffix of ['END', '🙂']) {
     expect(body.length).toBe(30000);
     await page.goto('/letters.html');
     await expect(page.locator('#message')).toHaveAttribute('maxlength', '30000');
-    await page.locator('#message').fill(body);
+    // Automated insertion of 30,000 characters takes ~1.5 s even with page scripts off
+    // (the page's input handler takes ~1 ms), and exceeded the 5 s default on loaded CI runners.
+    await page.locator('#message').fill(body, { timeout: 20_000 });
     await expect(page.locator('#message')).toHaveValue(body);
     await expect(page.locator('#message-count')).toHaveText('30,000 / 30,000 characters');
     await page.locator('.submission-preview > summary').click();
