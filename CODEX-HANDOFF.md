@@ -4,7 +4,7 @@ Claude Code completed and published the shorter-homepage PR (#4) at the owner's 
 
 ## State
 
-- **Live and verified: `01fc2d3` (#4).** It includes the video publication consent (#3), research-arrival (#5) and video-page scrolling changes. All 73 public files matched it byte for byte. Live browser checks and native iPhone Air / iOS 26.5 Safari checks are recorded in CHANGELOG.md.
+- **Live and verified: `921cc5a` (#7).** It includes the shorter homepage (#4), video publication consent (#3), research-arrival (#5) and video-page scrolling changes, plus plainer research shortcut labels. All 73 public files matched it byte for byte. Live browser and native iPhone Air / iOS 26.5 Safari checks are recorded in CHANGELOG.md.
 - **Unchanged:** Google Forms, the Dropbox request and permission records. No real form or video was submitted.
 - **Keep the exact shared video QR URL:** `https://ystoneman.github.io/kew-riverside-website/videos.html#upload`.
 
@@ -14,8 +14,8 @@ Claude Code completed and published the shorter-homepage PR (#4) at the owner's 
    - The new `evidence.html` and `options.html` need its theme assets and controls.
    - Its notes will conflict at the Unreleased insertion points in CHANGELOG.md, TESTING.md and UX-DESIGN-DECISIONS.md.
    - Its own appearance checks were failing at last inspection.
-2. **Rare test-harness failures to investigate separately** (see TESTING.md):
-   - the WebKit legacy-homepage redirect stall;
+2. **Test-harness failures to investigate separately** (see TESTING.md):
+   - the WebKit legacy-homepage redirect stall, which has blocked two main deployments until rerun (priority);
    - repeated same-hash source-link recovery under Chromium scroll anchoring.
 
 Node 24 is available locally at `/Users/yannstoneman/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node`. Local runs used temporary configs outside the repository on separate ports; repository config and server files were not changed.
