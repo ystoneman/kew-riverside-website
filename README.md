@@ -49,7 +49,12 @@ This collection is not exhaustive. Original documents remain with their publishe
 | response-checklist.md | Editable checklist source |
 | feedback.html / feedback.js | Ideas, evidence, meeting questions and corrections; optional publication and reviewed suggestions |
 | faq.html / discovery.js / discovery.css | Sourced practical answers, local FAQ search, homepage discovery routes and shared action styling |
-| letters.html / letters.js | Community letters, separate public and council permissions, private optional council identity fields |
+| letters.html / letters.js | Community letters written first, device drafts, separate public, quote and council permissions, private optional council identity fields |
+| contribute.css | Letters, Share ideas and thank-you page layout: invitation hero, choice cards, steps and returning-visitor panel |
+| sent.html / sent.js | Thank-you page for the form service's redirect: neutral by default, official-response step after a letter |
+| respond-reminder.ics | Calendar reminder for the official response (13 October, London time) |
+| voice.css / voice.js | Header tiles for Community letters and Share ideas, with a one-time arrival cue |
+| og-home.png / og-letters.png / og-ideas.png / og-videos.png | Link-preview images (1200 × 630) |
 | feedback.css | Shared form and public-board styles |
 | privacy.html | Versioned privacy and moderation notice |
 | suggestions.json | Approved website suggestions only |
@@ -66,7 +71,7 @@ Recheck the proposal, deadline, current public roles and meeting records before 
 
 When updating charts, retain the complete data table and specify geography, measure, units and date. Do not silently turn a projection into an actual observation.
 
-There are no analytics, advertising scripts or remote fonts. Forms post to Formspree, which runs a hosted security check; see `privacy.html`. The letters and suggestions boards render approved data as text, never visitor HTML. Council sharing requires separate, recorded consent and an operator check of the official receiving requirements; it is not an official consultation submission service. Outgoing links open the publisher's site. Search parameters remain in the page URL so a filtered view can be shared.
+Basic page counts use a local Umami collector, with detailed usage only after opt-in (see `ANALYTICS.md`); there are no advertising scripts or remote fonts. Forms post to Formspree, which runs a hosted security check; see `privacy.html`. The letters and suggestions boards render approved data as text, never visitor HTML. Council sharing requires separate, recorded consent and an operator check of the official receiving requirements; it is not an official consultation submission service. Outgoing links open the publisher's site. Search parameters remain in the page URL so a filtered view can be shared.
 
 ## Verification in this environment
 
@@ -147,6 +152,12 @@ The homepage research shortcut and the separate Site research entry in Evidence 
 
 The proposed `ENROLMENT-OUTREACH-BRIEF.md` is maintenance-only coordination material. It does not authorize outreach or commit partners, money or volunteers. No tracking was added.
 
+
+## Homepage and reference routes
+
+The homepage is a short overview. The complete evidence library, charts, history, gaps and method live in `evidence.html`; the eight strategies live in `options.html`. Keep their local contents and the six homepage task links useful. The video flyer QR address is a fixed route: `videos.html#upload`.
+
+The homepage retains each former fragment as a `.legacy-route` with an explicit destination and native Continue link. `homepage.js` uses replacement navigation and preserves query strings, including evidence searches without a fragment. Do not remove these compatibility targets when shortening copy. Update canonical citations in the builders as well as generated pages. The source-library integrity and legacy-route tests live in `test_site_structure.py`; browser interactions and saved searches are checked in `homepage.spec.js` and `evidence.spec.js`.
 
 ## Video publication permissions
 

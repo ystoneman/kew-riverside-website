@@ -1,5 +1,5 @@
 const fs = require('node:fs/promises');
-const { test, expect } = require('./fixtures');
+const { test, expect, expectScrollSettled } = require('./fixtures');
 
 // Independently pinned to the reviewed, rounded DfE combined expected-standard
 // figures. Neither the page nor a generated download supplies these expectations.
@@ -15,12 +15,12 @@ async function activate(locator, hasTouch) {
   else await locator.click();
 }
 
-test('Learning: both contextual homepage entries reach the results and support Back', async ({ page, hasTouch }) => {
-  for (const entry of [
-    page.getByRole('complementary', { name: 'How does Kew Riverside compare?' }),
-    page.locator('#visit-school'),
+test('Learning: contextual homepage and evidence entries reach the results and support Back', async ({ page, hasTouch }) => {
+  for (const [path, entry] of [
+    ['/evidence.html', page.getByRole('complementary', { name: 'How does Kew Riverside compare?' })],
+    ['/index.html', page.locator('#visit-school')],
   ]) {
-    await page.goto('/index.html');
+    await page.goto(path);
     const link = entry.locator('a[href="understand.html#learning-and-results"]');
     await expect(link).toBeVisible();
     await expect(link).toHaveAccessibleName(/learning|results/i);
@@ -28,7 +28,7 @@ test('Learning: both contextual homepage entries reach the results and support B
     await expect(page).toHaveURL(/understand\.html#learning-and-results$/);
     await expect(page.locator('#learning-and-results')).toBeInViewport();
     await page.goBack();
-    await expect(page).toHaveURL(/index\.html$/);
+    await expect(page).toHaveURL(new RegExp(path.replace('.', '\\.') + '$'));
     await expect(link).toBeVisible();
   }
 });
@@ -60,7 +60,7 @@ test('Learning: the local jump retains previous comparison sections and visible 
     await expect(charts.nth(index)).toHaveAttribute('role', 'img');
     await expect(charts.nth(index)).toHaveAccessibleName(new RegExp(name));
   }
-  await expect(section.locator('#inspection-summary a[href="index.html#source-inspection-2026"]')).toBeVisible();
+  await expect(section.locator('#inspection-summary a[href="evidence.html#source-inspection-2026"]')).toBeVisible();
 });
 
 test('Learning: chart table links reveal closed data and recover through repeated links and history', async ({ page, hasTouch }) => {
@@ -183,7 +183,7 @@ test('Learning: narrow arrival protects action routes and the chart stays inside
     }
     await page.goBack();
   }
-  await activate(page.getByRole('complementary', { name: 'How does Kew Riverside compare?' }).locator('a[href="understand.html#learning-and-results"]'), hasTouch);
+  await activate(page.locator('#visit-school a[href="understand.html#learning-and-results"]'), hasTouch);
   const chart = page.locator('#attainment-chart');
   await expect(chart).toBeVisible();
   const box = await chart.boundingBox();
@@ -194,7 +194,7 @@ test('Learning: narrow arrival protects action routes and the chart stays inside
 });
 
 test('Inspection: original-source counts, search and the resolved gap agree', async ({ page, hasTouch }) => {
-  await page.goto('/index.html#records');
+  await page.goto('/evidence.html#records');
   await expect(page.locator('.source-card')).toHaveCount(47);
   for (const [status, count] of [['Reviewed', 42], ['Index only', 2], ['Not retrieved', 3]]) {
     await expect(page.locator(`.source-card[data-status="${status}"]`)).toHaveCount(count);
@@ -216,11 +216,14 @@ test('Inspection: original-source counts, search and the resolved gap agree', as
   await page.getByLabel('Year', { exact: true }).selectOption('2003');
   await expect(inspection).toBeHidden();
   // Repeating the current hash must still recover a source hidden by filters.
+  // The reset re-expands the list above the link and scroll anchoring keeps the link in place;
+  // animated jumps then sometimes left Chromium there, so the jump must land at once.
   await activate(gap.locator('a[href="#source-inspection-2026"]'), hasTouch);
+  await expectScrollSettled(page, 'Repeated source link');
   await expect(inspection).toBeVisible();
   await expect(inspection).toBeInViewport();
   await expect(page.getByLabel('Year', { exact: true })).toHaveValue('');
-  await page.goto('/index.html?q=unfindable-inspection&type=Inspection&year=2003&status=Index%20only#source-inspection-2026');
+  await page.goto('/evidence.html?q=unfindable-inspection&type=Inspection&year=2003&status=Index%20only#source-inspection-2026');
   await expect(inspection).toBeVisible();
   await expect(inspection).toBeInViewport();
   await expect(page.getByLabel('Search the records')).toHaveValue('');
@@ -270,7 +273,7 @@ test('Learning FAQ: remembered terms and incoming answer links recover from sear
 });
 
 test('Recruitment: awareness channels retain direct school and normal-admissions routes', async ({ page, hasTouch }) => {
-  await page.goto('/index.html#option-enrolment');
+  await page.goto('/options.html#option-enrolment');
   const option = page.locator('#option-enrolment');
   await expect(option.getByRole('heading', { level: 3 })).toHaveText('Raise awareness to boost enrolment');
   for (const channel of ['nurseries', 'parent groups', 'community notices', 'word of mouth', 'social media']) {
@@ -298,7 +301,7 @@ test('Contributions: letters lead to contextual evidence and optional video with
   await expect(page.locator('#allow-council')).not.toBeChecked();
   await activate(page.locator('main .form-route a[href="feedback.html?kind=evidence#feedback-form"]'), hasTouch);
   await expect(page).toHaveURL(/feedback\.html\?kind=evidence#feedback-form$/);
-  await expect(page.locator('#kind')).toHaveValue('evidence');
+  await expect(page.locator('input[name="kind"][value="evidence"]')).toBeChecked();
   await expect(page.locator('#allow-public')).not.toBeChecked();
   await expect(page.locator('#message')).toHaveValue('');
   await page.goBack();

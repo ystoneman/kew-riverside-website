@@ -32,8 +32,8 @@ async function expectTrendMode(page, mode) {
   await expect(page.locator('#trend-status')).toContainText(mode === 'count' ? /pupil|number/i : /percentage|%/i);
 }
 
-test('Understand: homepage comparison preview leads directly to the visual explanation', async ({ page, hasTouch }) => {
-  await page.goto('/index.html#evidence');
+test('Understand: evidence comparison preview leads directly to the visual explanation', async ({ page, hasTouch }) => {
+  await page.goto('/evidence.html#evidence');
   const preview = page.getByRole('complementary', { name: 'How does Kew Riverside compare?' });
   await expect(preview).toBeVisible();
   await expect(preview).toContainText('pupil trends, school places and year-group sizes');
@@ -221,8 +221,8 @@ test('Understand: questions, source references and proposal comparison lead to t
     ['other-proposals', 'hampton-wick-proposal-2026'],
   ]) {
     await page.goto('/understand.html');
-    await activate(page.locator(`#${section} a[href="index.html#source-${source}"]`), hasTouch);
-    await expect(page).toHaveURL(new RegExp(`index.html#source-${source}$`));
+    await activate(page.locator(`#${section} a[href="evidence.html#source-${source}"]`), hasTouch);
+    await expect(page).toHaveURL(new RegExp(`evidence.html#source-${source}$`));
     await expect(page.locator('#source-' + source)).toBeInViewport();
   }
   await page.goto('/understand.html');

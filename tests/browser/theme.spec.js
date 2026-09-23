@@ -124,7 +124,7 @@ test('Dark mode keeps forms, disclosure content and focus readable without chang
 });
 
 test('Chart series, keys and forecast markers retain their meaning in dark mode', async ({page}) => {
-  await page.emulateMedia({colorScheme:'dark'}); await page.goto('/index.html');
+  await page.emulateMedia({colorScheme:'dark'}); await page.goto('/evidence.html');
   await expect(page.locator('.roll-legend i').first()).toHaveCSS('border-top-color','rgb(139, 215, 207)');
   await expect(page.locator('.roll-reported')).toHaveCSS('stroke','rgb(139, 215, 207)');
   await expect(page.locator('.roll-forecast')).toHaveCSS('stroke-dasharray','8px, 6px');

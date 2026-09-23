@@ -130,6 +130,9 @@ class DeploymentTests(unittest.TestCase):
             ('type="checkbox" required value="yes-process-my-letter-v3"', 'type="checkbox" value="yes-process-my-letter-v3"'),
             ('name="allow_public" type="checkbox"', 'name="allow_public" type="checkbox" required'),
             ('name="allow_council" type="checkbox"', 'name="allow_council" type="checkbox" required'),
+            ('yes-quote-published-letter-v1', 'yes-quote-published-letter-v2'),
+            ('name="allow_quotes" type="checkbox"', 'name="allow_quotes" type="checkbox" required'),
+            ('name="allow_quotes" type="checkbox"', 'name="allow_quotes" type="checkbox" checked'),
         ):
             self.assertIn(before, original)
             p.write_text(original.replace(before, after))

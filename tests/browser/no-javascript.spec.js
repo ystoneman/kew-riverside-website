@@ -1,4 +1,4 @@
-const { test, expect, pages, headerLinks, expectDestination, captureSubmissions } = require('./fixtures');
+const { test, expect, pages, headerLinks, expectDestination, expectStillArrival, captureSubmissions } = require('./fixtures');
 
 for (const file of pages) {
   test(`${file}: every native mobile menu link works without JavaScript`, async ({ page, baseURL }) => {
@@ -12,7 +12,7 @@ for (const file of pages) {
 }
 
 test('No JavaScript: evidence is readable and council identity stays disabled', async ({ page }) => {
-  await page.goto('/index.html');
+  await page.goto('/evidence.html#records');
   expect(await page.locator('.source-card:visible').count()).toBeGreaterThan(0);
   await page.goto('/letters.html');
   await expect(page.locator('#council-name')).toBeDisabled();
@@ -30,7 +30,7 @@ test('No JavaScript: homepage and Evidence expose the full report and web resear
   await expect(page).toHaveURL(/lessons\.html$/);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('What can other schools teach us?');
   await page.goBack();
-  await shortcut.locator('a[href="#source-lessons-report"]').tap();
+  await shortcut.locator('a[href="evidence.html#source-lessons-report"]').tap();
   const report = page.locator('#source-lessons-report');
   await expect(report).toBeInViewport();
   await expect(report).toContainText(/site research/i);
@@ -41,7 +41,7 @@ test('No JavaScript: homepage and Evidence expose the full report and web resear
   ]);
   expect(download.suggestedFilename()).toBe('lessons-report.pdf');
   expect(await download.failure()).toBeNull();
-  await page.goto('/index.html?q=impossible-report-search&type=Inspection#source-lessons-report');
+  await page.goto('/evidence.html?q=impossible-report-search&type=Inspection#source-lessons-report');
   await expect(report).toBeVisible();
   await expect(report).toBeInViewport();
   await expect(page.locator('.source-card:visible')).toHaveCount(47);
@@ -61,9 +61,74 @@ for (const [publish, council] of [[false, false], [true, false], [false, true], 
     expect(submissions[0].get('letter_consent')).toBe('yes-process-my-letter-v3');
     expect(submissions[0].get('allow_public')).toBe(publish ? 'yes-publish-with-display-name-v3' : null);
     expect(submissions[0].get('allow_council')).toBe(council ? 'yes-share-with-richmond-council-v2' : null);
-    for (const field of ['council_name', 'council_postcode']) expect(submissions[0].has(field)).toBe(false);
+    for (const field of ['council_name', 'council_postcode', 'allow_quotes']) expect(submissions[0].has(field)).toBe(false);
   });
 }
+
+test('No JavaScript: the letter form shows every step, the written starter and an unticked quote choice', async ({ page }) => {
+  await page.goto('/letters.html');
+  await expect(page.locator('#to-choices')).toBeHidden();
+  await expect(page.locator('#starters')).toBeHidden();
+  await expect(page.locator('#starter-static')).toBeVisible();
+  for (const id of ['#step-choose', '#step-send', '#quote-choice']) await expect(page.locator(id), id).toBeVisible();
+  await expect(page.locator('#allow-quotes')).not.toBeChecked();
+  await expect(page.locator('#allow-quotes')).toBeEnabled();
+  await expect(page.locator('#sent-return')).toBeHidden();
+  await expect(page.locator('#official-line')).toBeVisible();
+  await expect(page.locator('#draft-notice')).toBeVisible();
+});
+
+test('No JavaScript: an incoming removal link exposes the private category and how to use it', async ({ page }) => {
+  const submissions = await captureSubmissions(page);
+  await page.goto('/feedback.html?kind=privacy&letter=letter-012345abcdef#feedback-form');
+  await expect(page.locator('#kind-more')).toHaveAttribute('open', '');
+  await expect(page.locator('input[name="kind"][value="privacy"]')).toBeVisible();
+  await expect(page.getByText('For a privacy or removal request, choose')).toBeVisible();
+  await page.locator('input[name="kind"][value="privacy"]').check();
+  await page.locator('#message').fill('Please review fictional letter letter-012345abcdef.');
+  await page.locator('#feedback-form button[type="submit"]').click();
+  await expect.poll(() => submissions.length).toBe(1);
+  expect(submissions[0].get('kind')).toBe('privacy');
+  expect(submissions[0].get('allow_public')).toBeNull();
+});
+
+test('No JavaScript: dated invitations retain safe process guidance after their deadlines', async ({ page }) => {
+  await page.clock.setFixedTime(new Date('2026-10-17T12:00:00+01:00'));
+  await page.goto('/letters.html');
+  await expect(page.locator('#official-line')).toContainText('Check the current process');
+  await expect(page.locator('#step-official-fallback')).toBeVisible();
+  await expect(page.locator('#step-official-open')).toBeHidden();
+  await page.goto('/feedback.html');
+  await expect(page.locator('input[name="kind"][value="meeting"] + .kind-icon + span .kind-title')).toHaveText('A question about the proposal');
+  await expect(page.locator('#meeting-date')).toBeHidden();
+});
+
+for (const publish of [true, false]) {
+  test(`No JavaScript: a ticked quote choice submits its exact value (publication ${publish ? 'chosen' : 'not chosen'})`, async ({ page }) => {
+    const submissions = await captureSubmissions(page);
+    await page.goto('/letters.html');
+    await page.locator('#message').fill('A fictional community letter with quote permission, sent without JavaScript.');
+    await page.locator('#letter-consent').check();
+    if (publish) await page.locator('#allow-public').check();
+    await page.locator('#allow-quotes').check();
+    await page.locator('#letter-form button[type="submit"]').tap();
+    await expect.poll(() => submissions.length).toBe(1);
+    // Without publication the value is not permission; the privacy notice and operations rules say so.
+    expect(submissions[0].get('allow_quotes')).toBe('yes-quote-published-letter-v1');
+    expect(submissions[0].get('allow_public')).toBe(publish ? 'yes-publish-with-display-name-v3' : null);
+  });
+}
+
+test('No JavaScript: the thank-you page and the participation tiles work without scripts', async ({ page }) => {
+  await page.goto('/sent.html');
+  await expect(page.locator('#sent-title')).toHaveText('Thank you.');
+  await expect(page.locator('#sent-lead')).toBeVisible();
+  for (const id of ['#official-card', '#share-card', '#sent-more']) await expect(page.locator(id), id).toBeHidden();
+  const nav = page.getByRole('navigation', { name: 'Take part' });
+  await expect(nav.getByRole('link', { name: /^Community letters/ })).toBeVisible();
+  await expect(nav.getByRole('link', { name: /^Share ideas/ })).toBeVisible();
+  await expect(page.locator('html')).not.toHaveClass(/voice-cue/);
+});
 
 test('No JavaScript: letter accepts a full 30000-character message including an emoji', async ({ page }) => {
   const submissions = await captureSubmissions(page);
@@ -102,7 +167,7 @@ test('No JavaScript: Understand retains charts, underlying data and council cont
 
 test('No JavaScript: contextual learning entry exposes the results, native tables and downloads', async ({ page }) => {
   await page.goto('/index.html');
-  await page.getByRole('complementary', { name: 'How does Kew Riverside compare?' }).locator('a[href="understand.html#learning-and-results"]').tap();
+  await page.locator('#visit-school a[href="understand.html#learning-and-results"]').tap();
   const section = page.locator('#learning-and-results');
   await expect(section).toBeInViewport();
   await expect(page.locator('svg#attainment-chart')).toBeVisible();
@@ -122,7 +187,7 @@ test('No JavaScript: contextual learning entry exposes the results, native table
     expect(download.suggestedFilename()).toBe(filename);
     expect(await download.failure()).toBeNull();
   }
-  await section.locator('#inspection-summary a[href="index.html#source-inspection-2026"]').tap();
+  await section.locator('#inspection-summary a[href="evidence.html#source-inspection-2026"]').tap();
   await expect(page.locator('#source-inspection-2026')).toBeInViewport();
   await expect(page.locator('#source-inspection-2026')).toContainText('Reviewed');
 });
@@ -146,7 +211,7 @@ test('No JavaScript: prospective families can follow learning and open the sourc
     await expect(answer.locator('p').first()).toBeVisible();
     expect(await answer.locator('a[href]').count()).toBeGreaterThan(0);
   }
-  await page.locator('#latest-inspection a[href="index.html#source-inspection-2026"]').tap();
+  await page.locator('#latest-inspection a[href="evidence.html#source-inspection-2026"]').tap();
   await expect(page.locator('#source-inspection-2026')).toBeInViewport();
 });
 
@@ -160,7 +225,7 @@ test('No JavaScript: optional sharing details and reviewed ideas remain usable',
   await page.locator('#suggestions > summary').tap();
   await expect(page.locator('#suggestions')).toHaveAttribute('open', '');
   await expect(page.locator('#suggestions a[href="suggestions.json"]')).toBeVisible();
-  await page.locator('#kind').selectOption('evidence');
+  await page.locator('input[name="kind"][value="evidence"]').check();
   await page.locator('#message').fill('Synthetic source information entered without JavaScript.');
   await page.locator('#display-name').fill('Optional test alias');
   await page.locator('#allow-public').check();
@@ -231,6 +296,17 @@ test('No JavaScript: research keeps all cases, graphics, evidence notes and cita
   await expect(page.locator('#X04')).toHaveAttribute('open','');
 });
 
+test('No JavaScript: shared research links land still before a graphic or source is opened', async ({ page }) => {
+  await page.goto('/lessons.html#visual-guide');
+  await expectStillArrival(page, '#visual-guide');
+  await page.locator('#exhibit-1 > summary').tap();
+  await expect(page.locator('#exhibit-1')).toHaveAttribute('open','');
+  await page.goto('/lessons-sources.html#X04');
+  await expectStillArrival(page, '#X04');
+  await page.locator('#X04 > summary').tap();
+  await expect(page.locator('#X04')).toHaveAttribute('open','');
+});
+
 test('No JavaScript: video guidance and external upload route remain available', async ({ page }) => {
   await page.goto('/letters.html');
   await page.locator('main a[href="videos.html"]').tap();
@@ -256,6 +332,53 @@ test('No JavaScript: the named parent action plan is visible on arrival', async 
   await expect(page.locator('#parent-plan-title')).toBeInViewport();
 });
 
+test('No JavaScript: former homepage fragments offer an explicit route to the moved content', async ({ page }) => {
+  // Independently pinned public links, including a detail nested in a disclosure.
+  for (const [id, destination] of [
+    ['records', 'evidence.html'],
+    ['source-inspection-2026', 'evidence.html'],
+    ['source-lessons-report', 'evidence.html'],
+    ['earlier-record', 'evidence.html'],
+    ['gaps', 'evidence.html'],
+    ['method', 'evidence.html'],
+    ['options', 'options.html'],
+    ['option-enrolment', 'options.html'],
+    ['crowdfunding-recipient', 'options.html'],
+  ]) {
+    await page.goto('/index.html#' + id);
+    const fallback = page.locator('.legacy-route#' + id);
+    await expect(fallback).toBeInViewport();
+    const link = fallback.locator(`a[href="${destination}#${id}"]`);
+    await expect(link).toHaveAccessibleName(/Continue/i);
+    await link.tap();
+    await expect(page).toHaveURL(new RegExp(destination.replace('.', '\\.') + '#' + id + '$'));
+    if (id === 'crowdfunding-recipient') {
+      const details = page.locator('#crowdfunding-recipient').locator('xpath=ancestor::details[1]');
+      if (!(await details.evaluate(element => element.open))) await details.locator(':scope > summary').tap();
+    }
+    if (id === 'earlier-record' && !(await page.locator('#earlier-record').evaluate(element => element.open))) {
+      await page.locator('#earlier-record > summary').tap();
+    }
+    await expect(page.locator('#' + id)).toBeVisible();
+  }
+});
+
+test('No JavaScript: the exact video QR upload address keeps a working permission handoff', async ({ page }) => {
+  await page.goto('/videos.html#upload');
+  await expect(page).toHaveURL(/\/videos\.html#upload$/);
+  await expect(page.locator('#upload')).toBeInViewport();
+  await expect(page.locator('#upload-requirements')).toContainText('Adults recording themselves only');
+  await expect(page.locator('#upload-requirements')).toContainText('No Google or Dropbox sign-in required');
+  const link = page.locator('#video-upload-link');
+  const destination = await link.getAttribute('href');
+  await page.route(destination, route => route.fulfill({ contentType: 'text/html', body: '<h1>Fictional video permission handoff</h1><p>No upload sent.</p>' }));
+  await link.tap();
+  await expect(page).toHaveURL(destination);
+  await page.goBack();
+  await expect(page).toHaveURL(/\/videos\.html#upload$/);
+  await expect(page.locator('#upload')).toBeInViewport();
+  await expect(page.locator('main a[href="letters.html"]')).toBeVisible();
+});
 
 test('No JavaScript: video publication purpose and private alternative survive direct arrival', async ({ page, baseURL }) => {
   await page.goto('/videos.html#upload');
