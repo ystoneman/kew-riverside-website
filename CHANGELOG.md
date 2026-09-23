@@ -4,6 +4,10 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Plainer research shortcut labels
+
+Replace the homepage shortcut heading “Looking for the 44-page report?” with “What happened to other schools proposed for closure?” under a “Historical research” label. On Evidence, replace “Find the 44-page research report” with “Find lessons from other schools”, which matches the card it jumps to. Visitors who have never heard of the report now see its subject, while the download button still gives its 44-page length. Links, files, destinations and the research wording are unchanged. Review: lead-agent UX and evidence check at the owner's request. The heading describes the research's existing scope of closure proposals, 12 reprieves and four closures. At 320, 390 and 1440 px it wraps to three, two and one line(s), with no horizontal overflow, and the Evidence jump lands on its card. Validation: 356 focused homepage, Evidence, journey, layout and no-JavaScript checks passed.
+
 ### Long-letter check time budget
 
 Give the 30,000-character letter `fill` a 20 s action budget. Automated insertion takes about 1.5 s with page scripts on or off, while the page's input handler takes about 1 ms. The 5 s default failed on loaded CI and local runs; the preservation, counter, preview and submission assertions are unchanged.
