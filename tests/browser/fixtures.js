@@ -15,11 +15,36 @@ function headerLinks(file, selector) {
   return links;
 }
 
+// True when the page's policy, including the default that other fetch directives fall
+// back to, lets it load resources only from the site itself.
+function loadsOnlyFromSite(file) {
+  const policy = readFileSync(path.join(root, file), 'utf8').match(/http-equiv="Content-Security-Policy" content="([^"]*)"/)?.[1] || '';
+  const sources = policy.split(';').map(directive => directive.trim().split(/\s+/)).filter(([name]) => name.endsWith('-src'));
+  return sources.some(([name]) => name === 'default-src') && sources.every(([, ...allowed]) => allowed.every(source => ["'self'", "'none'"].includes(source)));
+}
+
 const test = base.extend({
+  // Legacy-route tests turn routing off; see networkGuard.
+  routeRequests: [true, { option: true }],
   // An unexpected external request fails the test and is aborted before sending.
   // Form tests install a more specific page route that returns a local fake response.
-  networkGuard: [async ({ context, baseURL }, use) => {
+  networkGuard: [async ({ context, baseURL, routeRequests }, use) => {
     const unexpected = [];
+    if (!routeRequests) {
+      // In WebKit any route pauses every request until Playwright continues it, which keeps
+      // more homepage requests in flight when a legacy link redirects. Cancelling them trips
+      // a network-process defect that can lose the redirected navigation (TESTING.md).
+      // Without routes nothing can abort a request, so every page's policy must keep its
+      // loads on this site; navigation, writes and the letters board are still checked.
+      for (const file of pages) expect(loadsOnlyFromSite(file), `${file} loads nothing from other origins`).toBe(true);
+      context.on('request', request => {
+        const url = new URL(request.url());
+        if (url.origin !== new URL(baseURL).origin || !['GET', 'HEAD'].includes(request.method()) || url.pathname === '/letters.json') unexpected.push(`${request.method()} ${request.url()}`);
+      });
+      await use(unexpected);
+      expect(unexpected, 'No real submissions, analytics or other external traffic during tests').toEqual([]);
+      return;
+    }
     await context.route('**/*', async route => {
       const request = route.request();
       if (new URL(request.url()).origin === new URL(baseURL).origin && ['GET', 'HEAD'].includes(request.method())) {
@@ -35,7 +60,8 @@ const test = base.extend({
         await route.abort('blockedbyclient');
       }
     });
-    await use();
+    // The harness checks inspect, then clear, requests they make deliberately.
+    await use(unexpected);
     expect(unexpected, 'No real submissions, analytics or other external traffic during tests').toEqual([]);
   }, { auto: true }],
   browserErrors: [async ({ page }, use) => {
