@@ -20,7 +20,7 @@ const test = base.extend({
   // Form tests install a more specific page route that returns a local fake response.
   networkGuard: [async ({ context, baseURL }, use) => {
     const unexpected = [];
-    await context.route('**/*', async route => {
+    if (process.env.KEW_DIAG_NO_ROUTE !== '1') await context.route('**/*', async route => {
       const request = route.request();
       if (new URL(request.url()).origin === new URL(baseURL).origin && ['GET', 'HEAD'].includes(request.method())) {
         // Real published letters are not test fixtures or screenshot content.
