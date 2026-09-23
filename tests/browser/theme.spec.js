@@ -123,6 +123,19 @@ test('Dark mode keeps forms, disclosure content and focus readable without chang
   await expect(page.locator('.faq-answer').first()).toHaveCSS('background-color','rgb(25, 43, 37)');
 });
 
+test('Analytics choices follow the system appearance while remaining readable', async ({page}) => {
+  await page.emulateMedia({colorScheme:'dark'}); await page.goto('/index.html');
+  await page.getByRole('link',{name:'Analytics choices',exact:true}).click();
+  const panel=page.locator('#analytics-panel');
+  await expect(panel).toBeVisible();
+  await expect(panel).toHaveCSS('background-color','rgb(25, 43, 37)');
+  await expect(panel).toHaveCSS('color','rgb(238, 244, 236)');
+  await expect(panel.getByRole('button',{name:'Basic counts only'})).toHaveCSS('background-color','rgb(34, 56, 46)');
+  await expect(panel.getByRole('button',{name:'Turn analytics off'})).toHaveCSS('background-color','rgb(25, 43, 37)');
+  await page.emulateMedia({colorScheme:'light'});
+  await expect(panel).toHaveCSS('background-color','rgb(255, 253, 247)');
+});
+
 test('Chart series, keys and forecast markers retain their meaning in dark mode', async ({page}) => {
   await page.emulateMedia({colorScheme:'dark'}); await page.goto('/evidence.html');
   await expect(page.locator('.roll-legend i').first()).toHaveCSS('border-top-color','rgb(139, 215, 207)');
