@@ -4,12 +4,19 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      http2:
+        description: Serve the test site over HTTP/2 (1) or HTTP/1.1 (0)
+        default: '0'
+      protocol_log:
+        description: Record the Playwright protocol log (1) or not (0)
+        default: '0'
 
 permissions:
   contents: read
 
 concurrency:
-  group: pages-${{ github.ref }}
+  group: pages-${{ github.ref }}-${{ inputs.http2 }}-${{ inputs.protocol_log }}
   cancel-in-progress: false
 
 jobs:
@@ -50,6 +57,22 @@ jobs:
         run: npx playwright install --with-deps chromium webkit
       - name: Test navigation and visitor journeys
         run: npm test
+        env:
+          KEW_HTTP2: ${{ inputs.http2 }}
+          KEW_DIAG_PROTOCOL: ${{ inputs.protocol_log }}
+          KEW_DIAG_DIR: /tmp/kew-diag
+          KEW_SERVER_LOG: /tmp/kew-diag/server.log
+          NODE_OPTIONS: --require ${{ github.workspace }}/tests/browser/diag-preload.cjs
+      - name: Trim protocol logs
+        if: always()
+        run: for f in /tmp/kew-diag/protocol-*.log; do [ -f "$f" ] && cut -c1-1500 "$f" > "$f.tmp" && mv "$f.tmp" "$f"; done; ls -la /tmp/kew-diag || true
+      - name: Save redirect diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: redirect-diagnostics
+          path: /tmp/kew-diag/
+          retention-days: 7
       - name: Save browser report and failure evidence
         if: failure()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

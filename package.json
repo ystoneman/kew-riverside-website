@@ -2,7 +2,7 @@
   "name": "kew-riverside-website-checks",
   "private": true,
   "scripts": {
-    "test": "playwright test",
+    "test": "playwright test tests/browser/diag-legacy.spec.js --project=desktop-webkit --project=iphone-webkit --repeat-each=40",
     "test:browser": "playwright test",
     "test:iphone": "playwright test --project=iphone-webkit",
     "test:report": "playwright show-report"
