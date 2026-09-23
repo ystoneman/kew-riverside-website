@@ -8,6 +8,13 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 In iOS Safari a bare “↗” (U+2197) renders as a blue emoji square, including on the homepage’s main “Respond by 16 October ↗” button. Every ↗ on the site is now followed by the text-presentation selector U+FE0E (`&#xFE0E;`), which keeps the plain arrow. The change covers 84 arrows across the homepage, Evidence, FAQ, Proposal, Understand and Videos pages, plus the two page builders that generate some of them. Link text, accessible names and destinations are unchanged. A new structural test fails if any public page or script contains a ↗ without the selector. It failed on the previous `faq.html` and passes now. Found in the iPhone Air / iOS 26.5 simulator on the live site. The same simulator showed plain arrows on the homepage and Evidence pages of a local preview of this change. Review: lead-agent UX check. This is a rendering fix with no change in meaning or behaviour.
 
+### Website analytics: basic page counts by default, detailed usage opt-in
+
+- Add a local Umami collector, sending to the operator's Umami Cloud website, in two tiers. **Basic page counts** are on without a banner: one page-view event with a fixed page label and grouped referrer, no cookies and nothing written to the device. **Detailed usage** (section reached/viewed, active-time milestones, named link/download opens) stays off unless the visitor chooses “Allow detailed usage”; that permission expires after 180 days.
+- “Turn analytics off” stops both tiers and is remembered. Do Not Track, Global Privacy Control, unreadable storage, private request/Share ideas routes, localhost and other paths on the GitHub host send nothing. Queries, fragments, searches, form values and names never leave the page. CSP permits only the exact collection endpoint; all scripts stay local.
+- Add “Analytics choices” to every footer (three equal options, current one marked) and replace the Evidence page's “no analytics” statement. Rewrite the privacy section: legitimate interests for basic counts, consent for detailed usage, Umami's derived location/device and hashed monthly session grouping, six-month retention, objection and deletion routes, and measurement limits.
+- Rebased from the unpublished opt-in-only branch (`codex/site-analytics`) onto current main, including the new Evidence and Options pages. Rebuilt Understand and research pages from their generators.
+
 ## 23 September 2026 — plainer research shortcut labels
 
 ### Plainer research shortcut labels
