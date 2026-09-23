@@ -96,10 +96,11 @@
     clear.hidden = !withClear;
   }
   function forgetDraft(note) {
+    clearTimeout(timer);
     store.remove(DRAFT);
     message.value = '';
     displayName.value = ''; // The draft held the public name too.
-    input();
+    updatePreview(); // Not an input event: that would schedule a save that hides the note below.
     newReference(); // A new letter gets its own reference.
     returnPanel.hidden = true;
     if (note) showStatus(note, false); else { status.hidden = true; clear.hidden = true; }
@@ -137,7 +138,7 @@
     if (!message.value) {
       message.value = saved.text;
       if (typeof saved.name === 'string') displayName.value = saved.name;
-      input();
+      updatePreview(); // Restoring is not an edit, so it does not re-save the draft.
     }
     if (saved.pending && !confirmed(message.value)) showReturn(!location.hash);
     else if (!saved.pending) showStatus('Draft restored from this device');

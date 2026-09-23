@@ -195,6 +195,9 @@ test('Letters: coming back after Send asks whether it arrived, in view, and keep
   await page.getByRole('button', { name: 'It arrived: clear this draft' }).click();
   await expect(panel).toBeHidden();
   await expect(page.locator('#message')).toHaveValue('');
+  // The note must outlast the draft-saving pause (0.6 s) rather than flash and vanish.
+  await page.waitForTimeout(1000);
+  await expect(page.locator('#draft-status')).toBeVisible();
   await expect(page.locator('#draft-status')).toHaveText('✓ Draft cleared from this device');
   expect(await readDraft(page)).toBeNull();
   expect(submissions).toHaveLength(1);
@@ -214,6 +217,8 @@ test('Letters: once the thank-you page confirms a letter, a restored copy is cle
   await page.goto('/letters.html');
   await expect(page.locator('#message')).toHaveValue('');
   await expect(page.locator('#sent-return')).toBeHidden();
+  await page.waitForTimeout(1000);
+  await expect(page.locator('#draft-status')).toBeVisible();
   await expect(page.locator('#draft-status')).toHaveText('✓ Your letter was sent. You can write another here');
   expect(await page.locator('#letter-reference').inputValue()).not.toBe(reference);
   expect(await readDraft(page)).toBeNull();
