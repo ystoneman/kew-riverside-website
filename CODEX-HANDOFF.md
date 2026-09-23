@@ -1,6 +1,30 @@
+# Current handoff — 23 September 2026
+
+Claude Code continued the shorter-homepage PR (#4) at the owner's request. This section supersedes the historical handoff below. The owner allows Claude Code to merge PRs itself after required checks and project reviews pass, using the documented owner exception; branch protection settings stay unchanged.
+
+## State at this commit
+
+- **Video consent release:** live and verified. Rerun attempt 2 of main run `35781407831` deployed `1cb3f52`, and all 69 live public files matched it byte for byte.
+- **Research-arrival fix:** PR #5 merged as `74ce73e`, but its main run `35823364131` failed a video-page check and did not deploy.
+- **Branch `codex/shorter-homepage`:** local worktree is `shorter-homepage-worktree`. It now includes `main` through `74ce73e`, plus a page-level `videos.css` rule so jumps and focus changes on the video page land immediately. That fixes the failed check above; see TESTING.md, “Video page scrolling and homepage integration”. The research fix therefore publishes with this PR.
+- **Unchanged shorter-homepage work:** a shorter homepage; the full evidence library on `evidence.html`; all eight strategies on `options.html`; all 86 moved anchors routed, with no-JavaScript links. **Keep the exact shared video QR URL `https://ystoneman.github.io/kew-riverside-website/videos.html#upload`.** Its earlier campaign, evidence and rendered UX reviews and native iPhone 17 Safari checks still apply.
+
+## Next steps
+
+1. Confirm hosted PR checks, merge, and confirm the main deployment. **A merge is not a deployment.**
+2. Compare every live public file with the deployed commit. Then check the live homepage, `evidence.html`, `options.html`, an old homepage source URL such as `index.html#source-inspection-2026`, a research anchor and `videos.html#upload`, including native Safari.
+3. Record verified results in CHANGELOG.md (date the Unreleased entries) and TESTING.md.
+4. Theme PR #2 (`codex/site-theme`) must merge `main` again. The new Evidence and Options pages need its theme assets and controls, and its notes will conflict at the Unreleased insertion points.
+
+Node 24 is available locally at `/Users/yannstoneman/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node`. Local runs used temporary configs outside the repository on separate ports; repository config and server files were not changed.
+
+---
+
+# Historical handoff (superseded where it conflicts with the current section)
+
 # Codex handoff: publish the Kew Riverside evidence hub
 
-## ACTIVE HANDOFF: video publication consent — 22 September 2026
+## Completed handoff: video publication consent — 22 September 2026
 
 The user asked to hand this task to Claude Code because of their remaining Codex credits. Stop at this handoff; do not assume the task is deployed. The user authorised updating the existing website, Dropbox request and both Google forms, including ordinary commit/push/deployment. Do not send messages, real form responses or test videos.
 

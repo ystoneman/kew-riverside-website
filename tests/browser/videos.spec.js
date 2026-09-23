@@ -1,4 +1,4 @@
-const { test, expect, expectDestination } = require('./fixtures');
+const { test, expect, expectDestination, expectScrollSettled } = require('./fixtures');
 const upload = 'https://docs.google.com/forms/d/e/1FAIpQLScJZ8ZnZWTaPUIoM9l2Vjir7TgNNTHuUyDEF5uLRJolm8iccg/viewform';
 const dropbox = 'https://www.dropbox.com/request/9uaa0fawrtdz6pv8b6hn';
 const legacy = 'https://docs.google.com/forms/d/e/1FAIpQLSfK3b8XtDJ5_mhKWTqxfZpZwPOJLGXjN1QIQYTKYlJ0dRAHHQ/viewform';
@@ -68,6 +68,17 @@ test('Video: withdrawal leads to private request and non-Google alternative stay
   await expect(page.locator('#video-privacy')).toBeInViewport();
   await expect(page.locator('section[aria-labelledby="video-privacy"]')).toContainText('2026-09-22-videos-v1');
   await expect(page.locator('section[aria-labelledby="video-privacy"]')).toContainText('2026-09-22-videos-dropbox-v1');
+});
+
+// Main run 35823364131: focusing the help summary started a smooth scroll in desktop
+// WebKit, which moved the original-form link beneath the following click.
+test('Video: focusing and opening upload help stays still before a link is used', async ({ page }) => {
+  await page.goto('/videos.html');
+  await page.locator('#upload-help summary').focus();
+  await expectScrollSettled(page, 'Focusing upload help');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#upload-help')).toHaveAttribute('open', '');
+  await expectScrollSettled(page, 'Opening upload help');
 });
 
 for (const [name, selector, destination] of [

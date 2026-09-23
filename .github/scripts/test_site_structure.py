@@ -10,6 +10,39 @@ from urllib.parse import parse_qs, unquote, urlsplit
 from check_site import PUBLIC_FILES, ROOT
 
 
+# Snapshot of the moved homepage IDs before the September 2026 page split.
+# Keep this independent of the new pages: deleting an entry must fail the check,
+# even if no current page still links to that previously shared address.
+LEGACY_EVIDENCE_IDS = '''
+evidence visual-preview-title school-roll-title roll-svg-title roll-svg-desc
+borough-context trend-title trend-desc area-fill timeline earlier-record records
+record-filters record-search topic-filter year-filter type-filter status-filter
+result-count research-count clear-filters source-lessons-report source-grid
+source-organisation-overview-2026 source-school-census-jan-2026
+source-school-capacity-may-2025 source-hampton-wick-proposal-2026
+source-consultation-richmond source-inspection-2026 source-newsletter-2026
+source-committee-september-2026 source-guidance-index source-guidance-2026
+source-participation source-buildings-2026 source-planning-nov-2025
+source-committee-nov-2025 source-forum-july-2025 source-planning-july-2025
+source-committee-june-2025 source-forum-2024 source-planning-2024 source-strategy-2023
+source-inspection-2021 source-inspection-2017 source-inspection-2012
+source-assessment-2011 source-visit-2009 source-inspection-2007 source-inspection-2003
+source-school-home source-pfi source-school-finance source-benchmarking
+source-ofsted-index source-newsletter-index source-committee-index
+source-committee-meetings source-forum-index source-petitions source-petition-scheme
+source-gias source-consultation-afc source-consultation-leaflet
+source-consultation-faq source-consultation-response source-committee-remit
+source-committee-chair source-committee-vice-chair source-committee-november-2026
+no-results gaps method
+'''.split()
+LEGACY_OPTION_IDS = '''
+options option-recovery-plan option-crowdfunding crowdfunding-funding-needed
+crowdfunding-council-assessment crowdfunding-sustainability crowdfunding-recipient
+crowdfunding-outreach crowdfunding-examples crowdfunding-appeal-terms
+crowdfunding-expertise option-demand option-enrolment
+'''.split()
+
+
 class Document(HTMLParser):
     VOID_TAGS = frozenset('area base br col embed hr img input link meta param source track wbr'.split())
 
@@ -20,6 +53,8 @@ class Document(HTMLParser):
         self.scripts = []
         self.navigation = {name: [] for name in ('desktop-explore', 'mobile-menu', 'participation-nav')}
         self.source_ids = []
+        self.legacy_routes = {}
+        self.legacy_links = {}
         self.stack = []
         self.feed(text)
 
@@ -35,12 +70,17 @@ class Document(HTMLParser):
             self.scripts.append(attrs['src'])
         if 'source-card' in classes:
             self.source_ids.append(attrs.get('id', ''))
+        if 'legacy-route' in classes:
+            self.legacy_routes[attrs.get('id', '')] = attrs.get('data-destination', '')
         if tag == 'a' and 'href' in attrs:
             for name in self.navigation:
-                if any(name in ancestor_classes for _, ancestor_classes in self.stack):
+                if any(name in ancestor_classes for _, ancestor_classes, _ in self.stack):
                     self.navigation[name].append(attrs['href'])
+            for _, ancestor_classes, ancestor_attrs in self.stack:
+                if 'legacy-route' in ancestor_classes:
+                    self.legacy_links.setdefault(ancestor_attrs.get('id', ''), []).append(attrs['href'])
         if tag not in self.VOID_TAGS:
-            self.stack.append((tag, classes))
+            self.stack.append((tag, classes, attrs))
 
     def handle_startendtag(self, tag, attributes):
         self.handle_starttag(tag, attributes)
@@ -97,6 +137,22 @@ class SiteStructureTests(unittest.TestCase):
                 duplicates = [identifier for identifier, count in Counter(page.ids).items() if count > 1]
                 self.assertEqual(duplicates, [], 'Duplicate IDs make anchors and controls ambiguous')
 
+    def test_previously_shared_homepage_anchors_keep_explicit_fallbacks(self):
+        expected = {identifier: filename + '#' + identifier
+                    for filename, identifiers in (('evidence.html', LEGACY_EVIDENCE_IDS),
+                                                   ('options.html', LEGACY_OPTION_IDS))
+                    for identifier in identifiers}
+        homepage = self.pages['index.html']
+        for identifier, destination in expected.items():
+            with self.subTest(anchor=identifier):
+                self.assertEqual(homepage.legacy_routes.get(identifier), destination,
+                                 'A previously shared homepage URL lost its destination')
+                self.assertIn(destination, homepage.legacy_links.get(identifier, []),
+                              'Legacy destinations need usable links without JavaScript')
+                filename, fragment = local_destination('index.html', destination)
+                self.assertIn(fragment, self.pages[filename].ids,
+                              'A legacy route must reach the original named content')
+
     def test_every_page_uses_the_same_versioned_navigation_script(self):
         baseline = [src for src in self.pages['index.html'].scripts if urlsplit(src).path == 'navigation.js']
         self.assertEqual(len(baseline), 1)
@@ -125,7 +181,7 @@ class SiteStructureTests(unittest.TestCase):
             rows = list(csv.DictReader(stream))
         json_ids = [record['id'] for record in records]
         csv_ids = [row['Record reference'] for row in rows]
-        html_ids = self.pages['index.html'].source_ids
+        html_ids = self.pages['evidence.html'].source_ids
         self.assertTrue(json_ids, 'The source library must not disappear silently')
         self.assertEqual(len(json_ids), len(set(json_ids)), 'Duplicate JSON record reference')
         self.assertEqual(len(csv_ids), len(set(csv_ids)), 'Duplicate CSV record reference')

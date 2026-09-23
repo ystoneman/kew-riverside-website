@@ -66,23 +66,28 @@ async function expectDestination(page, href, baseURL) {
   }
 }
 
-// A shared fragment must already be in view when the page loads and stay still,
-// so an immediate click or tap cannot land on content that is still scrolling.
-async function expectStillArrival(page, selector) {
-  // Page timers never run without JavaScript; the load position is then final.
-  const sample = test.info().project.use.javaScriptEnabled !== false;
-  const arrival = await page.evaluate(async ({ selector, sample }) => {
-    const top = document.querySelector(selector).getBoundingClientRect().top;
-    const positions = new Set([Math.round(scrollY)]);
-    for (const start = performance.now(); sample && performance.now() - start < 600;) {
+// Where scripts can run, sample the scroll position for 600 ms: a page that is
+// still animating can move a link or summary beneath an immediate click or tap.
+async function expectScrollSettled(page, label) {
+  // Page timers never run without JavaScript; the current position is then final.
+  if (test.info().project.use.javaScriptEnabled === false) return;
+  const positions = await page.evaluate(async () => {
+    const seen = new Set([Math.round(scrollY)]);
+    for (const start = performance.now(); performance.now() - start < 600;) {
       await new Promise(resolve => requestAnimationFrame(resolve));
-      positions.add(Math.round(scrollY));
+      seen.add(Math.round(scrollY));
     }
-    return { top, viewport: innerHeight, positions: positions.size };
-  }, { selector, sample });
+    return seen.size;
+  });
+  expect(positions, `${label} does not keep scrolling`).toBe(1);
+}
+
+// A shared fragment must already be in view when the page loads and stay still.
+async function expectStillArrival(page, selector) {
+  const arrival = await page.evaluate(selector => ({ top: document.querySelector(selector).getBoundingClientRect().top, viewport: innerHeight }), selector);
   expect(arrival.top, `${selector} is in view on arrival`).toBeGreaterThanOrEqual(0);
   expect(arrival.top, `${selector} is in view on arrival`).toBeLessThan(arrival.viewport / 2);
-  expect(arrival.positions, `${selector} arrival does not keep scrolling`).toBe(1);
+  await expectScrollSettled(page, `${selector} arrival`);
 }
 
 async function captureSubmissions(page) {
@@ -97,4 +102,4 @@ async function captureSubmissions(page) {
   return submissions;
 }
 
-module.exports = { test, expect, pages, headerLinks, expectDestination, expectStillArrival, captureSubmissions };
+module.exports = { test, expect, pages, headerLinks, expectDestination, expectScrollSettled, expectStillArrival, captureSubmissions };
