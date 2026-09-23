@@ -4,6 +4,14 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Hosted browser-suite budget
+
+PR #14 run `35880577922` reached more than 1,020 completed browser checks before GitHub cancelled its browser job at the previous 15-minute job limit. Increase that job's limit to 25 minutes as the participation suite grows; keep every browser project and assertion in place. The separate validation job passed, and the final combined run is recorded after completion.
+
+### Letter Send stays still while a draft saves
+
+The delayed saved-draft status and Clear draft control moved Send by 34 px at 390 px width and 61 px at 320 px. Under parallel iPhone WebKit load, that movement sometimes occurred between touch down and release, so the tap landed on the surrounding section and the letter was not submitted (J4). Show a truthful “Saving draft on this device” status and the Clear draft control as soon as writing starts; the later save updates the same space. A regression measuring Send position through the save fails on the previous code and passes at 320 and 390 px. The intercepted submission and position checks passed 200/200 four-worker iPhone WebKit repetitions, plus 24 focused letter checks across scripted browsers. No real form was submitted.
+
 ### Deep-linked video upload keeps its Back position
 
 The participation tile cue changed the document's root class on direct `videos.html#upload` arrival. In iPhone WebKit, returning from the intercepted permission-form handoff then left `#upload` in the URL but showed the top of the page (J9). Skip that decorative cue on shared fragment arrivals so the requested target takes precedence. The upload link, permissions, analytics choices and existing QR/Back assertions are unchanged. A new check pins the cue's absence on direct fragment arrival; the cue still runs on ordinary eligible page arrivals. In an isolated copy of the combined branch, the QR/Back test failed 13 of the first 14 focused repetitions before the guard; removing the cue script or its root-class change passed 3/3 and 5/5 respectively, while removing only its stylesheet still failed 3/3. The guard passed 20/20 focused iPhone WebKit repetitions. These are Playwright checks, not native Safari verification; no deployment is claimed.
@@ -12,7 +20,7 @@ The participation tile cue changed the document's root class on direct `videos.h
 
 Follow the visitor’s device appearance by default, with a labelled System / Light / Dark selector in the footer. Remember a manual choice in this browser only; System removes that override. Keep navigation and the protected parent-plan arrival in place. Add a deep-green screen palette for text, surfaces, forms, chart series, keys and forecast markers; preserve print styling and downloadable graphics. Version the updated stylesheet URLs so returning visitors do not mix older cached light-only components with the new palette. Document the local preference in Privacy. Storage failures leave the current page usable; Back and other-tab changes recover the current saved preference.
 
-Independent UX planning and implementation reviews covered the actual diff plus supplied 320px/390px, desktop dark/light, chart, form and native footer screenshots. Fixes included preview-button contrast, restored-page preference refresh and a 44px Safari picker. The contrast audit exposed WebKit root-variable inheritance inconsistencies; declaring the same palette on body fixed the repeated footer failures. The audit paints the page and retains its original thresholds. Test/deployment completion will be recorded after verification.
+Independent UX planning and implementation reviews covered the actual diff plus supplied 320px/390px, desktop dark/light, chart, form and native footer screenshots. Fixes included preview-button contrast, restored-page preference refresh and a 44px Safari picker. The contrast audit exposed WebKit root-variable inheritance inconsistencies; declaring the same palette on body fixed the repeated footer failures. The audit paints the page in bounded strips and retains its original thresholds. Integration with the shorter homepage and invitation adds dark colours to the new form states and analytics choices panel; the chart assertions follow their Evidence destination. Local focused and rendered checks are recorded in TESTING.md. Hosted verification and deployment remain pending.
 
 ### Warmer invitations to write, ask and suggest, and optional quotes from letters
 

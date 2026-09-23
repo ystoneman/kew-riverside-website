@@ -175,6 +175,8 @@ test('Letters: a draft keeps only the letter and public name on this device, and
 });
 
 test('Letters: a delayed draft save does not move Send under a waiting tap', async ({ page }) => {
+  // Isolate the save from the separate 260 ms entrance transform after Next.
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.clock.install();
   for (const width of [320, 390]) {
     await page.setViewportSize({ width, height: 664 });

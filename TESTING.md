@@ -129,6 +129,8 @@ Native iPhone Air / iOS 26.5 Safari separately checked the footer picker, Dark a
 
 Hosted run 35780141040 passed 749 checks; five long-page appearance checks stopped at Linux WebKit’s 32,767-pixel screenshot limit before their contrast assertion. A CSS-pixel scale correction reduced that to two failures on the homepage and source register in hosted run 35783738690. Capture now paints the full document in bounded CSS-pixel strips before the unchanged contrast assertion. All 88 focused appearance checks, 40 Python checks and 71-file public artifact validation passed locally; WebKit also captured every strip of a synthetic 44,000-pixel page. The prior complete local run passed all 754 checks; hosted verification of the strip capture is pending.
 
+After integration with the shorter homepage and participation invitation, all 16 public pages passed the dark/light appearance and text-contrast checks. The focused theme/participation run passed 313 browser checks with 15 deliberate file-check skips; the iPhone WebKit video QR/Back check passed 10 further repetitions. All 42 Python checks and the 89-file public artifact validation passed locally. Emulated iPhone WebKit at 390 px was visually checked on homepage, letters arrival and revealed choices, Share ideas cards, and the letter next-steps card. The analytics choices panel was checked in dark and light across four browser projects. These emulated checks do not replace a new native Safari or hosted run.
+
 
 ## Short homepage and stable shared links — 22 September 2026
 
