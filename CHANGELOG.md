@@ -4,9 +4,13 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+## 23 September 2026 — plainer research shortcut labels
+
 ### Plainer research shortcut labels
 
 Replace the homepage shortcut heading “Looking for the 44-page report?” with “What happened to other schools proposed for closure?” under a “Historical research” label. On Evidence, replace “Find the 44-page research report” with “Find lessons from other schools”, which matches the card it jumps to. Visitors who have never heard of the report now see its subject, while the download button still gives its 44-page length. Links, files, destinations and the research wording are unchanged. Review: lead-agent UX and evidence check at the owner's request. The heading describes the research's existing scope of closure proposals, 12 reprieves and four closures. At 320, 390 and 1440 px it wraps to three, two and one line(s), with no horizontal overflow, and the Evidence jump lands on its card. Validation: 356 focused homepage, Evidence, journey, layout and no-JavaScript checks passed.
+
+Publication verification: merged as `921cc5a` (#7) after hosted PR run `35831539219` passed all 732 browser checks. Main run `35832240369` attempt 1 hit the known WebKit legacy-redirect stall (731 passed; see TESTING.md). Rerun attempt 2 passed all 732 checks and deployed `921cc5a`. All 73 public files then matched `921cc5a` byte for byte. The live homepage heading and Evidence jump link show the new wording and the old wording is gone. Native iPhone Air / iOS 26.5 Safari showed the new homepage shortcut.
 
 ### Long-letter check time budget
 
