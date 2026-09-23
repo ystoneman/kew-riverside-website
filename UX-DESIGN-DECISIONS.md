@@ -231,6 +231,14 @@ Keep evidence gap 7 in its familiar position, visibly resolved and linked to the
 Independent planning reviews supported these placements. Implementation reviews corrected the chart disclosure link and source details; campaign and rendered UX reviews found no further actionable issues. Rendered review covered 320/390px and desktop, retained arrival routes, keyboard tables and FAQ recovery. Regression checks and native Safari outcomes are recorded in `TESTING.md` and release evidence in `CHANGELOG.md`; this rationale is not user-research evidence.
 
 
+## System-aware appearance — 22 September 2026
+
+Visitors can read in their preferred light or dark appearance without a new decision on arrival. Use CSS system preference as the default, including without JavaScript. A native labelled System / Light / Dark select in the footer provides an override without competing with J1–J4 or changing J5–J9 routes. A forced dark theme would ignore light preferences; a prominent header toggle would consume space needed by campaign and evidence routes. Store only an explicit light/dark choice locally, remove it for System, and recover saved choices on restored pages and across tabs.
+
+Use semantic screen colours rather than image inversion. Preserve the bright participation accents, direct chart labels, separate series, forecast dashes/hollow markers, source notes and consent boundaries. PDF/SVG image downloads remain unchanged and print stays light. A small CSS arrow allows the native select to retain a 44px target in WebKit. The theme script runs after styles in the head, before body paint; default system matching itself requires no script.
+
+Independent UX review inspected the diff and lead-provided mobile/desktop/native screenshots; its browser connection was unavailable, so interaction testing remains the lead agent’s responsibility. No protected journey priorities changed. Delivery checks are recorded in TESTING.md and CHANGELOG.md.
+
 ## Short homepage and dedicated reference pages — 22 September 2026
 
 The owner asked to move directly to a shorter homepage after feedback that scrolling through the site felt excessive. This supersedes earlier choices to keep complete options and the source library on the homepage. Preserving a destination alone does not establish comfortable discovery. The intended hierarchy remains J1–J9.
