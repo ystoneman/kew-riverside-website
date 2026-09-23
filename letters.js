@@ -3,7 +3,6 @@
   const form = document.getElementById('letter-form');
   const message = document.getElementById('message');
   const displayName = document.getElementById('display-name');
-  const consent = document.getElementById('letter-consent');
   const publicPermission = document.getElementById('allow-public');
   const councilPermission = document.getElementById('allow-council');
   const quotePermission = document.getElementById('allow-quotes');
@@ -20,9 +19,10 @@
     set(key, value, area = localStorage) { try { area.setItem(key, JSON.stringify(value)); return true; } catch { return false; } },
     remove(key, area = localStorage) { try { area.removeItem(key); } catch { /* storage unavailable */ } }
   };
-  // A short fingerprint of a letter, never its text, so a confirmed letter is recognised on return.
+  // A short fingerprint of a letter, never its text, so an explicitly cleared letter
+  // is removed from a browser-restored form on return.
   const fingerprint = text => { let h = 2166136261; for (let i = 0; i < text.length; i++) { h ^= text.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0).toString(36) + ':' + text.length; };
-  const confirmed = text => { const record = store.get('kr-letter-confirmed', sessionStorage); return Boolean(text) && Boolean(record) && record.id === fingerprint(text); };
+  const explicitlyCleared = text => { const record = store.get('kr-letter-cleared', sessionStorage); return Boolean(text) && Boolean(record) && record.id === fingerprint(text); };
   const londonDate = () => {
     const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date());
     const values = Object.fromEntries(parts.map(part => [part.type, part.value]));
@@ -98,11 +98,16 @@
   function forgetDraft(note) {
     clearTimeout(timer);
     store.remove(DRAFT);
-    message.value = '';
-    displayName.value = ''; // The draft held the public name too.
+    store.remove('kr-sent-letter', sessionStorage);
+    store.remove('kr-sent-kind', sessionStorage);
+    store.remove('kr-letter-cleared', sessionStorage);
+    form.reset(); // Clear private fields and every permission as well as the saved words.
+    sent = false;
+    updateChoices();
     updatePreview(); // Not an input event: that would schedule a save that hides the note below.
     newReference(); // A new letter gets its own reference.
     returnPanel.hidden = true;
+    document.getElementById('return-status').textContent = '';
     if (note) showStatus(note, false); else { status.hidden = true; clear.hidden = true; }
   }
   clear.addEventListener('click', () => { forgetDraft(); message.focus(); });
@@ -111,7 +116,7 @@
   function saveDraft(pending = false) {
     clearTimeout(timer);
     if (sent && !pending) return;
-    if (!pending && confirmed(message.value)) return;
+    if (!pending && explicitlyCleared(message.value)) return;
     if (message.value.trim().length < 3) { store.remove(DRAFT); status.hidden = true; clear.hidden = true; return; }
     if (store.set(DRAFT, { v: 1, text: message.value, name: displayName.value, saved: Date.now(), pending })) showStatus('Draft saved on this device');
   }
@@ -140,7 +145,7 @@
       if (typeof saved.name === 'string') displayName.value = saved.name;
       updatePreview(); // Restoring is not an edit, so it does not re-save the draft.
     }
-    if (saved.pending && !confirmed(message.value)) showReturn(!location.hash);
+    if (saved.pending && !explicitlyCleared(message.value)) showReturn(!location.hash);
     else if (!saved.pending) showStatus('Draft restored from this device');
   } else if (saved) {
     store.remove(DRAFT);
@@ -154,12 +159,13 @@
     if (!sent) { try { history.scrollRestoration = 'auto'; } catch { /* unsupported */ } }
   });
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && message.value.trim().length >= 3) saveDraft(); });
-  // Coming back to a letter the thank-you page confirmed: clear it rather than invite a duplicate.
-  const forgetConfirmed = () => { if (confirmed(message.value)) forgetDraft('Your letter was sent. You can write another here'); };
-  forgetConfirmed();
+  // A visitor can explicitly remove the copy on the next-steps page. If Back restores
+  // an old form DOM, honour that request without inferring that Formspree accepted it.
+  const forgetCleared = () => { if (explicitlyCleared(message.value)) forgetDraft('Letter cleared from this device. You can write another here'); };
+  forgetCleared();
   addEventListener('pageshow', event => {
-    forgetConfirmed();
-    if (event.persisted && sent && !confirmed(message.value)) showReturn(true);
+    forgetCleared();
+    if (event.persisted && sent && !explicitlyCleared(message.value)) showReturn(true);
   });
 
   // Returning after pressing Send without the thank-you page: copy for the official form, or clear.
@@ -167,7 +173,7 @@
     const note = document.getElementById('return-status');
     try {
       await navigator.clipboard.writeText(message.value);
-      note.textContent = 'Copied. In the official form, answer the questions, then paste your letter into the comments box.';
+      note.textContent = 'Copied. Answer the official form’s questions in your own words; use relevant parts of your letter where they fit.';
     } catch {
       message.focus();
       message.select();
@@ -219,8 +225,13 @@
     if (/^[\w-]+$/.test(target) && later.some(section => section.querySelector('#' + target))) reveal(false);
   });
 
-  // The official-response line retires after the stated deadline (London date).
-  if (londonDate() > '2026-10-16') document.getElementById('official-line').hidden = true;
+  // With scripts, show the direct official ask only while the initial consultation
+  // is open. The static fallbacks remain date-safe when scripts are unavailable.
+  const officialClosed = londonDate() > '2026-10-16';
+  document.getElementById('official-line').hidden = officialClosed;
+  document.getElementById('official-line-past').hidden = !officialClosed;
+  document.getElementById('step-official-open').hidden = officialClosed;
+  document.getElementById('step-official-fallback').hidden = !officialClosed;
 
   form.addEventListener('submit', event => {
     updateChoices();

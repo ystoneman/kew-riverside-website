@@ -103,7 +103,7 @@ test('Letters: writing comes first, and Next explains a too-short letter before 
   await expect(next).toBeHidden();
   await expect(page.locator('#step-error')).toBeHidden();
   // The official route stays visible before Send.
-  await expect(page.locator('#step-send .official-inline a')).toBeVisible();
+  await expect(page.locator('#step-official-open a').first()).toBeVisible();
 });
 
 test('Letters: a link to a later field shows every step at once', async ({ page }) => {
@@ -138,6 +138,8 @@ test('Letters: the character counter appears only near the limit', async ({ page
 
 test('Letters: a draft keeps only the letter and public name on this device, and clears on request', async ({ page }) => {
   await page.goto('/letters.html');
+  await expect(page.locator('#draft-notice')).toBeVisible();
+  await expect(page.locator('#draft-notice')).toContainText('shared device');
   await page.locator('#message').fill(LETTER);
   await expect(page.locator('#draft-status')).toHaveText('✓ Draft saved on this device');
   await revealLetterChoices(page);
@@ -161,6 +163,29 @@ test('Letters: a draft keeps only the letter and public name on this device, and
   await expect(page.locator('#display-name')).toHaveValue('');
   await expect(page.locator('#message')).toBeFocused();
   expect(await readDraft(page)).toBeNull();
+});
+
+test('Letters: Clear draft erases private fields, choices and a pending tab copy', async ({ page }) => {
+  await page.goto('/letters.html');
+  await page.locator('#message').fill(LETTER);
+  await revealLetterChoices(page);
+  await page.locator('#letter-consent').check();
+  await page.locator('#allow-public').check();
+  await page.locator('#allow-quotes').check();
+  await page.locator('#allow-council').check();
+  await page.locator('#email').fill('reply@example.invalid');
+  await page.locator('#council-name').fill('Fictional adult');
+  await page.evaluate(text => sessionStorage.setItem('kr-sent-letter', JSON.stringify({ text, at: Date.now() })), LETTER);
+  await expect(page.locator('#draft-status')).toBeVisible();
+  await page.getByRole('button', { name: 'Clear draft' }).click();
+  for (const selector of ['#message', '#display-name', '#email', '#council-name']) await expect(page.locator(selector)).toHaveValue('');
+  for (const selector of ['#letter-consent', '#allow-public', '#allow-quotes', '#allow-council']) await expect(page.locator(selector)).not.toBeChecked();
+  await expect(page.locator('#council-details')).toBeHidden();
+  await expect(page.locator('#sharing-summary')).toContainText('All sharing choices are off');
+  expect(await readDraft(page)).toBeNull();
+  expect(await page.evaluate(() => sessionStorage.getItem('kr-sent-letter'))).toBeNull();
+  await page.reload();
+  await expect(page.locator('#message')).toHaveValue('');
 });
 
 test('Letters: a draft older than seven days is not restored and is removed', async ({ page }) => {
@@ -200,26 +225,39 @@ test('Letters: coming back after Send asks whether it arrived, in view, and keep
   await expect(page.locator('#draft-status')).toBeVisible();
   await expect(page.locator('#draft-status')).toHaveText('✓ Draft cleared from this device');
   expect(await readDraft(page)).toBeNull();
+  expect(await page.evaluate(() => sessionStorage.getItem('kr-sent-letter'))).toBeNull();
   expect(submissions).toHaveLength(1);
 });
 
-test('Letters: once the thank-you page confirms a letter, a restored copy is cleared rather than offered again', async ({ page }) => {
+test('Letters: direct next-steps visit does not confirm receipt or erase the pending draft', async ({ page }) => {
+  const submissions = await captureSubmissions(page);
+  await sendFictionalLetter(page);
+  await expect.poll(() => submissions.length).toBe(1);
+  // A direct visit is not evidence of a provider receipt.
+  await page.goto('/sent.html');
+  await expect(page.locator('#sent-title')).toHaveText('After sending your letter');
+  await expect(page.locator('#sent-letter-lead')).toContainText('If Formspree confirmed');
+  expect(await readDraft(page)).not.toBeNull();
+  expect(await page.evaluate(() => sessionStorage.getItem('kr-letter-cleared'))).toBeNull();
+  await page.goto('/letters.html');
+  await expect(page.locator('#message')).toHaveValue(LETTER);
+  await expect(page.locator('#sent-return')).toBeVisible();
+});
+
+test('Letters: explicit removal on next-steps page clears both copies and a restored form', async ({ page }) => {
   const submissions = await captureSubmissions(page);
   await sendFictionalLetter(page);
   await expect.poll(() => submissions.length).toBe(1);
   const reference = submissions[0].get('reference');
-  // Stand-in for the form service's redirect to the thank-you page, in the same tab.
   await page.goto('/sent.html');
-  await expect(page.locator('#sent-title')).toHaveText('Thank you. Your letter is on its way.');
+  await page.getByRole('button', { name: 'clear both copies now' }).click();
   expect(await readDraft(page)).toBeNull();
-  // A browser that restores the sent words (for example on Back) must not invite a duplicate.
-  await page.evaluate(text => localStorage.setItem('kr-letter-draft', JSON.stringify({ v: 1, text, name: '', saved: Date.now(), pending: true })), LETTER);
-  await page.goto('/letters.html');
+  expect(await page.evaluate(() => sessionStorage.getItem('kr-sent-letter'))).toBeNull();
+  await page.goBack(); // Provider confirmation or error page.
+  await page.goBack(); // Browser-restored letter form.
+  await expect(page).toHaveURL(/\/letters\.html$/);
   await expect(page.locator('#message')).toHaveValue('');
   await expect(page.locator('#sent-return')).toBeHidden();
-  await page.waitForTimeout(1000);
-  await expect(page.locator('#draft-status')).toBeVisible();
-  await expect(page.locator('#draft-status')).toHaveText('✓ Your letter was sent. You can write another here');
   expect(await page.locator('#letter-reference').inputValue()).not.toBe(reference);
   expect(await readDraft(page)).toBeNull();
 });
@@ -233,10 +271,13 @@ for (const [moment, open] of [['2026-10-16T23:30:00', true], ['2026-10-17T00:30:
     await page.goto('/letters.html');
     await expect(page.locator('#sent-return')).toBeVisible();
     await expect(page.locator('#return-clear')).toBeVisible();
-    for (const selector of ['#official-line', '#return-official', '#return-official-link', '#return-copy']) {
+    for (const selector of ['#official-line', '#step-official-open', '#return-official', '#return-official-link', '#return-copy']) {
       if (open) await expect(page.locator(selector), selector).toBeVisible();
       else await expect(page.locator(selector), selector).toBeHidden();
     }
+    await expect(page.locator('#official-line-past')).toBeVisible({ visible: !open });
+    await expect(page.locator('#step-official-fallback')).toBeVisible({ visible: !open });
+    await expect(page.locator('.official-notice')).toContainText('check the current stage');
   });
 }
 
@@ -339,7 +380,7 @@ test('Share ideas: sending records only the kind of message, and the thank-you p
   const record = JSON.parse(await page.evaluate(() => sessionStorage.getItem('kr-sent-kind')));
   expect(Object.keys(record).sort()).toEqual(['at', 'kind']);
   expect(record.kind).toBe('suggestion');
-  await expect(page.locator('#sent-title')).toHaveText('Thank you. Your idea is with Yann.');
+  await expect(page.locator('#sent-title')).toHaveText('After sending your idea');
   await expect(page.locator('#share-card')).toBeHidden();
 });
 
@@ -375,7 +416,7 @@ test('Thank-you page after an idea: one official line, no letter or sharing asks
   await page.clock.setFixedTime(london('2026-09-24T12:00:00'));
   await arriveAfter(page, 'suggestion');
   await page.goto('/sent.html');
-  await expect(page.locator('#sent-title')).toHaveText('Thank you. Your idea is with Yann.');
+  await expect(page.locator('#sent-title')).toHaveText('After sending your idea');
   await expect(page.locator('#official-note')).toBeVisible();
   await expect(page.locator('#official-card')).toBeHidden();
   await expect(page.locator('#share-card')).toBeHidden();
@@ -390,7 +431,7 @@ test('Thank-you page after a letter: make it official first, copy the words, the
   }, LETTER);
   await arriveAfter(page, 'letter', { text: LETTER });
   await page.goto('/sent.html');
-  await expect(page.locator('#sent-title')).toHaveText('Thank you. Your letter is on its way.');
+  await expect(page.locator('#sent-title')).toHaveText('After sending your letter');
   await expect(page.locator('#sent-letter-lead')).toBeVisible();
   await expect(page.locator('#official-card')).toBeVisible();
   await expect(page.locator('#copy-step')).toBeVisible();
@@ -400,23 +441,22 @@ test('Thank-you page after a letter: make it official first, copy the words, the
   const official = await page.locator('#official-card').boundingBox();
   const share = await page.locator('#share-card').boundingBox();
   expect(official.y).toBeLessThan(share.y);
-  // The device draft is no longer needed; only a fingerprint of the letter is remembered.
-  expect(await readDraft(page)).toBeNull();
-  const confirmed = await page.evaluate(() => sessionStorage.getItem('kr-letter-confirmed'));
-  expect(JSON.parse(confirmed).id).toMatch(/^[0-9a-z]+:\d+$/);
-  expect(confirmed).not.toContain('fictional');
+  // A Send click is not a provider receipt; keep the draft until explicit removal.
+  expect(await readDraft(page)).not.toBeNull();
+  expect(await page.evaluate(() => sessionStorage.getItem('kr-letter-cleared'))).toBeNull();
   await page.getByRole('button', { name: 'Copy my letter' }).click();
-  await expect(page.locator('#copy-status')).toContainText('paste your letter into the comments box');
+  await expect(page.locator('#copy-status')).toContainText('use relevant parts of your letter');
   expect(await page.evaluate(() => window.copiedForTest)).toBe(LETTER);
   // Sharing never carries the letter's words.
   const canShare = await page.evaluate(() => typeof navigator.share === 'function');
   await expect(page.locator('#share-page')).toBeVisible({ visible: canShare });
   await expect(page.locator('#share-whatsapp')).toBeVisible({ visible: !canShare });
   expect(await page.locator('#share-whatsapp').getAttribute('href')).not.toContain('fictional');
-  await page.getByRole('button', { name: 'Remove them now' }).click();
+  await page.getByRole('button', { name: 'clear both copies now' }).click();
   await expect(page.locator('#copy-step')).toBeHidden();
   await expect(page.locator('#open-step-number')).toHaveText('1');
   expect(await page.evaluate(() => sessionStorage.getItem('kr-sent-letter'))).toBeNull();
+  expect(await readDraft(page)).toBeNull();
 });
 
 test('Thank-you page: if copying is blocked, the letter is shown selected to copy by hand', async ({ page }) => {
@@ -441,6 +481,11 @@ for (const [day, reminder, open] of [['2026-10-12', true, true], ['2026-10-13', 
     await expect(page.locator('#official-card')).toBeVisible({ visible: open });
     await expect(page.locator('#reminder-line')).toBeVisible({ visible: reminder });
     await expect(page.locator('#official-closed')).toBeVisible({ visible: !open });
+    if (!open) {
+      await expect(page.locator('#share-card')).toBeVisible();
+      await expect(page.locator('#share-card')).not.toContainText('respond to the consultation');
+      expect(await page.locator('#share-whatsapp').getAttribute('href')).not.toContain('consultation');
+    }
   });
 }
 

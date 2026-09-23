@@ -6,6 +6,9 @@
   // adapter keeps the rest of the logic reading and setting one value.
   const kindInputs = [...form.querySelectorAll('input[name="kind"]')];
   const kindMore = document.getElementById('kind-more');
+  // The extra choices start open in HTML so they remain reachable without scripts.
+  // With scripts, collapse only when no restored choice lives inside the disclosure.
+  if (kindMore) kindMore.open = kindInputs.some(input => input.checked && kindMore.contains(input));
   const kind = {
     get value() { const chosen = kindInputs.find(input => input.checked); return chosen ? chosen.value : 'suggestion'; },
     set value(value) {
@@ -79,6 +82,7 @@
   const aliases = { source: 'evidence', accessibility: 'suggestion', other: 'suggestion' };
   const requestedKind = params.get('kind');
   const linkedKind = Object.prototype.hasOwnProperty.call(aliases, requestedKind) ? aliases[requestedKind] : requestedKind;
+  document.getElementById('privacy-route-help').hidden = true;
   if (pristine && linkedKind === 'crowdfunding') {
     kind.value = 'crowdfunding';
     message.value = fundingPrompt;
@@ -96,10 +100,11 @@
   }
   const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date());
   const values = Object.fromEntries(parts.map(part => [part.type, part.value]));
-  if (`${values.year}-${values.month}-${values.day}` > '2026-09-29') {
-    const meeting = kindInputs.find(input => input.value === 'meeting').closest('.kind-card');
-    meeting.querySelector('.kind-title').textContent = 'A question about the proposal';
-    document.getElementById('meeting-date').hidden = true;
+  const meeting = kindInputs.find(input => input.value === 'meeting').closest('.kind-card');
+  if (`${values.year}-${values.month}-${values.day}` <= '2026-09-29') {
+    meeting.querySelector('.kind-title').textContent = 'A question for the meeting';
+    document.getElementById('meeting-date').hidden = false;
+  } else {
     meeting.parentElement.append(meeting);
     const note = document.querySelector('#meeting-context p');
     if (note && note.firstChild) note.firstChild.textContent = 'Yann reviews questions privately. Sending one here does not put it on a meeting agenda or send it to the council. ';

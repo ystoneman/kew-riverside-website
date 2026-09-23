@@ -75,6 +75,32 @@ test('No JavaScript: the letter form shows every step, the written starter and a
   await expect(page.locator('#allow-quotes')).toBeEnabled();
   await expect(page.locator('#sent-return')).toBeHidden();
   await expect(page.locator('#official-line')).toBeVisible();
+  await expect(page.locator('#draft-notice')).toBeVisible();
+});
+
+test('No JavaScript: an incoming removal link exposes the private category and how to use it', async ({ page }) => {
+  const submissions = await captureSubmissions(page);
+  await page.goto('/feedback.html?kind=privacy&letter=letter-012345abcdef#feedback-form');
+  await expect(page.locator('#kind-more')).toHaveAttribute('open', '');
+  await expect(page.locator('input[name="kind"][value="privacy"]')).toBeVisible();
+  await expect(page.getByText('For a privacy or removal request, choose')).toBeVisible();
+  await page.locator('input[name="kind"][value="privacy"]').check();
+  await page.locator('#message').fill('Please review fictional letter letter-012345abcdef.');
+  await page.locator('#feedback-form button[type="submit"]').click();
+  await expect.poll(() => submissions.length).toBe(1);
+  expect(submissions[0].get('kind')).toBe('privacy');
+  expect(submissions[0].get('allow_public')).toBeNull();
+});
+
+test('No JavaScript: dated invitations retain safe process guidance after their deadlines', async ({ page }) => {
+  await page.clock.setFixedTime(new Date('2026-10-17T12:00:00+01:00'));
+  await page.goto('/letters.html');
+  await expect(page.locator('#official-line')).toContainText('Check the current process');
+  await expect(page.locator('#step-official-fallback')).toBeVisible();
+  await expect(page.locator('#step-official-open')).toBeHidden();
+  await page.goto('/feedback.html');
+  await expect(page.locator('input[name="kind"][value="meeting"] + .kind-icon + span .kind-title')).toHaveText('A question about the proposal');
+  await expect(page.locator('#meeting-date')).toBeHidden();
 });
 
 for (const publish of [true, false]) {

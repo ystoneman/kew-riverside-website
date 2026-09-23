@@ -1,8 +1,8 @@
 'use strict';
-// On-site confirmation, reached through the form service's redirect. One Formspree form serves five
-// pages (letters, ideas, contact, corrections, supporters), so this page must not
-// assume a letter: the sending page records only its kind, in this tab, and
-// anything else gets the neutral confirmation with no asks.
+// Optional on-site next steps, reachable if the form service's redirect is enabled.
+// One Formspree form serves five pages (letters, ideas, contact, corrections,
+// supporters), so the sending page records only its kind in this tab. This record
+// is not a receipt; a direct visit or unknown kind gets neutral next steps.
 (() => {
   const $ = id => document.getElementById(id);
   const read = key => { try { return JSON.parse(sessionStorage.getItem(key)); } catch { return null; } };
@@ -15,11 +15,11 @@
   const closed = today > '2026-10-16';
 
   const titles = {
-    letter: 'Thank you. Your letter is on its way.',
-    meeting: 'Thank you. Your question is with Yann.',
-    suggestion: 'Thank you. Your idea is with Yann.',
-    evidence: 'Thank you. Your source is with Yann.',
-    correction: 'Thank you. Your correction is with Yann.'
+    letter: 'After sending your letter',
+    meeting: 'After sending your question',
+    suggestion: 'After sending your idea',
+    evidence: 'After sending your source',
+    correction: 'After sending your correction'
   };
   if (titles[kind]) $('sent-title').textContent = titles[kind];
   const isLetter = kind === 'letter';
@@ -36,15 +36,11 @@
   $('share-card').hidden = !isLetter;
   $('sent-more').hidden = !(isLetter || isIdea);
 
-  // The form service accepted the letter, so the device draft is no longer needed.
-  if (isLetter) { try { localStorage.removeItem('kr-letter-draft'); } catch { /* storage unavailable */ } }
-
-  // A short fingerprint of a letter (not the text) so a confirmed letter is recognised.
+  // A session marker records a Send click, not a Formspree receipt. Keep the draft
+  // until the visitor explicitly clears it after checking the provider's result.
   const fingerprint = text => { let h = 2166136261; for (let i = 0; i < text.length; i++) { h ^= text.charCodeAt(i); h = Math.imul(h, 16777619); } return (h >>> 0).toString(36) + ':' + text.length; };
   const saved = isLetter ? read('kr-sent-letter') : null;
   const text = saved && typeof saved.text === 'string' ? saved.text : '';
-  // Remember that this letter arrived, so going Back never turns it into a draft or a duplicate send.
-  if (text) { try { sessionStorage.setItem('kr-letter-confirmed', JSON.stringify({ id: fingerprint(text), at: Date.now() })); } catch { /* storage unavailable */ } }
   if (text) {
     $('copy-step').hidden = false;
     $('open-step-number').textContent = '2';
@@ -54,7 +50,7 @@
   $('copy-letter').addEventListener('click', async () => {
     try {
       await navigator.clipboard.writeText(text);
-      $('copy-status').textContent = 'Copied. In the form, answer the questions (your connection, view and reasons), then paste your letter into the comments box.';
+      $('copy-status').textContent = 'Copied. Answer the official form’s questions in your own words; use relevant parts of your letter where they fit.';
     } catch {
       const area = $('copy-fallback');
       area.value = text;
@@ -65,7 +61,12 @@
     }
   });
   $('forget-letter').addEventListener('click', () => {
-    try { sessionStorage.removeItem('kr-sent-letter'); } catch { /* storage unavailable */ }
+    try {
+      if (text) sessionStorage.setItem('kr-letter-cleared', JSON.stringify({ id: fingerprint(text), at: Date.now() }));
+      sessionStorage.removeItem('kr-sent-letter');
+      sessionStorage.removeItem('kr-sent-kind');
+      localStorage.removeItem('kr-letter-draft');
+    } catch { /* storage unavailable */ }
     $('copy-step').hidden = true;
     $('open-step-number').textContent = '1';
     $('paste-hint').hidden = true;
@@ -74,7 +75,7 @@
 
   // Count-free, first-person share text that matches the Parent action plan's ask.
   const url = 'https://ystoneman.github.io/kew-riverside-website/';
-  const message = 'I’ve written a few lines about what Kew Riverside means to us. If you’d like to add yours or respond to the council’s consultation, it’s here:';
+  const message = 'I’ve written a few lines about what Kew Riverside means to us. If you’d like to read or add a community letter, it’s here:';
   if (navigator.share) {
     // The phone's share sheet already offers WhatsApp and Copy, so show one button.
     $('share-page').hidden = false;
