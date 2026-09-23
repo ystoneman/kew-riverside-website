@@ -16,7 +16,7 @@ Claude Code completed and published the shorter-homepage PR (#4) at the owner's 
    - Its own appearance checks were failing at last inspection.
 2. **Test-harness failures to investigate separately** (see TESTING.md):
    - the WebKit legacy-homepage redirect stall, which has blocked two main deployments until rerun (priority);
-   - repeated same-hash source-link recovery under Chromium scroll anchoring.
+   - resolved: repeated same-hash source-link recovery. No failure has been seen since Evidence's jumps became immediate (`homepage.css`), and `sofiya.spec.js` now fails (38 of 40 runs) if this Evidence jump animates; keep that rule when merging theme CSS.
 
 Node 24 is available locally at `/Users/yannstoneman/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node`. Local runs used temporary configs outside the repository on separate ports; repository config and server files were not changed.
 
