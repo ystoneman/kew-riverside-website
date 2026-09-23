@@ -22,6 +22,8 @@ Follow the visitor’s device appearance by default, with a labelled System / Li
 
 Independent UX planning and implementation reviews covered the actual diff plus supplied 320px/390px, desktop dark/light, chart, form and native footer screenshots. Fixes included preview-button contrast, restored-page preference refresh and a 44px Safari picker. The contrast audit exposed WebKit root-variable inheritance inconsistencies; declaring the same palette on body fixed the repeated footer failures. The audit paints the page in bounded strips and retains its original thresholds. Integration with the shorter homepage and invitation adds dark colours to the new form states and analytics choices panel; the chart assertions follow their Evidence destination. Local focused and rendered checks are recorded in TESTING.md. Hosted verification and deployment remain pending.
 
+The independent review also found that the expanded borough chart had a malformed background variable and rendered transparent. Correct the chart surface in both appearances and pin its computed background and heading colour in a browser regression. The final integrated local run passed 1,202 browser checks with 15 deliberate skips; hosted verification remains pending.
+
 ### Warmer invitations to write, ask and suggest, and optional quotes from letters
 
 - **Header tiles.** Community letters (“Read & add yours”) and Share ideas (“Ask or suggest”) become warm tiles with decorative medallions on every page. On the first page of a visit from another site, their icons move once for about a second, never on the homepage, their own page or with reduced motion. Nothing is stored.

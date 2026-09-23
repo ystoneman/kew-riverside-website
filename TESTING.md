@@ -131,6 +131,8 @@ Hosted run 35780141040 passed 749 checks; five long-page appearance checks stopp
 
 After integration with the shorter homepage and participation invitation, all 16 public pages passed the dark/light appearance and text-contrast checks. The focused theme/participation run passed 313 browser checks with 15 deliberate file-check skips; the iPhone WebKit video QR/Back check passed 10 further repetitions. All 42 Python checks and the 89-file public artifact validation passed locally. Emulated iPhone WebKit at 390 px was visually checked on homepage, letters arrival and revealed choices, Share ideas cards, and the letter next-steps card. The analytics choices panel was checked in dark and light across four browser projects. These emulated checks do not replace a new native Safari or hosted run.
 
+Independent review found a transparent background on the expanded Evidence borough chart, caused by a malformed CSS variable. A new computed-style check failed on the prior declaration and passed in light and dark modes across all four browser projects after correction. The reviewer rechecked the expanded chart in light/dark Chromium and WebKit at 390 and 1280 px. The final integrated local suite passed 1,202 browser checks with 15 deliberate skips across four projects (`npx playwright test --workers=2 --reporter=dot`); 42 Python checks and the 89-file public artifact validation also passed. Hosted verification of this integrated theme branch remains pending.
+
 
 ## Short homepage and stable shared links — 22 September 2026
 

@@ -153,6 +153,21 @@ test('Chart series, keys and forecast markers retain their meaning in dark mode'
   for (const img of await page.locator('.lesson-exhibit img').all()) await expect(img).toHaveCSS('filter','none');
 });
 
+test('Expanded borough chart keeps a solid surface in light and dark appearances', async ({page}) => {
+  for (const [scheme, background, ink] of [
+    ['light', 'rgb(255, 255, 255)', 'rgb(24, 55, 51)'],
+    ['dark', 'rgb(25, 43, 37)', 'rgb(238, 244, 236)'],
+  ]) {
+    await page.emulateMedia({colorScheme:scheme});
+    await page.goto('/evidence.html');
+    await page.locator('#borough-context > summary').click();
+    const chart=page.locator('#borough-context .chart-card');
+    await expect(chart).toBeVisible();
+    await expect(chart).toHaveCSS('background-color',background);
+    await expect(chart.getByRole('heading',{name:'Fewer on-time Reception applications'})).toHaveCSS('color',ink);
+  }
+});
+
 test('Dark system with a manual override still prints in light colours', async ({page}) => {
   await page.emulateMedia({colorScheme:'dark'}); await page.goto('/index.html');
   await page.getByLabel('Appearance',{exact:true}).selectOption('dark');
