@@ -18,13 +18,15 @@ On Linux, install browser system dependencies with `npx playwright install --wit
 
 The browser harness serves the site locally over HTTP/2, as GitHub Pages does, uses fictional form inputs, and intercepts external requests. The four legacy-route tests observe requests instead of routing them (see Legacy redirect fix below). It never delivers a test submission to Formspree. Hosted CAPTCHA, real inbox delivery, council submission and real contribution moderation are outside the automated suite.
 
-## Case research integration — 23 September 2026 (unreleased)
+## Case research integration — 23 September 2026
 
 The integrated branch passed the complete Playwright suite: **1,247 passed, 15 expected skips**. After the final correction to the undated leaflet label, changed-page date stamps and the official council decision link, the **452 affected browser checks passed** across iPhone WebKit, Android Chromium, desktop Chromium/WebKit and the no-JavaScript project. They include the six homepage routes, source filtering and repeated links, finance/forecast tables and sources, response questions, light/dark appearances, direct family enquiries and native disclosures. No real form was submitted.
 
 All **48 Python tests** passed. `build_understand.py --check` and `build_sources.py --check` found generated HTML and CSV current; JavaScript syntax and whitespace checks passed. `check_site.py` validated **91 public files**, then staged the same 91 into a fresh outside-repository directory; staged files matched the checkout byte for byte and contained no private dispatch or claim-worksheet files. The PDF builder generated a two-page A4 checklist; both rendered pages were inspected and its text, page labels and links checked. Evidence, campaign and rendered UX specialist reviews passed after their findings were corrected.
 
-An iPhone 17 simulator running iOS 26.5 Safari displayed styled Home, Evidence `#records` and Understand `#budget` in portrait and the budget in landscape without visible clipping outside the intended table scroll. The simulator control could not operate the web view, so **native taps and Safari Back remain unverified**; Playwright covered those interactions in emulated browser projects. These are local checks only; this branch was not deployed.
+An iPhone 17 simulator running iOS 26.5 Safari displayed styled Home, Evidence `#records` and Understand `#budget` in portrait and the budget in landscape without visible clipping outside the intended table scroll. The simulator control could not operate the web view, so **native taps and Safari Back remain unverified**; Playwright covered those interactions in emulated browser projects.
+
+Implementation commit [`e5f89c3`](https://github.com/ystoneman/kew-riverside-website/commit/e5f89c3) passed the hosted validation, browser-tests and deploy jobs in [main run 35914201246](https://github.com/ystoneman/kew-riverside-website/actions/runs/35914201246). The hosted browser job reported **1,247 passed, 15 expected skips**. A separate HTTPS check fetched all **91 public files** from the live Pages site and found every file byte-identical to the implementation commit, with no missing files or mismatches. Live Home, Evidence, Understand, Options, Proposal, FAQ and the checklist PDF returned HTTP 200. The PDF had its expected media type and header; the dated gap notes, six response questions, neutral visit wording, deadline and official-form links were present. All 399 checked internal fragment links among those pages resolved.
 
 ## Coverage and maintenance
 
