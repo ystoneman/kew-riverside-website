@@ -4,6 +4,10 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Video QR Back position after analytics
+
+The analytics script attached its hidden choices panel while `videos.html#upload` loaded. In iPhone WebKit, returning from the intercepted permission-form handoff then kept the fragment in the URL but showed the top of the page, outside the upload card (J9). Keep the panel detached until someone opens Analytics choices. The existing QR and analytics controls retain their assertions; the analytics test now checks the panel's deferred insertion. The pre-analytics commit passed three QR repetitions, while the analytics commit and later main failed repeatedly; removing only the initial panel insertion restored Back position in a diagnostic copy. On this branch, the unchanged QR test passed 10 iPhone WebKit repetitions and all 120 analytics tests passed across the four scripted browser projects. These were Playwright browser checks, not native Safari verification. No real form or analytics call was sent, and no deployment is claimed.
+
 ### External-link arrows render as text on iPhone
 
 In iOS Safari a bare “↗” (U+2197) renders as a blue emoji square, including on the homepage’s main “Respond by 16 October ↗” button. Every ↗ on the site is now followed by the text-presentation selector U+FE0E (`&#xFE0E;`), which keeps the plain arrow. The change covers 84 arrows across the homepage, Evidence, FAQ, Proposal, Understand and Videos pages, plus the two page builders that generate some of them. Link text, accessible names and destinations are unchanged. A new structural test fails if any public page or script contains a ↗ without the selector. It failed on the previous `faq.html` and passes now. Found in the iPhone Air / iOS 26.5 simulator on the live site. The same simulator showed plain arrows on the homepage and Evidence pages of a local preview of this change. Review: lead-agent UX check. This is a rendering fix with no change in meaning or behaviour.
