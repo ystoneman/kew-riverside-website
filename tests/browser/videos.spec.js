@@ -57,7 +57,7 @@ test('Video: withdrawal leads to private request and non-Google alternative stay
   await expect(page.locator('#video-choices')).toContainText('filename question is optional');
   await expect(page.locator('#video-choices')).toContainText('Your face and voice can still identify you');
   await page.locator('#video-choices a[href^="feedback.html"]').click();
-  await expect(page.locator('#kind')).toHaveValue('privacy');
+  await expect(page.locator('input[name="kind"][value="privacy"]')).toBeChecked();
   await expect(page.locator('#publication-options')).toBeHidden();
   await page.goto('/videos.html');
   await page.locator('#upload-help summary').click();

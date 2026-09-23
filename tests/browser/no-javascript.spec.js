@@ -61,9 +61,74 @@ for (const [publish, council] of [[false, false], [true, false], [false, true], 
     expect(submissions[0].get('letter_consent')).toBe('yes-process-my-letter-v3');
     expect(submissions[0].get('allow_public')).toBe(publish ? 'yes-publish-with-display-name-v3' : null);
     expect(submissions[0].get('allow_council')).toBe(council ? 'yes-share-with-richmond-council-v2' : null);
-    for (const field of ['council_name', 'council_postcode']) expect(submissions[0].has(field)).toBe(false);
+    for (const field of ['council_name', 'council_postcode', 'allow_quotes']) expect(submissions[0].has(field)).toBe(false);
   });
 }
+
+test('No JavaScript: the letter form shows every step, the written starter and an unticked quote choice', async ({ page }) => {
+  await page.goto('/letters.html');
+  await expect(page.locator('#to-choices')).toBeHidden();
+  await expect(page.locator('#starters')).toBeHidden();
+  await expect(page.locator('#starter-static')).toBeVisible();
+  for (const id of ['#step-choose', '#step-send', '#quote-choice']) await expect(page.locator(id), id).toBeVisible();
+  await expect(page.locator('#allow-quotes')).not.toBeChecked();
+  await expect(page.locator('#allow-quotes')).toBeEnabled();
+  await expect(page.locator('#sent-return')).toBeHidden();
+  await expect(page.locator('#official-line')).toBeVisible();
+  await expect(page.locator('#draft-notice')).toBeVisible();
+});
+
+test('No JavaScript: an incoming removal link exposes the private category and how to use it', async ({ page }) => {
+  const submissions = await captureSubmissions(page);
+  await page.goto('/feedback.html?kind=privacy&letter=letter-012345abcdef#feedback-form');
+  await expect(page.locator('#kind-more')).toHaveAttribute('open', '');
+  await expect(page.locator('input[name="kind"][value="privacy"]')).toBeVisible();
+  await expect(page.getByText('For a privacy or removal request, choose')).toBeVisible();
+  await page.locator('input[name="kind"][value="privacy"]').check();
+  await page.locator('#message').fill('Please review fictional letter letter-012345abcdef.');
+  await page.locator('#feedback-form button[type="submit"]').click();
+  await expect.poll(() => submissions.length).toBe(1);
+  expect(submissions[0].get('kind')).toBe('privacy');
+  expect(submissions[0].get('allow_public')).toBeNull();
+});
+
+test('No JavaScript: dated invitations retain safe process guidance after their deadlines', async ({ page }) => {
+  await page.clock.setFixedTime(new Date('2026-10-17T12:00:00+01:00'));
+  await page.goto('/letters.html');
+  await expect(page.locator('#official-line')).toContainText('Check the current process');
+  await expect(page.locator('#step-official-fallback')).toBeVisible();
+  await expect(page.locator('#step-official-open')).toBeHidden();
+  await page.goto('/feedback.html');
+  await expect(page.locator('input[name="kind"][value="meeting"] + .kind-icon + span .kind-title')).toHaveText('A question about the proposal');
+  await expect(page.locator('#meeting-date')).toBeHidden();
+});
+
+for (const publish of [true, false]) {
+  test(`No JavaScript: a ticked quote choice submits its exact value (publication ${publish ? 'chosen' : 'not chosen'})`, async ({ page }) => {
+    const submissions = await captureSubmissions(page);
+    await page.goto('/letters.html');
+    await page.locator('#message').fill('A fictional community letter with quote permission, sent without JavaScript.');
+    await page.locator('#letter-consent').check();
+    if (publish) await page.locator('#allow-public').check();
+    await page.locator('#allow-quotes').check();
+    await page.locator('#letter-form button[type="submit"]').tap();
+    await expect.poll(() => submissions.length).toBe(1);
+    // Without publication the value is not permission; the privacy notice and operations rules say so.
+    expect(submissions[0].get('allow_quotes')).toBe('yes-quote-published-letter-v1');
+    expect(submissions[0].get('allow_public')).toBe(publish ? 'yes-publish-with-display-name-v3' : null);
+  });
+}
+
+test('No JavaScript: the thank-you page and the participation tiles work without scripts', async ({ page }) => {
+  await page.goto('/sent.html');
+  await expect(page.locator('#sent-title')).toHaveText('Thank you.');
+  await expect(page.locator('#sent-lead')).toBeVisible();
+  for (const id of ['#official-card', '#share-card', '#sent-more']) await expect(page.locator(id), id).toBeHidden();
+  const nav = page.getByRole('navigation', { name: 'Take part' });
+  await expect(nav.getByRole('link', { name: /^Community letters/ })).toBeVisible();
+  await expect(nav.getByRole('link', { name: /^Share ideas/ })).toBeVisible();
+  await expect(page.locator('html')).not.toHaveClass(/voice-cue/);
+});
 
 test('No JavaScript: letter accepts a full 30000-character message including an emoji', async ({ page }) => {
   const submissions = await captureSubmissions(page);
@@ -160,7 +225,7 @@ test('No JavaScript: optional sharing details and reviewed ideas remain usable',
   await page.locator('#suggestions > summary').tap();
   await expect(page.locator('#suggestions')).toHaveAttribute('open', '');
   await expect(page.locator('#suggestions a[href="suggestions.json"]')).toBeVisible();
-  await page.locator('#kind').selectOption('evidence');
+  await page.locator('input[name="kind"][value="evidence"]').check();
   await page.locator('#message').fill('Synthetic source information entered without JavaScript.');
   await page.locator('#display-name').fill('Optional test alias');
   await page.locator('#allow-public').check();

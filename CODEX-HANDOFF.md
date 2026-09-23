@@ -18,6 +18,12 @@ Claude Code completed and published the shorter-homepage PR (#4) at the owner's 
    - the WebKit legacy-homepage redirect stall, which has blocked two main deployments until rerun (priority);
    - resolved: repeated same-hash source-link recovery. No failure has been seen since Evidence's jumps became immediate (`homepage.css`), and `sofiya.spec.js` now fails (38 of 40 runs) if this Evidence jump animates; keep that rule when merging theme CSS.
 
+3. **Participation invitation (branch `claude/participation-invitation`).** Owner decisions and dated follow-ups:
+   - **Formspree plan.** The thank-you page `sent.html` needs Formspree's redirect, which is a paid-plan feature. If the owner upgrades, set the form's redirect to `https://ystoneman.github.io/kew-riverside-website/sent.html`. Until then the letters page's “Did your letter arrive?” panel carries the official step. Do not change provider settings or buy a plan without the owner.
+   - **After 29 September:** update the static meeting card in `feedback.html` for visitors without JavaScript (scripts already retitle it).
+   - **After 16 October:** replace dated official-response copy with the next process step (scripts already retire it).
+   - **Quote permission** (`allow_quotes=yes-quote-published-letter-v1`): record each permission privately within 30 days, following “Quote permission” in the private `feedback-moderation/LETTERS-OPERATIONS.md`. The five-minute letters heartbeat is unchanged and never handles quotes.
+
 Node 24 is available locally at `/Users/yannstoneman/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node`. Local runs used temporary configs outside the repository on separate ports; repository config and server files were not changed.
 
 ---

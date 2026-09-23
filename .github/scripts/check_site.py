@@ -21,6 +21,8 @@ response-checklist.md response-checklist.pdf sources.csv sources.json styles.css
 suggestions.json supporters.html supporters.js supporters.json
 attainment-data.json attainment.csv
 understand.html understand.css understand.js understand-data.json richmond-schools.csv
+voice.css voice.js contribute.css sent.html sent.js private-form.js respond-reminder.ics
+og-home.png og-letters.png og-ideas.png og-videos.png
 '''.split())
 MAINTENANCE_FILES = frozenset('''
 VIDEO-PERMISSIONS.md CONTRIBUTING.md .github/CODEOWNERS .github/pull_request_template.md .github/branch-protection.json
@@ -38,7 +40,7 @@ AGENTS.md CLAUDE.md TESTING.md CHANGELOG.md UX-DESIGN-DECISIONS.md package.json 
 tests/browser/fixtures.js tests/browser/server.js tests/browser/mobile.spec.js
 tests/browser/desktop.spec.js tests/browser/no-javascript.spec.js
 tests/browser/contributions.spec.js tests/browser/evidence.spec.js tests/browser/boards.spec.js
-tests/browser/visitor-journeys.spec.js tests/browser/understand.spec.js .github/scripts/build_understand.py .github/scripts/test_understand.py
+tests/browser/visitor-journeys.spec.js tests/browser/understand.spec.js tests/browser/participation.spec.js .github/scripts/build_understand.py .github/scripts/test_understand.py
 '''.split())
 CSP = "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self' https://cloud.umami.is/api/send; base-uri 'none'; object-src 'none'; frame-src 'none'; form-action 'self' https://formspree.io; upgrade-insecure-requests"
 SECRET_PATTERNS = [
@@ -125,10 +127,11 @@ def validate_site(root=ROOT):
                     'letter_consent': 'yes-process-my-letter-v3',
                     'allow_public': 'yes-publish-with-display-name-v3',
                     'allow_council': 'yes-share-with-richmond-council-v2',
+                    'allow_quotes': 'yes-quote-published-letter-v1',
                 }.items():
                     require(page.named_inputs.get(field, {}).get('value') == value, 'Letter permission or notice version has changed; review its meaning explicitly.')
                 require('required' in page.named_inputs['letter_consent'], 'Letter processing consent must be required.')
-                require(all('required' not in page.named_inputs[field] for field in ('allow_public', 'allow_council')), 'Letter sharing must remain optional.')
+                require(all('required' not in page.named_inputs[field] for field in ('allow_public', 'allow_council', 'allow_quotes')), 'Letter sharing must remain optional.')
         if name.endswith('.js'):
             require(not re.search(r'\b(?:innerHTML|outerHTML|insertAdjacentHTML|eval)\b|document\.write\s*\(', data), 'Unsafe DOM/code execution sink in ' + name)
     analytics = json.loads((root / 'analytics-config.json').read_text())

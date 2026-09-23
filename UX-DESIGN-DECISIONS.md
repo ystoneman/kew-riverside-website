@@ -21,8 +21,8 @@ Priority allocates attention; every existing task retains usable access. Visitor
 | J1 · Essential orientation | Understand the proposal, current decision status and relevant dates | Homepage status/date information, `proposal.html`, `faq.html` and directly cited official records; distinguish proposed, conditional and decided outcomes. |
 | J2 · Prominent action | Find what I can usefully do now | Named Parent action plan shortcut visible on homepage arrival, plus shared navigation to `proposal.html#parent-plan`; no disclosure or familiarity with the containing page required for the shortcut. |
 | J3 · Prominent action | Give my views to the decision-maker | Explicit official-response links and current verified deadline/stage; a website letter, idea or video does not replace an official response. |
-| J4 · Prominent participation | Read community experience or write a letter | Exposed Community letters / Read or write header action to `letters.html`, with reading and writing shortcuts and independent permissions. |
-| J5 · Prominent participation | Offer an idea, evidence, question or correction | Exposed Share ideas / Evidence & suggestions header action to `feedback.html`, with contextual category links and clear private/public choices. |
+| J4 · Prominent participation | Read community experience or write a letter | Exposed Community letters / Read & add yours header tile to `letters.html`, with the letters board directly after the form, reading and writing shortcuts, and independent permissions (optional quoting only on top of publication). |
+| J5 · Prominent participation | Offer an idea, evidence, question or correction | Exposed Share ideas / Ask or suggest header tile to `feedback.html`, with visible category cards, contextual category links and clear private/public choices. |
 | J6 · Easy to discover | Understand and check the case | All six homepage task destinations; Understand, `options.html`, Evidence navigation and `evidence.html#records` (with `index.html#records` retained as a compatibility entry); the full report and readable research through the homepage shortcut, Evidence and existing proposal route. Educational evidence at `understand.html#learning-and-results`, reached through the existing comparison/visit areas and `faq.html#learning`. Preserve sources, charts/tables, filters, direct anchors and downloads. |
 | J7 · Protected family task | Understand my child's practical next steps | Homepage child-next-steps card and `faq.html#school-places`; distinguish current-family contingencies from prospective-family admissions and preserve both. |
 | J8 · Contextual recruitment | Decide whether to enquire about the school | `index.html#visit-school` with a direct current school enquiry route and proposal context; related `options.html#option-enrolment` route. Reading campaign strategy is not a prerequisite. |
@@ -108,14 +108,13 @@ Keep the official response deadline prominent. Show the representation window re
 
 Keep Community letters and Share ideas visible in the shared navigation. Use the same wording, destinations and current-page state on every page and at each breakpoint. The envelope and idea icons are decorative; adjacent text supplies the accessible meaning.
 
-The contribution form has these six categories:
+The contribution form shows four categories as visible cards, with two more under “More options”:
 
-- An idea or suggestion
+- A question for the meeting (first until the 29 September meeting; afterwards “A question about the proposal”, last)
+- An idea or suggestion (the default)
 - Evidence or a source
-- A question for the meeting
 - A factual correction
-- A funding idea — no payment
-- A privacy or removal request
+- More options: a funding idea (no payment or pledge), and a privacy or removal request
 
 Use a single reading order on desktop and mobile. Ask for the main contribution first; make optional contact or display details clear. Reveal publication choices progressively, keep consent explicit and unchecked, and retain the private-only treatment of funding and privacy requests. Explain review before publication and keep the reviewed public board visually separate from the act of submitting. A website suggestion or community letter must not be mistaken for an official consultation response.
 
@@ -270,3 +269,25 @@ Need: learn which existing journeys people reach, without treating counts as nam
 Options: opt-in for everything behind a banner (the unpublished 22 September candidate), opt-in without a banner, or basic page counts by default with detailed usage opt-in. The owner chose the last: an opt-in-only design would undercount heavily, and a banner competes with the Parent action plan, Letters and Share ideas on arrival. Basic counts set no cookie and store nothing; detailed usage keeps consent. The choice stays one tap away in every footer, with three equal options and the current one marked. Browser privacy signals and private routes send nothing.
 
 Verification status is recorded in TESTING.md and CHANGELOG.md. This rationale is not user research. Revisit if the provider, data fields, ICO guidance or the interaction changes.
+
+## Participation invitation — 23 September 2026
+
+Need (J4, J5; guards J2, J3 and J9): make Community letters and Share ideas noticeable and inviting for busy parents with little attention to spare, and make writing, asking and suggesting as easy as possible, without competing with the official response or the Parent action plan.
+
+**Why the letters wall exists.** The owner's purpose, recorded here because it shapes the page: letters are not only for the council. Parents gain strength from reading what others have written; the wall lets parents be heard by their community, not just by the council; one parent said she cried reading a letter on the site. Reading is therefore a first-class outcome, not a by-product of writing. The board now sits directly after the form (at 390 × 844 its top moved from 5,130 px to 2,557 px), the hero links to it, and the thank-you page links back to it. Its caveats stay: opinions, not a representative survey, petition or count of responses.
+
+Design:
+
+- **Header tiles.** One warm colour family used nowhere else in the header, a decorative medallion and a plain second line: “Read & add yours” and “Ask or suggest”. One short cue on the first page of a visit from another site (icons only, about a second, never looping, none with reduced motion, none on the homepage where the Parent action plan has its own cue, none on the page itself, and none on a shared fragment link whose target must stay in view). Nothing is stored for it.
+- **Letters: write first.** A question heading (“What does Kew Riverside mean to you?”), the one-line official-response route in the hero, then the letter box. Starters, a dictation tip and “What could I write about?” help people begin. The choices and Send follow “Next” with scripts; everything is visible without them, after a restored draft and for links to later fields. The counter appears only near the limit.
+- **Drafts and returning.** The letter and public name are kept on this device for seven days and never the email or council details. A shared-device notice appears before writing. On Send the draft is marked pending. Coming back without the next-steps page shows “Did your letter arrive?”, focused and in view, with the official-form step until 16 October. A Send click does not prove delivery. Clear draft resets the full form and sharing choices; explicit clearing on the next-steps page removes both stored copies and uses a fingerprint only to clear a browser-restored form on Back.
+- **Share ideas.** Visible category cards replace the dropdown. The static meeting card is date-neutral for visitors without scripts; scripts add its date until the meeting's 3.30pm London-time start on 29 September and make it a general question afterwards. The extra category disclosure stays open without scripts so privacy/removal routes remain visible.
+- **Next-steps page (`sent.html`).** Neutral unless this tab records a recent letter or idea, and conditional on the provider's own result instead of claiming receipt from a Send click. After a letter: “Make it official” first (copy, open the form, calendar reminder until 12 October), then sharing with another parent, then reading others' letters. The official form has distinct questions; visitors answer those in their own words and use relevant excerpts, or use the council's email/post route for a full letter. Dated asks retire after 16 October. It needs the form service's redirect, which requires a paid Formspree plan; until then the letters page's return panel carries the official step.
+- **Link previews.** Four 1200 × 630 images and Open Graph tags for WhatsApp and other previews. Letter text is never used in previews or share messages.
+- **Optional quotes.** Quoting was the owner's request, so writers can agree now rather than being asked later. It is offered only on top of Publish (“from my published letter”), starts unticked, is dropped if Publish is unticked, and without scripts counts only with publication. The scope is closed: Yann's own posts, parent-group messages, leaflets, posters and talks, until 30 September 2028; not paid adverts, fundraising, the council, news organisations or school/PTA materials. “Independent permissions” still holds: no choice implies another. The value (`yes-quote-published-letter-v1`) is self-versioned under letter notice v3, so the private publication automation is unchanged.
+
+Costs and how they are contained: the header grows by 33 px at 320 × 568 and 38 px at 390 × 844 (unchanged on desktop); the Parent action plan's bottom edge moves from 330 to 363 px at 320 × 568 and stays fully visible (J2). The letter box moves up from 2,091 to 739 px at 320 and from 1,228 to 379 px on desktop. The full official-response panel and the supporters note move below the board; the one-line official route stays above the box and the inline official note stays before Send (J3). Share ideas' message box moves down (803 → 1,316 px at 320, 760 → 1,136 px at 390) because the categories are now visible; that is the accepted cost of not hiding choices in a dropdown. Measured in Chromium and WebKit with reduced motion and no letters loaded.
+
+Retained: every URL and anchor, `letters.html#letters`, `feedback.html?kind=…` deep links, `videos.html#upload`, the private request routes, all consent wording and values, and no-JavaScript submission.
+
+Owner and review triggers: after 16 October, check the next official process stage and update dated copy; decide the Formspree plan (the redirect address is `https://ystoneman.github.io/kew-riverside-website/sent.html`); keep quote permissions recorded within 30 days (private operations notes). Verification is recorded in TESTING.md and CHANGELOG.md.
