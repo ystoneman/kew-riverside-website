@@ -15,11 +15,42 @@ function headerLinks(file, selector) {
   return links;
 }
 
+// The analytics collector is the only other origin a page's policy allows. analytics.js
+// contacts it only from the production host (analytics.spec.js), never from this server.
+const productionOnly = { 'connect-src': ['https://cloud.umami.is/api/send'] };
+
+// True when the page's policy, including the default that other fetch directives fall
+// back to, lets it reach no other origin when served by this test harness.
+function staysOnSite(file) {
+  const policy = readFileSync(path.join(root, file), 'utf8').match(/http-equiv="Content-Security-Policy" content="([^"]*)"/)?.[1]?.toLowerCase() || '';
+  const sources = policy.split(';').map(directive => directive.trim().split(/\s+/)).filter(([name]) => /-src(?:-elem|-attr)?$/.test(name));
+  return sources.some(([name]) => name === 'default-src') && sources.every(([name, ...allowed]) => allowed.every(source => ["'self'", "'none'", ...(productionOnly[name] || [])].includes(source)));
+}
+
 const test = base.extend({
-  // An unexpected external request fails the test and is aborted before sending.
-  // Form tests install a more specific page route that returns a local fake response.
-  networkGuard: [async ({ context, baseURL }, use) => {
+  // Only journeys that submit no forms and follow no links to other origins may turn
+  // routing off (the legacy-route tests); without routes nothing is aborted.
+  routeRequests: [true, { option: true }],
+  // An unexpected external request fails the test and, with routing, is aborted before
+  // sending. Form tests install a more specific page route that returns a local fake response.
+  networkGuard: [async ({ context, baseURL, routeRequests }, use) => {
     const unexpected = [];
+    if (!routeRequests) {
+      // In WebKit any route pauses every request until Playwright continues it, which keeps
+      // more homepage requests in flight when a legacy link redirects. Cancelling them trips
+      // a network-process defect that can lose the redirected navigation (TESTING.md).
+      // Without routes nothing can abort a request: no page's policy may let it reach another
+      // origin from this server, and the journey must not submit forms or leave the site.
+      // Requests to other origins, local writes and the letters board are still reported.
+      for (const file of pages) expect(staysOnSite(file), `${file} can reach no other origin from this server`).toBe(true);
+      context.on('request', request => {
+        const url = new URL(request.url());
+        if (url.origin !== new URL(baseURL).origin || !['GET', 'HEAD'].includes(request.method()) || url.pathname === '/letters.json') unexpected.push(`${request.method()} ${request.url()}`);
+      });
+      await use(unexpected);
+      expect(unexpected, 'No real submissions, analytics or other external traffic during tests').toEqual([]);
+      return;
+    }
     await context.route('**/*', async route => {
       const request = route.request();
       if (new URL(request.url()).origin === new URL(baseURL).origin && ['GET', 'HEAD'].includes(request.method())) {
@@ -35,7 +66,8 @@ const test = base.extend({
         await route.abort('blockedbyclient');
       }
     });
-    await use();
+    // The harness checks inspect, then clear, requests they make deliberately.
+    await use(unexpected);
     expect(unexpected, 'No real submissions, analytics or other external traffic during tests').toEqual([]);
   }, { auto: true }],
   browserErrors: [async ({ page }, use) => {
