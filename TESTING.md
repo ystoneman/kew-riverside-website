@@ -16,7 +16,7 @@ npm test
 
 On Linux, install browser system dependencies with `npx playwright install --with-deps chromium webkit` instead. `npm run test:iphone` runs the iPhone WebKit project; `npm run test:report` opens the generated browser report. Reports, traces, screenshots, downloaded test files and dependencies are ignored by Git and excluded from deployment.
 
-The browser harness serves the site locally, uses fictional form inputs, and intercepts external requests. It never delivers a test submission to Formspree. Hosted CAPTCHA, real inbox delivery, council submission and real contribution moderation are outside the automated suite.
+The browser harness serves the site locally over HTTP/2, as GitHub Pages does, uses fictional form inputs, and intercepts external requests. The four legacy-route tests observe requests instead of routing them (see Legacy redirect fix below). It never delivers a test submission to Formspree. Hosted CAPTCHA, real inbox delivery, council submission and real contribution moderation are outside the automated suite.
 
 ## Coverage and maintenance
 
@@ -31,7 +31,7 @@ The browser harness serves the site locally, uses fictional form inputs, and int
 | Historical school lessons | Eight chart/data disclosures and downloads; complete 16-case catalogue; search/outcome filters, empty/reset states; direct links; keyboard and no-JavaScript use; 45 sources / 49 claims; preserved denominators and forecasts |
 | Parent Voices videos | Entry routes from letters/ideas; external permission, Dropbox and legacy Google handoffs intercepted locally; required YouTube / optional media permission, earlier-scope preservation and private-contact explanation; native disclosures and keyboard/touch; private withdrawal route; written alternative; no-JavaScript access |
 | Site integrity | Local links/anchors, source consistency, resource loading and script errors |
-| Security and privacy | Public data schemas, private-field rejection, consent defaults, local script allowlist, restrictive CSP and explicit deployment artifact contents |
+| Security and privacy | Public data schemas, private-field rejection, consent defaults, local script allowlist, restrictive CSP and explicit deployment artifact contents; the test guard's blocking and reporting of external requests |
 
 Public pages and navigation links are discovered from the site rather than maintained as a separate fixed page count. When adding a feature, add tests for its user-visible success, invalid/empty state and important privacy choices. Include a test that would catch a reported bug before fixing it. Add source or chart checks when changing the underlying data contract. Keep test expectations independent of implementation details where possible.
 
@@ -163,3 +163,33 @@ Rerun attempt 2 passed all 732 checks and deployed. All 73 live public files mat
 ## Legacy redirect stalls — 23 September 2026
 
 `homepage.spec.js:79` stalled again in main run `35832240369` (desktop WebKit, first step), which blocked the label release until a rerun. A local stress run (both WebKit projects, `--repeat-each=40`, six workers) reproduced it in 1–2 of 80 runs. A diagnostic tagged each navigation with a `?probe=` query, which `homepage.js` preserves, and used a logging copy of the test server. The stalled redirected requests did reach the server, but 6.5, 8.1 and 11.8 s after the homepage request (normally about 30 ms). During those gaps the server received almost no requests from any worker. The same log recorded heavy HTTP/1.1 connection churn: 5,530 TLS connections for 56,710 requests, 1,015 responses aborted mid-flight and 342 `ECONNRESET` handshake errors. Cancelling the homepage's in-flight requests closes those connections, and production GitHub Pages uses HTTP/2 instead. The likely cause is the test harness's HTTP/1.1 server under load rather than the page, but that is not proven. Candidate fixes (an HTTP/2 test server, cheaper TLS, or a justified navigation budget) are left for a separate change measured against the same stress run.
+
+## Legacy redirect fix — 23 September 2026
+
+**Cause.** Each legacy visit loads the homepage. Its deferred `homepage.js` then calls `location.replace()` while later stylesheets and `navigation.js` are still loading, so WebKit cancels them. Playwright 1.63's Linux WebKit bundles libsoup 3.6.5, which can lose a navigation after in-flight requests are cancelled ([microsoft/playwright#42803](https://github.com/microsoft/playwright/issues/42803); fixed in libsoup 3.6.6, not yet in a Playwright release). Temporary CI diagnostics, not merged, timed each redirect with a 40 s budget and logged the server and Playwright's protocol. All six logged stalls, one over HTTP/2 and five over HTTP/1.1, followed one pattern: the redirect cancelled 9–14 in-flight requests, and WebKit intercepted and continued the redirected document request but never sent it to the server. The request then failed 17–33 s later with "WebKit encountered an internal error", or stayed pending until the next navigation. A new visit on the same page completed in 0.2–0.5 s.
+
+**Why request routing mattered.** Once any Playwright route exists, WebKit pauses every request until Playwright continues it. That delay left more homepage requests in flight when the redirect ran. Redirects cancelled 6.3–6.9 requests on average with every request routed, about 1 when only other origins and the letters board were routed, and 0.2–0.3 without routes. The share of redirects cancelling nine or more fell from 46–52% to 7–9% and then 1.8%.
+
+**Measurements.** Linux CI, desktop and iPhone WebKit, every run visiting all 18 fragments. The diagnostic copy used a 40 s budget; the real test was unchanged apart from `--repeat-each`.
+
+| Test server | Network guard | Diagnostic runs stalled | Real-test runs stalled |
+| --- | --- | --- | --- |
+| HTTP/1.1 (previous) | Routes every request (previous) | 34 of 480 | 33 of 300 |
+| HTTP/1.1 | No routes | — | 1 of 100 |
+| HTTP/2 | Routes every request | 4 of 240 | 3 of 100 |
+| HTTP/2 | Routes other origins and the letters board | 5 of 400 | — |
+| HTTP/2 | No routes (this fix) | 0 of 240 | 0 of 500 |
+
+The fix's 400 real-test runs (jobs `35855474574`, `35855483278`, `35855492346`, `35855500232`) ran alongside 200 on `main` (`35855510272`, `35855519747`), where 24 stalled. The other real-test rows come from earlier jobs `35841422618`, `35841425615`, `35846309383` and `35846316308`. Across about 27,000 timed diagnostic redirects, none that completed took longer than 1.8 s (median about 0.35 s), and none that stalled completed within 40 s. A larger navigation budget therefore could not help, and the 10 s budget is unchanged. TLS was not the constraint either. A new handshake cost the server about 4.2 ms of CPU with the RSA-2048 certificate, 2.5–2.8 ms with ECDSA P-256 and 2.3–2.5 ms when resumed, which Node already allows. HTTP/2 also cut connections to one per browser context (82 for 43,886 requests in one diagnostic job), so the certificate is unchanged.
+
+**Fix.** `server.js` serves HTTP/2 like GitHub Pages, keeping HTTP/1.1 for Playwright's request client and readiness check. The four legacy-route tests set `routeRequests: false`, so the network guard observes their requests instead of routing them. It still fails a test on any request to another origin, any local write or the real letters board. Without routes nothing can abort a request, so the guard first checks that every page's Content-Security-Policy allows loads only from the site itself; `check_site.py` separately pins that policy. Every other test keeps the routed guard, which aborts external requests before they are sent. `harness.spec.js` checks four things:
+- pages and their resources load over HTTP/2 (this check fails on the previous server);
+- the routed guard reports a request to another origin and blocks it before it is sent;
+- the routed guard serves the empty letters board;
+- the unrouted guard still reports other origins, local writes and the real board.
+
+WebKit still opens, but does not use, a connection to a blocked navigation target. The journeys, fresh navigations and assertions of the legacy tests are unchanged.
+
+On macOS, WebKit uses CFNetwork rather than libsoup. There, the earlier probe's late redirected requests (6.5–11.8 s, on connections opened late) match WebKit's NetworkLoadScheduler. It can hold back a document load to an HTTP/1.1 origin until a 10 s preconnect finishes, and HTTP/2 origins are exempt. That match was not separately confirmed.
+
+When a Playwright release bundles libsoup 3.6.6 or later, rerun the stress with routing restored for the legacy tests before deciding whether they still need to run unrouted.
