@@ -98,10 +98,10 @@
   } else if (pristine && ['suggestion', 'evidence', 'meeting', 'correction'].includes(linkedKind)) {
     kind.value = linkedKind;
   }
-  const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date());
+  const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date());
   const values = Object.fromEntries(parts.map(part => [part.type, part.value]));
   const meeting = kindInputs.find(input => input.value === 'meeting').closest('.kind-card');
-  if (`${values.year}-${values.month}-${values.day}` <= '2026-09-29') {
+  if (`${values.year}-${values.month}-${values.day} ${values.hour}:${values.minute}` < '2026-09-29 15:30') {
     meeting.querySelector('.kind-title').textContent = 'A question for the meeting';
     document.getElementById('meeting-date').hidden = false;
   } else {

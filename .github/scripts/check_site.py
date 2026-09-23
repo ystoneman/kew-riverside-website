@@ -21,7 +21,7 @@ response-checklist.md response-checklist.pdf sources.csv sources.json styles.css
 suggestions.json supporters.html supporters.js supporters.json
 attainment-data.json attainment.csv
 understand.html understand.css understand.js understand-data.json richmond-schools.csv
-voice.css voice.js contribute.css sent.html sent.js respond-reminder.ics
+voice.css voice.js contribute.css sent.html sent.js private-form.js respond-reminder.ics
 og-home.png og-letters.png og-ideas.png og-videos.png
 '''.split())
 MAINTENANCE_FILES = frozenset('''

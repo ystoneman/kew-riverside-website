@@ -161,9 +161,17 @@
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && message.value.trim().length >= 3) saveDraft(); });
   // A visitor can explicitly remove the copy on the next-steps page. If Back restores
   // an old form DOM, honour that request without inferring that Formspree accepted it.
-  const forgetCleared = () => { if (explicitlyCleared(message.value)) forgetDraft('Letter cleared from this device. You can write another here'); };
-  forgetCleared();
+  const forgetCleared = () => {
+    const record = store.get('kr-letter-cleared', sessionStorage);
+    // Chromium can restore other inputs while leaving the message empty on Back.
+    // A cleared tab with no message still needs the full form reset.
+    if (record && (!message.value || record.id === fingerprint(message.value))) {
+      forgetDraft('Letter cleared from this device. You can write another here');
+    }
+  };
   addEventListener('pageshow', event => {
+    // Chromium may restore checkboxes and email between load and pageshow.
+    // Consume the clear marker only after that restoration.
     forgetCleared();
     if (event.persisted && sent && !explicitlyCleared(message.value)) showReturn(true);
   });

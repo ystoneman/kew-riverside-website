@@ -18,6 +18,8 @@ async function sendFictionalLetter(page, options = {}) {
   await page.locator('#letter-consent').check();
   if (options.publish) await page.locator('#allow-public').check();
   if (options.quote) await page.locator('#allow-quotes').check();
+  if (options.council) await page.locator('#allow-council').check();
+  if (options.email) await page.locator('#email').fill(options.email);
   await page.locator('#letter-form button[type="submit"]').click();
 }
 
@@ -246,7 +248,7 @@ test('Letters: direct next-steps visit does not confirm receipt or erase the pen
 
 test('Letters: explicit removal on next-steps page clears both copies and a restored form', async ({ page }) => {
   const submissions = await captureSubmissions(page);
-  await sendFictionalLetter(page);
+  await sendFictionalLetter(page, { publish: true, council: true, email: 'fictional@example.invalid' });
   await expect.poll(() => submissions.length).toBe(1);
   const reference = submissions[0].get('reference');
   await page.goto('/sent.html');
@@ -258,9 +260,43 @@ test('Letters: explicit removal on next-steps page clears both copies and a rest
   await expect(page).toHaveURL(/\/letters\.html$/);
   await expect(page.locator('#message')).toHaveValue('');
   await expect(page.locator('#sent-return')).toBeHidden();
+  await expect(page.locator('#allow-public')).not.toBeChecked();
+  await expect(page.locator('#allow-council')).not.toBeChecked();
+  await expect(page.locator('#email')).toHaveValue('');
   expect(await page.locator('#letter-reference').inputValue()).not.toBe(reference);
   expect(await readDraft(page)).toBeNull();
 });
+
+for (const file of ['about.html', 'corrections.html', 'supporters.html']) {
+  test(`${file}: a private submission clears an earlier participation marker`, async ({ page }) => {
+    const submissions = await captureSubmissions(page);
+    await page.goto('/' + file);
+    await page.evaluate(text => {
+      sessionStorage.setItem('kr-sent-kind', JSON.stringify({ kind: 'letter', at: Date.now() }));
+      sessionStorage.setItem('kr-sent-letter', JSON.stringify({ text, at: Date.now() }));
+    }, LETTER);
+    if (file === 'about.html') {
+      await page.locator('#contact-message').fill('A fictional private contact request for testing.');
+      await page.locator('input[name="contact_consent"]').check();
+    } else if (file === 'corrections.html') {
+      await page.locator('#message').fill('A fictional private correction request for testing.');
+    } else {
+      await page.locator('#public-name').fill('Fictional Adult');
+      await page.locator('#supporter-email').fill('fictional@example.invalid');
+      await page.locator('input[name="adult_self"]').check();
+      await page.locator('input[name="supporter_consent"]').check();
+      await page.locator('#allow-supporter').check();
+    }
+    await page.locator('form[action="https://formspree.io/f/mwlpollw"] button[type="submit"]').click();
+    await expect.poll(() => submissions.length).toBe(1);
+    await page.goto('/sent.html');
+    await expect(page.locator('#sent-title')).toHaveText('Thank you.');
+    await expect(page.locator('#official-card')).toBeHidden();
+    await expect(page.locator('#copy-step')).toBeHidden();
+    expect(await page.evaluate(() => sessionStorage.getItem('kr-sent-kind'))).toBeNull();
+    expect(await page.evaluate(() => sessionStorage.getItem('kr-sent-letter'))).toBeNull();
+  });
+}
 
 for (const [moment, open] of [['2026-10-16T23:30:00', true], ['2026-10-17T00:30:00', false]]) {
   test(`Letters at ${moment} London time: the official-form asks are ${open ? 'shown' : 'retired'}`, async ({ page }) => {
@@ -345,7 +381,7 @@ test('Privacy: the quote section states scope, exclusions, end date, records and
 // ---------- Share ideas ----------
 
 test('Share ideas: visible choices start on a suggestion, with the meeting card dated before the meeting', async ({ page }) => {
-  await page.clock.setFixedTime(london('2026-09-29T20:00:00'));
+  await page.clock.setFixedTime(london('2026-09-29T15:29:00'));
   await page.goto('/feedback.html');
   await expect(page.locator('input[name="kind"][value="suggestion"]')).toBeChecked();
   const cards = page.locator('#kind-cards > .kind-grid > .kind-card');
@@ -359,7 +395,7 @@ test('Share ideas: visible choices start on a suggestion, with the meeting card 
 });
 
 test('Share ideas: after the meeting the card becomes a general question and moves last', async ({ page }) => {
-  await page.clock.setFixedTime(london('2026-09-30T08:00:00'));
+  await page.clock.setFixedTime(london('2026-09-29T15:30:00'));
   await page.goto('/feedback.html');
   await expect(page.locator('#meeting-date')).toBeHidden();
   const cards = page.locator('#kind-cards > .kind-grid > .kind-card');
