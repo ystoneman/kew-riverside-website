@@ -18,16 +18,19 @@ test.use({ trace: process.env.KEW_DIAG_PROTOCOL === '1' ? 'off' : 'retain-on-fai
 test('diag legacy redirects', async ({ page }, testInfo) => {
   test.setTimeout(600_000);
   const tag = `${testInfo.project.name}-${testInfo.repeatEachIndex}`;
+  let cancelled = 0;
+  page.on('requestfailed', request => { if (/cancel/i.test(request.failure()?.errorText || '')) cancelled++; });
   for (const [id, destination] of legacyDestinations) {
     const probe = `${tag}-${id}`;
     const started = Date.now();
+    cancelled = 0;
     let error = '';
     try {
       await page.goto(`/index.html?probe=${probe}#${id}`, { timeout: 40_000 });
       await expect(page).toHaveURL(new RegExp(destination.replace('.', '\\.') + '\\?probe=' + probe + '#' + id + '$'));
     } catch (e) { error = e.message.split('\n')[0].slice(0, 120); }
     const ms = Date.now() - started;
-    console.log(`DIAG ${JSON.stringify({ probe, t0: started, ms, ok: !error, error, worker: testInfo.workerIndex })}`);
+    console.log(`DIAG ${JSON.stringify({ probe, t0: started, ms, ok: !error, error, worker: testInfo.workerIndex, cancelled })}`);
     if (error) {
       // Does the same page recover on a new visit, or stay wedged?
       const again = Date.now();

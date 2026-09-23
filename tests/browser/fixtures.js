@@ -20,6 +20,24 @@ const test = base.extend({
   // Form tests install a more specific page route that returns a local fake response.
   networkGuard: [async ({ context, baseURL }, use) => {
     const unexpected = [];
+    if (process.env.KEW_GUARD === 'narrow') {
+      // TEMPORARY DIAGNOSTIC: route only external URLs and the letters board, so
+      // Playwright continues local requests itself without a client round trip.
+      const site = new URL(baseURL).origin;
+      const escaped = site.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      await context.route(new RegExp(`^(?!${escaped}/)`), async route => {
+        const request = route.request();
+        unexpected.push(`${request.method()} ${request.url()}`);
+        await route.abort('blockedbyclient');
+      });
+      await context.route(new RegExp(`^${escaped}/letters\\.json(?:[?#]|$)`), route => route.fulfill({ json: { version: 1, letters: [] } }));
+      context.on('request', request => {
+        if (new URL(request.url()).origin === site && !['GET', 'HEAD'].includes(request.method())) unexpected.push(`${request.method()} ${request.url()}`);
+      });
+      await use();
+      expect(unexpected, 'No real submissions, analytics or other external traffic during tests').toEqual([]);
+      return;
+    }
     await context.route('**/*', async route => {
       const request = route.request();
       if (new URL(request.url()).origin === new URL(baseURL).origin && ['GET', 'HEAD'].includes(request.method())) {

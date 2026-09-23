@@ -11,12 +11,15 @@ on:
       protocol_log:
         description: Record the Playwright protocol log (1) or not (0)
         default: '0'
+      guard:
+        description: Network guard routes (broad = every URL, narrow = external URLs and letters board)
+        default: broad
 
 permissions:
   contents: read
 
 concurrency:
-  group: pages-${{ github.ref }}-${{ inputs.http2 }}-${{ inputs.protocol_log }}
+  group: pages-${{ github.ref }}-${{ github.run_id }}
   cancel-in-progress: false
 
 jobs:
@@ -60,6 +63,7 @@ jobs:
         env:
           KEW_HTTP2: ${{ inputs.http2 }}
           KEW_DIAG_PROTOCOL: ${{ inputs.protocol_log }}
+          KEW_GUARD: ${{ inputs.guard }}
           KEW_DIAG_DIR: /tmp/kew-diag
           KEW_SERVER_LOG: /tmp/kew-diag/server.log
           NODE_OPTIONS: --require ${{ github.workspace }}/tests/browser/diag-preload.cjs
