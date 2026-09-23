@@ -216,8 +216,8 @@ test('Inspection: original-source counts, search and the resolved gap agree', as
   await page.getByLabel('Year', { exact: true }).selectOption('2003');
   await expect(inspection).toBeHidden();
   // Repeating the current hash must still recover a source hidden by filters.
-  // The reset re-expands the list above the link. An animated jump let Chromium scroll
-  // anchoring hold the page at the link despite explicit scroll requests, so it must land at once.
+  // The reset re-expands the list above the link and scroll anchoring keeps the link in place;
+  // animated jumps then sometimes left Chromium there, so the jump must land at once.
   await activate(gap.locator('a[href="#source-inspection-2026"]'), hasTouch);
   await expectScrollSettled(page, 'Repeated source link');
   await expect(inspection).toBeVisible();
