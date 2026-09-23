@@ -53,6 +53,7 @@ class Document(HTMLParser):
         self.scripts = []
         self.navigation = {name: [] for name in ('desktop-explore', 'mobile-menu', 'participation-nav')}
         self.source_ids = []
+        self.source_cards = {}
         self.legacy_routes = {}
         self.legacy_links = {}
         self.stack = []
@@ -70,6 +71,12 @@ class Document(HTMLParser):
             self.scripts.append(attrs['src'])
         if 'source-card' in classes:
             self.source_ids.append(attrs.get('id', ''))
+            self.source_cards[attrs.get('id', '')] = {'attrs': attrs, 'summary': [], 'url': None}
+        elif tag == 'a' and self.stack and self.stack[-1][0] == 'h3':
+            card = next((ancestor_attrs.get('id') for _, ancestor_classes, ancestor_attrs in reversed(self.stack)
+                         if 'source-card' in ancestor_classes), None)
+            if card:
+                self.source_cards[card]['url'] = attrs.get('href')
         if 'legacy-route' in classes:
             self.legacy_routes[attrs.get('id', '')] = attrs.get('data-destination', '')
         if tag == 'a' and 'href' in attrs:
@@ -81,6 +88,14 @@ class Document(HTMLParser):
                     self.legacy_links.setdefault(ancestor_attrs.get('id', ''), []).append(attrs['href'])
         if tag not in self.VOID_TAGS:
             self.stack.append((tag, classes, attrs))
+
+    def handle_data(self, data):
+        if len(self.stack) < 2:
+            return
+        tag, classes, _ = self.stack[-1]
+        parent_tag, parent_classes, parent_attrs = self.stack[-2]
+        if tag == 'p' and parent_tag == 'article' and 'source-card' in parent_classes and 'publisher' not in classes:
+            self.source_cards[parent_attrs['id']]['summary'].append(data)
 
     def handle_startendtag(self, tag, attributes):
         self.handle_starttag(tag, attributes)
@@ -208,6 +223,20 @@ class SiteStructureTests(unittest.TestCase):
                 with self.subTest(record=row['Record reference'], column=column):
                     value = by_id[row['Record reference']][key]
                     self.assertEqual(row[column], '' if value is None else str(value))
+        html_cards = self.pages['evidence.html'].source_cards
+        for record in records:
+            with self.subTest(record=record['id'], representation='HTML'):
+                card = html_cards['source-' + record['id']]
+                attrs = card['attrs']
+                for key, attribute in (('year', 'data-year'), ('type', 'data-type'),
+                                       ('topic', 'data-topic'), ('status', 'data-status')):
+                    self.assertEqual(attrs[attribute], record[key])
+                self.assertEqual(card['url'], record['url'])
+                summary = ' '.join(''.join(card['summary']).split())
+                self.assertEqual(summary, ' '.join(record['summary'].split()))
+                search = ' '.join(attrs['data-search'].lower().split())
+                self.assertIn(' '.join(record['summary'].lower().split()), search,
+                              'A visible summary must also be searchable')
 
 
 if __name__ == '__main__':

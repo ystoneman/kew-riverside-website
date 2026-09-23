@@ -35,7 +35,7 @@ test('Learning: contextual homepage and evidence entries reach the results and s
 
 test('Learning: the local jump retains previous comparison sections and visible context', async ({ page, hasTouch }) => {
   await page.goto('/understand.html');
-  const expected = ['pupil-trends', 'school-places', 'year-groups', 'other-proposals', 'learning-and-results', 'methodology'];
+  const expected = ['pupil-trends', 'forecast-checks', 'school-places', 'year-groups', 'budget', 'other-proposals', 'learning-and-results', 'methodology'];
   expect(await page.locator('main > section[id]').evaluateAll(sections => sections.map(section => section.id).filter(id => id !== 'top'))).toEqual(expected);
   await activate(page.locator('.visual-route a[href="#learning-and-results"]'), hasTouch);
   await expect(page.locator('#learning-and-results')).toBeInViewport();
@@ -195,12 +195,12 @@ test('Learning: narrow arrival protects action routes and the chart stays inside
 
 test('Inspection: original-source counts, search and the resolved gap agree', async ({ page, hasTouch }) => {
   await page.goto('/evidence.html#records');
-  await expect(page.locator('.source-card')).toHaveCount(47);
-  for (const [status, count] of [['Reviewed', 42], ['Index only', 2], ['Not retrieved', 3]]) {
+  await expect(page.locator('.source-card')).toHaveCount(57);
+  for (const [status, count] of [['Reviewed', 53], ['Index only', 2], ['Not retrieved', 2]]) {
     await expect(page.locator(`.source-card[data-status="${status}"]`)).toHaveCount(count);
   }
   const inspection = page.locator('#source-inspection-2026');
-  await page.getByLabel('Search the records').fill('Ofsted 2026');
+  await page.getByLabel('Search source records and research reports').fill('Ofsted 2026');
   await page.getByLabel('Record type', { exact: true }).selectOption('Inspection');
   await page.getByLabel('Year', { exact: true }).selectOption('2026');
   await page.getByLabel('Coverage', { exact: true }).selectOption('Reviewed');
@@ -208,7 +208,7 @@ test('Inspection: original-source counts, search and the resolved gap agree', as
   await expect(inspection).toHaveAttribute('data-status', 'Reviewed');
   await expect(inspection.locator('h3 a')).toHaveAttribute('href', 'https://www.kewriverside.richmond.sch.uk/attachments/download.asp?file=3619&type=pdf');
   await page.getByRole('button', { name: 'Clear filters' }).click();
-  await expect(page.locator('.source-card:visible')).toHaveCount(47);
+  await expect(page.locator('.source-card:visible')).toHaveCount(57);
   const gap = page.locator('#gaps article').filter({ has: page.locator('span', { hasText: /^07$/ }) });
   await expect(gap).toContainText(/resolved/i);
   await activate(gap.locator('a[href="#source-inspection-2026"]'), hasTouch);
@@ -226,7 +226,7 @@ test('Inspection: original-source counts, search and the resolved gap agree', as
   await page.goto('/evidence.html?q=unfindable-inspection&type=Inspection&year=2003&status=Index%20only#source-inspection-2026');
   await expect(inspection).toBeVisible();
   await expect(inspection).toBeInViewport();
-  await expect(page.getByLabel('Search the records')).toHaveValue('');
+  await expect(page.getByLabel('Search source records and research reports')).toHaveValue('');
   await expect(page.getByLabel('Coverage', { exact: true })).toHaveValue('');
   await expect(page.locator('main')).not.toContainText(/full (?:2026 )?(?:inspection )?report (?:has )?not (?:been )?retrieved/i);
 });

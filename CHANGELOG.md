@@ -4,7 +4,14 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
-No new entries.
+### Dated case evidence and response questions — 23 September 2026
+
+- Understand now separates the reported 31 March 2026 revenue reserve from the council’s later deficit projection, shows five years of financial actuals in an optional table, and states the missing annual budget bridge. It checks one 2025/26 Kew planning-area forecast against census counts, distinguishes a later forecast revision from measured error, and explains why the school’s PFI charge is not a closure saving. Reviewed aggregate observations are available as CSV and JSON.
+- Evidence now has 57 original-source records (53 reviewed, two index-only, two not retrieved), clearer source-search scope, four direct explanation routes and five dated evidence gaps. The request notes record what was sent on 23 September; they do not claim a reply, disclosure or agreement. The historic school-research report remains separately indexed.
+- Home and Options direct prospective families to ask the school what visits are currently available. The reported open-day restriction is unconfirmed. Options links the council’s published alternatives explanation and current government guidance while leaving school-specific feasibility unresolved. Proposal offers six optional, sourced questions for an individual official response; FAQ and the two-page checklist point to the canonical explanations.
+- Portable builders regenerate the source index, Understand sections/CSV and public checklist PDF. The PDF was rendered and both pages visually inspected; its selectable text, page labels and links were checked. No private request reference, mailbox link or personal reply address was added to the public artifact.
+
+Local verification and publication status are recorded in TESTING.md. This entry describes an unreleased branch, not a live deployment.
 
 ## 23 September 2026 — participation and appearance releases
 

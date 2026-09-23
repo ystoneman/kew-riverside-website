@@ -24,7 +24,7 @@ test('Report discovery: remembered terms find the research and preserve its prov
   await page.goto('/evidence.html#records');
   const report = page.locator('#source-lessons-report');
   for (const query of ['other schools', '12 schools', 'closure reversals', 'saved schools', 'report', '44-page PDF', '44 page PDF']) {
-    await page.getByLabel('Search the records').fill(query);
+    await page.getByLabel('Search source records and research reports').fill(query);
     await expect(report).toBeVisible();
     await expect(page.locator('#research-count')).toHaveText('1 of 1 site research reports');
     await expect(page.locator('#no-results')).toBeHidden();
@@ -37,21 +37,21 @@ test('Report discovery: remembered terms find the research and preserve its prov
   await expect(report).toContainText(/four closure comparisons/i);
   await expect(report).toContainText(/not an official record or a representative dataset/i);
   await expect(report).not.toHaveClass(/\bsource-card\b/);
-  await expect(page.locator('.source-card')).toHaveCount(47);
+  await expect(page.locator('.source-card')).toHaveCount(57);
   await page.reload();
-  await expect(page.getByLabel('Search the records')).toHaveValue('44 page PDF');
+  await expect(page.getByLabel('Search source records and research reports')).toHaveValue('44 page PDF');
   await expect(report).toBeVisible();
 });
 
 test('Report discovery: research filters, separate counts, empty state and reset agree', async ({ page }) => {
   await page.goto('/evidence.html#records');
   const report = page.locator('#source-lessons-report');
-  await expect(page.locator('#result-count')).toHaveText('47 of 47 records');
+  await expect(page.locator('#result-count')).toHaveText('57 of 57 records');
   await expect(page.locator('#research-count')).toHaveText('1 of 1 site research reports');
   await page.getByLabel('Record type', { exact: true }).selectOption('Site research');
   await expect(report).toBeVisible();
   await expect(page.locator('.source-card:visible')).toHaveCount(0);
-  await expect(page.locator('#result-count')).toHaveText('0 of 47 records');
+  await expect(page.locator('#result-count')).toHaveText('0 of 57 records');
   await expect(page.locator('#no-results')).toBeHidden();
   await page.getByLabel('Coverage', { exact: true }).selectOption('Synthesis');
   await expect(report).toBeVisible();
@@ -61,11 +61,11 @@ test('Report discovery: research filters, separate counts, empty state and reset
   await expect(page.locator('#no-results')).toBeVisible();
   await page.getByRole('button', { name: 'Clear filters' }).click();
   await expect(report).toBeVisible();
-  await expect(page.locator('.source-card:visible')).toHaveCount(47);
-  await expect(page.locator('#result-count')).toHaveText('47 of 47 records');
+  await expect(page.locator('.source-card:visible')).toHaveCount(57);
+  await expect(page.locator('#result-count')).toHaveText('57 of 57 records');
   await expect(page.locator('#research-count')).toHaveText('1 of 1 site research reports');
   await expect(page.locator('#no-results')).toBeHidden();
-  await expect(page.getByLabel('Search the records')).toBeFocused();
+  await expect(page.getByLabel('Search source records and research reports')).toBeFocused();
 });
 
 test('Report discovery: direct and repeated report anchors recover incompatible filters', async ({ page, hasTouch }) => {
@@ -73,14 +73,14 @@ test('Report discovery: direct and repeated report anchors recover incompatible 
   const report = page.locator('#source-lessons-report');
   await expect(report).toBeVisible();
   await expect(report).toBeInViewport();
-  await expect(page.getByLabel('Search the records')).toHaveValue('');
+  await expect(page.getByLabel('Search source records and research reports')).toHaveValue('');
   await expect(page.getByLabel('Record type', { exact: true })).toHaveValue('');
   await expect(page.getByLabel('Year', { exact: true })).toHaveValue('');
   await expect(page.getByLabel('Coverage', { exact: true })).toHaveValue('');
   await page.getByLabel('Record type', { exact: true }).selectOption('Inspection');
   await expect(report).toBeHidden();
   await expect(page).toHaveURL(/#source-lessons-report$/);
-  const shortcut = page.locator('#research-shortcut a[href="#source-lessons-report"]');
+  const shortcut = page.locator('#research-shortcut[href="#source-lessons-report"]');
   if (hasTouch) await shortcut.tap(); else await shortcut.click();
   await expect(report).toBeVisible();
   await expect(report).toBeInViewport();
@@ -91,7 +91,7 @@ test('Source search, combined filters, empty state and clear remain usable', asy
   await page.goto('/evidence.html#records');
   const total = await page.locator('.source-card').count();
   await expect(page.locator('#result-count')).toHaveText(`${total} of ${total} records`);
-  await page.getByLabel('Search the records').fill('Ofsted');
+  await page.getByLabel('Search source records and research reports').fill('Ofsted');
   expect(await page.locator('.source-card:visible').count()).toBeGreaterThan(0);
   expect(await page.locator('.source-card:visible').count()).toBeLessThan(total);
   await page.getByLabel('Record type', { exact: true }).selectOption('Inspection');
@@ -100,22 +100,88 @@ test('Source search, combined filters, empty state and clear remain usable', asy
   await expect(page.locator('.source-card:visible h3')).toContainText('First Ofsted inspection');
   await expect(page).toHaveURL(/q=Ofsted/);
   await page.reload();
-  await expect(page.getByLabel('Search the records')).toHaveValue('Ofsted');
+  await expect(page.getByLabel('Search source records and research reports')).toHaveValue('Ofsted');
   await expect(page.locator('.source-card:visible')).toHaveCount(1);
-  await page.getByLabel('Search the records').fill('no-record-can-match-this-test-phrase');
+  await page.getByLabel('Search source records and research reports').fill('no-record-can-match-this-test-phrase');
   await expect(page.locator('#no-results')).toBeVisible();
   await expect(page.locator('.source-card:visible')).toHaveCount(0);
   await page.getByRole('button', { name: 'Clear filters' }).click();
   await expect(page.locator('.source-card:visible')).toHaveCount(total);
   await expect(page.locator('#no-results')).toBeHidden();
-  await expect(page.getByLabel('Search the records')).toBeFocused();
+  await expect(page.getByLabel('Search source records and research reports')).toBeFocused();
 });
 
 test('Direct evidence references remain visible when URL filters exclude them', async ({ page }) => {
   await page.goto('/evidence.html?q=no-record-can-match-this-test-phrase#source-inspection-2003');
   await expect(page.locator('#source-inspection-2003')).toBeVisible();
   await expect(page.locator('#source-inspection-2003')).toBeInViewport();
-  await expect(page.getByLabel('Search the records')).toHaveValue('');
+  await expect(page.getByLabel('Search source records and research reports')).toHaveValue('');
+});
+
+test('New source terms find the appropriate reviewed records without counting explanation links', async ({ page }) => {
+  await page.goto('/evidence.html#records');
+  const search = page.getByLabel('Search source records and research reports');
+  await expect(search).toHaveAttribute('aria-describedby', 'record-search-help');
+  await expect(page.locator('#record-search-help')).toContainText(/not the full text of linked documents or every website answer/i);
+  for (const [term, record] of [
+    ['reserves', 'source-school-balances-mar-2026'],
+    ['amalgamation', 'source-prescribed-alterations-2025'],
+    ['equality', 'source-school-organisation-eina-2026'],
+    ['PFI', 'source-kew-finance-expenditure-history'],
+  ]) {
+    await search.fill(term);
+    await expect(page.locator(`#${record}`)).toBeVisible();
+    await expect(page.locator('#no-results')).toBeHidden();
+    await expect(page.locator('.evidence-answer-links a')).toHaveCount(4);
+    await expect(page.locator('.evidence-answer-links a').first()).toBeVisible();
+  }
+  await search.fill('nothing-in-this-source-register');
+  await expect(page.locator('#no-results')).toBeVisible();
+  await expect(page.locator('.evidence-answer-links a').first()).toBeVisible();
+  await page.locator('#no-results a[href="evidence.html#records"]').click();
+  await expect(search).toHaveValue('');
+  await expect(page.locator('#result-count')).toHaveText('57 of 57 records');
+  await expect(page.locator('#no-results')).toBeHidden();
+});
+
+test('Evidence arrival exposes explanations and source search at narrow width', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/evidence.html#records');
+  await expect(page.locator('#evidence-explainer-title')).toBeInViewport();
+  await expect(page.getByLabel('Search source records and research reports')).toBeInViewport();
+  await expect(page.locator('.evidence-answer-links a')).toHaveCount(4);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
+});
+
+test('Evidence gaps show dated requests without treating dispatch as disclosure', async ({ page }) => {
+  await page.goto('/evidence.html#gap-budget');
+  await expect(page.locator('#gaps .section-heading')).toContainText('Request dates record dispatch, not disclosure or agreement');
+  for (const [id, subject] of [
+    ['gap-budget', /budget.*forecast/i],
+    ['gap-alternatives', /options appraisal/i],
+    ['gap-closure-costs', /cost comparison/i],
+    ['gap-forecasts', /forecast versions/i],
+    ['gap-pupil-impacts', /equality assessment/i],
+  ]) {
+    const note = page.locator(`#${id} .request-status`);
+    await expect(note).toContainText('Requested 23 September 2026');
+    await expect(note).toContainText(subject);
+    await expect(note).not.toContainText(/FS-Case|Stoneman|@/i);
+  }
+});
+
+test('New source anchors recover from incompatible saved filters and repeat visits', async ({ page }) => {
+  const source = page.locator('#source-school-balances-mar-2026');
+  await page.goto('/evidence.html?q=impossible-source-query&type=Inspection#source-school-balances-mar-2026');
+  await expect(source).toBeVisible();
+  await expect(source).toBeInViewport();
+  await expect(page.getByLabel('Search source records and research reports')).toHaveValue('');
+  await page.getByLabel('Record type', { exact: true }).selectOption('Inspection');
+  await expect(source).toBeHidden();
+  await page.locator('#gap-budget a[href="#source-school-balances-mar-2026"]').click();
+  await expect(source).toBeVisible();
+  await expect(source).toBeInViewport();
+  await expect(page.getByLabel('Record type', { exact: true })).toHaveValue('');
 });
 
 test('Each source filter independently updates visible records', async ({ page }) => {

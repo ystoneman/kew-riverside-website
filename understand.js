@@ -6,15 +6,13 @@
     const target = document.getElementById(id);
     if (!target) return;
     let element = target;
-    let revealed = false;
     while (element) {
       if (element.tagName === 'DETAILS') {
         element.open = true;
-        revealed = true;
       }
       element = element.parentElement;
     }
-    if (revealed) target.scrollIntoView({ behavior: 'instant', block: 'start' });
+    target.scrollIntoView({ behavior: 'instant', block: 'start' });
   }
   window.addEventListener('hashchange', revealLinkedDetails);
   document.addEventListener('click', event => {

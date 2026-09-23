@@ -1,6 +1,6 @@
 {
   "title": "Kew Riverside — Parent-led evidence and action, maintained by Yann Stoneman",
-  "researchChecked": "2026-09-22",
+  "researchChecked": "2026-09-23",
   "scope": "Curated public-record index; not exhaustive. Original documents remain with their publishers.",
   "currentClosureStatus": "Pre-statutory consultation on closure effective 1 September 2027. Council-linked form states response deadline 16 October 2026. Later committee and statutory stages are planned and conditional; no final closure decision verified. Checked 21 September 2026.",
   "coverageDefinitions": {
@@ -215,9 +215,9 @@
       "topic": "Demand & housing",
       "status": "Reviewed",
       "url": "https://cabnet.richmond.gov.uk/documents/s500017780/6.%20School%20Place%20Planning%20Report.pdf",
-      "summary": "Provides the application series and occupancy figures used in the infographics. Kew Retail Park was paused and excluded from the housing-yield calculation at this point. These are borough-wide figures and dated planning assumptions.",
+      "summary": "Provides the borough application series and occupancy figures used here. Its illustrative 342 primary pupils from housing concern the combined eastern borough over five to ten years, not Kew Riverside alone; Kew Retail Park was paused and excluded. Housing permissions are not occupied family homes.",
       "locator": "Item 6, 18 pages; October 2025 data, presented 13 November 2025.",
-      "accessChecked": "2026-09-21"
+      "accessChecked": "2026-09-23"
     },
     {
       "id": "committee-nov-2025",
@@ -271,9 +271,9 @@
       "topic": "Decision process",
       "status": "Reviewed",
       "url": "https://assets.publishing.service.gov.uk/media/6a034409e71c4cdf4026bab8/Closing_maintained_schools_guidance_-_May_2026.pdf",
-      "summary": "Guidance effective from 1 September 2026 covers consultation, alternatives, formal proposals, representations and decisions. It addresses future capacity, pupil impacts and decision-making duties. Use the current guidance, rather than assuming an older closure process applies.",
+      "summary": "Current guidance effective 1 September 2026 covers consultation, alternatives, formal proposals, representations and decisions. Its decision factors include future capacity, pupil and equality impacts, travel and funding. The sections reviewed do not identify a consultation-triggered ban on visits; any actual local instruction remains unverified.",
       "locator": "May 2026 edition, 30 pages; effective 1 September 2026.",
-      "accessChecked": "2026-09-21"
+      "accessChecked": "2026-09-23"
     },
     {
       "id": "guidance-index",
@@ -341,7 +341,7 @@
       "topic": "Funding & buildings",
       "status": "Reviewed",
       "url": "https://www.kewriverside.richmond.sch.uk/page/?pid=557&title=Financial+Information",
-      "summary": "Links to the Department for Education's financial benchmarking service. The page is a route to financial records, not a verified current closure budget.",
+      "summary": "The school links to the DfE financial benchmarking service. Its historical actuals have now been retrieved separately; this school page is not an approved current budget or forecast.",
       "locator": "School financial information webpage, checked 21 September 2026.",
       "accessChecked": "2026-09-21"
     },
@@ -353,11 +353,11 @@
       "publisher": "Department for Education",
       "type": "Directory",
       "topic": "Funding & buildings",
-      "status": "Not retrieved",
+      "status": "Reviewed",
       "url": "https://financial-benchmarking-and-insights-tool.education.gov.uk/school/133343",
-      "summary": "Official financial service linked from the school's website. The underlying figures have not been retrieved or reconciled to a current school budget.",
-      "locator": "Follow the service to check reporting year and accounting definitions.",
-      "accessChecked": "2026-09-21"
+      "summary": "The DfE service now provides Kew Riverside's reported five-year income, expenditure and revenue-balance actuals through its history pages. Those actuals do not supply the school's approved 2026/27 budget or the council's multi-year closure forecast.",
+      "locator": "School 133343 overview and historical data; underlying income, expenditure and balance series have separate records below. Financial years end in March; published values are rounded.",
+      "accessChecked": "2026-09-23"
     },
     {
       "id": "ofsted-index",
@@ -509,9 +509,9 @@
       "topic": "Decision process",
       "status": "Reviewed",
       "url": "https://www.richmond.gov.uk/media/fxhbilws/kew_riverside_consultation_leaflet.pdf",
-      "summary": "School-specific proposal, financial rationale, reported rolls and forecasts, alternatives considered, conditional decision timetable and response instructions. Initial response period wording differs from the general FAQ; the council-linked form gives 16 October 2026.",
-      "locator": "8 PDF pages. PDF pages 3–6: finance, forecasting, pupil series and alternatives; page 7: timetable; page 8: event and response routes. Publication date not stated; current document retrieved 21 September 2026.",
-      "accessChecked": "2026-09-21"
+      "summary": "The Kew-specific proposal gives financial and pupil-number forecasts, an alternatives explanation, a conditional timetable and response routes. Its statement that a replacement amalgamation must be a free school needs comparison with the September 2026 new-school rules and the existing-school alteration route; legal availability alone does not prove Kew feasibility. The council-linked response form gives 16 October 2026 as the deadline.",
+      "locator": "8 PDF pages. PDF pages 3–6: finance, forecasting, pupil series and alternatives; page 7: timetable; page 8: event and response routes. Publication date not stated; first retrieved 21 September and rechecked 23 September 2026.",
+      "accessChecked": "2026-09-23"
     },
     {
       "id": "consultation-faq",
@@ -523,9 +523,9 @@
       "topic": "Decision process",
       "status": "Reviewed",
       "url": "https://www.richmond.gov.uk/media/prepaqcb/school_organisation_consultation_faq.pdf",
-      "summary": "Council-wide FAQ on school organisation, AfC’s role, pupil forecasts, alternatives and transition. Describes initial consultation ending in October, a November committee stage and planned April 2027 determination. General explanations must not be mistaken for Kew-specific commitments.",
-      "locator": "14 PDF pages. General FAQ supplied by the Kew consultation page. Publication date not stated; checked 21 September 2026.",
-      "accessChecked": "2026-09-21"
+      "summary": "General council FAQ on school organisation, forecasts, alternatives and transition. Its Q18 says applications and admissions may continue during consultation. It does not establish that open days or tours are currently available at Kew, and general explanations are not Kew-specific commitments.",
+      "locator": "14 PDF pages; Q18 on PDF page 8 (printed page 7) addresses applications and admissions. Publication date not stated; checked 23 September 2026.",
+      "accessChecked": "2026-09-23"
     },
     {
       "id": "consultation-response",
@@ -666,6 +666,146 @@
       "summary": "Consultation proposal for one 210-place primary school plus retained nursery, initially using both buildings and later one site when pupil numbers permit. Current pupils would have guaranteed places. School designation, which legal school closes and the eventual site remain matters for the decision process. This is not an approved merger.",
       "locator": "Pre-statutory consultation leaflet, September/October 2026; publication date not stated. Printed pages 3 and 6–9 (PDF pages 4 and 7–10) explain capacity, legal mechanism, unresolved choices and the conditional 1 September 2027 implementation date. Comparing proposals does not establish that amalgamation or shared leadership would be viable at Kew Riverside.",
       "accessChecked": "2026-09-22"
+    },
+    {
+      "id": "school-balances-mar-2026",
+      "date": null,
+      "year": "2026",
+      "title": "Maintained-school balances at 31 March 2026",
+      "publisher": "London Borough of Richmond upon Thames",
+      "type": "Committee record",
+      "topic": "Funding & buildings",
+      "status": "Reviewed",
+      "url": "https://cabnet.richmond.gov.uk/documents/s500020983/Item%206%20Appendix%20A.pdf",
+      "summary": "The council records Kew Riverside's revenue balance at £231,685.09 on 31 March 2026, down £75,103.70 from a year earlier. Capital balances are separate. This dated actual does not show cash available today or the missing forecast bridge.",
+      "locator": "Appendix A associated with the 25 June 2026 Schools Forum, page 1, Kew Riverside row; revenue and capital columns. Document publication date not stated.",
+      "accessChecked": "2026-09-23"
+    },
+    {
+      "id": "school-organisation-june-2026",
+      "date": "2026-06-11",
+      "year": "2026",
+      "title": "School organisation report: June 2026 Part A",
+      "publisher": "London Borough of Richmond upon Thames",
+      "type": "Committee record",
+      "topic": "Demand & housing",
+      "status": "Reviewed",
+      "url": "https://cabnet.richmond.gov.uk/documents/s500020721/11.%20School%20Organisation%20Report%20-%2011%20June%202026-%20Part%20A.pdf",
+      "summary": "The June committee report records a 2031/32 Kew planning-area forecast of 514 pupils and distinguishes temporary admission capacity, admission capacity and net capacity. It says the Kew PFI expires in 2032. These are June figures and definitions, not the later leaflet forecast or closure savings.",
+      "locator": "11 June 2026 committee report, PDF pages 3–4 (forecast and capacity table), paragraph 3.23 (PFI). Kew planning area is not Kew Riverside alone.",
+      "accessChecked": "2026-09-23"
+    },
+    {
+      "id": "school-organisation-decisions-june-2026",
+      "date": "2026-06-11",
+      "year": "2026",
+      "title": "Education Committee decisions: 11 June 2026",
+      "publisher": "London Borough of Richmond upon Thames",
+      "type": "Committee record",
+      "topic": "Decision process",
+      "status": "Reviewed",
+      "url": "https://cabnet.richmond.gov.uk/ieDecisionDetails.aspx?ID=500001440",
+      "summary": "The decisions record gives a general delegation for taking school-organisation proposals to pre-statutory consultation after assessment and discussions, in consultation with the committee chair. It is not a Kew-specific closure decision or proof of any instruction restricting visits.",
+      "locator": "Council decision details page, School Organisation, resolution (b), 11 June 2026. The former decisions PDF link no longer resolves; this official page gives the decision text.",
+      "accessChecked": "2026-09-23"
+    },
+    {
+      "id": "kew-area-forecast-2025",
+      "date": "2026-03-19",
+      "year": "2026",
+      "title": "Local-authority pupil forecasts: 2024/25 SCAP data",
+      "publisher": "Department for Education",
+      "type": "Official dataset",
+      "topic": "Demand & housing",
+      "status": "Reviewed",
+      "url": "https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/64501ba1-ae89-40e0-9cf5-552a5f1ea6d1",
+      "summary": "The 2025 vintage forecasts 651 pupils in Reception–Year 6 and 88 in Reception for the Kew planning area in 2025/26. The matched January 2026 school census gives 654 and 97. This one-year, area-level check is not a forecast for Kew Riverside alone or a long-term accuracy verdict.",
+      "locator": "Dataset published 19 March 2026; planning_area_code 3180007, Primary, 202526, Primary total and Reception. Compared with January 2026 census for URNs 133343, 102884 and 102921, excluding nursery.",
+      "accessChecked": "2026-09-23"
+    },
+    {
+      "id": "school-organisation-eina-2026",
+      "date": null,
+      "year": "2026",
+      "title": "School organisation: borough equality impact and needs analysis",
+      "publisher": "London Borough of Richmond upon Thames",
+      "type": "Committee record",
+      "topic": "Decision process",
+      "status": "Reviewed",
+      "url": "https://cabnet.richmond.gov.uk/documents/s500020722/11.%20School%20Organisation%20LBR%20EINA.pdf",
+      "summary": "This borough-wide assessment says detailed school-specific assessments for pupils and staff should follow as proposals proceed. A separate Kew assessment was not located in the public material reviewed; that does not establish that none exists or that the equality duty was breached.",
+      "locator": "June 2026 committee appendix; approved 14 May 2026. PDF pages 1–2 describe scope; page 15 lists school-specific assessment action. Document publication date not stated.",
+      "accessChecked": "2026-09-23"
+    },
+    {
+      "id": "prescribed-alterations-2025",
+      "date": "2025-08",
+      "year": "2025",
+      "title": "Making significant changes to maintained schools",
+      "publisher": "Department for Education",
+      "type": "Guidance",
+      "topic": "Decision process",
+      "status": "Reviewed",
+      "url": "https://assets.publishing.service.gov.uk/media/68947395ad0cbc0e276430d8/making-significant-changes-prescribed-alterations-to-maintained-schools.pdf",
+      "summary": "Guidance describes an existing-school amalgamation route that can close one school while changing a surviving school, including its age range or site. Additional-site and reserved SEND proposals have separate requirements. This route is legally available in principle, not shown deliverable for Kew.",
+      "locator": "August 2025 edition; PDF pages 11–12 on additional sites and page 23 on amalgamations. Current linked edition checked 23 September 2026.",
+      "accessChecked": "2026-09-23"
+    },
+    {
+      "id": "opening-new-schools-2026",
+      "date": "2026-09-03",
+      "year": "2026",
+      "title": "Opening new schools: current statutory guidance",
+      "publisher": "Department for Education",
+      "type": "Guidance",
+      "topic": "Decision process",
+      "status": "Reviewed",
+      "url": "https://www.gov.uk/government/publications/opening-new-schools",
+      "summary": "Guidance in force from 1 September 2026 describes local-authority proposals for a replacement maintained school under the changed law; earlier proposals have transitional rules. It does not make a particular Kew replacement necessary, affordable or approved.",
+      "locator": "GOV.UK page updated 3 September 2026; linked September 2026 guidance, PDF pages 9 and 31–32 for decision-maker and replacement-school route.",
+      "accessChecked": "2026-09-23"
+    },
+    {
+      "id": "kew-finance-income-history",
+      "date": null,
+      "year": "Undated",
+      "title": "Kew Riverside reported income history",
+      "publisher": "Department for Education",
+      "type": "Official dataset",
+      "topic": "Funding & buildings",
+      "status": "Reviewed",
+      "url": "https://financial-benchmarking-and-insights-tool.education.gov.uk/api/income/history?type=school&id=133343&dimension=Actuals",
+      "summary": "Reported school income for financial years ending March 2022–2026. These are rounded historical actuals, not 2026/27 budget income or guaranteed revenue for additional pupils.",
+      "locator": "FBIT public income-history response; school 133343, Actuals, rows year 2022–2026. Year denotes the March financial-year end. Publication date not stated.",
+      "accessChecked": "2026-09-23"
+    },
+    {
+      "id": "kew-finance-expenditure-history",
+      "date": null,
+      "year": "Undated",
+      "title": "Kew Riverside reported expenditure history",
+      "publisher": "Department for Education",
+      "type": "Official dataset",
+      "topic": "Funding & buildings",
+      "status": "Reviewed",
+      "url": "https://financial-benchmarking-and-insights-tool.education.gov.uk/api/expenditure/history?type=school&id=133343&dimension=Actuals",
+      "summary": "Reported school expenditure for financial years ending March 2022–2026, including a 2025/26 PFI charge of £69,640. The school charge is not the council-wide contract liability or an avoidable saving on closure.",
+      "locator": "FBIT public expenditure-history response; school 133343, Actuals, rows year 2022–2026 and PFI expenditure field. Publication date not stated.",
+      "accessChecked": "2026-09-23"
+    },
+    {
+      "id": "kew-finance-balance-history",
+      "date": null,
+      "year": "Undated",
+      "title": "Kew Riverside reported revenue-balance history",
+      "publisher": "Department for Education",
+      "type": "Official dataset",
+      "topic": "Funding & buildings",
+      "status": "Reviewed",
+      "url": "https://financial-benchmarking-and-insights-tool.education.gov.uk/api/balance/history?type=school&id=133343&dimension=Actuals",
+      "summary": "Reported school revenue balances for financial years ending March 2022–2026. The March 2026 figure is rounded in this service; the council balance appendix separately gives £231,685.09. A revenue reserve is not the same as an annual result.",
+      "locator": "FBIT public balance-history response; school 133343, Actuals, rows year 2022–2026. Publication date not stated.",
+      "accessChecked": "2026-09-23"
     }
   ],
   "charts": {
@@ -820,7 +960,10 @@
         "guidance-2026",
         "school-finance",
         "pfi",
-        "consultation-leaflet"
+        "consultation-leaflet",
+        "school-balances-mar-2026",
+        "prescribed-alterations-2025",
+        "opening-new-schools-2026"
       ]
     },
     {
@@ -904,7 +1047,9 @@
       "refs": [
         "strategy-2023",
         "planning-nov-2025",
-        "consultation-leaflet"
+        "consultation-leaflet",
+        "school-organisation-june-2026",
+        "kew-area-forecast-2025"
       ]
     },
     {
@@ -967,7 +1112,9 @@
       "refs": [
         "pfi",
         "buildings-2026",
-        "school-finance"
+        "school-finance",
+        "school-balances-mar-2026",
+        "kew-finance-expenditure-history"
       ]
     },
     {
@@ -982,7 +1129,8 @@
       "refs": [
         "guidance-2026",
         "planning-nov-2025",
-        "consultation-leaflet"
+        "consultation-leaflet",
+        "school-organisation-eina-2026"
       ]
     },
     {

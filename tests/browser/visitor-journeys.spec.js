@@ -33,7 +33,7 @@ test('Homepage: responsive copy keeps words separated on mobile and desktop', as
       await expect(story).toHaveAccessibleName(/family|story|chose/i);
       for (const [selector, wording] of [
         ['.discovery-heading > p', 'the evidence or a way'],
-        ['#visit-school .visit-school-action > p', 'page. Tour invitation'],
+        ['#visit-school .visit-school-action > p', 'page. Please check visit availability'],
       ]) {
         const copy = page.locator(selector);
         await expect(copy).toBeVisible();
@@ -43,6 +43,49 @@ test('Homepage: responsive copy keeps words separated on mobile and desktop', as
   } finally {
     if (originalViewport) await page.setViewportSize(originalViewport);
   }
+});
+
+test('Prospective families can enquire directly from Home and Options without a promised tour', async ({ page }) => {
+  const schoolContact = 'https://www.kewriverside.richmond.sch.uk/page/?pid=525&title=Contact+Us';
+  await page.goto('/index.html#visit-school');
+  const homeVisit = page.locator('#visit-school');
+  await expect(homeVisit).toContainText('what visits are currently available');
+  await expect(homeVisit).toContainText('Closure is proposed, not decided');
+  await expect(homeVisit.locator('a.button.primary')).toHaveAttribute('href', schoolContact);
+  await expect(homeVisit.locator('a[href="https://www.richmond.gov.uk/primary_school_admissions"]')).toBeVisible();
+
+  await page.goto('/options.html#option-enrolment');
+  const option = page.locator('#option-enrolment');
+  await expect(option).toContainText('Ask the school what visits are currently available');
+  await expect(option).toContainText('applications and admissions can continue');
+  await expect(option.locator('a[href^="https://www.kewriverside.richmond.sch.uk/page/"]').filter({ hasText: 'Ask the school about visits and places' })).toBeVisible();
+});
+
+test('Proposal presents six evidence questions, optional detail and the official response', async ({ page }) => {
+  await page.goto('/proposal.html#questions');
+  const ids = ['question-budget', 'question-alternatives', 'question-closure-costs', 'question-demand', 'question-continuity', 'question-learning'];
+  expect(await page.locator('#questions .question-list > article').evaluateAll(items => items.map(item => item.id))).toEqual(ids);
+  for (const id of ids) {
+    const item = page.locator('#' + id);
+    await expect(item.getByRole('heading', { level: 3 })).toBeVisible();
+    await expect(item.locator(':scope > p a')).toHaveCount(id === 'question-continuity' ? 2 : 1);
+    await expect(item.locator('details')).not.toHaveAttribute('open', '');
+  }
+  const budget = page.locator('#question-budget');
+  await budget.locator('summary').focus();
+  await page.keyboard.press('Enter');
+  await expect(budget.locator('details')).toHaveAttribute('open', '');
+  await expect(budget).toContainText('Distinguish actuals from forecasts');
+  await expect(page.locator('#questions')).toContainText('without waiting for every answer');
+  await expect(page.locator('#plan-respond a.button.primary')).toHaveAttribute('href', /docs\.google\.com\/forms/);
+});
+
+test('Options ranking links to the council’s published alternatives rather than site questions', async ({ page }) => {
+  await page.goto('/options.html#options');
+  await expect(page.locator('.ranking-method a')).toHaveAttribute(
+    'href',
+    'https://www.richmond.gov.uk/media/fxhbilws/kew_riverside_consultation_leaflet.pdf#page=6',
+  );
 });
 
 test('Homepage: orientation leads to a compact meeting invitation with its date, public source and details', async ({ page, hasTouch }) => {

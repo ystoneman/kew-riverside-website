@@ -98,13 +98,13 @@ legacyTest('Legacy homepage: representative shared fragments reach their origina
 legacyTest('Legacy homepage: saved search without a fragment survives migration and reload', async ({ page }) => {
   await page.goto('/index.html?q=Ofsted&type=Inspection&year=2003');
   await expect(page).toHaveURL(/evidence\.html\?q=Ofsted&type=Inspection&year=2003#records$/);
-  await expect(page.getByLabel('Search the records')).toHaveValue('Ofsted');
+  await expect(page.getByLabel('Search source records and research reports')).toHaveValue('Ofsted');
   await expect(page.getByLabel('Record type', { exact: true })).toHaveValue('Inspection');
   await expect(page.getByLabel('Year', { exact: true })).toHaveValue('2003');
   await expect(page.locator('.source-card:visible')).toHaveCount(1);
   await expect(page.locator('.source-card:visible h3')).toContainText('First Ofsted inspection');
   await page.reload();
-  await expect(page.getByLabel('Search the records')).toHaveValue('Ofsted');
+  await expect(page.getByLabel('Search source records and research reports')).toHaveValue('Ofsted');
   await expect(page.locator('.source-card:visible')).toHaveCount(1);
 });
 
@@ -113,7 +113,7 @@ legacyTest('Legacy homepage: source links recover conflicting filters and do not
   await page.goto('/index.html?q=unfindable-source&type=Inspection&year=2003#source-inspection-2026');
   await expect(page).toHaveURL(/evidence\.html#source-inspection-2026$/);
   await expect(page.locator('#source-inspection-2026')).toBeInViewport();
-  await expect(page.getByLabel('Search the records')).toHaveValue('');
+  await expect(page.getByLabel('Search source records and research reports')).toHaveValue('');
   await expect(page.getByLabel('Year', { exact: true })).toHaveValue('');
   await page.goBack();
   await expect(page).toHaveURL(/faq\.html#school-places$/);

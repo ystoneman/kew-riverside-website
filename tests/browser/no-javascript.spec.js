@@ -44,7 +44,23 @@ test('No JavaScript: homepage and Evidence expose the full report and web resear
   await page.goto('/evidence.html?q=impossible-report-search&type=Inspection#source-lessons-report');
   await expect(report).toBeVisible();
   await expect(report).toBeInViewport();
-  await expect(page.locator('.source-card:visible')).toHaveCount(47);
+  await expect(page.locator('.source-card:visible')).toHaveCount(57);
+});
+
+test('No JavaScript: budget and forecast answers, sources and optional data remain readable', async ({ page }) => {
+  await page.goto('/index.html');
+  await page.locator('#find-your-way a[href="understand.html"]').tap();
+  await expect(page).toHaveURL(/understand\.html$/);
+  await expect(page.locator('#budget')).toContainText('£231,685');
+  await expect(page.locator('#forecast-checks')).toContainText(/Kew planning area/i);
+  const source = page.locator('#budget a[href="evidence.html#source-school-balances-mar-2026"]');
+  await expect(source).toBeVisible();
+  const detail = page.locator('#budget details').first();
+  await detail.locator('summary').tap();
+  await expect(detail.locator('table')).toBeVisible();
+  await source.tap();
+  await expect(page.locator('#source-school-balances-mar-2026')).toBeInViewport();
+  await expect(page.locator('#source-school-balances-mar-2026')).toContainText(/31 March 2026|March 2026/);
 });
 
 for (const [publish, council] of [[false, false], [true, false], [false, true], [true, true]]) {

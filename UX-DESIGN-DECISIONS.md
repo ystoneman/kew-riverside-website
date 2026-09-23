@@ -67,6 +67,16 @@ These choices are design judgments to verify, not measured conversion improvemen
 
 ## Selected page and interaction design
 
+### Current case research: finances, forecasts and source discovery — 23 September 2026
+
+Visitor need: a family or resident should be able to see the financial starting point, understand what the council projects, assess the limited forecast check, and reach the original records without knowing the research file names. This serves J6 while retaining J2–J5's exposed participation routes and J7–J8's direct family and school-enquiry routes.
+
+The canonical financial and forecast explanations belong on Understand at `#budget` and `#forecast-checks`; closure-cost definitions sit at `#closure-costs`. Options retains the legal and delivery questions; FAQ holds short practical answers; Proposal holds questions to consider in an official response; Evidence retains original records and explicitly unresolved gaps. The homepage keeps its six task destinations. Evidence has short, unfiltered links to the explanations beside its source search, while the historical report stays separately findable through the existing shortcut and source/research navigation. Source search continues to cover indexed records and research reports only; FAQ search covers answers only.
+
+Alternatives considered: another homepage band, a new report page, a global search, and copying full finance tables into the FAQ. Each would add another choice or duplicate the canonical answer without evidence that the extra interface is needed. The selected change adds two local Understand links and replaces part of Evidence's stacked introduction, with no new global navigation item or public form. Existing anchors, saved search terms, source counts and historical report routes remain protected. Request progress is kept as dated text in the relevant Evidence gaps; an acknowledgement is distinct from reviewed evidence.
+
+Verification status: the integrated branch passed the full browser suite and a later affected-journey run after final source/date edits, plus source/export and public-file validation. The UX review inspected 320 × 568, 390 × 844 and desktop layouts, protected actions, Evidence arrival, links and no-JavaScript reading. Native iPhone 17 / iOS 26.5 Safari screenshots showed the changed pages in portrait and a budget view in landscape; simulator taps and Safari Back could not be verified. Details and counts are in TESTING.md. These checks are not a claim of user research or a live release.
+
 ### Longer community letters — 22 September 2026
 
 The owner requested room for 30,000-character letters and a way to expand longer stories (J4). Keep the existing reading/writing entry points, letter IDs and independent permissions. Increasing the input limit alone would make the public board difficult to scan; shortening stored text would lose the contributor's words. Instead, retain the full letter and display a roughly 360-character opening for stories over 1,200 characters, followed by a native “Read full letter” disclosure. Short letters stay fully visible.

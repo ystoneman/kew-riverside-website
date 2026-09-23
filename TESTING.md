@@ -18,6 +18,14 @@ On Linux, install browser system dependencies with `npx playwright install --wit
 
 The browser harness serves the site locally over HTTP/2, as GitHub Pages does, uses fictional form inputs, and intercepts external requests. The four legacy-route tests observe requests instead of routing them (see Legacy redirect fix below). It never delivers a test submission to Formspree. Hosted CAPTCHA, real inbox delivery, council submission and real contribution moderation are outside the automated suite.
 
+## Case research integration — 23 September 2026 (unreleased)
+
+The integrated branch passed the complete Playwright suite: **1,247 passed, 15 expected skips**. After the final correction to the undated leaflet label, changed-page date stamps and the official council decision link, the **452 affected browser checks passed** across iPhone WebKit, Android Chromium, desktop Chromium/WebKit and the no-JavaScript project. They include the six homepage routes, source filtering and repeated links, finance/forecast tables and sources, response questions, light/dark appearances, direct family enquiries and native disclosures. No real form was submitted.
+
+All **48 Python tests** passed. `build_understand.py --check` and `build_sources.py --check` found generated HTML and CSV current; JavaScript syntax and whitespace checks passed. `check_site.py` validated **91 public files**, then staged the same 91 into a fresh outside-repository directory; staged files matched the checkout byte for byte and contained no private dispatch or claim-worksheet files. The PDF builder generated a two-page A4 checklist; both rendered pages were inspected and its text, page labels and links checked. Evidence, campaign and rendered UX specialist reviews passed after their findings were corrected.
+
+An iPhone 17 simulator running iOS 26.5 Safari displayed styled Home, Evidence `#records` and Understand `#budget` in portrait and the budget in landscape without visible clipping outside the intended table scroll. The simulator control could not operate the web view, so **native taps and Safari Back remain unverified**; Playwright covered those interactions in emulated browser projects. These are local checks only; this branch was not deployed.
+
 ## Coverage and maintenance
 
 | Area | Checks |
@@ -27,8 +35,8 @@ The browser harness serves the site locally over HTTP/2, as GitHub Pages does, u
 | Contributions | Entry routes, feedback categories, private-only funding/privacy behaviour, previews, validation and independent letter consents |
 | Participation invitation | Header tiles on every page (labels, tap size, current page, 320 px fit, one-time cue); write-first letters, starters, counter, drafts, full-form clearing, Send/Back arrival panel and next-steps page without inferred receipt; dated official asks; optional quotes only with publication; Share ideas cards and meeting dates, including no-JavaScript fallback; next-steps page by kind, age and date; copy fallback; calendar file; link previews |
 | Discovery and FAQ | Parent-plan entry routes, PTA session dates, consent and deadline distinctions, optional further actions, reordered/searchable school-place answers; six homepage task routes; deadline links; 16 sourced answers; keyboard/native disclosures; search, no matches and reset; answer links/history; no-JavaScript use; historical record and six conditional future stages |
-| Evidence | Search/filter/reset journeys and visitor download formats |
-| School comparisons | Dated source sentinels; aggregate-only export; HTML/CSV/JSON agreement; count/percentage controls; local/borough tables; downloads; no-JavaScript and failed-script fallbacks |
+| Evidence | Search/filter/reset journeys; separate source and report counts; dated request notes with dispatch qualification; visitor download formats and 57-record HTML/JSON/CSV agreement |
+| School comparisons and case figures | Dated source sentinels; aggregate-only exports; HTML/CSV/JSON agreement; actual reserve versus projection, missing annual bridge, bounded deficit, one-vintage forecast check, revision and PFI charge limits; count/percentage controls; local/borough and optional finance tables; downloads; no-JavaScript and failed-script fallbacks |
 | Historical school lessons | Eight chart/data disclosures and downloads; complete 16-case catalogue; search/outcome filters, empty/reset states; direct links; keyboard and no-JavaScript use; 45 sources / 49 claims; preserved denominators and forecasts |
 | Parent Voices videos | Entry routes from letters/ideas; external permission, Dropbox and legacy Google handoffs intercepted locally; required YouTube / optional media permission, earlier-scope preservation and private-contact explanation; native disclosures and keyboard/touch; private withdrawal route; written alternative; no-JavaScript access |
 | Site integrity | Local links/anchors, source consistency, resource loading and script errors |
