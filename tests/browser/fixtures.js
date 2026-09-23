@@ -20,6 +20,17 @@ const test = base.extend({
   // Form tests install a more specific page route that returns a local fake response.
   networkGuard: [async ({ context, baseURL }, use) => {
     const unexpected = [];
+    if (process.env.KEW_GUARD === 'none') {
+      // TEMPORARY DIAGNOSTIC: no routes at all; observe requests only.
+      const site = new URL(baseURL).origin;
+      context.on('request', request => {
+        const url = new URL(request.url());
+        if (url.origin !== site || !['GET', 'HEAD'].includes(request.method()) || url.pathname === '/letters.json') unexpected.push(`${request.method()} ${request.url()}`);
+      });
+      await use();
+      expect(unexpected, 'No real submissions, analytics or other external traffic during tests').toEqual([]);
+      return;
+    }
     if (process.env.KEW_GUARD === 'narrow') {
       // TEMPORARY DIAGNOSTIC: route only external URLs and the letters board, so
       // Playwright continues local requests itself without a client round trip.
