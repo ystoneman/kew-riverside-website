@@ -137,6 +137,17 @@ class SiteStructureTests(unittest.TestCase):
                 duplicates = [identifier for identifier, count in Counter(page.ids).items() if count > 1]
                 self.assertEqual(duplicates, [], 'Duplicate IDs make anchors and controls ambiguous')
 
+    def test_external_link_arrows_render_as_text_on_iphone(self):
+        # iOS Safari draws a bare U+2197 as a blue emoji square. The text-presentation
+        # selector U+FE0E keeps the plain arrow; the builders must emit it too.
+        for name in sorted(PUBLIC_FILES):
+            if not name.endswith(('.html', '.js')):
+                continue
+            text = (ROOT / name).read_text(encoding='utf-8')
+            bare = text.replace('↗&#xFE0E;', '').replace('↗︎', '').count('↗')
+            with self.subTest(file=name):
+                self.assertEqual(bare, 0, 'Follow each ↗ with &#xFE0E; so iPhones do not show an emoji')
+
     def test_previously_shared_homepage_anchors_keep_explicit_fallbacks(self):
         expected = {identifier: filename + '#' + identifier
                     for filename, identifiers in (('evidence.html', LEGACY_EVIDENCE_IDS),
