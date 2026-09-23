@@ -15,6 +15,9 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 - **Link previews.** Open Graph images and tags for the homepage, letters, Share ideas and videos. The calendar reminder follows RFC 5545 (CRLF, folded lines); `.gitattributes` keeps its line endings.
 
 Planning research, a clickable prototype and three specialist planning reviews are recorded in the owner's workspace plan, outside this repository. Quote permission had separate campaign and evidence/privacy reviews and follows their scope, nesting, end-date and record-keeping conclusions. Verification is recorded below once complete.
+### Video QR Back position after analytics
+
+The analytics script attached its hidden choices panel while `videos.html#upload` loaded. In iPhone WebKit, returning from the intercepted permission-form handoff then kept the fragment in the URL but showed the top of the page, outside the upload card (J9). Keep the panel detached until someone opens Analytics choices. The existing QR and analytics controls retain their assertions; the analytics test now checks the panel's deferred insertion. The pre-analytics commit passed three QR repetitions, while the analytics commit and later main failed repeatedly; removing only the initial panel insertion restored Back position in a diagnostic copy. On this branch, the unchanged QR test passed 10 iPhone WebKit repetitions and all 120 analytics tests passed across the four scripted browser projects. These were Playwright browser checks, not native Safari verification. No real form or analytics call was sent, and no deployment is claimed.
 
 ### External-link arrows render as text on iPhone
 
