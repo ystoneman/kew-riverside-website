@@ -11,6 +11,12 @@ test('No JavaScript: page identity and native section routes retain nested conte
   await expect(page.locator('#option-crowdfunding > details.option-card')).toHaveAttribute('open', '');
   await expect(page.locator('#option-crowdfunding .option-first')).toBeVisible();
   await expect(page.locator('#option-crowdfunding')).toBeInViewport();
+  // Leaving from the reading position should return to that section.
+  await page.locator('#option-crowdfunding .option-contribute').tap();
+  await expect(page).toHaveURL(/feedback\.html\?kind=crowdfunding#feedback-form$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/options\.html#option-crowdfunding$/);
+  await expect(page.locator('#option-crowdfunding')).toBeInViewport();
   const menu = page.locator('.mobile-menu');
   await menu.locator(':scope > summary').tap();
   expect((await menu.locator('a').allTextContents()).slice(0, 4)).toEqual(['Parent action plan', 'Home', 'About', 'Proposal & dates']);
@@ -23,6 +29,14 @@ test('No JavaScript: page identity and native section routes retain nested conte
   await expect(page.locator('#school-places')).toBeInViewport();
   await page.goBack();
   await page.goBack();
+  await expect(page).toHaveURL(/options\.html#option-crowdfunding$/);
+  await expect(page.locator('#option-crowdfunding > details.option-card')).toHaveAttribute('open', '');
+  await expect(page.locator('#option-crowdfunding .option-first')).toBeVisible();
+  // The static no-script menu requires returning to the header before leaving.
+  // Back may restore that departure position instead of reapplying the fragment.
+  // Recover through the real same-fragment link, never a test-only scroll.
+  if (await sections.getAttribute('open') === null) await sections.locator(':scope > summary').tap();
+  await sections.locator('a[data-section-id="option-crowdfunding"]').tap();
   await expect(page).toHaveURL(/options\.html#option-crowdfunding$/);
   await expect(page.locator('#option-crowdfunding')).toBeInViewport();
 });
