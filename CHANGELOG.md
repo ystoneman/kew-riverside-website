@@ -4,6 +4,12 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Stable section arrival before publication
+
+Production run 36066710325 stopped publication after one desktop WebKit arrival failure (1,438 passed, 15 expected skips). Its trace showed navigation measuring an unfinished stylesheet state: the header/bar changed from 90/57.58px to 80/61px, with a later four-pixel Options scroll correction. Local instrumentation reproduced the same movement. All styles now precede the existing synchronous pre-paint theme initializer; navigation then runs before the other deferred initializers. Stylesheet cascade order is unchanged, orientation remains last, and navigation asset versions are consistent across all 16 pages. No corrective scroll timer or relaxed arrival assertion was added.
+
+A new regression deliberately delays the final stylesheet and checks that the first fragment jump uses the final orientation offsets and stays still for 600ms. Moving deferred scripts alone passed 100 repeated arrivals but failed all 20 delayed-style WebKit cases, establishing that ordering alone was insufficient. The stylesheet barrier passed all 12 repeated delayed-style checks across the four scripted projects. Fifty Python checks, generated-page freshness and 95-public-file validation pass; full-suite and hosted revalidation are pending. Independent rendered UX recheck passed delayed-style Options, Lessons, citation and saved Evidence arrivals at 390 and 1440px, with stable offsets/scroll and no errors or overflow. Native Safari remains unverified.
+
 ### Page orientation and clearer Proposal questions
 
 - Keep the current page visible in one compact scrolling bar; add a curated section/subsection navigator, section-link copying with a selectable fallback, and the full page menu at every width. About follows Home; Options and Lessons are ordinary menu destinations. Keep exposed Community letters and Share ideas, the named Parent action plan and existing deep links, filters, downloads and no-script routes.

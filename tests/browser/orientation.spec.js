@@ -1,4 +1,40 @@
-const { test, expect } = require('./fixtures');
+const { test, expect, expectStillArrival } = require('./fixtures');
+
+test('Orientation: delayed final styles settle before the initial Options fragment jump', async ({ page }) => {
+  await page.goto('/proposal.html#plan-keep-going');
+  await page.route('**/orientation.css?*', async route => {
+    const response = await route.fetch();
+    // A slow final stylesheet must not leave the initial jump using old offsets.
+    await new Promise(resolve => setTimeout(resolve, 200));
+    await route.fulfill({ response });
+  });
+  await page.addInitScript(() => {
+    window.initialFragmentOffsets = [];
+    const scrollIntoView = Element.prototype.scrollIntoView;
+    Element.prototype.scrollIntoView = function (...args) {
+      if (this.id === 'options') {
+        const root = document.documentElement;
+        window.initialFragmentOffsets.push({
+          ready: root.classList.contains('has-orientation'),
+          padding: parseFloat(getComputedStyle(root).scrollPaddingTop),
+          margin: parseFloat(getComputedStyle(this).scrollMarginTop),
+          height: document.querySelector('.site-orientation').getBoundingClientRect().height,
+        });
+      }
+      return scrollIntoView.apply(this, args);
+    };
+  });
+  await page.locator('#plan-keep-going a[href="options.html#options"]').click();
+  await page.waitForURL('**/options.html#options', { waitUntil: 'load' });
+  await expectStillArrival(page, '#options');
+  const jumps = await page.evaluate(() => window.initialFragmentOffsets);
+  expect(jumps.length).toBeGreaterThan(0);
+  for (const jump of jumps) {
+    expect(jump.ready).toBe(true);
+    expect(jump.margin).toBe(12);
+    expect(jump.padding).toBeCloseTo(jump.height + 12, 1);
+  }
+});
 
 async function activate(locator, hasTouch) {
   if (await locator.evaluate(node => document.documentElement.classList.contains('has-orientation') && Boolean(node.closest('.site-orientation')))) {
