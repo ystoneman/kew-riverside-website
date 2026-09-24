@@ -56,6 +56,8 @@ test('Prospective families can enquire directly from Home and Options without a 
 
   await page.goto('/options.html#option-enrolment');
   const option = page.locator('#option-enrolment');
+  await option.locator('.option-evidence > summary').click();
+  await expect(option.locator('.option-evidence')).toHaveAttribute('open', '');
   await expect(option).toContainText('Ask the school what visits are currently available');
   await expect(option).toContainText('applications and admissions can continue');
   await expect(option.locator('a[href^="https://www.kewriverside.richmond.sch.uk/page/"]').filter({ hasText: 'Ask the school about visits and places' })).toBeVisible();
@@ -82,7 +84,8 @@ test('Proposal presents six evidence questions, optional detail and the official
 
 test('Options ranking links to the council’s published alternatives rather than site questions', async ({ page }) => {
   await page.goto('/options.html#options');
-  await expect(page.locator('.ranking-method a')).toHaveAttribute(
+  await page.locator('.options-method > summary').click();
+  await expect(page.locator('.ranking-method').getByRole('link', { name: /published reasons for not preferring/ })).toHaveAttribute(
     'href',
     'https://www.richmond.gov.uk/media/fxhbilws/kew_riverside_consultation_leaflet.pdf#page=6',
   );
@@ -337,10 +340,18 @@ test('Parent plan: correct PTA dates, independent video permission and official 
   await page.goto('/proposal.html#parent-plan');
   const prep = page.locator('#prep-sessions');
   await expect(prep).toContainText('school grounds');
-  await expect(prep.locator('.prep-session-dates > li').first()).toContainText('Friday 25 September');
-  await expect(prep.locator('.prep-session-dates > li').first()).toContainText('9am or 3.20pm');
-  await expect(prep.locator('.prep-session-dates > li').last()).toContainText('Monday 28 September');
-  await expect(prep.locator('.prep-session-dates > li').last()).toContainText('9am');
+  const sessions = prep.locator('.prep-session-dates > li');
+  await expect(sessions).toHaveCount(3);
+  for (const [index, date, time, room] of [
+    [0, 'Friday 25 September', '9am', 'School Hall'],
+    [1, 'Friday 25 September', '3.30pm', 'Rainbow Room'],
+    [2, 'Monday 28 September', '9am', 'School Hall'],
+  ]) {
+    await expect(sessions.nth(index)).toContainText(date);
+    await expect(sessions.nth(index)).toContainText(time);
+    await expect(sessions.nth(index)).toContainText(room);
+  }
+  await expect(prep).not.toContainText('3.20pm');
   await expect(prep).toContainText('separate from the council meeting');
   await expect(page.locator('#plan-attend')).toContainText('Tuesday 29 September · 3.30pm');
   await expect(page.locator('#plan-respond')).toContainText('You can respond now if you are ready.');

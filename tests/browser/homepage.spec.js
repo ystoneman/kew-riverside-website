@@ -67,14 +67,16 @@ test('Dedicated pages: local navigation exposes depth and retains a homepage rec
     await expect(page.locator('#' + id)).toBeInViewport();
   }
   await page.goto('/options.html#options');
-  const optionsNav = page.locator('#options-navigation');
-  await expect(optionsNav.locator('a')).toHaveCount(8);
-  await expect(page.locator('#options .action-card')).toHaveCount(8);
+  await expect(page.locator('#options-navigation')).toBeVisible();
+  await expect(page.locator('#options .action-card')).toHaveCount(7);
+  await expect(page.locator('#option-7 .options-response-button')).toBeVisible();
   for (const id of ['option-recovery-plan', 'option-crowdfunding', 'option-demand', 'option-enrolment']) {
-    const link = optionsNav.locator(`a[href="#${id}"]`);
-    await expect(link).toHaveAccessibleName(/\S/);
-    await activate(link, hasTouch);
-    await expect(page.locator('#' + id)).toBeInViewport();
+    const detail = page.locator('#' + id + ' > details.option-card');
+    const summary = detail.locator(':scope > summary');
+    await expect(summary).toHaveAccessibleName(/\S/);
+    await activate(summary, hasTouch);
+    await expect(detail).toHaveAttribute('open', '');
+    await expect(page.locator('#' + id + ' .option-first')).toBeVisible();
   }
   await activate(page.locator('header a.brand'), hasTouch);
   await expect(page).toHaveURL(/index\.html(?:#top)?$/);

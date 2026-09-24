@@ -1,55 +1,182 @@
 const { test, expect, expectStillArrival } = require('./fixtures');
 async function activate(locator, hasTouch) { if (hasTouch) await locator.tap(); else await locator.click(); }
+const officialResponse = 'https://docs.google.com/forms/d/e/1FAIpQLSda5oPsdUlrJkf6vACC_AjvXFR6-ki3iBymNIF5BAWNxf85xQ/viewform';
+const optionIds = ['option-recovery-plan', 'option-crowdfunding', 'option-demand', 'option-enrolment', 'option-5', 'option-6', 'option-8'];
+const fundingQuestions = ['funding-needed', 'council-assessment', 'sustainability', 'recipient', 'outreach', 'examples', 'appeal-terms', 'expertise'];
 
-test('Options: the Parent plan arrives at conclusions before the option index', async ({ page, hasTouch }) => {
+test('Options: the Parent plan arrives at the response, useful answer and optional ways to help', async ({ page, hasTouch }) => {
   await page.goto('/proposal.html#plan-keep-going');
   await activate(page.locator('#plan-keep-going a[href="options.html#options"]'), hasTouch);
   await page.waitForURL('**/options.html#options', { waitUntil: 'load' });
   await expectStillArrival(page, '#options');
-  await expect(page.locator('#options-findings-title')).toBeInViewport();
-  const findings = page.locator('.options-takeaways');
-  await expect(findings.locator('article')).toHaveCount(3);
-  await expect(findings).toContainText('willing delivery partner');
-  await expect(findings).toContainText('not confirmed enrolments');
-  await expect(page.locator('.options-scope')).toContainText('not proven solutions');
-  expect(await findings.evaluate(el => Boolean(el.compareDocumentPosition(document.getElementById('options-navigation')) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
-  for (const card of await page.locator('#options .action-card').all()) {
-    await expect(card.locator('.option-step')).toBeVisible();
-    await expect(card.locator('.option-limit')).toBeVisible();
-    expect(await card.locator('.option-step').evaluate(el => el.closest('details') === null)).toBe(true);
+  await expect(page.locator('#options h1')).toBeInViewport();
+  await expect(page.locator('#option-7 .options-response-button')).toHaveAttribute('href', officialResponse);
+  await expect(page.locator('#option-7')).toContainText('16 October 2026');
+  expect(await page.locator('#option-7').evaluate(el => el.closest('details') === null)).toBe(true);
+  await expect(page.locator('.options-insight')).toBeVisible();
+  await expect(page.locator('#options-findings-title')).toBeVisible();
+  await expect(page.locator('.options-insight')).toContainText(/budget|costed/i);
+  expect(await page.locator('.options-insight').evaluate(el => Boolean(el.compareDocumentPosition(document.getElementById('options-navigation')) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
+  expect(await page.locator('#options .action-card').evaluateAll(cards => cards.map(card => card.id))).toEqual(optionIds);
+  await expect(page.locator('.action-card > details.option-card[open]')).toHaveCount(0);
+  await expect(page.locator('.options-prep a[href="proposal.html#prep-sessions"]')).toBeVisible();
+  await expect(page.locator('.options-prep a[href="proposal.html#school-meeting"]')).toBeVisible();
+  const enquiry = page.locator('.options-school-enquiry');
+  await expect(enquiry).toBeVisible();
+  expect(await enquiry.evaluate(el => el.closest('details') === null)).toBe(true);
+  await expect(enquiry.locator('a[href="https://www.kewriverside.richmond.sch.uk/page/?pid=525&title=Contact+Us"]')).toBeVisible();
+  await expect(enquiry).toContainText(/closure is proposed/i);
+  for (const target of ['prep-sessions', 'school-meeting']) {
+    await activate(page.locator(`.options-prep a[href="proposal.html#${target}"]`), hasTouch);
+    await expect(page).toHaveURL(new RegExp(`proposal\\.html#${target}$`));
+    await expect(page.locator('#' + target)).toBeInViewport();
+    await page.goBack();
+    await expect(page).toHaveURL(/options\.html#options$/);
   }
-  await expect(page.locator('.options-immediate a[href*="docs.google.com/forms"]')).toBeVisible();
+  await page.route(officialResponse, route => route.fulfill({ contentType: 'text/html', body: '<h1>Fictional official response handoff</h1><p>No form was submitted.</p>' }));
+  await activate(page.locator('.options-response-button'), hasTouch);
+  await expect(page).toHaveURL(officialResponse);
+  await expect(page.getByRole('heading')).toHaveText('Fictional official response handoff');
+  await page.goBack();
+  await expect(page).toHaveURL(/options\.html#options$/);
+  const checklist = page.locator('.options-response a[href="response-checklist.pdf"]');
+  await expect(checklist).toBeVisible();
+  const download = page.waitForEvent('download');
+  await activate(checklist, hasTouch);
+  expect((await download).suggestedFilename()).toBe('kew-riverside-response-checklist.pdf');
 });
 
-test('Options: optional funding questions remain reachable through shared links and Back', async ({ page, hasTouch }) => {
+test('Options: a phone arrival exposes the title, response date and button with a short reading layer', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto('/options.html');
+  await expect(page.locator('#options h1')).toBeInViewport({ ratio: 1 });
+  await expect(page.locator('.options-response .response-date')).toBeInViewport({ ratio: 1 });
+  await expect(page.locator('.options-response-button')).toBeInViewport({ ratio: 1 });
+  const visibleWords = await page.locator('main').evaluate(main => {
+    const walker = document.createTreeWalker(main, NodeFilter.SHOW_TEXT);
+    const text = [];
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+      if (!node.textContent.trim()) continue;
+      let visible = true;
+      for (let parent = node.parentElement; parent; parent = parent.parentElement) {
+        if (parent.matches('script,style,template,noscript,[hidden]')) { visible = false; break; }
+        const style = getComputedStyle(parent);
+        if (style.display === 'none' || style.visibility === 'hidden') { visible = false; break; }
+        // Closed details can still report descendant rectangles: only their own summary is exposed.
+        if (parent.tagName === 'DETAILS' && !parent.open && !parent.querySelector(':scope > summary')?.contains(node)) { visible = false; break; }
+        if (parent === main) break;
+      }
+      if (visible) text.push(node.textContent);
+    }
+    return text.join(' ').trim().split(/\s+/).length;
+  });
+  expect(visibleWords, 'The initial reading layer stays within the agreed 450-word budget').toBeLessThanOrEqual(450);
+});
+
+test('Options: every optional row exposes a bounded contribution before deeper evidence', async ({ page, hasTouch }) => {
+  await page.goto('/options.html');
+  for (const id of optionIds) {
+    const card = page.locator('#' + id);
+    const detail = card.locator(':scope > details.option-card');
+    const summary = detail.locator(':scope > summary');
+    await expect(summary).toHaveAccessibleName(/\S/);
+    await activate(summary, hasTouch);
+    await expect(detail).toHaveAttribute('open', '');
+    await expect(card.locator('.option-first')).toBeVisible();
+    await expect(card.locator('.option-first a[href^="feedback.html?"]')).toBeVisible();
+    const evidence = card.locator('.option-evidence');
+    await expect(evidence).not.toHaveAttribute('open', '');
+    await activate(evidence.locator(':scope > summary'), hasTouch);
+    await expect(evidence).toHaveAttribute('open', '');
+    await expect(evidence.locator('a').first()).toBeVisible();
+    await summary.focus();
+    await page.keyboard.press('Enter');
+    await expect(detail).not.toHaveAttribute('open', '');
+    await expect(summary).toBeFocused();
+    await page.keyboard.press('Space');
+    await expect(detail).toHaveAttribute('open', '');
+    await expect(summary).toBeFocused();
+    await activate(summary, hasTouch);
+  }
+  await expect(page.locator('.options-school-enquiry')).toBeVisible();
+});
+
+test('Options: old option and nested question links reveal the requested detail', async ({ page }) => {
+  for (const id of optionIds) {
+    await page.goto('/options.html#' + id);
+    await expect(page.locator('#' + id)).toBeInViewport();
+    await expect(page.locator('#' + id + ' > details.option-card')).toHaveAttribute('open', '');
+    await expect(page.locator('#' + id + ' .option-first')).toBeVisible();
+  }
+  for (const question of fundingQuestions) {
+    const id = 'crowdfunding-' + question;
+    await page.goto('/options.html#' + id);
+    await expect(page.locator('#option-crowdfunding > details.option-card')).toHaveAttribute('open', '');
+    await expect(page.locator('#' + id + ' > details.question-detail')).toHaveAttribute('open', '');
+    await expect(page.locator('#' + id)).toBeInViewport();
+    await expect(page.locator(`#${id} a[href="feedback.html?kind=crowdfunding&question=${question}#feedback-form"]`)).toBeVisible();
+  }
+  await expectStillArrival(page, '#crowdfunding-expertise');
+});
+
+test('Options: optional funding questions keep private context and recover through Back', async ({ page, hasTouch }) => {
   await page.goto('/options.html#option-crowdfunding');
   const questions = page.locator('.funding-questions');
-  await expect(questions).not.toHaveAttribute('open', '');
-  await expect(page.locator('.funding-status')).toContainText('No donations or pledges');
-  await expect(page.locator('.funding-status')).toContainText('no recipient is agreed');
-  await activate(questions.locator(':scope > summary'), hasTouch);
-  await expect(questions).toHaveAttribute('open', '');
   await expect(questions.locator('li[id]')).toHaveCount(8);
-  await questions.locator(':scope > summary').focus();
+  await expect(questions.locator('details.question-detail[open]')).toHaveCount(0);
+  const status = page.locator('#option-crowdfunding .option-first .funding-status');
+  await expect(status).toBeVisible();
+  await expect(status).toContainText('No donations or pledges');
+  await expect(status).toContainText(/no recipient.*agreed/);
+  const recipient = page.locator('#crowdfunding-recipient > details.question-detail');
+  await activate(recipient.locator(':scope > summary'), hasTouch);
+  await expect(recipient).toHaveAttribute('open', '');
+  await recipient.locator(':scope > summary').focus();
   await page.keyboard.press('Enter');
-  await expect(questions).not.toHaveAttribute('open', '');
-  await expect(questions.locator(':scope > summary')).toBeFocused();
+  await expect(recipient).not.toHaveAttribute('open', '');
+  await expect(recipient.locator(':scope > summary')).toBeFocused();
   await page.goto('/options.html#crowdfunding-recipient');
   await expectStillArrival(page, '#crowdfunding-recipient');
-  await expect(questions).toHaveAttribute('open', '');
   await activate(page.locator('#crowdfunding-recipient a'), hasTouch);
+  await expect(page).toHaveURL(/feedback\.html\?kind=crowdfunding&question=recipient#feedback-form$/);
   await expect(page.locator('input[name="kind"][value="crowdfunding"]')).toBeChecked();
+  await expect(page.locator('#funding-subject')).toContainText('receive and manage');
+  await expect(page.locator('#funding-context')).toContainText('stays private');
   await page.goBack();
   await expect(page.locator('#crowdfunding-recipient')).toBeInViewport();
-  await expect(questions).toHaveAttribute('open', '');
+  await expect(recipient).toHaveAttribute('open', '');
+  await expect(page.locator('#option-crowdfunding > details.option-card')).toHaveAttribute('open', '');
 });
 
-test('Options: a failed enhancement leaves funding questions available', async ({ page }) => {
+test('Options: repeating a real cross-reference reopens its row and Back returns to funding', async ({ page, hasTouch }) => {
+  await page.goto('/options.html#option-crowdfunding');
+  const funding = page.locator('#option-crowdfunding > details.option-card');
+  await activate(funding.locator('.option-evidence > summary'), hasTouch);
+  const planLink = funding.locator('a[href="#option-recovery-plan"]').first();
+  await activate(planLink, hasTouch);
+  const recovery = page.locator('#option-recovery-plan > details.option-card');
+  await expect(recovery).toHaveAttribute('open', '');
+  await activate(recovery.locator(':scope > summary'), hasTouch);
+  await expect(recovery).not.toHaveAttribute('open', '');
+  await activate(planLink, hasTouch);
+  await expect(page).toHaveURL(/#option-recovery-plan$/);
+  await expect(recovery).toHaveAttribute('open', '');
+  await expect(recovery.locator(':scope > summary')).toBeInViewport();
+  await page.goBack();
+  await expect(page).toHaveURL(/#option-crowdfunding$/);
+  await expect(funding).toHaveAttribute('open', '');
+  await expect(page.locator('#option-crowdfunding')).toBeInViewport();
+});
+
+test('Options: a failed enhancement leaves all optional rows and funding questions available', async ({ page }) => {
   await page.route('**/options.js*', route => route.fulfill({ status: 503, contentType: 'application/javascript', headers: { 'x-test-fixture': 'intentional-error' }, body: '' }));
   await page.goto('/options.html#crowdfunding-recipient');
-  await expect(page.locator('.funding-questions')).toHaveAttribute('open', '');
+  await expect(page.locator('.action-card > details.option-card[open]')).toHaveCount(7);
+  await expect(page.locator('.funding-questions details.question-detail[open]')).toHaveCount(8);
   await expect(page.locator('#crowdfunding-recipient')).toBeVisible();
   await expect(page.locator('#crowdfunding-recipient a')).toBeVisible();
+  await expect(page.locator('.options-response-button')).toBeVisible();
+  await expect(page.locator('.options-school-enquiry')).toBeVisible();
 });
 
 test('Proposal: immediate actions and stage dates stay outside optional detail', async ({ page }) => {

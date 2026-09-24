@@ -286,7 +286,9 @@ test('Learning FAQ: remembered terms and incoming answer links recover from sear
 test('Recruitment: awareness channels retain direct school and normal-admissions routes', async ({ page, hasTouch }) => {
   await page.goto('/options.html#option-enrolment');
   const option = page.locator('#option-enrolment');
-  await expect(option.getByRole('heading', { level: 3 })).toHaveText('Raise awareness to boost enrolment');
+  await expect(option.locator('details.option-card > summary')).toHaveAccessibleName(/families.*school/i);
+  await activate(option.locator('.option-evidence > summary'), hasTouch);
+  await expect(option.locator('.option-evidence')).toHaveAttribute('open', '');
   for (const channel of ['nurseries', 'parent groups', 'community notices', 'word of mouth', 'social media']) {
     await expect(option).toContainText(new RegExp(channel, 'i'));
   }
