@@ -1,0 +1,41 @@
+/* Conclusions before choices; explanations stay close to their qualification. */
+html:has(.options-page){scroll-behavior:auto}
+.options-page main{overflow-wrap:anywhere}
+.options-page .directory-intro{padding-bottom:12px}
+.options-page .directory-intro>p{max-width:70ch}
+.options-page .options-immediate{font-size:15px;line-height:1.7;max-width:76ch}
+.options-page #options{padding-top:20px;scroll-margin-top:130px}
+.options-findings{max-width:900px;margin-bottom:42px}
+.options-findings>h2{font-size:clamp(30px,3.6vw,42px);line-height:1.2;max-width:25ch;margin:12px 0 16px}
+.options-scope{max-width:80ch;font-size:15px;line-height:1.7}
+.options-takeaways{margin-top:24px}
+.options-takeaways article{display:grid;grid-template-columns:40px minmax(0,1fr);gap:18px;padding:22px 0;border-top:1px solid var(--line)}
+.takeaway-number{font:28px/1.3 Georgia,serif;color:var(--teal)}
+.options-takeaways h3{font-size:24px;line-height:1.3;margin:0 0 10px}
+.options-takeaways p{font-size:16px;line-height:1.7;max-width:70ch;margin:0 0 6px}
+.options-takeaways a{display:inline-flex;align-items:center;min-height:44px;font-size:14px;font-weight:700}
+.options-detail-heading h2{font-size:30px;margin-bottom:12px}
+.options-detail-heading p{font-size:16px}
+.options-page .option-index{margin:20px 0;padding-block:16px;max-width:960px}
+.options-method{max-width:960px;margin:0 0 30px;border-bottom:1px solid var(--line)}
+.options-method>summary{padding:12px 0 18px;font-size:16px}
+.options-method .ranking-method{margin:0 0 20px}
+.options-page .actions{max-width:1000px}
+.options-page .action-card{min-width:0;overflow-wrap:anywhere}
+.options-page .action-card>.rank{flex-shrink:0}
+.options-page .action-content{min-width:0;width:0}
+.options-page .action-content>p{max-width:76ch;font-size:16px;line-height:1.7}
+.options-page .action-content .option-step{padding:12px 16px;background:var(--theme-soft,#edf3e8);border-radius:8px;margin:14px 0 12px}
+.option-step>strong,.option-limit>strong{display:block;margin-bottom:4px;color:var(--ink)}
+.options-page .action-content .option-limit{font-size:15px;margin-bottom:16px}
+.options-page .action-content .option-admissions{font-size:15px}
+.options-page .action-content>details>summary{font-size:16px;line-height:1.6;min-height:44px;padding-block:12px}
+.options-page .funding-questions{margin-top:18px}
+.options-page .funding-questions>summary{font-weight:700}
+.options-page .funding-questions>div{padding:12px 0}
+.options-page .funding-questions ol{display:block}
+.options-page .funding-questions li{margin-block:14px;scroll-margin-top:130px}
+.options-page .funding-feedback{margin-top:16px}
+@media(max-width:1100px){.options-page #options,.options-page .funding-questions li{scroll-margin-top:24px}}
+@media(max-width:600px){.options-takeaways article{grid-template-columns:28px minmax(0,1fr);gap:12px;padding-block:20px}.takeaway-number{font-size:23px}.options-takeaways h3{font-size:23px}.options-page .action-content .option-step{padding:14px 16px}.options-page .option-index{display:block}.options-page .option-index a{display:flex;padding-block:8px;min-height:44px}.options-findings{margin-bottom:32px}}
+@media print{.options-page details>div{display:block!important}.options-takeaways article{break-inside:avoid}}

@@ -1,5 +1,22 @@
 const { test, expect, pages, headerLinks, expectDestination, expectStillArrival, captureSubmissions } = require('./fixtures');
 
+test('Clarity pages preserve findings, funding questions and native process details without scripts', async ({ page }) => {
+  await page.goto('/options.html#options');
+  await expect(page.locator('#options-findings-title')).toBeInViewport();
+  await expect(page.locator('.options-takeaways article')).toHaveCount(3);
+  await page.goto('/options.html#crowdfunding-recipient');
+  await expect(page.locator('.funding-questions')).toHaveAttribute('open', '');
+  await expect(page.locator('#crowdfunding-recipient a')).toBeVisible();
+  await page.goto('/proposal.html#school-meeting');
+  await expect(page.locator('#school-meeting')).toBeInViewport();
+  await expect(page.locator('#school-meeting > .stage-label')).toBeVisible();
+  await page.goto('/proposal.html#who-decides');
+  const details = page.locator('#roles-detail');
+  await details.locator(':scope > summary').tap();
+  await expect(details).toHaveAttribute('open', '');
+  await expect(details.locator('.role-profile')).toHaveCount(2);
+});
+
 for (const file of pages) {
   test(`${file}: every native mobile menu link works without JavaScript`, async ({ page, baseURL }) => {
     for (const href of headerLinks(file, 'mobile')) {

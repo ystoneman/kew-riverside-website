@@ -30,6 +30,16 @@ class LessonEvidenceTests(unittest.TestCase):
   self.assertEqual({r['id']:r['paper'] for r in f['petition_snapshot']['schools'] if r['paper'] is not None},{'brading':102,'godshill':542,'arreton':250})
   self.assertEqual(f['hackney_consultation']['clear_proposal_responses'],219)
   self.assertEqual(f['hackney_consultation']['submissions'],175)
+ def test_comparison_findings_link_to_paired_case_records(self):
+  d=self.data;reprieves={s['id'] for s in d['catalogue']['schools']};closures={s['id'] for s in d['comparisons']['schools']}
+  sources={s['id'] for s in d['sources']};lessons=d['comparisons']['comparison_lessons']
+  self.assertEqual(len(lessons),3);self.assertEqual(len({p['id'] for p in lessons}),3)
+  for lesson in lessons:
+   self.assertTrue(lesson['record']);self.assertTrue(lesson['limit']);self.assertTrue(lesson['question'])
+   linked={case_id for outcome in lesson['outcomes'] for case_id in outcome['case_ids']}
+   self.assertTrue(linked & reprieves);self.assertTrue(linked & closures)
+   self.assertLessEqual(linked,reprieves | closures)
+   self.assertLessEqual(set(lesson['sources']),sources)
  def test_public_research_has_no_private_estimate_and_retains_limits(self):
   for name in ['lessons-data.json','lessons.html','lessons-sources.html']+[p.name for p in ROOT.glob('lessons-0*.svg')]:
    text=(ROOT/name).read_text();self.assertIsNone(re.search(r'10\s*[-–]\s*15\s*%',text),name)

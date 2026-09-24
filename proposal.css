@@ -45,3 +45,38 @@
 
 /* Long action-guide jumps should land immediately, including without scripts. */
 html:has(.parent-plan){scroll-behavior:auto}
+
+/* Read the action and stage first; open the procedural record when needed. */
+.proposal-page{overflow-wrap:anywhere}
+.proposal-page>.source-note{max-width:85ch;margin:0 0 22px}
+.proposal-page .proposal-intro h1{margin-bottom:18px}
+.proposal-page .proposal-actions{margin-block:22px}
+.proposal-page .parent-plan-list>li{padding-block:20px}
+.proposal-page .parent-plan-list h3{font-size:25px;margin-bottom:10px}
+.proposal-page .parent-plan-list p{max-width:76ch}
+.proposal-page .future-timeline{display:block;max-width:1000px;margin-block:24px}
+.proposal-page .future-timeline>li{display:grid;grid-template-columns:210px minmax(0,1fr);gap:8px 28px;margin-block:12px;padding:22px 24px}
+.proposal-page .future-timeline>li::before{content:none}
+.proposal-page .future-timeline>li>.stage-label{grid-column:1;grid-row:1 / span 5;font-size:13px;line-height:1.7;margin:0}
+.proposal-page .future-timeline>li>:not(.stage-label){grid-column:2;margin:0}
+.proposal-page .future-timeline h3{font-size:23px}
+.proposal-page .future-timeline>li>p{font-size:16px;line-height:1.7;max-width:70ch}
+.proposal-page .future-timeline>li>.source-note{font-size:13px}
+.stage-detail>summary{padding:8px 0;min-height:44px;font-size:15px;line-height:1.6}
+.stage-detail>div{padding:8px 0}
+.stage-detail p{font-size:15px;line-height:1.7}
+.proposal-detail{margin-block:22px;border-block:1px solid var(--line)}
+.proposal-detail>summary{padding:18px 4px;font-size:18px;line-height:1.6}
+.proposal-detail>div{padding-block:12px}
+.proposal-detail>div>p{max-width:85ch}
+.proposal-page .role-grid,.proposal-page .profile-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.proposal-page .role-grid>article,.proposal-page .profile-grid>article{min-width:0;overflow-wrap:anywhere}
+.proposal-page .proposal-actions,.proposal-page .parent-plan-list>li{min-width:0;overflow-wrap:anywhere}
+.proposal-detail summary:focus-visible,.stage-detail summary:focus-visible{outline:3px solid var(--theme-focus,#0e6470);outline-offset:4px}
+.proposal-page .question-list>article{max-width:900px;padding-block:22px;border-top:1px solid var(--line)}
+.proposal-page .question-list>article>h3{font-size:24px;margin-bottom:12px}
+.proposal-page .question-list>article>p{max-width:78ch;font-size:16px;line-height:1.7}
+.proposal-page .question-list article>details{border:0;padding:0}
+.proposal-page .question-list summary{font-size:16px;min-height:44px;line-height:1.6}
+@media(max-width:700px){.proposal-page .role-grid,.proposal-page .profile-grid{grid-template-columns:minmax(0,1fr)}.proposal-page .future-timeline>li{display:block;padding:20px}.proposal-page .future-timeline>li>.stage-label{margin-bottom:10px}.proposal-page .future-timeline>li>:not(.stage-label){margin-bottom:10px}.proposal-page .future-timeline>li>:last-child{margin-bottom:0}.proposal-page .future-timeline h3{font-size:23px}.proposal-page .parent-plan-list h3{font-size:23px}.proposal-page .question-list>article>h3{font-size:22px}}
+@media print{.proposal-detail>div,.stage-detail>div{display:block!important}.proposal-page .future-timeline>li{display:block}}
