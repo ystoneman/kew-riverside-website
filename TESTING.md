@@ -14,9 +14,17 @@ python3 .github/scripts/check_site.py
 npm test
 ```
 
+For an isolated checkout while another local preview uses the default port, set `KEW_TEST_PORT` (for example `KEW_TEST_PORT=4273 npm test`). The configured browser URL and HTTPS server use the same port.
+
+`qr.spec.js` covers the permanent `/visit/` handoff across all five projects, including JavaScript-disabled iPhone WebKit. It intercepts the school destination locally; no real enquiry is submitted. It checks root and GitHub Pages project-subpath arrivals, missing/trailing slash, direct HTML, Back, ignored query/fragment input and a browser with automatic refresh disabled. The fallback is checked at 320, 390 and 1440 px, with native keyboard or touch activation. Public-file and link checks include nested redirect HTML; shared-menu checks apply to content pages.
+
 On Linux, install browser system dependencies with `npx playwright install --with-deps chromium webkit` instead. `npm run test:iphone` runs the iPhone WebKit project; `npm run test:report` opens the generated browser report. Reports, traces, screenshots, downloaded test files and dependencies are ignored by Git and excluded from deployment.
 
 The browser harness serves the site locally over HTTP/2, as GitHub Pages does, uses fictional form inputs, and intercepts external requests. The four legacy-route tests observe requests instead of routing them (see Legacy redirect fix below). It never delivers a test submission to Formspree. Hosted CAPTCHA, real inbox delivery, council submission and real contribution moderation are outside the automated suite.
+
+## Permanent flyer redirect — 24 September 2026
+
+All 49 Python tests and 56 focused QR/harness browser checks passed. The 92-file public artifact staged successfully, including `visit/index.html`. Script syntax and whitespace checks passed. Native iPhone 17 / iOS 26.5 Safari followed the local redirect to the real school Contact Us page; its final screen was inspected. Native Back and fallback touch were not exercised separately; those paths passed in browser emulation. No enquiry or form was submitted.
 
 ## Evidence and numbers findings-first revision — 24 September 2026
 

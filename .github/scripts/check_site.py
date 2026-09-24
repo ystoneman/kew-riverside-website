@@ -11,6 +11,7 @@ from public_data import validate_board
 
 ROOT = Path(__file__).resolve().parents[2]
 PUBLIC_FILES = frozenset('''
+visit/index.html
 theme.css theme.js
 analytics.js analytics.css analytics-config.json
 videos.html videos.css evidence.html options.html homepage.css homepage.js
@@ -26,6 +27,7 @@ voice.css voice.js contribute.css sent.html sent.js private-form.js respond-remi
 og-home.png og-letters.png og-ideas.png og-videos.png
 '''.split())
 MAINTENANCE_FILES = frozenset('''
+tests/browser/qr.spec.js
 tests/browser/theme.spec.js
 VIDEO-PERMISSIONS.md CONTRIBUTING.md .github/CODEOWNERS .github/pull_request_template.md .github/branch-protection.json
 .agents/skills/kew-campaign-review/SKILL.md .agents/skills/kew-campaign-review/agents/openai.yaml
@@ -51,6 +53,9 @@ SECRET_PATTERNS = [
     r'\bAKIA[0-9A-Z]{16}\b',
     r'\b(?:sk_live_|sk-proj-|sk-ant-api)[A-Za-z0-9_-]{20,}',
 ]
+
+# Redirect entry points have dedicated journey tests instead of shared navigation.
+REDIRECT_PAGES = frozenset({'visit/index.html'})
 
 
 def require(ok, message):
@@ -151,6 +156,7 @@ def stage_site(output, root=ROOT):
     require(not output.is_relative_to(Path(root).resolve()), 'Build output must be outside the repository.')
     output.mkdir(parents=True)
     for name in sorted(PUBLIC_FILES):
+        (output / name).parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(Path(root) / name, output / name)
     return len(PUBLIC_FILES)
 
