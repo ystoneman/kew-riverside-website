@@ -5,7 +5,7 @@ import html
 import re
 
 ROOT = Path(__file__).resolve().parents[2]
-VERSION = '2026092404'
+VERSION = '2026092405'
 PAGES = {
     'index.html': 'Home', 'about.html': 'About', 'proposal.html': 'Proposal & dates',
     'faq.html': 'FAQ', 'understand.html': 'Understand', 'options.html': 'Options',

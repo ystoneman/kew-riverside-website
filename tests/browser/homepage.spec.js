@@ -1,4 +1,4 @@
-const { test, expect } = require('./fixtures');
+const { test, expect, expectScrollSettled } = require('./fixtures');
 
 // Legacy links redirect while the homepage is still loading. These tests run without
 // request routing, which in WebKit left requests in flight to be cancelled and could
@@ -149,11 +149,14 @@ test('Shared video QR: the exact upload path remains directly usable with an int
   await expect(page.locator('#upload-requirements')).toContainText('No Google or Dropbox sign-in required');
   const link = page.locator('#video-upload-link');
   const destination = await link.getAttribute('href');
-  await page.route(destination, route => route.fulfill({ contentType: 'text/html', body: '<h1>Fictional video permission handoff</h1><p>No upload sent.</p>' }));
+  await page.route(destination, route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><title>Fictional handoff</title><h1>Fictional video permission handoff</h1><p>No upload sent.</p>' }));
   await activate(link, hasTouch);
   await expect(page).toHaveURL(destination);
+  await page.waitForURL(destination, { waitUntil: 'load' });
+  await expect(page.getByRole('heading', { name: 'Fictional video permission handoff' })).toBeVisible();
   await page.goBack();
   await expect(page).toHaveURL(/\/videos\.html#upload$/);
   await expect(page.locator('#upload')).toBeInViewport();
   await expect(page.locator('main a[href="letters.html"]')).toBeVisible();
+  await expectScrollSettled(page, 'Back to video upload');
 });

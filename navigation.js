@@ -18,6 +18,10 @@
   document.addEventListener('click', event => {
     const link = event.target.closest('a');
     if (!bar.contains(event.target)) close();
+    if (link && !event.defaultPrevented && event.button === 0 && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey && !link.hasAttribute('download') && (!link.target || link.target === '_self')) {
+      const destination = new URL(link.href, location.href);
+      if (/^https?:$/.test(destination.protocol)) rememberPosition();
+    }
     if (!link || !bar.contains(link) || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     if (link.closest('.section-links')) {
       const target = document.getElementById(decodeURIComponent(link.hash.slice(1)));
@@ -108,7 +112,53 @@
   window.addEventListener('scroll',schedule,{passive:true});
   window.addEventListener('resize', () => { if (innerWidth !== lastWidth) close(); lastWidth=innerWidth; measure(); });
   window.addEventListener('hashchange',schedule);
-  window.addEventListener('pageshow',schedule);
+  // Store coordinates only in this history entry, while the document is active.
+  // Do not write at pagehide: WebKit may already expose the destination entry.
+  function rememberPosition() {
+    try {
+      if (history.state !== null && (typeof history.state !== 'object' || Array.isArray(history.state))) return;
+      const state = {...history.state};
+      if (history.scrollRestoration === 'manual') delete state.kewReadingPosition;
+      else state.kewReadingPosition = {url:location.href,x:scrollX,y:scrollY};
+      history.replaceState(state, '');
+    } catch { /* Native browser history remains available. */ }
+  }
+  document.addEventListener('submit', event => { if (!event.defaultPrevented) rememberPosition(); });
+  function forgetPosition(position) {
+    try {
+      const saved = history.state?.kewReadingPosition;
+      if (!position || saved?.url !== position.url || saved.x !== position.x || saved.y !== position.y) return;
+      const state = {...history.state};
+      delete state.kewReadingPosition;
+      history.replaceState(state, '');
+    } catch { /* History may be unavailable during another navigation. */ }
+  }
+  window.addEventListener('pageshow', event => {
+    const position = history.state?.kewReadingPosition;
+    const returned = event.persisted || performance.getEntriesByType('navigation')[0]?.type === 'back_forward';
+    if (returned && position?.url === location.href && Number.isFinite(position.x) && Number.isFinite(position.y) && position.y > 0 && history.scrollRestoration !== 'manual') {
+      // WebKit can reset to zero just after pageshow on an external handoff.
+      // Give native restoration its frame, preserving it whenever it succeeds.
+      const interactions = ['pointerdown', 'keydown', 'click', 'input', 'change'];
+      const cancel = () => { cancelAnimationFrame(frame); cleanup(); forgetPosition(position); };
+      const cleanup = () => {
+        interactions.forEach(type => document.removeEventListener(type,cancel));
+        window.removeEventListener('wheel',cancel);
+      };
+      const frame = requestAnimationFrame(() => {
+        cleanup();
+        const currentPosition = history.state?.kewReadingPosition;
+        if (location.href === position.url && currentPosition?.url === position.url && currentPosition.x === position.x && currentPosition.y === position.y && history.scrollRestoration !== 'manual' && scrollY === 0) {
+          window.scrollTo({left:position.x,top:position.y,behavior:'instant'});
+        }
+        // One return only: toolbar navigation must not revive an older departure.
+        forgetPosition(position);
+      });
+      interactions.forEach(type => document.addEventListener(type,cancel,{once:true}));
+      window.addEventListener('wheel',cancel,{once:true,passive:true});
+    } else forgetPosition(position);
+    schedule();
+  });
   document.addEventListener('DOMContentLoaded',schedule);
   document.addEventListener('toggle',schedule,true);
   const main = document.querySelector('main');

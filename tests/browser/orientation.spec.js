@@ -1,4 +1,4 @@
-const { test, expect, expectStillArrival } = require('./fixtures');
+const { test, expect, expectStillArrival, expectScrollSettled } = require('./fixtures');
 
 test('Orientation: delayed final styles settle before the initial Options fragment jump', async ({ page }) => {
   await page.goto('/proposal.html#plan-keep-going');
@@ -69,6 +69,73 @@ async function expectUncovered(page, target) {
   const boxes = await Promise.all([page.locator('.site-orientation').boundingBox(), target.boundingBox()]);
   expect(boxes[1].y, 'The destination clears the persistent orientation region').toBeGreaterThanOrEqual(boxes[0].y + boxes[0].height - 1);
 }
+
+test('Orientation: Back preserves a later reading position and a subsequent departure from the top', async ({ page, hasTouch }) => {
+  await page.goto('/videos.html#upload');
+  const originalURL = page.url();
+  await page.evaluate(() => history.replaceState({ existingVisitorState: 'keep' }, ''));
+  const link = page.locator('a[href="https://www.youtube.com/@KewParentVoices"]');
+  await link.scrollIntoViewIfNeeded();
+  await expect(link).toBeInViewport();
+  const departureY = await page.evaluate(() => scrollY);
+  expect(departureY).toBeGreaterThan(1000);
+  const destination = await link.getAttribute('href');
+  await page.route(destination, route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><h1>Fictional video channel</h1>' }));
+  await activate(link, hasTouch);
+  await page.waitForURL(destination, { waitUntil: 'load' });
+  await expect(page.getByRole('heading', { name: 'Fictional video channel' })).toBeVisible();
+  const historyLength = await page.evaluate(() => history.length);
+  await page.goBack();
+  await page.waitForURL(originalURL, { waitUntil: 'load' });
+  await expect(page.locator('.page-name')).toHaveText('Parent Voices');
+  await expect.poll(() => page.evaluate(y => Math.abs(scrollY - y), departureY)).toBeLessThanOrEqual(2);
+  await expectScrollSettled(page, 'Back to the later video section');
+  await expect(link).toBeInViewport({ ratio: 0.5 });
+  expect(await page.evaluate(() => history.state.existingVisitorState)).toBe('keep');
+  await expect.poll(() => page.evaluate(() => history.state.kewReadingPosition)).toBeUndefined();
+  expect(await page.evaluate(() => history.length)).toBe(historyLength);
+
+  // A real departure from the top must supersede the earlier reading position,
+  // even though this history entry still contains its incoming #upload fragment.
+  await page.evaluate(() => scrollTo({ top: 0, behavior: 'instant' }));
+  await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
+  await activate(page.locator('.brand'), hasTouch);
+  await page.waitForURL('**/index.html', { waitUntil: 'load' });
+  await expect(page.locator('#find-your-way')).toBeVisible();
+  await page.goBack();
+  await page.waitForURL(originalURL, { waitUntil: 'load' });
+  await expect(page.locator('.page-name')).toHaveText('Parent Voices');
+  await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
+  expect(await page.evaluate(() => history.state.existingVisitorState)).toBe('keep');
+  expect(await page.evaluate(() => history.state.kewReadingPosition)).toBeUndefined();
+  await expectScrollSettled(page, 'Back after departing from the top');
+});
+
+test('Orientation: pending Back recovery yields to a new destination, manual recovery or user input', async ({ page }) => {
+  await page.goto('/videos.html');
+  for (const change of ['destination', 'cleared-state', 'manual', 'pointer', 'keyboard', 'click', 'input', 'change', 'wheel', 'native-restored']) {
+    const result = await page.evaluate(async change => {
+      history.scrollRestoration = 'auto';
+      history.replaceState({ kewReadingPosition: { url: location.href, x: 0, y: 900 } }, '');
+      scrollTo({ top: 0, behavior: 'instant' });
+      document.activeElement.blur();
+      const historyLength = history.length;
+      // Reproduce the narrow pageshow-to-frame window without contacting a provider.
+      window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true }));
+      if (change === 'destination') history.replaceState(history.state, '', '#process-title');
+      if (change === 'cleared-state') history.replaceState(null, '');
+      if (change === 'manual') history.scrollRestoration = 'manual';
+      if (change === 'pointer') document.dispatchEvent(new PointerEvent('pointerdown'));
+      if (change === 'keyboard') document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home' }));
+      if (['click', 'input', 'change'].includes(change)) document.body.dispatchEvent(new Event(change, { bubbles: true }));
+      if (change === 'wheel') window.dispatchEvent(new WheelEvent('wheel'));
+      if (change === 'native-restored') scrollTo({ top: 450, behavior: 'instant' });
+      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      return { y: scrollY, sameHistory: history.length === historyLength, focused: document.activeElement.tagName, saved: Boolean(history.state?.kewReadingPosition) };
+    }, change);
+    expect(result, change).toEqual({ y: change === 'native-restored' ? 450 : 0, sameHistory: true, focused: 'BODY', saved: false });
+  }
+});
 
 test('Orientation: each main page has a stable identity and the complete menu in the same order', async ({ page, hasTouch }) => {
   for (const [file, name] of mainPages) {
