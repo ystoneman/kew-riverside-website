@@ -276,6 +276,9 @@ test('Letters: explicit removal on next-steps page clears both copies and a rest
   const submissions = await captureSubmissions(page);
   await sendFictionalLetter(page, { publish: true, council: true, email: 'fictional@example.invalid' });
   await expect.poll(() => submissions.length).toBe(1);
+  // Recording the intercepted POST does not mean its document committed yet.
+  // Establish the provider history entry before simulating the next-steps visit.
+  await page.waitForURL('https://formspree.io/f/mwlpollw', { waitUntil: 'load' });
   const reference = submissions[0].get('reference');
   await page.goto('/sent.html');
   await page.getByRole('button', { name: 'clear both copies now' }).click();

@@ -19,6 +19,8 @@ Verification: focused interaction, failure fallback, keyboard/touch, enlarged-te
 
 CI execution: the hosted rerun passed the corrected no-script check but timed out near the end of the combined browser job, leaving two earlier iPhone arrival failures without detailed reports. Forty local repetitions of those two arrivals passed. The same five projects now run in parallel jobs and retain all 1,454 configured cases, existing individual test limits and the required `browser-tests` gate; that gate fails unless every project succeeds. Immediate failure output and separate project artifacts improve diagnosis. Hosted arrival failures still require revalidation before release.
 
+The five-project hosted run completed: 1,438 browser checks passed, with 15 expected skips and one unrelated simulated-submission setup race. Both earlier arrival checks passed. The saved trace shows the test left the intercepted provider document before it committed: Back went directly from Sent to Letters, then to about:blank. The test now waits for that fixture document to load before visiting Sent; both Back calls and every storage, text, permission, email and reference-clearing assertion remain. Independent UX source review agrees; no public code changed. The corrected flow passed 40 repetitions across the four scripted browser projects (22.4 seconds); exact-head hosted validation is pending.
+
 ### Consented community letter
 
 - Added a contributor-authorised consultation letter to the existing Community letters board, dated 24 September 2026. The public transcript omits a short birthdate-related aside at the owner's request; the remaining wording and paragraph structure are preserved. The original PDF is not a public asset or repository file.
