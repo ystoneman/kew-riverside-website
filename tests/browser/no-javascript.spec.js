@@ -57,7 +57,7 @@ test('No JavaScript: budget and forecast answers, sources and optional data rema
   await expect(source).toBeVisible();
   const detail = page.locator('#budget details').first();
   await detail.locator('summary').tap();
-  await expect(detail.locator('table')).toBeVisible();
+  await expect(detail.locator('table').last()).toBeVisible();
   await source.tap();
   await expect(page.locator('#source-school-balances-mar-2026')).toBeInViewport();
   await expect(page.locator('#source-school-balances-mar-2026')).toContainText(/31 March 2026|March 2026/);
@@ -404,4 +404,34 @@ test('No JavaScript: video publication purpose and private alternative survive d
   await expect(page.locator('#resume-instructions')).toContainText('including any earlier private-only choice');
   await page.locator('#private-video-alternative a').tap();
   await expect(page).toHaveURL(/about.html#contact$/);
+});
+
+test('No JavaScript: old source links and council charts remain exposed after simplification', async ({ page }) => {
+  await page.goto('/evidence.html#source-inspection-2026');
+  await expect(page.locator('#source-library')).toHaveAttribute('open', '');
+  await expect(page.locator('#source-inspection-2026')).toBeInViewport();
+  await expect(page.locator('#source-grid .source-card:visible')).toHaveCount(57);
+  await expect(page.locator('.school-roll-chart .source-card')).toHaveCount(0);
+  await page.goto('/evidence.html#school-roll-title');
+  await expect(page.locator('#school-roll-title')).toBeInViewport();
+  await expect(page.locator('#council-figures')).toHaveAttribute('open', '');
+});
+
+
+test('No JavaScript: London outcomes and their explanations precede source search', async ({ page }) => {
+  await page.goto('/evidence.html#records');
+  const findings = page.locator('#london-findings');
+  await expect(findings.getByRole('heading', { name: 'Four London schools kept teaching.' })).toBeInViewport();
+  await expect(findings).toContainText('Two adjudications in 2025');
+  await expect(findings).toContainText('continued as an academy');
+  await expect(findings.locator('.finding-stories article')).toHaveCount(3);
+  await expect(findings.locator('details')).toHaveCount(0);
+  await findings.locator('a[href="#source-search"]').tap();
+  await expect(page.locator('#record-search')).toBeInViewport();
+  await expect(page.locator('.source-card:visible')).toHaveCount(57);
+  await page.goBack();
+  await expect(page.locator('#london-findings-title')).toBeInViewport();
+  await findings.locator('a[href="lessons.html#case-st-john"]').tap();
+  await expect(page.locator('#case-st-john')).toBeInViewport();
+  await expect(page.locator('#case-st-john')).toContainText('St John the Divine');
 });

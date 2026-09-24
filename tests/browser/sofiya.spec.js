@@ -46,8 +46,12 @@ test('Learning: the local jump retains previous comparison sections and visible 
   expect(visibleCopy).toMatch(/expected standard/i);
   expect(visibleCopy).toMatch(/small.*cohort|cohort.*small/i);
   expect(visibleCopy).toMatch(/attainment.*progress|progress.*attainment/is);
+  for (const text of ['2025', '73%', '62%', '78%', '15 in 2025', '68%', '22 pupils', 'provisional']) expect(visibleCopy).toContain(text);
+  await expect(page.locator('svg#attainment-chart')).toBeHidden();
+  await activate(page.locator('#attainment-detail > summary'), hasTouch);
+  const detailedCopy = await section.innerText();
   for (const { year, kew, england, richmond } of combinedResults) {
-    for (const text of [String(year), `${kew}%`, `${england}%`, `${richmond}%`]) expect(visibleCopy).toContain(text);
+    for (const text of [String(year), `${kew}%`, `${england}%`, `${richmond}%`]) expect(detailedCopy).toContain(text);
   }
   const chart = page.locator('svg#attainment-chart');
   await expect(chart).toBeVisible();
@@ -60,11 +64,14 @@ test('Learning: the local jump retains previous comparison sections and visible 
     await expect(charts.nth(index)).toHaveAttribute('role', 'img');
     await expect(charts.nth(index)).toHaveAccessibleName(new RegExp(name));
   }
+  await activate(page.locator('#inspection-summary > summary'), hasTouch);
   await expect(section.locator('#inspection-summary a[href="evidence.html#source-inspection-2026"]')).toBeVisible();
+  await expect(section.locator('#inspection-summary')).toContainText('Needs attention: attendance and behaviour');
 });
 
 test('Learning: chart table links reveal closed data and recover through repeated links and history', async ({ page, hasTouch }) => {
   await page.goto('/understand.html#learning-and-results');
+  await activate(page.locator('#attainment-detail > summary'), hasTouch);
   const details = page.locator('details#attainment-tables');
   const summary = details.locator(':scope > summary');
   const table = details.locator('table').first();
@@ -107,6 +114,7 @@ test('Learning: chart table links reveal closed data and recover through repeate
 
 test('Learning: native data and method disclosures work by keyboard and download usable data', async ({ page, hasTouch }) => {
   await page.goto('/understand.html#learning-and-results');
+  await activate(page.locator('#attainment-detail > summary'), hasTouch);
   for (const id of ['attainment-tables', 'attainment-method']) {
     const details = page.locator(`details#${id}`);
     const summary = details.locator(':scope > summary');
@@ -184,6 +192,7 @@ test('Learning: narrow arrival protects action routes and the chart stays inside
     await page.goBack();
   }
   await activate(page.locator('#visit-school a[href="understand.html#learning-and-results"]'), hasTouch);
+  await activate(page.locator('#attainment-detail > summary'), hasTouch);
   const chart = page.locator('#attainment-chart');
   await expect(chart).toBeVisible();
   const box = await chart.boundingBox();
@@ -201,6 +210,7 @@ test('Inspection: original-source counts, search and the resolved gap agree', as
   }
   const inspection = page.locator('#source-inspection-2026');
   await page.getByLabel('Search source records and research reports').fill('Ofsted 2026');
+  await page.locator('#record-refinements > summary').click();
   await page.getByLabel('Record type', { exact: true }).selectOption('Inspection');
   await page.getByLabel('Year', { exact: true }).selectOption('2026');
   await page.getByLabel('Coverage', { exact: true }).selectOption('Reviewed');
@@ -211,6 +221,7 @@ test('Inspection: original-source counts, search and the resolved gap agree', as
   await expect(page.locator('.source-card:visible')).toHaveCount(57);
   const gap = page.locator('#gaps article').filter({ has: page.locator('span', { hasText: /^07$/ }) });
   await expect(gap).toContainText(/resolved/i);
+  await activate(gap.locator('summary'), hasTouch);
   await activate(gap.locator('a[href="#source-inspection-2026"]'), hasTouch);
   await expect(inspection).toBeInViewport();
   await page.getByLabel('Year', { exact: true }).selectOption('2003');

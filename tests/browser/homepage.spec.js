@@ -58,7 +58,7 @@ test('Short homepage: visitors choose destinations before any long document or s
 
 test('Dedicated pages: local navigation exposes depth and retains a homepage recovery path', async ({ page, hasTouch }) => {
   await page.goto('/evidence.html#records');
-  const evidenceNav = page.locator('#evidence-navigation');
+  const evidenceNav = page.locator('#evidence-navigation, .evidence-more');
   for (const id of ['evidence', 'records', 'source-lessons-report', 'earlier-record', 'gaps', 'method']) {
     const link = evidenceNav.locator(`a[href="#${id}"]`);
     await expect(link).toBeVisible();
@@ -97,7 +97,7 @@ legacyTest('Legacy homepage: representative shared fragments reach their origina
 
 legacyTest('Legacy homepage: saved search without a fragment survives migration and reload', async ({ page }) => {
   await page.goto('/index.html?q=Ofsted&type=Inspection&year=2003');
-  await expect(page).toHaveURL(/evidence\.html\?q=Ofsted&type=Inspection&year=2003#records$/);
+  await expect(page).toHaveURL(/evidence\.html\?q=Ofsted&type=Inspection&year=2003#source-search$/);
   await expect(page.getByLabel('Search source records and research reports')).toHaveValue('Ofsted');
   await expect(page.getByLabel('Record type', { exact: true })).toHaveValue('Inspection');
   await expect(page.getByLabel('Year', { exact: true })).toHaveValue('2003');
