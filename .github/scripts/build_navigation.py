@@ -5,7 +5,7 @@ import html
 import re
 
 ROOT = Path(__file__).resolve().parents[2]
-VERSION = '2026092403'
+VERSION = '2026092405'
 PAGES = {
     'index.html': 'Home', 'about.html': 'About', 'proposal.html': 'Proposal & dates',
     'faq.html': 'FAQ', 'understand.html': 'Understand', 'options.html': 'Options',
@@ -39,7 +39,21 @@ def render_navigation(name, document):
     document = re.sub(r'<!-- orientation:start -->.*?<!-- orientation:end -->', '', document, flags=re.S)
     document = re.sub(r'<link rel="stylesheet" href="orientation\.css(?:\?v=\d+)?">', '', document)
     document = re.sub(r'navigation\.js\?v=\d+', 'navigation.js?v='+VERSION, document)
-    document = document.replace('</head>', '<link rel="stylesheet" href="orientation.css?v='+VERSION+'"></head>')
+    # Deferred scripts must follow every stylesheet they measure. Navigation sets
+    # the final fragment offsets before page-specific disclosure/reveal scripts.
+    head, separator, body = document.partition('</head>')
+    deferred_pattern = r'<script\b[^>]*\bdefer\b[^>]*>.*?</script>'
+    deferred = re.findall(deferred_pattern, head, re.S)
+    head = re.sub(deferred_pattern, '', head, flags=re.S)
+    deferred.sort(key=lambda script: 0 if 'src="navigation.js?' in script else 1)
+    # Keep the existing synchronous, pre-paint theme initializer after the final
+    # stylesheet too. This parser barrier also covers WebKit's early defer path.
+    theme_pattern = r'<script src="theme\.js\?v=\d+"></script>'
+    theme = re.search(theme_pattern, head)
+    theme_script = theme.group() if theme else ''
+    head = re.sub(theme_pattern, '', head)
+    head = re.sub(r'(?m)^ +$', '', head)
+    document = head+'<link rel="stylesheet" href="orientation.css?v='+VERSION+'">'+theme_script+''.join(deferred)+separator+body
     match = re.search(r'<header class="site-header">.*?</header>', document, re.S)
     header = match.group()
     header = re.sub(r'<details class="mobile-menu">.*?</details>', '', header, flags=re.S)

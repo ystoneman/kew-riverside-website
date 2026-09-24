@@ -4,6 +4,16 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Stable arrivals and Back recovery before publication
+
+- Settle the final stylesheet before navigation measures the persistent bar, then initialize navigation before page-specific fragment handlers. Preserve the stylesheet cascade and regenerate consistent navigation versions across all 16 pages. A delayed-stylesheet regression checks the initial offsets and the existing 600ms arrival-stability requirement.
+- Recover a saved reading position only when a browser Back/Forward return unexpectedly lands at zero. Store only coordinates and the current URL in that history entry; preserve unrelated state, manual form recovery and successful native scrolling. New navigation or user input cancels the one-frame recovery. Consume the marker after its one return assessment so it cannot revive a stale position later.
+- Keep the intercepted video handoff committed before testing Back. Retain the actual upload-arrival assertion, and add later-section/top-departure, state-preservation and cancellation coverage. No real upload or form is sent.
+
+Publication remains pending. PR #23 merged, but production run 36066710325 correctly blocked deployment on a WebKit arrival failure. The stylesheet-only PR #24 revision passed 1,443 hosted checks (15 expected skips); its local run then exposed the separate video Back defect. The final combined fix requires fresh complete local and hosted checks. Detailed diagnostic and review evidence is in TESTING.md. Native Safari interaction remains unverified.
+
+The combined public implementation passed all 1,451 local browser checks (15 expected skips). Hosted validation found only an over-specific new Back-test setup: native WebKit reapplies incoming fragments on the deployed baseline too. The precision test now uses an unfragmented entry while preserving every assertion and separate QR-fragment coverage; 48 focused repetitions passed. Fresh exact-head hosted checks remain required.
+
 ### Page orientation and clearer Proposal questions
 
 - Keep the current page visible in one compact scrolling bar; add a curated section/subsection navigator, section-link copying with a selectable fallback, and the full page menu at every width. About follows Home; Options and Lessons are ordinary menu destinations. Keep exposed Community letters and Share ideas, the named Parent action plan and existing deep links, filters, downloads and no-script routes.
@@ -13,13 +23,7 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 Review: independent evidence, campaign and rendered UX implementation reviews found no remaining actionable findings after fixes for short-screen menu bounds, enlarged labels, Letters heading wrapping and inherited section-link layout. Checks and release status are recorded below as completed; no user-study results or real form submissions are claimed.
 
-The complete local run passed **1,439 browser checks with 15 expected skips** (6.6 minutes), and all 50 Python checks and 95-public-file validation passed. The first hosted run passed 1,438 browser checks and found one no-JavaScript test-contract error: opening the static menu first scrolls away from Funding, so Linux WebKit correctly restored that header departure position on Back. Its trace and screenshot show the correct URL and intact content. Independent UX review confirmed the correction: retain initial arrival and Back URL/open/readable assertions, then use the real same-fragment section link for recovery. A separate in-content departure/Back check preserves the reading-position assertion. Public files did not change; the corrected test and hosted rerun are required before release.
-
-Verification: focused interaction, failure fallback, keyboard/touch, enlarged-text and no-JavaScript checks passed. The corrected no-script test passed ten local repetitions; hosted revalidation and deployment are in progress. Native iPhone 17 / iOS 26.5 Safari testing was attempted, but the computer-use interface did not deliver the requested navigation and reported the simulator screenshot unavailable; this release has no verified native Safari interaction result. Browser emulation is tested separately.
-
-CI execution: the hosted rerun passed the corrected no-script check but timed out near the end of the combined browser job, leaving two earlier iPhone arrival failures without detailed reports. Forty local repetitions of those two arrivals passed. The same five projects now run in parallel jobs and retain all 1,454 configured cases, existing individual test limits and the required `browser-tests` gate; that gate fails unless every project succeeds. Immediate failure output and separate project artifacts improve diagnosis. Hosted arrival failures still require revalidation before release.
-
-The five-project hosted run completed: 1,438 browser checks passed, with 15 expected skips and one unrelated simulated-submission setup race. Both earlier arrival checks passed. The saved trace shows the test left the intercepted provider document before it committed: Back went directly from Sent to Letters, then to about:blank. The test now waits for that fixture document to load before visiting Sent; both Back calls and every storage, text, permission, email and reference-clearing assertion remain. Independent UX source review agrees; no public code changed. The corrected flow passed 40 repetitions across the four scripted browser projects (22.4 seconds); exact-head hosted validation is pending.
+The original feature passed 1,439 local and hosted browser checks with 15 expected skips, 50 Python checks and 95-public-file validation. CI now runs the same five browser projects in parallel, with unchanged per-test limits and a required aggregate that fails unless every project passes. Two test-setup corrections retained substantive assertions: no-script Back restores the actual departure position, and the intercepted Letters provider must commit before starting the next page. The production arrival failure and final recovery work above must pass before publication.
 
 ### Consented community letter
 
