@@ -4,6 +4,14 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Permanent flyer QR destination
+
+- Add `/visit/`, initially redirecting to the verified school contact page, with a descriptive native link if automatic refresh is disabled. No scripts, analytics, new menu entry or change to the existing video QR. README explains how to update the destination without reprinting flyers.
+- Include nested public assets in the deployment package and browser harness. The harness serves only allowlisted files, supports the GitHub Pages project prefix and can use `KEW_TEST_PORT` for isolated parallel checks. All public HTML is discovered; only the named redirect uses dedicated handoff coverage instead of shared-menu checks.
+- Add checks for slash/slashless/direct-file routes, project-subpath arrival, Back, fixed destinations despite incoming parameters, no-JavaScript use, and narrow/desktop fallback with keyboard/touch access. The initial macOS WebKit keyboard check used Tab; it was corrected to the suite's existing Option-Tab convention without changing the page or weakening the focus assertion.
+
+Validation so far: all 49 Python tests passed, and all 92 public files staged successfully outside the repository. The print PNG was independently decoded with Apple Vision to the exact permanent `/visit/` URL; print assets are kept outside the public repository. Independent campaign planning and implementation reviews found no actionable concerns. All 56 focused QR and browser-harness checks passed across desktop/mobile Chromium and WebKit, including JavaScript-disabled iPhone WebKit. Native iPhone 17 / iOS 26.5 Safari followed the local public `/visit/` page to the real school Contact Us page; the final screen was inspected, without submitting a form or accepting cookies. Native Back/touch fallback were not separately exercised. Hosted release verification remains pending; this entry does not yet claim publication.
+
 ### Findings before navigation on Evidence and Understand
 
 - **Evidence:** opens with four selected London examples: three schools whose closure proposals were rejected in two 2025 adjudications, plus Pooles Park continuing through an academy proposal. Each short account states what changed the outcome and links to its case and original evidence. The collection is not a London total or success rate; it contains no verified Richmond example. A visible Kew takeaway distinguishes useful questions from legal/governance routes that may not apply.

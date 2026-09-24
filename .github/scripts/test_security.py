@@ -87,6 +87,7 @@ class DeploymentTests(unittest.TestCase):
         temp = tempfile.TemporaryDirectory(); self.addCleanup(temp.cleanup)
         self.base = Path(temp.name); self.root = self.base / 'site'; self.root.mkdir()
         for name in PUBLIC_FILES:
+            (self.root / name).parent.mkdir(parents=True, exist_ok=True)
             if name in {'letters.json', 'suggestions.json', 'supporters.json'}:
                 (self.root / name).write_text(json.dumps(fixture(Path(name).stem)))
             else:
@@ -96,7 +97,8 @@ class DeploymentTests(unittest.TestCase):
     def test_stage_contains_only_intended_public_assets(self):
         (self.root / 'README.md').write_text('Maintenance notes')
         stage_site(self.base / 'output', self.root)
-        self.assertEqual({p.name for p in (self.base / 'output').iterdir()}, PUBLIC_FILES)
+        self.assertEqual({p.relative_to(self.base / 'output').as_posix()
+                          for p in (self.base / 'output').rglob('*') if p.is_file()}, PUBLIC_FILES)
 
     def test_raw_inbox_or_unknown_file_stops_deployment(self):
         (self.root / 'intake.json').write_text('{}')

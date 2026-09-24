@@ -1,4 +1,5 @@
 const { defineConfig, devices } = require('@playwright/test');
+const baseURL = `https://127.0.0.1:${process.env.KEW_TEST_PORT || 4173}`;
 
 module.exports = defineConfig({
   testDir: './tests/browser',
@@ -10,7 +11,7 @@ module.exports = defineConfig({
   expect: { timeout: 5_000 },
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
-    baseURL: 'https://127.0.0.1:4173',
+    baseURL,
     ignoreHTTPSErrors: true,
     serviceWorkers: 'block',
     trace: 'retain-on-failure',
@@ -20,7 +21,7 @@ module.exports = defineConfig({
   },
   webServer: {
     command: 'node tests/browser/server.js',
-    url: 'https://127.0.0.1:4173',
+    url: baseURL,
     ignoreHTTPSErrors: true,
     reuseExistingServer: false,
     stdout: 'ignore',
@@ -31,6 +32,6 @@ module.exports = defineConfig({
     { name: 'android-chromium', use: { ...devices['Pixel 7'] }, testIgnore: ['**/desktop.spec.js', '**/no-javascript.spec.js'] },
     { name: 'desktop-chromium', use: { browserName: 'chromium', viewport: { width: 1440, height: 1000 } }, testIgnore: ['**/mobile.spec.js', '**/no-javascript.spec.js'] },
     { name: 'desktop-webkit', use: { browserName: 'webkit', viewport: { width: 1440, height: 1000 } }, testIgnore: ['**/mobile.spec.js', '**/no-javascript.spec.js'] },
-    { name: 'iphone-no-javascript', use: { ...devices['iPhone 13'], javaScriptEnabled: false }, testMatch: '**/no-javascript.spec.js' },
+    { name: 'iphone-no-javascript', use: { ...devices['iPhone 13'], javaScriptEnabled: false }, testMatch: ['**/no-javascript.spec.js', '**/qr.spec.js'] },
   ],
 });

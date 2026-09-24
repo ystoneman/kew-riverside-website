@@ -67,6 +67,12 @@ These choices are design judgments to verify, not measured conversion improvemen
 
 ## Selected page and interaction design
 
+### Permanent flyer enquiry link — 24 September 2026
+
+J8: a family scanning a printed flyer should reach the school's current enquiry route while the printed address stays useful when bookings move. Use the human-readable `/visit/` address, initially pointing directly to the school contact page. A future registration destination must be verified before changing it. No homepage space, menu item, campaign reading or extra choice is added; existing proposal context and enquiry routes remain in place, as does the separate video QR.
+
+An immediate HTML refresh and descriptive native link provide the handoff without scripts or analytics. A commercial dynamic-QR provider adds an unnecessary dependency; a JavaScript-only redirect would exclude visitors with scripts disabled. A second `/qr/` alias is unnecessary. Maintain matching refresh/link destinations with regression coverage and instructions in README. The route is an explicit exception to shared menus, with its own Back, narrow-screen, keyboard/touch, no-JavaScript and disabled-refresh checks; all public pages retain automatic link/security validation. Independent campaign and UX reviews informed this choice. Verification and publication are recorded in CHANGELOG.
+
 ### Evidence and numbers: findings before navigation — 24 September 2026
 
 Visitor need (J6): the owner's follow-up clarified that a directory of links still made readers do the work. They want findings such as how many nearby schools changed a proposed closure and how. The earlier navigation-led Evidence design below is superseded by this decision; the optional-detail approach remains.

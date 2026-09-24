@@ -7,7 +7,7 @@ import posixpath
 import unittest
 from urllib.parse import parse_qs, unquote, urlsplit
 
-from check_site import PUBLIC_FILES, ROOT
+from check_site import PUBLIC_FILES, REDIRECT_PAGES, ROOT
 
 
 # Snapshot of the moved homepage IDs before the September 2026 page split.
@@ -51,6 +51,7 @@ class Document(HTMLParser):
         self.ids = []
         self.references = []
         self.scripts = []
+        self.refreshes = []
         self.navigation = {name: [] for name in ('desktop-explore', 'mobile-menu', 'participation-nav')}
         self.source_ids = []
         self.source_cards = {}
@@ -61,6 +62,8 @@ class Document(HTMLParser):
 
     def handle_starttag(self, tag, attributes):
         attrs = dict(attributes)
+        if tag == 'meta' and attrs.get('http-equiv', '').lower() == 'refresh':
+            self.refreshes.append(attrs.get('content', ''))
         classes = set(attrs.get('class', '').split())
         if 'id' in attrs:
             self.ids.append(attrs['id'])
@@ -184,6 +187,8 @@ class SiteStructureTests(unittest.TestCase):
         self.assertEqual(len(baseline), 1)
         self.assertTrue(parse_qs(urlsplit(baseline[0]).query).get('v'), 'Navigation fixes need a cache version')
         for name, page in self.pages.items():
+            if name in REDIRECT_PAGES:
+                continue  # Automatic handoff; covered by the redirect journey tests.
             with self.subTest(page=name):
                 actual = [src for src in page.scripts if urlsplit(src).path == 'navigation.js']
                 self.assertEqual(actual, baseline, 'Pages must load the same navigation release exactly once')
@@ -193,6 +198,8 @@ class SiteStructureTests(unittest.TestCase):
         expected_desktop = navigation_destinations('index.html', baseline['desktop-explore'])
         self.assertTrue(expected_desktop)
         for name, page in self.pages.items():
+            if name in REDIRECT_PAGES:
+                continue
             with self.subTest(page=name):
                 desktop = navigation_destinations(name, page.navigation['desktop-explore'])
                 mobile = navigation_destinations(name, page.navigation['mobile-menu'])
@@ -200,6 +207,15 @@ class SiteStructureTests(unittest.TestCase):
                 self.assertEqual(desktop, expected_desktop, 'Desktop destinations differ between pages')
                 self.assertEqual(mobile, desktop | {('index.html', '')}, 'Mobile menu must retain every desktop destination and Home')
                 self.assertEqual(participation, {('letters.html', ''), ('feedback.html', '')})
+
+    def test_printed_visit_route_has_matching_immediate_and_native_destinations(self):
+        destination = 'https://www.kewriverside.richmond.sch.uk/page/?pid=525&title=Contact+Us'
+        self.assertEqual(REDIRECT_PAGES, {'visit/index.html'})
+        for name in REDIRECT_PAGES:
+            page = self.pages[name]
+            self.assertEqual(page.refreshes, ['0; url=' + destination])
+            self.assertIn(('a', 'href', destination), page.references)
+            self.assertEqual(page.scripts, [], 'This handoff needs no scripts or tracking')
 
     def test_source_library_and_downloads_contain_the_same_records(self):
         records = json.loads((ROOT / 'sources.json').read_text(encoding='utf-8'))['records']

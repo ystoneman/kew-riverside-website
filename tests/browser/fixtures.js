@@ -1,10 +1,15 @@
 const { test: base, expect } = require('@playwright/test');
-const { readdirSync, readFileSync } = require('node:fs');
+const { readFileSync } = require('node:fs');
 const path = require('node:path');
 
 const root = path.resolve(__dirname, '../..');
-// New public pages automatically inherit the navigation and layout checks.
-const pages = readdirSync(root).filter(name => name.endsWith('.html')).sort();
+// Discover nested public pages too. Only explicit redirect routes use dedicated
+// handoff/Back/no-JavaScript/fallback coverage in qr.spec.js instead of site menus.
+const manifest = readFileSync(path.join(root, '.github/scripts/check_site.py'), 'utf8');
+const publicFiles = manifest.match(/PUBLIC_FILES = frozenset\('''([\s\S]*?)'''\.split\(\)\)/)[1].trim().split(/\s+/);
+const redirectPages = ['visit/index.html'];
+const allPages = publicFiles.filter(name => name.endsWith('.html')).sort();
+const pages = allPages.filter(name => !redirectPages.includes(name));
 function headerLinks(file, selector) {
   const html = readFileSync(path.join(root, file), 'utf8');
   const className = selector === 'mobile' ? 'mobile-menu' : 'desktop-explore';
@@ -151,4 +156,4 @@ async function revealLetterChoices(page) {
   await expect(page.locator('#letter-consent')).toBeVisible();
 }
 
-module.exports = { test, expect, pages, headerLinks, expectDestination, expectScrollSettled, expectStillArrival, captureSubmissions, chooseKind, revealLetterChoices };
+module.exports = { test, expect, pages, allPages, redirectPages, headerLinks, expectDestination, expectScrollSettled, expectStillArrival, captureSubmissions, chooseKind, revealLetterChoices };

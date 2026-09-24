@@ -12,6 +12,18 @@ This directory is deployed from `main` at https://github.com/ystoneman/kew-river
 
 The evidence pages need no build or API keys. Feedback and community letters use the private Formspree inbox behind the public form endpoint. Secrets and private submissions must never enter this repository. Relative asset paths support the repository subpath.
 
+## Permanent flyer QR link
+
+Print or encode **https://ystoneman.github.io/kew-riverside-website/visit/**. Keep that address and `visit/index.html` in place for the lifetime of the flyers. The current destination is the [school contact page](https://www.kewriverside.richmond.sch.uk/page/?pid=525&title=Contact+Us), verified on 24 September 2026. The redirect works without JavaScript and includes a normal link if automatic refresh is disabled. It adds no tracking or subscription.
+
+To point existing flyers to a future, verified school registration page:
+
+1. Update both destination URLs in `visit/index.html` (the refresh and fallback link), using `&amp;` for ampersands. Update the title and short fallback description to match.
+2. Update the intended destination in `tests/browser/qr.spec.js` and `.github/scripts/test_site_structure.py`. Keep the tests for Back, no JavaScript, the native fallback, and ignored incoming parameters.
+3. Follow `TESTING.md`, then merge and verify the Pages deployment. Test the same printed address before distributing more flyers. Previously printed QR codes stay unchanged.
+
+The redirect belongs to this GitHub Pages account and repository. Renaming or removing either can break printed links. GitHub Pages can briefly cache an older destination after an update; verify it live rather than assuming a commit is already published. The existing video QR at `videos.html#upload` has a separate purpose and is unchanged.
+
 ## Content and provenance
 
 - Original research cut-off: **21 September 2026**. School comparison datasets and the council proposal comparison were checked on **22 September 2026**; new case evidence was checked on **23 September 2026**. Individual source access dates are recorded.
