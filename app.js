@@ -92,13 +92,9 @@
   });
   apply(false);
   revealAnchor();
-  // Retain saved-search URLs while bringing returning researchers to their controls.
+  // Give native fragment recovery and discovery.js the same saved-search target.
+  // Existing query links remain valid; replaceState preserves their Back entry.
   if (fields.some(key => controls[key].value) && ['', '#records'].includes(initial.hash)) {
-    window.addEventListener('load', () => {
-      // Run after discovery.js has queued its initial fragment recovery.
-      requestAnimationFrame(() => {
-        document.getElementById('source-search').scrollIntoView({ behavior: 'instant', block: 'start' });
-      });
-    }, { once: true });
+    window.history.replaceState(window.history.state, '', initial.pathname + initial.search + '#source-search');
   }
 })();

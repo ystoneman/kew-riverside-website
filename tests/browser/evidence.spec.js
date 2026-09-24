@@ -328,7 +328,7 @@ test('London findings lead directly to the named case with sources, and Back ret
   }
 });
 
-test('Saved Evidence searches bypass the findings while retaining their query and URL', async ({ page }) => {
+test('Saved Evidence searches canonicalize the search anchor while retaining filters and Back', async ({ page }) => {
   for (const hash of ['', '#records']) {
     // Start a new document: adding a hash to this same URL is an in-page jump.
     await page.goto('/index.html');
@@ -338,6 +338,22 @@ test('Saved Evidence searches bypass the findings while retaining their query an
     await expect(search).toBeInViewport();
     await expect(page.locator('.source-card:visible')).toHaveCount(1);
     await expect(page.locator('.source-card:visible h3')).toContainText('First Ofsted inspection');
-    expect(new URL(page.url()).hash).toBe(hash);
+    await expect(page).toHaveURL(/evidence\.html\?q=Ofsted&type=Inspection&year=2003#source-search$/);
+    await page.locator('#evidence-navigation a[href="#records"]').click();
+    await expect(page.locator('#london-findings-title')).toBeInViewport();
+    await expect(search).toHaveValue('Ofsted');
+    await page.goBack();
+    await expect(search).toBeInViewport();
+    await page.goBack();
+    await expect(page).toHaveURL(/index\.html$/);
   }
+});
+
+
+test('Non-search query parameters and invalid filters keep the findings entry', async ({ page }) => {
+  await page.goto('/evidence.html?preview=insights&topic=not-a-topic#records');
+  await expect(page.locator('#london-findings-title')).toBeInViewport();
+  await expect(page).toHaveURL(/\?preview=insights&topic=not-a-topic#records$/);
+  await expect(page.locator('#topic-filter')).toHaveValue('');
+  await expect(page.locator('#source-library')).not.toHaveAttribute('open', '');
 });
