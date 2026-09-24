@@ -4,6 +4,13 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Consented community letter
+
+- Added a contributor-authorised consultation letter to the existing Community letters board, dated 24 September 2026. The public transcript omits a short birthdate-related aside at the owner's request; the remaining wording and paragraph structure are preserved. The original PDF is not a public asset or repository file.
+- Retained the existing attributed opinion presentation, accurate AI-screening label, full-letter disclosure and removal route (J4). No interface or permission changes. Independent evidence/editorial planning and implementation reviews found no actionable issues. Lead-agent UX review inspected the unchanged long-letter presentation with fictional data at 390 and 1440 px; direct links open the letter with no horizontal overflow.
+
+Verification: independent source-to-transcript comparison confirms only the requested omission and whitespace normalisation. All 49 Python checks passed, and the 92-file public artifact passes schema/privacy validation and staging. The initial revision also passed all 1,329 local and hosted browser checks, with 15 expected skips. A concurrent main-branch release required a changelog-only conflict resolution; the approved transcript is unchanged. Updated-revision validation and deployment are pending; publication requires its automated checks to pass.
+
 ### Clearer Options, Lessons and Proposal pages
 
 - Options now explains three connected priorities at the existing `#options` destination before its eight-option index. Each option exposes a useful first step and important limitation. Funding questions become optional depth with static-open fallback and incoming-link/Back recovery; direct official-response, Parent plan and school-enquiry routes remain exposed.
