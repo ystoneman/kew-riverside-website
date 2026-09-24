@@ -9,7 +9,7 @@ module.exports = defineConfig({
   workers: process.env.CI ? 2 : 4,
   timeout: 45_000,
   expect: { timeout: 5_000 },
-  reporter: [['list'], ['html', { open: 'never' }]],
+  reporter: [[process.env.CI ? 'line' : 'list'], ['html', { open: 'never' }]],
   use: {
     baseURL,
     ignoreHTTPSErrors: true,

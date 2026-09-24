@@ -17,6 +17,8 @@ The complete local run passed **1,439 browser checks with 15 expected skips** (6
 
 Verification: focused interaction, failure fallback, keyboard/touch, enlarged-text and no-JavaScript checks passed. The corrected no-script test passed ten local repetitions; hosted revalidation and deployment are in progress. Native iPhone 17 / iOS 26.5 Safari testing was attempted, but the computer-use interface did not deliver the requested navigation and reported the simulator screenshot unavailable; this release has no verified native Safari interaction result. Browser emulation is tested separately.
 
+CI execution: the hosted rerun passed the corrected no-script check but timed out near the end of the combined browser job, leaving two earlier iPhone arrival failures without detailed reports. Forty local repetitions of those two arrivals passed. The same five projects now run in parallel jobs and retain all 1,454 configured cases, existing individual test limits and the required `browser-tests` gate; that gate fails unless every project succeeds. Immediate failure output and separate project artifacts improve diagnosis. Hosted arrival failures still require revalidation before release.
+
 ### Consented community letter
 
 - Added a contributor-authorised consultation letter to the existing Community letters board, dated 24 September 2026. The public transcript omits a short birthdate-related aside at the owner's request; the remaining wording and paragraph structure are preserved. The original PDF is not a public asset or repository file.
