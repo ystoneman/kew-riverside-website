@@ -71,7 +71,9 @@ async function expectUncovered(page, target) {
 }
 
 test('Orientation: Back preserves a later reading position and a subsequent departure from the top', async ({ page, hasTouch }) => {
-  await page.goto('/videos.html#upload');
+  // Keep native fragment reapplication separate from reading-position recovery.
+  // The shared QR regression independently covers the incoming #upload route.
+  await page.goto('/videos.html');
   const originalURL = page.url();
   await page.evaluate(() => history.replaceState({ existingVisitorState: 'keep' }, ''));
   const link = page.locator('a[href="https://www.youtube.com/@KewParentVoices"]');
@@ -95,8 +97,7 @@ test('Orientation: Back preserves a later reading position and a subsequent depa
   await expect.poll(() => page.evaluate(() => history.state.kewReadingPosition)).toBeUndefined();
   expect(await page.evaluate(() => history.length)).toBe(historyLength);
 
-  // A real departure from the top must supersede the earlier reading position,
-  // even though this history entry still contains its incoming #upload fragment.
+  // A real departure from the top must supersede the earlier reading position.
   await page.evaluate(() => scrollTo({ top: 0, behavior: 'instant' }));
   await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
   await activate(page.locator('.brand'), hasTouch);

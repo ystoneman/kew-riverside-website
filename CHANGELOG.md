@@ -12,6 +12,8 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 Publication remains pending. PR #23 merged, but production run 36066710325 correctly blocked deployment on a WebKit arrival failure. The stylesheet-only PR #24 revision passed 1,443 hosted checks (15 expected skips); its local run then exposed the separate video Back defect. The final combined fix requires fresh complete local and hosted checks. Detailed diagnostic and review evidence is in TESTING.md. Native Safari interaction remains unverified.
 
+The combined public implementation passed all 1,451 local browser checks (15 expected skips). Hosted validation found only an over-specific new Back-test setup: native WebKit reapplies incoming fragments on the deployed baseline too. The precision test now uses an unfragmented entry while preserving every assertion and separate QR-fragment coverage; 48 focused repetitions passed. Fresh exact-head hosted checks remain required.
+
 ### Page orientation and clearer Proposal questions
 
 - Keep the current page visible in one compact scrolling bar; add a curated section/subsection navigator, section-link copying with a selectable fallback, and the full page menu at every width. About follows Home; Options and Lessons are ordinary menu destinations. Keep exposed Community letters and Share ideas, the named Parent action plan and existing deep links, filters, downloads and no-script routes.
