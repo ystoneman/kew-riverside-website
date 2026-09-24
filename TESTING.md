@@ -22,6 +22,18 @@ On Linux, install browser system dependencies with `npx playwright install --wit
 
 The browser harness serves the site locally over HTTP/2, as GitHub Pages does, uses fictional form inputs, and intercepts external requests. The four legacy-route tests observe requests instead of routing them (see Legacy redirect fix below). It never delivers a test submission to Formspree. Hosted CAPTCHA, real inbox delivery, council submission and real contribution moderation are outside the automated suite.
 
+## Parent-friendly Options and PTA flyer alignment — 24 September 2026
+
+Changed-journey checks cover the Parent plan arrival, promoted official response and checklist download, first-screen title/date/button at 375 × 812, a 450-word initial reading budget, all seven contribution disclosures, preserved option/question URLs, nested and repeated recovery, Back, keyboard activation, failed-script/no-JavaScript fallback and an always-exposed school enquiry. The official form is intercepted with a fictional handoff. Existing enrolment and ranking checks retain their substantive assertions while opening the new appropriate disclosure.
+
+All 32 focused checks passed. The first focused run passed 24 with two strict-selector failures: the old ranking test assumed a single link. The correction opens the method disclosure and selects the named council-reasons link, retaining the exact PDF URL assertion. Follow-up and legacy-route checks passed. All 50 Python checks, generated freshness and 94-file validation/staging passed. The initial complete run passed 1,382 checks with 15 expected skips and eight failures from two older tests across four projects: the renamed checklist label and newly nested enrolment explanation required updated setup. Exact download filename/content and contact destination assertions remain. The clean full rerun passed **1,390 checks with 15 expected skips** across desktop/mobile Chromium and WebKit and JavaScript-disabled iPhone WebKit (4.3 minutes).
+
+Lighthouse 13.5 accessibility: initial 96, final **100** after changing new muted summaries/preparation notes to the stronger body-text colour (the initial ratio was 4.45:1). The remaining unscored shared-brand label/name diagnostic predates this change; the audit score does not establish full accessibility conformance. Lighthouse ran locally without adding repository dependencies.
+
+Independent rendered UX review covered 320 × 568 WebKit, 375 × 812 and 1440 × 900 Chromium, dark/light appearance, 200% text, keyboard, old/nested/repeated links, Back and no JavaScript. Title, deadline and button fit on normal-text phone arrival; default main copy measures about 320 words versus 1,099. These are controlled measurements, not a usability study. Evidence and campaign reviews checked the actual copy, source links, privacy routing and supplied flyer.
+
+Native iPhone 17 / iOS 26.5 Safari rendered the new Options arrival with the title, date and primary action visible. Screenshots were inspected. A simulator click on the response disclosure produced no screen change; native taps and Back remain unverified. Emulated interactions passed. No real form or message was submitted. Screenshots and test reports remain outside public assets. This revision is not published.
+
 ## Three-page findings-first implementation — 24 September 2026
 
 Options, Lessons and Proposal were checked against the approved plan and their existing visitor journeys. New browser coverage exercises the Parent plan → Options arrival, exposed deliverables/limits and immediate routes, optional funding questions, direct question URLs and Back, an intentionally unavailable enhancement script, visible Proposal stages, keyboard/touch disclosure operation, enlarged text and no-JavaScript access. Lessons adds direct named-case navigation, filtered/repeated recovery, modified-click preservation and native no-JavaScript case/source access. Existing assertions remain intact.
@@ -32,7 +44,11 @@ Independent implementation evidence and campaign review found no remaining conte
 
 Native check: iPhone 17 / iOS 26.5 Safari rendered the local Options `#options`, Lessons `#key-lessons` and Proposal `#timetable` arrivals with readable content. Screenshots were inspected and retained outside the repository. Simulator keyboard/web-view input did not respond; native taps, disclosure operation, Back and landscape were not verified. Those interactions were checked in Chromium/WebKit emulation and must not be reported as native passes. No real forms or messages were submitted.
 
-The complete local suite passed **1,374 browser checks, with 15 expected skips**, across Chromium/WebKit desktop, mobile and the no-JavaScript project. These changes are local and have not been published.
+The complete local suite passed **1,374 browser checks, with 15 expected skips**, across Chromium/WebKit desktop, mobile and the no-JavaScript project.
+
+Publication record: [PR #20](https://github.com/ystoneman/kew-riverside-website/pull/20) merged as `4bb25f0` after [PR run 36024604772](https://github.com/ystoneman/kew-riverside-website/actions/runs/36024604772) passed. [Main run 36027249102](https://github.com/ystoneman/kew-riverside-website/actions/runs/36027249102) passed validation, all **1,374 browser checks with 15 expected skips**, and Pages deployment on 24 September 2026 at 16:46 UTC. Both hosted runs passed all **50 Python checks** and **94-public-file validation**. All 94 published HTTPS files matched the merged commit byte for byte.
+
+Live browser verification: desktop Chromium (1440 px) and mobile WebKit (390 px) passed Options actions and funding deep-link/Back/Forward recovery; Lessons named cases, filtered/repeated targets and Back; and Proposal actions, six stages and role disclosures. Source/download link sets matched the local reference exactly (Options 18/1, Lessons 50/17, Proposal 21/2). No horizontal overflow or script errors occurred; all three mobile screenshots were inspected. These were emulated browser checks; no real form was submitted.
 
 ## Permanent flyer redirect — 24 September 2026
 

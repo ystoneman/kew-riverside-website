@@ -2,10 +2,20 @@ const { test, expect, pages, headerLinks, expectDestination, expectStillArrival,
 
 test('Clarity pages preserve findings, funding questions and native process details without scripts', async ({ page }) => {
   await page.goto('/options.html#options');
-  await expect(page.locator('#options-findings-title')).toBeInViewport();
-  await expect(page.locator('.options-takeaways article')).toHaveCount(3);
+  await expect(page.locator('#options h1')).toBeInViewport();
+  await expect(page.locator('.options-response-button')).toBeVisible();
+  await expect(page.locator('.options-response')).toContainText('16 October 2026');
+  await expect(page.locator('#options-findings-title')).toBeVisible();
+  await expect(page.locator('.action-card > details.option-card[open]')).toHaveCount(7);
+  await expect(page.locator('.options-school-enquiry')).toBeVisible();
   await page.goto('/options.html#crowdfunding-recipient');
-  await expect(page.locator('.funding-questions')).toHaveAttribute('open', '');
+  await expect(page.locator('#option-crowdfunding > details.option-card')).toHaveAttribute('open', '');
+  await expect(page.locator('.funding-questions details.question-detail[open]')).toHaveCount(8);
+  const question = page.locator('#crowdfunding-recipient > details.question-detail');
+  await question.locator(':scope > summary').tap();
+  await expect(question).not.toHaveAttribute('open', '');
+  await question.locator(':scope > summary').tap();
+  await expect(question).toHaveAttribute('open', '');
   await expect(page.locator('#crowdfunding-recipient a')).toBeVisible();
   await page.goto('/proposal.html#school-meeting');
   await expect(page.locator('#school-meeting')).toBeInViewport();

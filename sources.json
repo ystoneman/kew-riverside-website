@@ -945,13 +945,30 @@
       }
     }
   },
-  "rankingMethod": "Editorial priorities based on decision relevance, potential evidence strength and usefulness before a decision. Not probabilities. School-specific feasibility unproven. Eight options. Crowdfunding is placed next to the costed recovery plan because they are connected, not because its feasibility or likelihood of success is established. The enrolment campaign follows demand testing and must be developed with the school and tested against a recovery budget.",
+  "rankingMethod": "One immediate official-response action plus seven optional ways to help. Rank records display order, not probabilities or a required sequence. The seven options retain their previous relative order, based on decision relevance, potential evidence strength and usefulness before a decision. School-specific feasibility remains unproven. Crowdfunding follows the costed recovery plan because they are connected, not because feasibility or success is established. Enrolment follows demand testing and must be developed with the school and tested against a recovery budget.",
   "approaches": [
     {
       "rank": 1,
-      "title": "Build a costed plan to keep teaching on the site",
-      "tag": "Highest priority",
-      "effort": "High",
+      "title": "Respond to the council",
+      "tag": "Official response",
+      "effort": "Give your own views; preparing a recovery plan is optional.",
+      "evidence": "Public participation rules available",
+      "why": "A concise, referenced case is easier to assess than a signature count alone. Coordinate who addresses budgets, demand, alternatives and pupil impacts, while preserving each person's own views.",
+      "next": "Respond through the official council-linked form by its stated date, 16 October 2026. Keep a copy, check later committee agendas and respond again during any statutory representation period.",
+      "limits": "A petition is a route to consideration, not a veto. Public campaigning does not replace a response during the formal representation period.",
+      "refs": [
+        "participation",
+        "petitions",
+        "guidance-2026",
+        "consultation-leaflet"
+      ],
+      "id": "option-7"
+    },
+    {
+      "rank": 2,
+      "title": "Help build a plan to keep teaching at Kew",
+      "tag": "Optional contribution",
+      "effort": "Share one budget question, a public example or relevant finance or education experience.",
       "evidence": "Needs school-specific budgets and partner commitments",
       "why": "A credible alternative gives decision-makers an implementable choice. Model a smaller intake, shared leadership, a federation or appropriate use of spare space, with a realistic staffing and funding plan.",
       "next": "Produce a three-year budget with low, central and high pupil scenarios. Identify who would deliver it and what support they would commit.",
@@ -964,14 +981,15 @@
         "school-balances-mar-2026",
         "prescribed-alterations-2025",
         "opening-new-schools-2026"
-      ]
+      ],
+      "id": "option-recovery-plan"
     },
     {
-      "rank": 2,
+      "rank": 3,
       "id": "option-crowdfunding",
-      "title": "Explore community crowdfunding",
-      "tag": "Exploratory — feasibility to establish",
-      "effort": "High",
+      "title": "See if fundraising could help",
+      "tag": "Exploratory",
+      "effort": "Share one funding question, a public example or your own fundraising experience.",
       "evidence": "Needs a recovery budget, donor interest and an agreed recipient",
       "why": "Could local residents, families and businesses help fund a viable future for Kew Riverside? Community fundraising could contribute to a costed recovery plan and give the school time to make changes.",
       "next": "Establish the funding needed for an agreed recovery period, identify an organisation able to receive and manage contributions, and seek a written assessment from the school and council of how a funded plan would affect the proposal. Assess donor interest before deciding whether to launch a public appeal.",
@@ -981,7 +999,7 @@
         "consultation-leaflet",
         "school-finance"
       ],
-      "forecast": "The council projects a budget deficit of over £400,000 by 2028/29. This is a forecast, not an agreed fundraising target.",
+      "forecast": "The council projects an accumulated budget deficit of over £400,000 by 2028/29. This is a forecast, not an agreed fundraising target.",
       "stage": "Ideas and feasibility only; no campaign, donations or pledges.",
       "feedbackPrivacy": "Private human review; no publication or automatic forwarding.",
       "questions": [
@@ -1036,10 +1054,10 @@
       ]
     },
     {
-      "rank": 3,
-      "title": "Test the local demand forecast",
-      "tag": "High priority",
-      "effort": "Medium–high",
+      "rank": 4,
+      "title": "Check the pupil-number forecast",
+      "tag": "Optional contribution",
+      "effort": "Share one dated public source, or a question about pupil numbers or local housing.",
       "evidence": "School and local forecasts published; assumptions need scrutiny",
       "why": "The borough trend is clear, but a borough average cannot settle the case for one school. Compare forecasts with actual admissions, local cohorts and dated housing-delivery assumptions.",
       "next": "Test the published school and Kew-area forecasts against their inputs and past errors. Reconcile dated housing assumptions and examine credible delivery scenarios.",
@@ -1050,14 +1068,15 @@
         "consultation-leaflet",
         "school-organisation-june-2026",
         "kew-area-forecast-2025"
-      ]
+      ],
+      "id": "option-demand"
     },
     {
-      "rank": 4,
+      "rank": 5,
       "id": "option-enrolment",
-      "title": "Raise awareness to boost enrolment",
-      "tag": "An idea to develop with the school",
-      "effort": "Medium–high",
+      "title": "Help more families find the school",
+      "tag": "Develop with the school",
+      "effort": "Suggest one local group or place where the school could share verified information.",
       "evidence": "Needs available places, school coordination and a recovery budget",
       "why": "Help local families discover the school through nurseries, parent groups, community notices, word of mouth and social media. Give them verified school information and a direct route to enquire about a visit; assess any sustained increase in enrolment against a costed recovery plan.",
       "next": "Agree a time-limited recruitment pilot with the school; establish available year groups, previous recruitment results, owners and costs. Seek a school/council assessment of what sustained increase, by when, would change the recovery plan.",
@@ -1101,10 +1120,10 @@
       ]
     },
     {
-      "rank": 5,
-      "title": "Audit the actual saving from closure",
-      "tag": "High priority",
-      "effort": "Medium–high",
+      "rank": 6,
+      "title": "Check what closing would really save",
+      "tag": "Optional contribution",
+      "effort": "Share a public cost figure or ask which costs would continue after closure.",
       "evidence": "PFI arrangement documented; closure cost model missing",
       "why": "The useful comparison is the avoidable cost of keeping the school open against the full cost of closing it. Continuing building payments could change the balance.",
       "next": "Seek an annual cash-flow comparison including private finance initiative obligations, transition costs, redundancy, transport and any site-use income. Separate costs that end from costs that continue.",
@@ -1115,13 +1134,14 @@
         "school-finance",
         "school-balances-mar-2026",
         "kew-finance-expenditure-history"
-      ]
+      ],
+      "id": "option-5"
     },
     {
-      "rank": 6,
-      "title": "Document pupil impacts and receiving-school capacity",
-      "tag": "High priority",
-      "effort": "Medium",
+      "rank": 7,
+      "title": "Show what a move would mean for children",
+      "tag": "Optional contribution",
+      "effort": "Suggest one question about support, safe journeys, siblings or available places.",
       "evidence": "Transition commitments published; detailed impact evidence still sought",
       "why": "Decision-makers need practical evidence about each year group, additional support, safe journeys, accessibility, continuity and siblings. Aggregate empty places do not answer every family-level question.",
       "next": "Request capacity by year group and provision for special educational needs and disabilities (SEND). Submit anonymised, specific examples with realistic mitigations and alternatives.",
@@ -1131,36 +1151,22 @@
         "planning-nov-2025",
         "consultation-leaflet",
         "school-organisation-eina-2026"
-      ]
-    },
-    {
-      "rank": 7,
-      "title": "Put the evidence through every formal decision stage",
-      "tag": "Essential alongside 1–6",
-      "effort": "Low–medium",
-      "evidence": "Public participation rules available",
-      "why": "A concise, referenced case is easier to assess than a signature count alone. Coordinate who addresses budgets, demand, alternatives and pupil impacts, while preserving each person's own views.",
-      "next": "Respond through the official council-linked form by its stated date, 16 October 2026. Keep a copy, check later committee agendas and respond again during any statutory representation period.",
-      "limits": "A petition is a route to consideration, not a veto. Public campaigning does not replace a response during the formal representation period.",
-      "refs": [
-        "participation",
-        "petitions",
-        "guidance-2026",
-        "consultation-leaflet"
-      ]
+      ],
+      "id": "option-6"
     },
     {
       "rank": 8,
-      "title": "Obtain a focused legal review if a concrete defect emerges",
-      "tag": "Conditional",
-      "effort": "High / professional costs",
+      "title": "Flag a possible legal problem",
+      "tag": "Conditional specialist review",
+      "effort": "Point to a specific document or process concern. Seek specialist advice promptly about any legal deadline.",
       "evidence": "Depends on the actual proposal and decision record",
       "why": "An education or public-law solicitor can assess a specific concern about the process, evidence or legal duties once the relevant documents are available.",
       "next": "Provide the notice, consultation material, decision report and a precise chronology. Ask promptly about applicable deadlines and remedies.",
       "limits": "Disagreement with the merits is not by itself a legal defect. Parents do not have a general direct right of appeal to the Schools Adjudicator for a community-school closure. This ranking is not legal advice.",
       "refs": [
         "guidance-2026"
-      ]
+      ],
+      "id": "option-8"
     }
   ]
 }
