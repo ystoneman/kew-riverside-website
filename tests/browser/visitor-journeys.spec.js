@@ -32,7 +32,7 @@ test('Homepage: responsive copy keeps words separated on mobile and desktop', as
       await expect(story).toBeVisible();
       await expect(story).toHaveAccessibleName(/family|story|chose/i);
       for (const [selector, wording] of [
-        ['.discovery-heading > p', 'the evidence or a way'],
+        ['.discovery-heading > p', 'Shortcuts to pages and answers on this website.'],
         ['#visit-school .visit-school-action > p', 'page. Please check visit availability'],
       ]) {
         const copy = page.locator(selector);
@@ -63,22 +63,21 @@ test('Prospective families can enquire directly from Home and Options without a 
   await expect(option.locator('a[href^="https://www.kewriverside.richmond.sch.uk/page/"]').filter({ hasText: 'Ask the school about visits and places' })).toBeVisible();
 });
 
-test('Proposal presents six evidence questions, optional detail and the official response', async ({ page }) => {
+test('Proposal presents six plain questions with children first and the official response independent', async ({ page }) => {
   await page.goto('/proposal.html#questions');
-  const ids = ['question-budget', 'question-alternatives', 'question-closure-costs', 'question-demand', 'question-continuity', 'question-learning'];
+  const ids = ['question-continuity', 'question-learning', 'question-budget', 'question-closure-costs', 'question-demand', 'question-alternatives'];
   expect(await page.locator('#questions .question-list > article').evaluateAll(items => items.map(item => item.id))).toEqual(ids);
   for (const id of ids) {
     const item = page.locator('#' + id);
     await expect(item.getByRole('heading', { level: 3 })).toBeVisible();
-    await expect(item.locator(':scope > p a')).toHaveCount(id === 'question-continuity' ? 2 : 1);
-    await expect(item.locator('details')).not.toHaveAttribute('open', '');
+    await expect(item.locator(':scope > p a[href$=".html"], :scope > p a[href*=".html#"]')).toHaveCount(1);
+    await expect(item.locator(':scope > p a[href$=".html"], :scope > p a[href*=".html#"]')).toHaveAccessibleName(/\S/);
+    await expect(item.locator('details')).toHaveCount(0);
   }
   const budget = page.locator('#question-budget');
-  await budget.locator('summary').focus();
-  await page.keyboard.press('Enter');
-  await expect(budget.locator('details')).toHaveAttribute('open', '');
-  await expect(budget).toContainText('Distinguish actuals from forecasts');
-  await expect(page.locator('#questions')).toContainText('without waiting for every answer');
+  await expect(budget).toContainText(/March 2026/);
+  await expect(budget).toContainText(/2028\/29/);
+  await expect(page.locator('#questions')).toContainText(/respond without waiting for answers/i);
   await expect(page.locator('#plan-respond a.button.primary')).toHaveAttribute('href', /docs\.google\.com\/forms/);
 });
 
@@ -146,6 +145,7 @@ test('Homepage: six clear entry routes lead to answers, dates, evidence and part
   await page.goto('/index.html');
   const routes = page.locator('#find-your-way .route-card');
   expect(await routes.evaluateAll(links => links.map(link => link.getAttribute('href')))).toEqual(entryRoutes);
+  expect((await routes.locator('.route-destination').allTextContents()).map(text => text.trim())).toEqual(['Options', 'Proposal & dates · Timeline', 'Understand', 'Evidence', 'Share ideas', 'FAQ · School places']);
   for (const href of entryRoutes) {
     await page.goto('/index.html');
     const link = page.locator(`#find-your-way a[href="${href}"]`);
@@ -271,7 +271,7 @@ test('FAQ: topic links restore answers hidden by a previous search', async ({ pa
   await page.goto('/faq.html');
   await page.getByRole('searchbox', { name: 'Find an answer', exact: true }).fill('zz-no-matching-answer-zz');
   await expect(page.locator('#school-places')).toBeHidden();
-  await activate(page.locator('a[href="#school-places"]'), hasTouch);
+  await activate(page.locator('.faq-topics a[href="#school-places"]'), hasTouch);
   await expect(page.locator('#faq-query')).toHaveValue('');
   await expect(page.locator('#school-places')).toBeVisible();
   await expect(page.locator('#school-places')).toBeInViewport();
@@ -359,7 +359,7 @@ test('Parent plan: correct PTA dates, independent video permission and official 
   await expect(page.locator('#plan-respond')).toContainText('does not replace your own official response');
   await expect(page.locator('#plan-share')).toContainText('require explicit YouTube publication permission');
   await expect(page.locator('#plan-share')).toContainText('optional news-media permission');
-  await expect(page.locator('.parent-reassurance')).toContainText('Keep following any admissions or SEND instructions');
+  await expect(page.locator('.parent-reassurance')).toContainText('Keep following any admissions or SEND (special educational needs and disabilities) instructions');
   for (const href of ['letters.html', 'videos.html', 'feedback.html?kind=evidence#feedback-form', 'feedback.html?kind=meeting#feedback-form', 'options.html#options']) {
     await page.goto('/proposal.html#parent-plan');
     await activate(page.locator(`#parent-plan a[href="${href}"]`), hasTouch);

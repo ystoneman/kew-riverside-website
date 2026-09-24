@@ -1,0 +1,248 @@
+const { test, expect } = require('./fixtures');
+
+async function activate(locator, hasTouch) {
+  if (await locator.evaluate(node => document.documentElement.classList.contains('has-orientation') && Boolean(node.closest('.site-orientation')))) {
+    // Locator auto-scroll can scroll the whole document to a sticky ancestor.
+    // A visitor instead taps the visible control, scrolling only its menu panel.
+    await locator.evaluate(node => {
+      const panel = node.closest('.section-panel, .mobile-menu nav');
+      if (!panel) return;
+      const item = node.getBoundingClientRect(), viewport = panel.getBoundingClientRect();
+      if (item.top < viewport.top) panel.scrollTop -= viewport.top - item.top;
+      else if (item.bottom > viewport.bottom) panel.scrollTop += item.bottom - viewport.bottom;
+    });
+    const bounds = await locator.boundingBox();
+    const point = { x: bounds.x + bounds.width / 2, y: bounds.y + bounds.height / 2 };
+    if (hasTouch) await locator.page().touchscreen.tap(point.x, point.y);
+    else await locator.page().mouse.click(point.x, point.y);
+  } else if (hasTouch) await locator.tap();
+  else await locator.click();
+}
+const mainPages = [
+  ['index.html', 'Home'], ['about.html', 'About'], ['proposal.html', 'Proposal & dates'],
+  ['faq.html', 'FAQ'], ['understand.html', 'Understand'], ['options.html', 'Options'],
+  ['lessons.html', 'Lessons'], ['evidence.html', 'Evidence'],
+];
+const menuNames = ['Parent action plan', 'Home', 'About', 'Proposal & dates', 'FAQ', 'Understand', 'Options', 'Lessons', 'Evidence'];
+
+async function activeSection(page) {
+  return page.locator('.section-links a[aria-current="location"]').evaluateAll(links => links.length === 1 ? links[0].dataset.sectionId : null);
+}
+async function expectUncovered(page, target) {
+  await expect(target).toBeInViewport();
+  const boxes = await Promise.all([page.locator('.site-orientation').boundingBox(), target.boundingBox()]);
+  expect(boxes[1].y, 'The destination clears the persistent orientation region').toBeGreaterThanOrEqual(boxes[0].y + boxes[0].height - 1);
+}
+
+test('Orientation: each main page has a stable identity and the complete menu in the same order', async ({ page, hasTouch }) => {
+  for (const [file, name] of mainPages) {
+    await page.goto('/' + file);
+    await expect(page.locator('.site-orientation .page-name')).toHaveText(name);
+    await expect(page.locator('.mobile-menu')).toHaveCount(1);
+    const menu = page.locator('.mobile-menu');
+    await activate(menu.locator(':scope > summary'), hasTouch);
+    const names = await menu.locator('a').allTextContents();
+    expect(names.slice(0, menuNames.length).map(text => text.trim())).toEqual(menuNames);
+    await expect(menu.getByRole('link', { name, exact: true })).toHaveAttribute('aria-current', 'page');
+    for (const [label, href] of [['Community letters', 'letters.html'], ['Share ideas', 'feedback.html']]) {
+      await expect(menu.getByRole('link', { name: label, exact: true })).toHaveAttribute('href', href);
+    }
+  }
+});
+
+test('Orientation: the complete menu works on desktop and retains a return to the current section', async ({ page, hasTouch }) => {
+  await page.goto('/evidence.html#method');
+  const menu = page.locator('.mobile-menu');
+  await activate(menu.locator(':scope > summary'), hasTouch);
+  await activate(menu.getByRole('link', { name: 'About', exact: true }), hasTouch);
+  await expect(page).toHaveURL(/about\.html$/);
+  await expect(page.locator('.page-name')).toHaveText('About');
+  await page.goBack();
+  await expect(page).toHaveURL(/evidence\.html#method$/);
+  await expect(page.locator('#method')).toBeInViewport();
+  await activate(menu.locator(':scope > summary'), hasTouch);
+  await activate(menu.getByRole('link', { name: 'Options', exact: true }), hasTouch);
+  await expect(page).toHaveURL(/options\.html$/);
+  await expect(page.locator('.page-name')).toHaveText('Options');
+});
+
+test('Orientation: passive reading updates location without changing URL, history or keyboard focus', async ({ page }) => {
+  await page.goto('/evidence.html');
+  const summary = page.locator('.mobile-menu > summary');
+  await summary.focus();
+  const initial = await page.evaluate(() => ({ url: location.href, history: history.length }));
+  for (const id of ['source-search', 'earlier-record', 'method']) {
+    await page.locator('#' + id).evaluate(node => node.scrollIntoView({ block: 'start', behavior: 'instant' }));
+    await expect.poll(() => activeSection(page)).toBe(id);
+    await expect(page.locator('.section-trail')).toContainText(await page.locator(`.section-links a[data-section-id="${id}"]`).textContent());
+    await expect(page.locator('.page-name')).toHaveText('Evidence');
+    await expect(page.locator('.site-orientation')).toBeInViewport({ ratio: 1 });
+    await expect(summary).toBeFocused();
+    expect(await page.evaluate(() => ({ url: location.href, history: history.length }))).toEqual(initial);
+    const region = await page.locator('.site-orientation').boundingBox();
+    expect(region.y).toBeGreaterThanOrEqual(-1);
+    expect(region.y + region.height).toBeLessThan(await page.evaluate(() => innerHeight));
+  }
+});
+
+test('Orientation: on-page links reveal nested content, repeat safely and keep Back useful', async ({ page, hasTouch }) => {
+  await page.goto('/options.html#options');
+  const sections = page.locator('.page-sections');
+  await activate(sections.locator(':scope > summary'), hasTouch);
+  await activate(sections.locator('a[data-section-id="option-crowdfunding"]'), hasTouch);
+  const funding = page.locator('#option-crowdfunding > details.option-card');
+  await expect(page).toHaveURL(/#option-crowdfunding$/);
+  await expect(funding).toHaveAttribute('open', '');
+  await expect(sections).not.toHaveAttribute('open', '');
+  await expectUncovered(page, funding.locator(':scope > summary'));
+  await activate(funding.locator(':scope > summary'), hasTouch);
+  await expect(funding).not.toHaveAttribute('open', '');
+  await activate(sections.locator(':scope > summary'), hasTouch);
+  await activate(sections.locator('a[data-section-id="option-crowdfunding"]'), hasTouch);
+  await expect(funding).toHaveAttribute('open', '');
+  await expectUncovered(page, funding.locator(':scope > summary'));
+  await page.goBack();
+  await expect(page).toHaveURL(/#options$/);
+  await expect(page.locator('#options h1')).toBeInViewport();
+});
+
+test('Orientation: section tracking excludes closed content and filtered-out FAQ groups', async ({ page }) => {
+  await page.goto('/faq.html#learning');
+  await expect(page.locator('h1')).toHaveText('FAQ');
+  const search = page.getByRole('searchbox', { name: 'Find an answer', exact: true });
+  await search.fill('no-matching-answer-orientation-test');
+  await expect.poll(async () => page.locator('.section-links a[aria-current="location"]').evaluateAll(links => links.every(link => {
+    const target = document.getElementById(link.dataset.sectionId);
+    if (!target) return false;
+    for (let node = target; node; node = node.parentElement) {
+      if (node.hidden || getComputedStyle(node).display === 'none') return false;
+      if (node !== target && node.tagName === 'DETAILS' && !node.open && !node.querySelector(':scope > summary')?.contains(target)) return false;
+    }
+    return true;
+  }))).toBe(true);
+  await expect(page.locator('.page-name')).toHaveText('FAQ');
+  await search.fill('');
+  await page.goto('/understand.html#forecast-checks');
+  const detail = page.locator('#forecast-detail');
+  if (await detail.getAttribute('open') !== null) await detail.locator(':scope > summary').click();
+  await page.locator('#forecast-checks').evaluate(node => node.scrollIntoView({ block: 'start', behavior: 'instant' }));
+  await expect.poll(async () => page.locator('.section-links a[aria-current="location"]').evaluateAll(links => links.every(link => {
+    const target = document.getElementById(link.dataset.sectionId);
+    return target && (target.id === 'forecast-detail' || !target.closest('#forecast-detail:not([open])'));
+  }))).toBe(true);
+});
+
+test('Orientation: menus share keyboard focus, Escape and outside-dismissal rules', async ({ page, hasTouch, browserName }) => {
+  await page.goto('/options.html');
+  const menu = page.locator('.mobile-menu');
+  const sections = page.locator('.page-sections');
+  // Start as a keyboard visitor; iOS emulation retains its touch navigation
+  // starting point when synthetic Tab events follow an earlier touch sequence.
+  await sections.locator(':scope > summary').focus();
+  await page.keyboard.press('Enter');
+  await expect(sections).toHaveAttribute('open', '');
+  const next = browserName === 'webkit' && process.platform === 'darwin' ? 'Alt+Tab' : 'Tab';
+  await page.keyboard.press(next);
+  await expect(sections.locator('.section-links a').first()).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(sections).not.toHaveAttribute('open', '');
+  await expect(sections.locator(':scope > summary')).toBeFocused();
+  await activate(menu.locator(':scope > summary'), hasTouch);
+  await activate(sections.locator(':scope > summary'), hasTouch);
+  await expect(menu).not.toHaveAttribute('open', '');
+  await expect(sections).toHaveAttribute('open', '');
+  await activate(menu.locator(':scope > summary'), hasTouch);
+  await expect(sections).not.toHaveAttribute('open', '');
+  await expect(menu).toHaveAttribute('open', '');
+  const bottom = await page.locator('.site-orientation').evaluate(node => node.getBoundingClientRect().bottom);
+  // The expanded menu covers the heading on narrow screens. Use the visible
+  // page gutter, rather than trying to click content underneath the popup.
+  expect(await page.evaluate(y => !document.elementFromPoint(4, y)?.closest('.site-orientation'), bottom + 12)).toBe(true);
+  if (hasTouch) await page.touchscreen.tap(4, bottom + 12);
+  else await page.mouse.click(4, bottom + 12);
+  await expect(menu).not.toHaveAttribute('open', '');
+});
+
+test('Orientation: copying the current section reports success without navigating', async ({ page, hasTouch, baseURL }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async value => { window.__sectionCopied = value; } } });
+  });
+  await page.goto('/options.html#option-crowdfunding');
+  await expect.poll(() => activeSection(page)).toBe('option-crowdfunding');
+  const before = await page.evaluate(() => ({ url: location.href, history: history.length }));
+  await activate(page.locator('.page-sections > summary'), hasTouch);
+  await activate(page.locator('.section-copy'), hasTouch);
+  await expect.poll(() => page.evaluate(() => window.__sectionCopied)).toBe(baseURL + '/options.html#option-crowdfunding');
+  await expect(page.locator('.section-copy-status')).toContainText(/copied/i);
+  expect(await page.evaluate(() => ({ url: location.href, history: history.length }))).toEqual(before);
+});
+
+test('Orientation: clipboard rejection exposes a selectable link instead of losing the action', async ({ page, hasTouch, baseURL }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async () => { throw new Error('Clipboard unavailable in this test'); } } });
+  });
+  await page.goto('/options.html#option-crowdfunding');
+  await expect.poll(() => activeSection(page)).toBe('option-crowdfunding');
+  await activate(page.locator('.page-sections > summary'), hasTouch);
+  await activate(page.locator('.section-copy'), hasTouch);
+  const fallback = page.getByRole('textbox', { name: 'Section link', exact: true });
+  await expect(fallback).toBeVisible();
+  await expect(fallback).toHaveAttribute('readonly', '');
+  await expect(fallback).toHaveValue(baseURL + '/options.html#option-crowdfunding');
+  await expect(fallback).toBeFocused();
+  expect(await fallback.evaluate(node => node.selectionStart === 0 && node.selectionEnd === node.value.length)).toBe(true);
+});
+
+test('Orientation: failed navigation enhancement leaves native page and section routes available', async ({ page, hasTouch }) => {
+  await page.route('**/navigation.js*', route => route.fulfill({ status: 503, contentType: 'application/javascript', headers: { 'x-test-fixture': 'intentional-error' }, body: '' }));
+  await page.goto('/options.html');
+  await expect(page.locator('.page-name')).toHaveText('Options');
+  const sections = page.locator('.page-sections');
+  await activate(sections.locator(':scope > summary'), hasTouch);
+  await activate(sections.locator('a[data-section-id="option-crowdfunding"]'), hasTouch);
+  await expect(page).toHaveURL(/#option-crowdfunding$/);
+  await expect(page.locator('#option-crowdfunding > details.option-card')).toHaveAttribute('open', '');
+  if (await sections.getAttribute('open') !== null) await activate(sections.locator(':scope > summary'), hasTouch);
+  const menu = page.locator('.mobile-menu');
+  await activate(menu.locator(':scope > summary'), hasTouch);
+  await activate(menu.getByRole('link', { name: 'About', exact: true }), hasTouch);
+  await expect(page).toHaveURL(/about\.html$/);
+  await expect(page.locator('.page-name')).toHaveText('About');
+});
+
+test('Orientation: short screens keep the complete menu scrollable and its last route reachable', async ({ page, hasTouch }) => {
+  await page.setViewportSize({ width: 667, height: 375 });
+  await page.goto('/options.html#option-crowdfunding');
+  await activate(page.locator('.mobile-menu > summary'), hasTouch);
+  const panel = page.locator('.mobile-menu nav');
+  const last = panel.getByRole('link', { name: 'Research citations', exact: true });
+  await last.scrollIntoViewIfNeeded();
+  const bounds = await panel.boundingBox();
+  expect(bounds.y).toBeGreaterThanOrEqual(0);
+  expect(bounds.y + bounds.height).toBeLessThanOrEqual(376);
+  await expect(last).toBeInViewport({ ratio: 1 });
+  await activate(last, hasTouch);
+  await expect(page).toHaveURL(/lessons-sources\.html$/);
+  await expect(page.locator('.page-name')).toHaveText('Research citations');
+});
+
+test('Orientation: enlarged text retains readable controls and an uncovered section destination', async ({ page, hasTouch }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.goto('/options.html#option-crowdfunding');
+  // Capture every computed size first so nested labels do not multiply more than twice.
+  await page.locator('.site-orientation').evaluate(bar => {
+    const elements = [bar, ...bar.querySelectorAll('*')];
+    const sizes = elements.map(node => parseFloat(getComputedStyle(node).fontSize) * 2);
+    elements.forEach((node, i) => { node.style.fontSize = sizes[i] + 'px'; });
+  });
+  await expect(page.locator('.page-name')).toBeInViewport({ ratio: 1 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+  await activate(page.locator('.page-sections > summary'), hasTouch);
+  const link = page.locator('.section-links a[data-section-id="option-demand"]');
+  await link.scrollIntoViewIfNeeded();
+  await expect(link).toBeInViewport({ ratio: 1 });
+  await activate(link, hasTouch);
+  await expect(page.locator('#option-demand > details')).toHaveAttribute('open', '');
+  await expectUncovered(page, page.locator('#option-demand > details > summary'));
+  await expect(page.locator('#option-demand')).toBeFocused();
+});

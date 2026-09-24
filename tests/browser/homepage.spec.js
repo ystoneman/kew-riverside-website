@@ -37,10 +37,13 @@ test('Short homepage: visitors choose destinations before any long document or s
   await page.goto('/index.html');
   await expect(page.locator('main .source-card, main .action-card, main .school-roll-chart')).toHaveCount(0);
   await expect(page.locator('#find-your-way .route-card')).toHaveCount(6);
+  await expect(page.locator('#find-your-way .discovery-heading')).toContainText('Shortcuts to pages and answers on this website.');
+  expect((await page.locator('#find-your-way .route-arrow').allTextContents()).map(text => text.trim())).toEqual(Array(6).fill('→'));
   await expect(page.locator('#top')).toContainText(/proposal to close/i);
   await expect(page.locator('#top')).toContainText('No final decision has been made.');
   await expect(page.locator('#top')).toContainText(/16\s+October/i);
   await expect(page.locator('#research-shortcut a[href="lessons.html"]')).toBeVisible();
+  await expect(page.locator('#research-shortcut a[href="lessons.html"]')).toHaveAccessibleName(/Lessons/);
   await expect(page.locator('#research-shortcut a[href="lessons-report.pdf"]')).toBeVisible();
   await expect(page.locator('#visit-school a[href="understand.html#learning-and-results"]')).toBeVisible();
   await expect(page.locator('#find-your-way a[href="faq.html#school-places"]')).toBeVisible();

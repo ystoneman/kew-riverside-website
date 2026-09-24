@@ -257,7 +257,7 @@ test('Learning FAQ: remembered terms and incoming answer links recover from sear
   }
   await query.fill('zz-no-learning-answer-zz');
   await expect(page.locator('#learning')).toBeHidden();
-  await activate(page.locator('a[href="#learning"]'), hasTouch);
+  await activate(page.locator('.faq-topics a[href="#learning"]'), hasTouch);
   await expect(query).toHaveValue('');
   await expect(page.locator('#learning')).toBeInViewport();
   await expect(page.locator('main details:visible')).toHaveCount(16);

@@ -212,7 +212,7 @@ test('Long letter links open the complete story on arrival, hash changes and Bac
   expect(await firstArticle.locator('.suggestion-body').textContent()).toBe(first.body);
   await firstArticle.locator('summary').click();
   await expect(firstArticle.locator('details')).not.toHaveAttribute('open', '');
-  await page.locator('a[href="#letters"]').click();
+  await page.locator('main a[href="#letters"]').click();
   await expect(page).toHaveURL(/#letters$/);
   await page.goto('/letters.html#' + second.id);
   await expect(secondArticle.locator('details')).toHaveAttribute('open', '');

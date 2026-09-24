@@ -1,5 +1,32 @@
 const { test, expect, pages, headerLinks, expectDestination, expectStillArrival, captureSubmissions } = require('./fixtures');
 
+test('No JavaScript: page identity and native section routes retain nested content and recovery', async ({ page }) => {
+  await page.goto('/options.html');
+  await expect(page.locator('.page-name')).toHaveText('Options');
+  await expect(page.locator('.section-copy')).toBeHidden();
+  const sections = page.locator('.page-sections');
+  await sections.locator(':scope > summary').tap();
+  await sections.locator('a[data-section-id="option-crowdfunding"]').tap();
+  await expect(page).toHaveURL(/options\.html#option-crowdfunding$/);
+  await expect(page.locator('#option-crowdfunding > details.option-card')).toHaveAttribute('open', '');
+  await expect(page.locator('#option-crowdfunding .option-first')).toBeVisible();
+  await expect(page.locator('#option-crowdfunding')).toBeInViewport();
+  const menu = page.locator('.mobile-menu');
+  await menu.locator(':scope > summary').tap();
+  expect((await menu.locator('a').allTextContents()).slice(0, 4)).toEqual(['Parent action plan', 'Home', 'About', 'Proposal & dates']);
+  await expect(menu.getByRole('link', { name: 'Options', exact: true })).toHaveAttribute('aria-current', 'page');
+  await menu.getByRole('link', { name: 'FAQ', exact: true }).tap();
+  await expect(page.locator('h1')).toHaveText('FAQ');
+  await page.locator('.page-sections > summary').tap();
+  await page.locator('.section-links a[data-section-id="school-places"]').tap();
+  await expect(page).toHaveURL(/faq\.html#school-places$/);
+  await expect(page.locator('#school-places')).toBeInViewport();
+  await page.goBack();
+  await page.goBack();
+  await expect(page).toHaveURL(/options\.html#option-crowdfunding$/);
+  await expect(page.locator('#option-crowdfunding')).toBeInViewport();
+});
+
 test('Clarity pages preserve findings, funding questions and native process details without scripts', async ({ page }) => {
   await page.goto('/options.html#options');
   await expect(page.locator('#options h1')).toBeInViewport();

@@ -4,6 +4,30 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Page orientation and clearer Proposal questions
+
+- Keep the current page visible in one compact scrolling bar; add a curated section/subsection navigator, section-link copying with a selectable fallback, and the full page menu at every width. About follows Home; Options and Lessons are ordinary menu destinations. Keep exposed Community letters and Share ideas, the named Parent action plan and existing deep links, filters, downloads and no-script routes.
+- Make FAQ the actual heading and label all six homepage question cards with their existing destination page/section. Evidence’s old future-timeline anchor now points to Proposal & dates while preserving the historical record.
+- Put the two child-focused Proposal questions first, remove their repeated fold-outs and use plain source-attributed blocks with one relevant explanation link each. Preserve all question IDs. Label the research slides optional and allow normal browser opening from Proposal. Clarify verified request attribution and About’s accurate AI-use disclosure.
+- Preserve the owner’s supplied suggestions verbatim in the private navigation plan. Source checking corrected the suggested sibling wording, clarified the reserve/accumulated-deficit distinction and limited the forecast-check description to the available Kew-area evidence.
+
+Review: independent evidence, campaign and rendered UX implementation reviews found no remaining actionable findings after fixes for short-screen menu bounds, enlarged labels, Letters heading wrapping and inherited section-link layout. Checks and release status are recorded below as completed; no user-study results or real form submissions are claimed.
+
+Verification: focused interaction, failure fallback, keyboard/touch, enlarged-text and no-JavaScript checks passed. Full local/hosted validation and deployment are in progress. Native iPhone 17 / iOS 26.5 Safari testing was attempted, but the computer-use interface did not deliver the requested navigation and reported the simulator screenshot unavailable; this release has no verified native Safari interaction result. Browser emulation is tested separately.
+
+### Consented community letter
+
+- Added a contributor-authorised consultation letter to the existing Community letters board, dated 24 September 2026. The public transcript omits a short birthdate-related aside at the owner's request; the remaining wording and paragraph structure are preserved. The original PDF is not a public asset or repository file.
+- Retained the existing attributed opinion presentation, accurate AI-screening label, full-letter disclosure and removal route (J4). No interface or permission changes. Independent evidence/editorial planning and implementation reviews found no actionable issues. Lead-agent UX review inspected the unchanged long-letter presentation with fictional data at 390 and 1440 px; direct links open the letter with no horizontal overflow.
+
+Verification: independent source-to-transcript comparison confirms only the requested omission and whitespace normalisation. All 49 Python checks passed, and the 92-file public artifact passes schema/privacy validation and staging. The initial revision also passed all 1,329 local and hosted browser checks, with 15 expected skips. A concurrent main-branch release required a changelog-only conflict resolution; the approved transcript is unchanged. Updated-revision validation and deployment are pending; publication requires its automated checks to pass.
+
+## 24 September 2026 — Manageable Options and PTA session details
+
+Publication record: [PR #22](https://github.com/ystoneman/kew-riverside-website/pull/22) merged as `3463007` after [PR run 36045056456](https://github.com/ystoneman/kew-riverside-website/actions/runs/36045056456) passed at `fb74bf3`. [Main run 36047729062](https://github.com/ystoneman/kew-riverside-website/actions/runs/36047729062) passed validation, browser checks and Pages deployment on 24 September 2026 at 19:37 UTC. Both hosted runs passed all **1,390 browser checks with 15 expected skips**, **50 Python checks** and **94-public-file validation**. All 94 published HTTPS files matched the merged commit byte for byte. The concurrently approved community letter remains intact.
+
+Live browser verification: desktop Chromium (1440 × 900) and mobile WebKit (375 × 812) passed the seven closed contribution rows, 320-word initial layer, phone title/deadline/button, Parent plan and legacy response arrivals, keyboard disclosure, all eight funding question links, repeated links, Back/Forward, contextual feedback and direct school enquiry. All three PTA date/time/room pairs match the supplied flyer. Source/download references match the local reference exactly (Options 19/1, Proposal 21/2). All four screenshots were inspected; no horizontal overflow or script errors occurred. These are browser-emulation checks, not native Safari. External origins and non-GET/HEAD requests were blocked; no form or message was submitted.
+
 ### Options: a manageable first step for parents
 
 - Promote the official response and 16 October date into the first phone screen, with the printable checklist. Keep the original `#option-7` address and full later-stage participation guidance.
@@ -14,14 +38,7 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 Review: independent evidence and campaign implementation reviews passed. Evidence review found all 48 original detailed paragraphs/list items retained, with no lost source URLs or question links. Rendered UX review passed 320/375/1440 px, light/dark, keyboard, 200% text, nested/repeated links, Back and no JavaScript; all three PTA time/room pairs match the supplied flyer. Native iPhone 17 / iOS 26.5 Safari displayed the revised first screen; simulator taps did not respond, so native disclosure/touch/Back remain unverified. No real form was submitted.
 
-Verification: 32 focused browser checks passed across the affected flows; two initial failures were stale selectors in an existing ranking-link test, corrected without changing its exact council-PDF assertion. All 50 Python checks and 94-public-file validation/staging passed. The initial full suite passed 1,382 checks with 15 expected skips and eight failures, all from two older Options tests across four browser projects. Their setup now follows the renamed checklist and nested explanation while retaining PDF-content and contact-route assertions; the clean full rerun passed **1,390 browser checks with 15 expected skips** across all five browser projects. Lighthouse 13.5 reports accessibility 100 after increasing the new secondary text’s contrast. Its existing shared-brand accessible-name diagnostic is unscored and unchanged. Local preview only; not yet published.
-
-### Consented community letter
-
-- Added a contributor-authorised consultation letter to the existing Community letters board, dated 24 September 2026. The public transcript omits a short birthdate-related aside at the owner's request; the remaining wording and paragraph structure are preserved. The original PDF is not a public asset or repository file.
-- Retained the existing attributed opinion presentation, accurate AI-screening label, full-letter disclosure and removal route (J4). No interface or permission changes. Independent evidence/editorial planning and implementation reviews found no actionable issues. Lead-agent UX review inspected the unchanged long-letter presentation with fictional data at 390 and 1440 px; direct links open the letter with no horizontal overflow.
-
-Verification: independent source-to-transcript comparison confirms only the requested omission and whitespace normalisation. All 49 Python checks passed, and the 92-file public artifact passes schema/privacy validation and staging. The initial revision also passed all 1,329 local and hosted browser checks, with 15 expected skips. A concurrent main-branch release required a changelog-only conflict resolution; the approved transcript is unchanged. Updated-revision validation and deployment are pending; publication requires its automated checks to pass.
+Verification: 32 focused browser checks passed across the affected flows; two initial failures were stale selectors in an existing ranking-link test, corrected without changing its exact council-PDF assertion. All 50 Python checks and 94-public-file validation/staging passed. The initial full suite passed 1,382 checks with 15 expected skips and eight failures, all from two older Options tests across four browser projects. Their setup now follows the renamed checklist and nested explanation while retaining PDF-content and contact-route assertions; the clean full rerun passed **1,390 browser checks with 15 expected skips** across all five browser projects. Lighthouse 13.5 reports accessibility 100 after increasing the new secondary text’s contrast. Its existing shared-brand accessible-name diagnostic is unscored and unchanged. Publication and live asset verification are recorded above.
 
 ## 24 September 2026 — Clearer Options, Lessons and Proposal pages
 

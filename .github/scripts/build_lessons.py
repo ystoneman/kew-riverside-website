@@ -1,5 +1,6 @@
 """Build the optional historical-research pages from reviewed public data. Standard library only."""
 from pathlib import Path
+from build_navigation import render_navigation
 import json,html,re,argparse
 ROOT=Path(__file__).resolve().parents[2]
 D=json.loads((ROOT/'lessons-data.json').read_text())
@@ -68,6 +69,7 @@ for q in Q:
  claims.append(f'''<details class="lesson-claim" id="{esc(q['id'])}"><summary><span><strong>{esc(q['id'])} · {esc(q['title'])}</strong><span class="lesson-subtitle">{esc(q['kind'])}</span></span></summary><div><p>{esc(q['claim'])}</p><p>{refs(q['sources'])}</p><p class="source-note">{esc(q['locator'])}</p></div></details>''')
 appendix=f'''<p class="lesson-breadcrumb"><a href="lessons.html">Lessons from other schools</a> / Citations</p><header class="lesson-hero"><p class="eyebrow">Complete citations appendix · 22 September 2026</p><h1>Follow every claim <br>back to its source.</h1><p class="lesson-lead">45 source records and 49 evidence or interpretation entries. This is the complete register for this research pack, not a bibliography of all school closures.</p><p>Sources retain their dates, exact locations and inspection limits. Recommendations are labelled editorial inferences. Some original records may restrict automated access.</p><div class="button-row"><a class="button primary" href="lessons.html">Back to the research</a><a class="button" href="lessons-report.pdf" download>Download report &amp; appendix (PDF)</a></div></header><nav class="proposal-nav" aria-label="Appendix sections"><a href="#source-register">45 source records</a><a href="#claim-ledger">49 claims &amp; interpretations</a><a href="lessons.html#method">Method &amp; limits</a></nav><section class="lesson-section" id="source-register"><h2>The source register</h2><nav class="lesson-source-index" aria-label="Source identifiers">{''.join('<a href="#'+esc(s['id'])+'">'+esc(s['id'])+'</a>' for s in S)}</nav>{''.join(source_cards)}</section><section class="lesson-section" id="claim-ledger"><h2>Evidence and interpretation ledger</h2><p>Select an entry for its proposition, sources and exact location. S and G identify sources; the other identifiers describe cases, exhibits and interpretations.</p>{''.join(claims)}</section>'''
 outputs={'lessons.html':page('Lessons from other schools',body),'lessons-sources.html':page('Research citations',appendix)}
+outputs={name:render_navigation(name,text) for name,text in outputs.items()}
 if __name__=='__main__':
  ap=argparse.ArgumentParser();ap.add_argument('--check',action='store_true');args=ap.parse_args()
  for name,text in outputs.items():

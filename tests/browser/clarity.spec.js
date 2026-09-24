@@ -211,6 +211,31 @@ test('Proposal: fuller roles and decision records open with keyboard and touch',
   }
 });
 
+test('Proposal: optional research opens as a document while Lessons and existing downloads remain available', async ({ page, hasTouch }) => {
+  await page.goto('/proposal.html#other-schools');
+  const research = page.locator('#other-schools');
+  const pdf = research.locator('a[href="lessons-report.pdf"]');
+  await expect(pdf).toHaveAccessibleName(/Optional:.*PDF, 44 pages/);
+  await expect(pdf).not.toHaveAttribute('download');
+  await expect(research).toContainText('You don’t need to read this to respond.');
+  await activate(research.locator('a[href="lessons.html"]'), hasTouch);
+  await expect(page).toHaveURL(/lessons\.html$/);
+  await expect(page.locator('main')).toBeVisible();
+  await page.goBack();
+  await expect(page).toHaveURL(/proposal\.html#other-schools$/);
+  await expect(research).toBeInViewport();
+  // A local HTML stand-in verifies normal document navigation/Back without
+  // assuming the visitor's browser has an inline PDF viewer configured.
+  await page.route('**/lessons-report.pdf', route => route.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>Research document test</title><h1>Research document test</h1>' }));
+  await activate(pdf, hasTouch);
+  await expect(page).toHaveURL(/lessons-report\.pdf$/);
+  await expect(page.getByRole('heading', { name: 'Research document test' })).toBeVisible();
+  await page.goBack();
+  await expect(research).toBeInViewport();
+  await page.goto('/index.html');
+  await expect(page.locator('#research-shortcut a[href="lessons-report.pdf"]')).toHaveAttribute('download', 'lessons-report.pdf');
+});
+
 test('Clarity pages: enlarged main text reflows at a narrow width', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 700 });
   for (const url of ['/options.html#options', '/proposal.html#timetable', '/lessons.html#key-lessons']) {
