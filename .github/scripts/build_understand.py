@@ -9,6 +9,7 @@ import io
 import json
 from html import escape
 from pathlib import Path
+from build_navigation import render_navigation
 import re
 import build_learning
 import build_case_evidence
@@ -157,7 +158,7 @@ def render(data, case_data=None):
 <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="strict-origin-when-cross-origin"><meta name="theme-color" content="#143936">
 <title>Understand the situation | Kew Riverside &amp; Richmond school data</title><meta name="description" content="Explore dated pupil trends, forecast checks, school finances, places and learning results for Kew Riverside and Richmond schools."><meta property="og:title" content="Understand the situation · Kew Riverside"><meta property="og:description" content="Dated, sourced answers on pupil numbers, forecasts, school finances, places and learning results."><meta property="og:type" content="website"><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css?v=2026092303"><link rel="stylesheet" href="participation.css?v=2026092303"><link rel="stylesheet" href="discovery.css?v=2026092303"><link rel="stylesheet" href="parent-plan.css?v=2026092303"><link rel="stylesheet" href="button-motion.css"><link rel="stylesheet" href="understand.css?v=2026092402"><script src="navigation.js?v=2026092202" defer></script><script src="understand.js?v=2026092401" defer></script><link rel="stylesheet" href="analytics.css?v=2026092303"><script src="analytics.js?v=2026092301" defer></script><link rel="stylesheet" href="voice.css?v=2026092303"><script src="voice.js?v=2026092301" defer></script><link rel="stylesheet" href="theme.css?v=2026092201"><script src="theme.js?v=2026092201"></script></head>
 '''
-    return head + header + body + footer
+    return render_navigation('understand.html', head + header + body + footer)
 
 
 def csv_text(data):

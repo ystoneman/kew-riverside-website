@@ -205,7 +205,9 @@ class SiteStructureTests(unittest.TestCase):
                 mobile = navigation_destinations(name, page.navigation['mobile-menu'])
                 participation = navigation_destinations(name, page.navigation['participation-nav'])
                 self.assertEqual(desktop, expected_desktop, 'Desktop destinations differ between pages')
-                self.assertEqual(mobile, desktop | {('index.html', '')}, 'Mobile menu must retain every desktop destination and Home')
+                self.assertTrue(desktop | {('index.html', '')} <= mobile, 'Full menu must retain every desktop destination and Home')
+                required_pages = {'index.html', 'about.html', 'proposal.html', 'faq.html', 'understand.html', 'options.html', 'lessons.html', 'evidence.html', 'letters.html', 'feedback.html', 'videos.html', 'supporters.html', 'privacy.html', 'corrections.html', 'lessons-sources.html'}
+                self.assertEqual({file for file, fragment in mobile}, required_pages | ({'sent.html'} if name == 'sent.html' else set()), 'Full menu must expose the agreed page set')
                 self.assertEqual(participation, {('letters.html', ''), ('feedback.html', '')})
 
     def test_printed_visit_route_has_matching_immediate_and_native_destinations(self):
