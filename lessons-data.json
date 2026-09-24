@@ -802,10 +802,25 @@
     },
     "comparison_lessons": [
       {
-        "theme": "A financial alternative",
-        "reprieve": "Fletching: revised budget and evidenced support helped stop the initial proposal.",
-        "closure": "Broad Oak: a revised federation budget still ran into deficit; leadership and recruitment assumptions were challenged.",
-        "implication": "Test every year of the plan and show credible staffing, reserves, pupil demand and partner commitments.",
+        "id": "financial-plan",
+        "theme": "An alternative must withstand financial scrutiny",
+        "outcomes": [
+          {
+            "case_ids": [
+              "fletching"
+            ],
+            "text": "Closure consultation halted in 2019."
+          },
+          {
+            "case_ids": [
+              "broad-oak"
+            ],
+            "text": "School closed in 2020."
+          }
+        ],
+        "record": "Fletching’s short-term budget improved with largely one-off support; its roll and the diocese’s position also supported the recommendation. Broad Oak’s revised federation budget still forecast a deficit, with concerns about leadership cover and pupil recruitment.",
+        "limit": "Fletching still expected recurring deficits, so the reprieve did not demonstrate long-term recovery. Its rural setting differs from Kew.",
+        "question": "Does the alternative work across every forecast year, with credible staffing, pupil demand and partner commitments?",
         "sources": [
           "S01",
           "S02",
@@ -814,10 +829,25 @@
         ]
       },
       {
-        "theme": "External challenge",
-        "reprieve": "St John the Divine: closure was rejected after scrutiny of process and the receiving school's viability.",
-        "closure": "St Bartholomew's: closure was approved, with an extra term for vulnerable pupils' transition.",
-        "implication": "Tie each challenge to a specific defect and its practical remedy. A delay and a lasting reprieve are different outcomes.",
+        "id": "decision-and-transition",
+        "theme": "A challenge can change a decision—or improve transition",
+        "outcomes": [
+          {
+            "case_ids": [
+              "st-john"
+            ],
+            "text": "Closure proposal rejected in 2025."
+          },
+          {
+            "case_ids": [
+              "st-bartholomew"
+            ],
+            "text": "Closure approved, with an extra term for transition; closed in December 2024."
+          }
+        ],
+        "record": "St John’s decision found process deficiencies and insufficient evidence that pupil transfers would sustain the receiving school. St Bartholomew’s decision accepted closure but required more time for vulnerable pupils’ transition.",
+        "limit": "A delay is a different outcome from a reprieve. These faith-school referral routes are not an automatic right of appeal for Kew parents.",
+        "question": "What specific concern needs checking, and what remedy would address it?",
         "sources": [
           "S08",
           "S23",
@@ -825,10 +855,29 @@
         ]
       },
       {
-        "theme": "Public mobilisation",
-        "reprieve": "Five Isle of Wight proposals stopped after petitions were recorded.",
-        "closure": "Cowes also had a petition, and a councillor spoke on its behalf; it closed.",
-        "implication": "Use mobilisation to recruit evidence, expertise and commitments. These observations do not measure whether petitions helped.",
+        "id": "petition-evidence",
+        "theme": "Petitions accompanied different outcomes",
+        "outcomes": [
+          {
+            "case_ids": [
+              "godshill",
+              "brading",
+              "oakfield",
+              "wroxall",
+              "arreton"
+            ],
+            "text": "Five closure proposals stopped in 2024–25."
+          },
+          {
+            "case_ids": [
+              "cowes"
+            ],
+            "text": "Also had a petition; closed in August 2025."
+          }
+        ],
+        "record": "Petitions were recorded for all six schools, but the records do not measure their effect or establish a winning signature threshold.",
+        "limit": "These schools belonged to one local programme. The minutes do not isolate individual reasons for the Brading, Oakfield and Wroxall decisions.",
+        "question": "Could community support help identify useful evidence, relevant expertise or credible commitments?",
         "sources": [
           "S03",
           "S05",

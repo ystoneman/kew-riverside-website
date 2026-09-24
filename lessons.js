@@ -30,6 +30,7 @@
   }
   window.addEventListener('hashchange', () => revealTarget(location.hash));
   document.addEventListener('click', event => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     const link = event.target.closest('a[href^="#"]');
     if (link && link.hash === location.hash) revealTarget(link.hash);
   });
