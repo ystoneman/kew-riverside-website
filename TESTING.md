@@ -18,6 +18,18 @@ On Linux, install browser system dependencies with `npx playwright install --wit
 
 The browser harness serves the site locally over HTTP/2, as GitHub Pages does, uses fictional form inputs, and intercepts external requests. The four legacy-route tests observe requests instead of routing them (see Legacy redirect fix below). It never delivers a test submission to Formspree. Hosted CAPTCHA, real inbox delivery, council submission and real contribution moderation are outside the automated suite.
 
+## Evidence and numbers findings-first revision — 24 September 2026
+
+Following the owner's clarification, Evidence now presents the selected London outcomes and explanations before source navigation, and Understand presents three findings before topic links. **21 focused browser checks passed** across all four scripted projects and iPhone no-JavaScript: findings arrival, source escape/Back, case links, saved-filter arrivals, enlarged text and Numbers links. Saved-search URLs are tested as fresh arrivals from the homepage; an ordinary same-document “Key findings” jump retains its original purpose. Independent UX rechecks repeated 16 saved-search arrivals across Chromium/WebKit, with exact URLs, reset and Back preserved.
+
+All **48 Python checks**, builder/export freshness, script syntax, whitespace and **91 public-file** validation passed. A broad run was stopped under heavy machine load after 109 passes, with four interrupted and 1,187 unrun; there is no completed new full-suite result for this follow-up. The previous iteration's full result below is kept distinct. Native iPhone 17 / iOS 26.5 Safari displayed the new Evidence findings and refreshed Numbers introduction in portrait; native web-view taps and Back remain unverified. Changes remain local and unpublished.
+
+## Earlier Evidence and numbers simplification — 24 September 2026
+
+New and extended browser cases cover the short-answer arrival, native chart/library disclosures by keyboard and touch, all 57 sources in one library, visible resolved-gap status, source searches, saved filters, old/repeated chart and source anchors, Back, and 200% enlarged main text at 320 px. No-JavaScript and failed-script checks preserve original sources, chart/table access and incoming links. Modified source-link clicks leave the original library closed; anonymous gaps no longer expand on fragment-free arrival.
+
+Final local run (Node 25.9.0): **1,268 browser checks passed, 15 expected skips**. The last two Evidence fixes then passed **68 focused checks** across all four scripted browser projects. **48 Python checks** passed; both builders were current and **91 public assets** validated/staged. Tests used intercepted external submissions and isolated result directories. iPhone 17 / iOS 26.5 Safari rendered Evidence in portrait/landscape and the financial summary in portrait, but simulator web-view input did not respond: native taps/swipes/Back remain unverified. Chromium/WebKit emulation covered the interactions. See CHANGELOG.md for review and release status.
+
 ## Case research integration — 23 September 2026
 
 The integrated branch passed the complete Playwright suite: **1,247 passed, 15 expected skips**. After the final correction to the undated leaflet label, changed-page date stamps and the official council decision link, the **452 affected browser checks passed** across iPhone WebKit, Android Chromium, desktop Chromium/WebKit and the no-JavaScript project. They include the six homepage routes, source filtering and repeated links, finance/forecast tables and sources, response questions, light/dark appearances, direct family enquiries and native disclosures. No real form was submitted.

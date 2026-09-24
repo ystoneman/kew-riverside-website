@@ -1,5 +1,8 @@
 'use strict';
 (() => {
+  // Keep every existing deep target readable when scripting is unavailable.
+  // Enhanced arrivals start with the short answers, then reveal a linked detail.
+  document.querySelectorAll('details[data-overview-detail]').forEach(detail => { detail.open = false; });
   function revealLinkedDetails() {
     let id;
     try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
@@ -15,6 +18,7 @@
     target.scrollIntoView({ behavior: 'instant', block: 'start' });
   }
   window.addEventListener('hashchange', revealLinkedDetails);
+  window.addEventListener('pageshow', revealLinkedDetails);
   document.addEventListener('click', event => {
     const link = event.target.closest('a[href^="#"]');
     if (link && link.hash === location.hash) revealLinkedDetails();

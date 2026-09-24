@@ -58,7 +58,7 @@ test('Short homepage: visitors choose destinations before any long document or s
 
 test('Dedicated pages: local navigation exposes depth and retains a homepage recovery path', async ({ page, hasTouch }) => {
   await page.goto('/evidence.html#records');
-  const evidenceNav = page.locator('#evidence-navigation');
+  const evidenceNav = page.locator('#evidence-navigation, .evidence-more');
   for (const id of ['evidence', 'records', 'source-lessons-report', 'earlier-record', 'gaps', 'method']) {
     const link = evidenceNav.locator(`a[href="#${id}"]`);
     await expect(link).toBeVisible();

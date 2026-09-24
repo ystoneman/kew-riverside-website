@@ -173,6 +173,7 @@ test('Expanded borough chart keeps a solid surface in light and dark appearances
   ]) {
     await page.emulateMedia({colorScheme:scheme});
     await page.goto('/evidence.html');
+    await page.locator('#council-figures > summary').click();
     await page.locator('#borough-context > summary').click();
     const chart=page.locator('#borough-context .chart-card');
     await expect(chart).toBeVisible();

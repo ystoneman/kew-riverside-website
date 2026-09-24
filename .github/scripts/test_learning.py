@@ -301,13 +301,15 @@ class LearningDataTests(unittest.TestCase):
             self.assertAlmostEqual(baseline, baselines[0], msg='Bars must begin at a common zero baseline')
         labels = [node.text.strip() for node in self.section.find('text') if re.fullmatch(r'\d+%', node.text.strip())]
         self.assertEqual(labels, [f'{value}%' for value in values])
-        lead = next(node for node in self.section.find('p') if 'section-lead' in node.attrs.get('class', '').split())
+        leads = [node for node in self.section.find('p') if 'section-lead' in node.attrs.get('class', '').split()]
+        self.assertEqual(re.findall(r'\d+%', leads[0].text), ['73%', '62%', '78%'])
+        lead = leads[1]
         lead_values = [f'{pair[0]}%' for group in ('Kew Riverside', 'England', 'Richmond upon Thames')
                        for pair in COMBINED_RESULTS[group]]
         self.assertEqual(re.findall(r'\d+%', lead.text), lead_values)
         self.assertIn('below the borough figure in 2024 and 2025', lead.text)
-        note = self.section.find('aside', id='newer-darell-results')[0].text
-        for fact in ('68%', '22 pupils', '63%', 'school-reported', 'provisional', 'Kew 2025 and Darell 2026'):
+        note = self.section.find('p', id='newer-darell-results')[0].text
+        for fact in ('68%', '22 pupils', '63%', 'school announcement', 'provisional', 'different years and publication stages'):
             self.assertIn(fact, note)
 
     def test_chart_and_table_values_come_from_data_instead_of_literal_markup(self):

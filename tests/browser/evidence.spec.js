@@ -1,6 +1,13 @@
 const fs = require('node:fs/promises');
 const { test, expect } = require('./fixtures');
 
+async function refine(page, label, value) {
+  const filters = page.locator('#record-refinements');
+  if (!await filters.evaluate(node => node.open)) await filters.locator('summary').click();
+  await page.getByLabel(label, { exact: true }).selectOption(value);
+}
+
+
 test('Report discovery: homepage links reach the web research and download the 44-page report', async ({ page, hasTouch }) => {
   await page.goto('/index.html');
   const shortcut = page.locator('#research-shortcut');
@@ -48,14 +55,14 @@ test('Report discovery: research filters, separate counts, empty state and reset
   const report = page.locator('#source-lessons-report');
   await expect(page.locator('#result-count')).toHaveText('57 of 57 records');
   await expect(page.locator('#research-count')).toHaveText('1 of 1 site research reports');
-  await page.getByLabel('Record type', { exact: true }).selectOption('Site research');
+  await refine(page, 'Record type', 'Site research');
   await expect(report).toBeVisible();
   await expect(page.locator('.source-card:visible')).toHaveCount(0);
   await expect(page.locator('#result-count')).toHaveText('0 of 57 records');
   await expect(page.locator('#no-results')).toBeHidden();
-  await page.getByLabel('Coverage', { exact: true }).selectOption('Synthesis');
+  await refine(page, 'Coverage', 'Synthesis');
   await expect(report).toBeVisible();
-  await page.getByLabel('Year', { exact: true }).selectOption('2003');
+  await refine(page, 'Year', '2003');
   await expect(report).toBeHidden();
   await expect(page.locator('#research-count')).toHaveText('0 of 1 site research reports');
   await expect(page.locator('#no-results')).toBeVisible();
@@ -77,7 +84,7 @@ test('Report discovery: direct and repeated report anchors recover incompatible 
   await expect(page.getByLabel('Record type', { exact: true })).toHaveValue('');
   await expect(page.getByLabel('Year', { exact: true })).toHaveValue('');
   await expect(page.getByLabel('Coverage', { exact: true })).toHaveValue('');
-  await page.getByLabel('Record type', { exact: true }).selectOption('Inspection');
+  await refine(page, 'Record type', 'Inspection');
   await expect(report).toBeHidden();
   await expect(page).toHaveURL(/#source-lessons-report$/);
   const shortcut = page.locator('#research-shortcut[href="#source-lessons-report"]');
@@ -94,8 +101,8 @@ test('Source search, combined filters, empty state and clear remain usable', asy
   await page.getByLabel('Search source records and research reports').fill('Ofsted');
   expect(await page.locator('.source-card:visible').count()).toBeGreaterThan(0);
   expect(await page.locator('.source-card:visible').count()).toBeLessThan(total);
-  await page.getByLabel('Record type', { exact: true }).selectOption('Inspection');
-  await page.getByLabel('Year', { exact: true }).selectOption('2003');
+  await refine(page, 'Record type', 'Inspection');
+  await refine(page, 'Year', '2003');
   await expect(page.locator('.source-card:visible')).toHaveCount(1);
   await expect(page.locator('.source-card:visible h3')).toContainText('First Ofsted inspection');
   await expect(page).toHaveURL(/q=Ofsted/);
@@ -144,12 +151,23 @@ test('New source terms find the appropriate reviewed records without counting ex
   await expect(page.locator('#no-results')).toBeHidden();
 });
 
-test('Evidence arrival exposes explanations and source search at narrow width', async ({ page }) => {
+test('Evidence arrival leads with London outcomes and reaches source search in one step', async ({ page, hasTouch }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/evidence.html#records');
-  await expect(page.locator('#evidence-explainer-title')).toBeInViewport();
+  const findings = page.locator('#london-findings');
+  await expect(findings.getByRole('heading', {name:'Four London schools kept teaching.'})).toBeInViewport();
+  await expect(findings.locator('.finding-outcomes')).toBeInViewport();
+  await expect(findings).toContainText('Two adjudications in 2025');
+  await expect(findings).toContainText('continued as an academy');
+  await expect(findings).toContainText('not a London-wide total or a success rate');
+  await expect(findings).toContainText('does not yet include a verified Richmond example');
+  await expect(findings.locator('.finding-stories article')).toHaveCount(3);
+  await expect(findings.locator('details')).toHaveCount(0);
+  const escape = findings.locator('a[href="#source-search"]');
+  if (hasTouch) await escape.tap(); else await escape.click();
   await expect(page.getByLabel('Search source records and research reports')).toBeInViewport();
-  await expect(page.locator('.evidence-answer-links a')).toHaveCount(4);
+  await page.goBack();
+  await expect(page.locator('#london-findings-title')).toBeInViewport();
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
 });
 
@@ -176,8 +194,9 @@ test('New source anchors recover from incompatible saved filters and repeat visi
   await expect(source).toBeVisible();
   await expect(source).toBeInViewport();
   await expect(page.getByLabel('Search source records and research reports')).toHaveValue('');
-  await page.getByLabel('Record type', { exact: true }).selectOption('Inspection');
+  await refine(page, 'Record type', 'Inspection');
   await expect(source).toBeHidden();
+  await page.locator('#gap-budget summary').click();
   await page.locator('#gap-budget a[href="#source-school-balances-mar-2026"]').click();
   await expect(source).toBeVisible();
   await expect(source).toBeInViewport();
@@ -188,7 +207,7 @@ test('Each source filter independently updates visible records', async ({ page }
   for (const [label, value] of [['Topic', 'Funding & buildings'], ['Coverage', 'Index only'], ['Record type', 'Official dataset']]) {
     await page.goto('/evidence.html#records');
     const total = await page.locator('.source-card').count();
-    await page.getByLabel(label, { exact: true }).selectOption(value);
+    await refine(page, label, value);
     expect(await page.locator('.source-card:visible').count()).toBeGreaterThan(0);
     expect(await page.locator('.source-card:visible').count()).toBeLessThan(total);
     await expect(page.locator('.source-card:visible').first()).toContainText(value);
@@ -229,4 +248,96 @@ test('Charts and option details provide usable nonvisual alternatives', async ({
   await campaign.getByRole('link', { name: /Offer campaign help/ }).click();
   await expect(page).toHaveURL(/about.html#contact$/);
   await expect(page.locator('#contact')).toBeInViewport();
+});
+
+test('Evidence starts with explanations and optional detail, then opens the complete library by keyboard or touch', async ({ page, hasTouch }) => {
+  await page.goto('/evidence.html');
+  await expect(page.locator('.gap-detail[open]')).toHaveCount(0);
+  const library = page.locator('#source-library');
+  await expect(library).not.toHaveAttribute('open', '');
+  await expect(page.locator('#record-refinements')).not.toHaveAttribute('open', '');
+  await expect(page.locator('#council-figures')).not.toHaveAttribute('open', '');
+  await expect(page.locator('.evidence-answer-links a')).toHaveCount(4);
+  await expect(page.locator('#source-lessons-report a[href="lessons.html"]')).toBeVisible();
+  const summary = library.locator(':scope > summary');
+  if (hasTouch) await summary.tap();
+  else { await summary.focus(); await page.keyboard.press('Enter'); }
+  await expect(page.locator('#source-grid .source-card:visible')).toHaveCount(57);
+  await expect(page.locator('.school-roll-chart .source-card')).toHaveCount(0);
+  if (hasTouch) await summary.tap(); else await page.keyboard.press('Space');
+  await expect(library).not.toHaveAttribute('open', '');
+  await page.getByLabel('Search source records and research reports').fill('inspection');
+  await expect(library).toHaveAttribute('open', '');
+  await expect(page.locator('#source-inspection-2026')).toBeVisible();
+  await expect(page.locator('#library-label')).toContainText('matching original records');
+  for (const card of await page.locator('.source-card:visible').all()) {
+    expect(await card.evaluate(node => Boolean(node.closest('#source-grid')))).toBe(true);
+  }
+});
+
+test('Evidence source and gap links recover from closed detail and browser history', async ({ page }) => {
+  await page.goto('/evidence.html#gap-budget');
+  const gap = page.locator('#gap-budget .gap-detail');
+  await expect(gap).toHaveAttribute('open', '');
+  await gap.locator('a[href="#source-school-balances-mar-2026"]').click();
+  await expect(page.locator('#source-school-balances-mar-2026')).toBeInViewport();
+  await page.goBack();
+  await expect(page.locator('#gap-budget')).toBeInViewport();
+  await page.locator('#source-library > summary').click();
+  await gap.locator('a[href="#source-school-balances-mar-2026"]').click();
+  await expect(page.locator('#source-library')).toHaveAttribute('open', '');
+  await expect(page.locator('#source-school-balances-mar-2026')).toBeInViewport();
+});
+
+test('Evidence repeated council-figures links reopen the chart and separate report links keep originals optional', async ({ page }) => {
+  await page.goto('/evidence.html#evidence');
+  await expect(page.locator('#council-figures')).toHaveAttribute('open', '');
+  await page.locator('#council-figures > summary').click();
+  await page.locator('.evidence-more a[href="#evidence"]').click();
+  await expect(page.locator('#council-figures')).toHaveAttribute('open', '');
+  await page.goto('/evidence.html#source-lessons-report');
+  await expect(page.locator('#source-lessons-report')).toBeInViewport();
+  await expect(page.locator('#source-library')).not.toHaveAttribute('open', '');
+  const resolved = page.locator('.gap-detail').filter({has:page.getByRole('heading', {name:'The complete 2026 inspection report'})});
+  await expect(resolved.locator('.gap-state')).toBeVisible();
+  await expect(resolved.locator('.gap-state')).toHaveText('Evidence found');
+});
+
+test('Opening a source in another tab leaves the current reading position and library unchanged', async ({ page }) => {
+  await page.goto('/evidence.html#gap-budget');
+  const link = page.locator('#gap-budget a[href="#source-school-balances-mar-2026"]');
+  // Prevent only the browser's new-tab default; still exercise the real modified click handlers.
+  await link.evaluate(node => node.addEventListener('click', event => event.preventDefault(), { once: true }));
+  await link.click({modifiers:['ControlOrMeta']});
+  await expect(page.locator('#source-library')).not.toHaveAttribute('open', '');
+  await expect(page.locator('#gap-budget')).toBeInViewport();
+});
+
+
+test('London findings lead directly to the named case with sources, and Back returns to the insight', async ({ page, hasTouch }) => {
+  await page.goto('/evidence.html#records');
+  for (const [finding, target] of [['finding-st-john','case-st-john'], ['finding-linked-schools','case-fenstanton'], ['finding-pooles','case-pooles']]) {
+    const link = page.locator(`#${finding} a[href="lessons.html#${target}"]`);
+    if (hasTouch) await link.tap(); else await link.click();
+    await expect(page.locator('#' + target)).toHaveAttribute('open', '');
+    await expect(page.locator('#' + target)).toBeInViewport();
+    await expect(page.locator(`#${target} .source-note a`).first()).toBeVisible();
+    await page.goBack();
+    await expect(page).toHaveURL(/evidence\.html#records$/);
+    await expect(link).toBeVisible();
+  }
+});
+
+test('Saved Evidence searches bypass the findings while retaining their query and URL', async ({ page }) => {
+  for (const hash of ['', '#records']) {
+    // Start a new document: adding a hash to this same URL is an in-page jump.
+    await page.goto('/index.html');
+    await page.goto('/evidence.html?q=Ofsted&type=Inspection&year=2003' + hash);
+    const search = page.getByLabel('Search source records and research reports');
+    await expect(search).toHaveValue('Ofsted');
+    await expect(search).toBeInViewport();
+    await expect(page.locator('.source-card:visible')).toHaveCount(1);
+    await expect(page.locator('.source-card:visible h3')).toContainText('First Ofsted inspection');
+    expect(new URL(page.url()).hash).toBe(hash);
+  }
 });

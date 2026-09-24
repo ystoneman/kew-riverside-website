@@ -103,3 +103,47 @@
 @media(max-width:650px){.attainment-charts{grid-template-columns:1fr;max-width:320px;margin-inline:auto}.learning-context,#attainment-tables,#attainment-method{scroll-margin-top:24px}}
 /* Avoid moving the chart link beneath a click during direct section arrival. */
 html:has(#learning-and-results:target){scroll-behavior:auto}
+
+/* A short answer stays visible; each optional comparison has one clear entry. */
+html:has(.understand-hero){scroll-behavior:auto}
+.understand-hero{grid-template-columns:minmax(0,1fr);gap:24px;padding-block:40px 32px}
+.understand-hero>*{min-width:0}
+.data-section h2,.data-method h2,.data-next h2{overflow-wrap:anywhere}
+.understand-hero h1{font-size:clamp(36px,4.5vw,56px);max-width:none;margin-bottom:14px;overflow-wrap:anywhere}
+.understand-hero .intro{max-width:65ch;margin-bottom:12px}
+.visual-route{display:flex;flex-wrap:wrap;gap:0 24px;padding:16px 20px;background:transparent;border-radius:10px}
+.visual-route p{flex-basis:100%;font-weight:700;margin:0 0 4px}
+.visual-route a{min-height:44px;border:0;text-decoration:underline;text-underline-offset:4px}
+.data-section{padding-block:32px;max-width:960px}
+.data-section h2{font-size:clamp(27px,3vw,36px);max-width:32ch;margin-bottom:14px}
+.data-section .section-lead{font-size:18px;line-height:1.6;max-width:70ch;margin-bottom:14px}
+.data-context{font-size:15px;line-height:1.65;max-width:80ch;margin-bottom:14px}
+.data-date{margin-bottom:12px}
+.data-section>.chart-footnote{margin:12px 0 16px;max-width:85ch}
+.data-disclosure{margin-top:10px;border:1px solid var(--theme-border, #d1dccc);border-radius:8px;background:var(--theme-surface, #fff)}
+.data-disclosure>summary{cursor:pointer;font-weight:700;padding:15px 18px;min-height:52px;font-size:15px;color:var(--ink)}
+.data-disclosure[open]>summary{border-bottom:1px solid var(--theme-border, #d1dccc)}
+.data-disclosure>summary:hover{text-decoration:underline;text-underline-offset:4px}
+.disclosure-body{padding:20px}
+.disclosure-body>:first-child{margin-top:0}
+.disclosure-body>:last-child{margin-bottom:0}
+.disclosure-body>.data-disclosure{background:transparent}
+.data-disclosure>p,.data-disclosure>ul{margin:18px}
+.data-disclosure>.data-table-scroll{margin:18px}
+.data-disclosure>.reading-note{margin:18px}
+.data-disclosure .section-lead{font-size:16px}
+.data-disclosure[id]{scroll-margin-top:112px}
+.data-method{max-width:960px;margin-top:0;padding:28px}
+.data-method .data-disclosure{margin-bottom:20px}
+@media(max-width:1100px){.data-disclosure[id]{scroll-margin-top:24px}}
+@media(max-width:650px){.understand-hero{padding-top:28px;gap:18px}.visual-route{gap:0 18px;padding:12px 16px}.visual-route a{font-size:14px}.data-section{padding-block:28px}.data-section .section-lead{font-size:17px}.data-context{font-size:14px}.disclosure-body{padding:16px}.data-disclosure>summary{padding:14px 16px}.data-method{padding:22px 18px}}
+@media print{.data-disclosure{border:0}.data-disclosure>summary{font-weight:700}.disclosure-body{padding:0}.data-section{break-inside:auto}}
+
+/* Put the useful findings before the optional topic routes. */
+.number-findings{max-width:78ch;margin-top:22px}
+.number-findings article+article{margin-top:20px;padding-top:18px;border-top:1px solid var(--theme-border,#cbd7ca)}
+.number-findings h2{font:700 19px/1.4 Arial,sans-serif;margin:0 0 6px;overflow-wrap:anywhere}
+.number-findings p{font-size:16px;line-height:1.65;margin:0}
+.number-findings a{text-underline-offset:3px}
+.understand-hero .number-findings+.source-note{margin-top:18px;margin-bottom:0}
+@media(max-width:650px){.number-findings{margin-top:18px}.number-findings h2{font-size:18px}.number-findings p{font-size:15px}.number-findings article+article{margin-top:16px;padding-top:16px}}
