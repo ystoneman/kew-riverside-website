@@ -22,6 +22,10 @@ On Linux, install browser system dependencies with `npx playwright install --wit
 
 The browser harness serves the site locally over HTTP/2, as GitHub Pages does, uses fictional form inputs, and intercepts external requests. The four legacy-route tests observe requests instead of routing them (see Legacy redirect fix below). It never delivers a test submission to Formspree. Hosted CAPTCHA, real inbox delivery, council submission and real contribution moderation are outside the automated suite.
 
+## Detailed usage analytics on by default — 25 September 2026
+
+`analytics.spec.js` now expects detailed usage without a saved choice, keeps a saved Basic counts only choice to page views (including after reload), checks that every configured section ID exists, that Evidence's source library and unanswered questions and Options' ways to help are reached and viewed, that a nested section's viewing time is its own, that all three choices fit a 320 × 568 screen, that jumps within a page are not counted as opening it (fails on the previous code), and that writing a letter pauses section timing but not page time and sends no typed words. `theme.spec.js` follows the new pressed default. Final local run: 52 Python checks, 100-file validation and 1,595 browser checks passed with 15 expected skips (Node 24.19.0). All collection requests are intercepted; Umami receipt of the live change is checked separately after deployment.
+
 ## Fundraising sharing previews — 25 September 2026
 
 Both role briefs receive static sharing metadata and distinct 1200 × 630 PNGs under 100 KB. The full page bodies compare byte-for-byte equal with the published baseline. Python coverage checks distinct public images, PNG dimensions, concise proposal/donations-closed context and metadata consistency. The no-incoming-link guard now examines actual anchor destinations rather than canonical document metadata; incoming visitor links remain forbidden.

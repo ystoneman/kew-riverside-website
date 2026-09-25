@@ -229,8 +229,9 @@
     let url;
     try { url = new URL(a.href); } catch (_) { return; }
     if (url.origin === location.origin && url.pathname.startsWith(ROOT)) {
-      const name = url.pathname.split('/').pop();
-      if (PRIVATE_PAGES.has(name)) return;
+      const name = url.pathname.split('/').pop() || 'index.html';
+      // A jump within this page (menus, Back to top) is not opening a page.
+      if (PRIVATE_PAGES.has(name) || name === file) return;
       if (!label && Object.hasOwn(DOWNLOADS, name)) label = DOWNLOADS[name];
       if (!label && Object.hasOwn(PAGES, name) && !url.search) label = 'Opened ' + PAGES[name];
     }

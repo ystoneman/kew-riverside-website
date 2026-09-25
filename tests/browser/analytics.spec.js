@@ -469,6 +469,42 @@ test('Default visitors report Evidence and Options sections, and the nested sour
   expect(JSON.stringify(sent)).not.toMatch(/scrollY|innerText|query/);
 });
 
+test('Jumps within a page are not counted as opening it; links to another page are', async ({ page, context }) => {
+  const { sent } = await virtualProduction(context);
+  await page.goto(site + 'proposal.html');
+  await expect.poll(() => pageViews(sent).length).toBe(1);
+  // Programmatic clicks exercise the collector's handler for links that may sit in closed menus.
+  for (const selector of ['a[href="#timetable"]', 'a[href="#main"]', 'a[href="proposal.html#parent-plan"]']) {
+    await page.locator(selector).first().evaluate(link => link.click());
+  }
+  await page.waitForTimeout(300);
+  expect(events(sent, 'Action opened')).toEqual([]);
+  await page.goto(site + 'lessons.html');
+  await expect.poll(() => pageViews(sent).length).toBe(2);
+  await page.locator('a.nav-parent-plan').first().evaluate(link => link.click());
+  await expect(page).toHaveURL(site + 'proposal.html#parent-plan');
+  await expect.poll(() => events(sent, 'Action opened')).toEqual([{ action: 'Opened Proposal & action plan' }]);
+});
+
+// The notice says section timing pauses in a form field but page viewing time does not.
+test('Writing a letter pauses section timing but not active page time, and sends no typed words', async ({ page, context }) => {
+  const { sent } = await virtualProduction(context);
+  await controlledAttention(page);
+  await page.goto(site + 'letters.html');
+  await freezeAfterLoad(page);
+  await page.locator('#message').focus();
+  await page.locator('#message').fill('An entirely fictional test letter: ' + sentinel);
+  const reachedBefore = events(sent, 'Section reached').length;
+  for (let interval = 0; interval < 11; interval += 1) {
+    await page.keyboard.press('Space');
+    await page.clock.runFor(30_000);
+  }
+  await expect.poll(() => events(sent, 'Active viewing')).toEqual([15, 30, 60, 120, 300].map(seconds => ({ seconds })));
+  expect(events(sent, 'Section viewed 10s')).toEqual([]);
+  expect(events(sent, 'Section reached')).toHaveLength(reachedBefore);
+  expect(JSON.stringify(sent)).not.toContain(sentinel);
+});
+
 test('At 320px, every analytics choice is visible when the panel opens', async ({ page, context }) => {
   await virtualProduction(context);
   await page.setViewportSize({ width: 320, height: 568 });
