@@ -2,6 +2,14 @@
 
 The suite covers the site's main visitor journeys across Chromium and WebKit, with touch, keyboard and JavaScript-disabled cases. It does not establish that every possible device, browser, assistive technology or third-party service works. Xcode Simulator Safari is checked separately for mobile interaction changes.
 
+## Proposed gatherings — 25 September 2026
+
+The new `gatherings.spec.js` covers the stable `/gatherings/` address, root and project-subpath arrivals, slash and direct-HTML variants, ignored incoming parameters, the no-refresh native fallback, narrow layout, the privacy route and both contextual entries. The hosted form is intercepted locally; Back must restore the actual clicked form or entry link at least 80% inside the viewport and remain still for 600ms. All seven new checks run in all five projects, including no JavaScript. The information page is included in the shared all-page navigation, participation and mobile checks; Python validation covers the nested redirect and every local link.
+
+The first 35 focused checks passed, and the strengthened Back checks passed all 35 again. The final published-form URL and restored shared tile stylesheet receive fresh full-suite verification. All 51 Python checks and 98-public-file validation passed. Independent campaign/evidence implementation review found no remaining content issue. Independent UX review requested the Back assertion and standard tile stylesheet, both corrected. Final rendered recheck found no actionable issue at 320/390/1440 px, with light/dark appearance, 200% main text, keyboard, section links, intercepted Google handoff/Back and no JavaScript. Signed-out IAB inspection by the lead confirmed the published form is readable without login, all ten questions render, name/email and interest/count/help questions are optional, only explicit consent is required, and updates/privacy/contact links work. Editor access is owner-only; automatic email collection, one-response restriction and response summary are off. No live test response was submitted. Native iPhone 17 / iOS 26.5 Safari was attempted locally but stopped at the preview's self-signed TLS warning; native interaction is not claimed. No real form or message was submitted by automated tests.
+
+An initial full run was stopped after the live form URL arrived: workers had already loaded the old placeholder destination while the served HTML changed, so the network guard correctly blocked the new external URL. This was an inconsistent test snapshot, not a visitor failure; the restart uses one settled final revision.
+
 ## Run locally
 
 Use Node.js 24, Python 3 and OpenSSL. From this repository:

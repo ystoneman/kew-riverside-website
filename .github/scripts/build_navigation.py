@@ -13,9 +13,11 @@ PAGES = {
     'feedback.html': 'Share ideas', 'videos.html': 'Parent Voices', 'supporters.html': 'Supporters',
     'privacy.html': 'Privacy', 'corrections.html': 'Corrections',
     'lessons-sources.html': 'Research citations', 'sent.html': 'Next steps',
+    'gatherings.html': 'Proposed gatherings',
 }
 # Explicit destinations avoid navigation generated from hidden templates or every source card.
 SECTIONS = {
+    'gatherings.html': [('register','Register interest'),('dates','Proposed dates'),('before-you-come','Practical arrangements'),('official-response','Official response'),('privacy','Form privacy')],
     'index.html': [('meeting-invitation','Council meeting'),('find-your-way','Find what you need'),('research-shortcut','Historical research','find-your-way'),('quick-answers','Before you respond'),('visit-school','Considering Kew Riverside?')],
     'evidence.html': [('records','Key findings'),('finding-st-john','St John the Divine','records'),('finding-linked-schools','Fenstanton & Holy Trinity','records'),('finding-pooles','Pooles Park','records'),('source-search','Find a source'),('source-library','Original sources','source-search'),('evidence','Numbers behind the proposal'),('timeline','Dates and next steps'),('earlier-record','Earlier public record'),('gaps','Unanswered questions'),('gap-budget','Keeping Kew open','gaps'),('gap-pupil-impacts',"Children’s needs",'gaps'),('gap-selection','Why Kew?','gaps'),('gap-closure-costs','Closure costs and site','gaps'),('gap-alternatives','Costed alternatives','gaps'),('gap-recruitment','Recruitment support','gaps'),('gap-forecasts','Pupil and housing forecasts','gaps'),('gap-answers','Written answers','gaps'),('evidence-found','Evidence obtained','gaps'),('gap-records','Process and records','gaps'),('method','Method and limits')],
     'options.html': [('option-7','Your official response'),('options-prep-title','Prepare together'),('options-findings-title','What an alternative needs'),('options-navigation','Ways to help'),('option-recovery-plan','A practical recovery plan','options-navigation'),('option-crowdfunding','Funding','options-navigation'),('option-demand','Pupil demand','options-navigation'),('option-enrolment','School enquiries','options-navigation'),('option-5','Closure costs','options-navigation'),('option-6',"Children’s needs",'options-navigation'),('option-8','Legal experience','options-navigation'),('options-sources-title','Evidence and next steps')],
@@ -70,6 +72,7 @@ def render_navigation(name, document):
     header = re.sub(r'<a href="(letters|feedback)\.html"', lambda m:m.group()+(' aria-current="page"' if m.group(1)+'.html' == name else ''), header)
     menu_links = link('proposal.html#parent-plan','Parent action plan',True)
     for file, label in PAGES.items():
+        if file == 'gatherings.html': continue  # Contextual event route; keep the shared menu compact.
         if file == 'sent.html' and name != file: continue
         href = file+'#records' if file == 'evidence.html' else file
         menu_links += link(href,label)

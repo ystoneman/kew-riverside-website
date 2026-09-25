@@ -2,6 +2,14 @@
 
 Recorded: 22 September 2026. Status: implementation in progress; final verification and publication are recorded separately in [CHANGELOG.md](CHANGELOG.md). This is a design rationale, not a report of a user study or a claim that every visitor will complete these tasks successfully.
 
+## Proposed gatherings interest route — 25 September 2026
+
+Visitor need: a stable address on a printed flyer that lets adults check provisional arrangements and optionally register interest (J1/J2/J3/J9). `/gatherings/` makes a native, no-script handoff to `gatherings.html`; the information page remains under the website owner's control if the Google Form later changes. A direct form QR was rejected because it could conceal changed or cancelled arrangements.
+
+The homepage uses one short contextual link in its existing consultation invitation; the Parent plan adds one link to its attendance action. No new homepage band or shared navigation item is added. The existing Parent plan arrival, six homepage destinations, participation tiles, official response and family routes retain their positions and labels. The new page uses the shared header, section navigation and theme, with provisional status before a single clearly labelled Google handoff. Event cards distinguish suggested gatherings from scheduled official meetings. Essential location/agenda limits are exposed and privacy is linked beside the form.
+
+The form is linked rather than embedded so merely reading the page does not load Google. No analytics script is loaded on this information page or the short redirect. Local tests intercept provider navigation; form publication and signed-out responder access are checked separately by the lead; automated checks do not verify real response receipt. Review and verification results are recorded in CHANGELOG.md and TESTING.md.
+
 ## Purpose and constraints
 
 Help people understand the proposal, check its evidence and take useful action in support of Kew Riverside. Visitors should quickly distinguish a proposed outcome from a decision, an official council response from a contribution to this independent website, and verified figures from forecasts or unanswered questions.

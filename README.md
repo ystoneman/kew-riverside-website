@@ -24,6 +24,10 @@ To point existing flyers to a future, verified school registration page:
 
 The redirect belongs to this GitHub Pages account and repository. Renaming or removing either can break printed links. GitHub Pages can briefly cache an older destination after an update; verify it live rather than assuming a commit is already published. The existing video QR at `videos.html#upload` has a separate purpose and is unchanged.
 
+## Proposed gatherings flyer address
+
+Use **https://ystoneman.github.io/kew-riverside-website/gatherings/** for a gathering flyer QR. The permanent native redirect leads to `gatherings.html`, where visitors check current status and choose whether to open Google Forms. Keep the information page in the route when a gathering changes or is cancelled; do not redirect printed flyers straight to a form. Update the form URL in both `gatherings.html` and the independently pinned browser test in `tests/browser/gatherings.spec.js`. The form itself is managed privately in the owner's Google account; response data never belongs in this repository. The owner must manually delete identifiable responses by 12 December 2026, sooner if no longer needed or consent is withdrawn. This date is a privacy commitment, not an automatic Google Forms deletion setting. Any exports or separate copies need the same manual handling. Retain the `/visit/` school-enquiry and `videos.html#upload` routes for their existing flyers.
+
 ## Content and provenance
 
 - Original research cut-off: **21 September 2026**. School comparison datasets and the council proposal comparison were checked on **22 September 2026**; new case evidence was checked on **23 September 2026**. Individual source access dates are recorded.

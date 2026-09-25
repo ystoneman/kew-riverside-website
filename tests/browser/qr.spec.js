@@ -30,7 +30,7 @@ test('QR: incoming parameters and fragments cannot change or leak into the desti
 });
 
 test('QR: native fallback stays readable and usable if automatic refresh is disabled', async ({ page, hasTouch, browserName }) => {
-  expect(redirectPages).toEqual(['visit/index.html']);
+  expect(redirectPages).toEqual(['gatherings/index.html', 'visit/index.html']);
   expect([...pages, ...redirectPages].sort()).toEqual(allPages);
   await interceptSchool(page);
   await page.route('**/visit/', async route => {

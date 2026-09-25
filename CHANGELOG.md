@@ -4,6 +4,14 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Proposed gatherings interest page
+
+- Add a permanent `/gatherings/` flyer address leading to `gatherings.html`, with a Google Forms handoff, provisional dates and separate official-meeting information. Add contextual homepage and Parent plan entries, preserving existing navigation and official-response routes.
+- Explain the exact-location, school dismissal and November agenda limits at the relevant date. Keep the interest form separate from consultation responses, council attendance, speaking registration and photography permission.
+- Publish a form-specific privacy notice: optional adult contact, private owner-only records, explicit consent and manual deletion by 12 December 2026. The information page and printed redirect load no form embed or analytics.
+
+Independent campaign/evidence and UX planning and implementation reviews passed after adding the official-response distinction beside the form, restoring the shared tile styling and strengthening Back verification. The published Google Form was checked signed out; only explicit consent is required, with optional contact and interest fields, owner-only editing and no public response summary. All 51 Python checks, 98-file validation and 35 focused browser checks passed before final full-suite verification. The final full regression and deployment remain pending.
+
 ### Prioritised unanswered questions
 
 - Replace the document-led gap list with eight plain questions: viability; children’s outcomes; selection criteria; net closure costs and the site; costed alternatives; recruitment support; forecasts and housing; and written answers. Keep existing question anchors, source links and dated request records, while distinguishing new questions from earlier requests.
