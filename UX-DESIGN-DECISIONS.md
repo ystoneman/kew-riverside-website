@@ -354,6 +354,18 @@ Options: opt-in for everything behind a banner (the unpublished 22 September can
 
 Verification status is recorded in TESTING.md and CHANGELOG.md. This rationale is not user research. Revisit if the provider, data fields, ICO guidance or the interaction changes.
 
+## Analytics: detailed usage on by default — 25 September 2026
+
+Need: the 23 September design left detailed usage opt-in, and the Events report showed zero events for the week to 25 September while the provider accepted a live test event. The owner wants usable evidence on section reach and key-link opens (such as the official form) to improve the site, and accepted changing the privacy notice. Applies across all journeys; no page content, destination, order or arrival position changes.
+
+Options: keep opt-in (no data at current traffic); add a banner asking for opt-in (competes with the Parent action plan, Letters and Share ideas on arrival, and still undercounts); or make detailed usage part of the default under the ICO statistical-purposes exception with a simple objection. The owner chose the last. Saved “Basic counts only” and off choices keep their meaning, browser privacy signals and private routes still send nothing, and the “allow” button is relabelled “Include detailed usage” because it no longer grants consent. The three choices now come before the longer panel text, so all three fit a 320 × 568 screen without scrolling.
+
+Section labels follow each page's own “On this page” list, adding Evidence, Options, Videos and Understand's newer sections and removing stale homepage IDs. The letter-writing and video-sharing areas are measured as whole areas only, never fields. A nested section's own area is taken out of its parent's, so Evidence's source library can be the section in view.
+
+Deferred: an “Analytics choices” entry in the header menu, which the ICO suggests is more prominent than a footer on long pages. The footer link is on every page, the Evidence method notes and privacy page link to it, and the mobile menu reaches Privacy; a menu change also alters navigation on every page. Revisit with the next navigation change or if the ICO or the owner asks.
+
+Verification status is recorded in TESTING.md and CHANGELOG.md. This rationale is not user research.
+
 ## Participation invitation — 23 September 2026
 
 Need (J4, J5; guards J2, J3 and J9): make Community letters and Share ideas noticeable and inviting for busy parents with little attention to spare, and make writing, asking and suggesting as easy as possible, without competing with the official response or the Parent action plan.

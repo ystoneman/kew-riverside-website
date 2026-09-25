@@ -85,7 +85,7 @@ Recheck the proposal, deadline, current public roles and meeting records before 
 
 When updating charts, retain the complete data table and specify geography, measure, units and date. Do not silently turn a projection into an actual observation.
 
-Basic page counts use a local Umami collector, with detailed usage only after opt-in (see `ANALYTICS.md`); there are no advertising scripts or remote fonts. Forms post to Formspree, which runs a hosted security check; see `privacy.html`. The letters and suggestions boards render approved data as text, never visitor HTML. Council sharing requires separate, recorded consent and an operator check of the official receiving requirements; it is not an official consultation submission service. Outgoing links open the publisher's site. Search parameters remain in the page URL so a filtered view can be shared.
+Page counts and detailed usage use a local Umami collector, on by default with a footer choice to reduce or turn them off (see `ANALYTICS.md`); there are no advertising scripts or remote fonts. Forms post to Formspree, which runs a hosted security check; see `privacy.html`. The letters and suggestions boards render approved data as text, never visitor HTML. Council sharing requires separate, recorded consent and an operator check of the official receiving requirements; it is not an official consultation submission service. Outgoing links open the publisher's site. Search parameters remain in the page URL so a filtered view can be shared.
 
 ## Verification in this environment
 

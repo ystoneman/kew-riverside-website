@@ -83,7 +83,7 @@ async function choices(page) {
   return panel;
 }
 
-const ALLOW = 'Allow detailed usage';
+const ALLOW = 'Include detailed usage';
 const BASIC = 'Basic counts only';
 const OFF = 'Turn analytics off';
 
@@ -127,7 +127,7 @@ async function freezeAfterLoad(page) {
   await expect(page.locator('#analytics-panel')).toHaveCount(0);
 }
 
-test('A basic page view is sent without a banner, stored choice or detailed events', async ({ page, context }) => {
+test('By default a page view and detailed usage are sent without a banner, cookie or stored choice', async ({ page, context }) => {
   const { sent, configReads } = await virtualProduction(context);
   await controlledAttention(page);
   await page.goto(site);
@@ -143,19 +143,32 @@ test('A basic page view is sent without a banner, stored choice or detailed even
   expect(sent[0].headers).not.toHaveProperty('cookie');
   expect(sent[0].headers).not.toHaveProperty('referer');
   expect(sent[0].headers).not.toHaveProperty('authorization');
-  expect(await page.evaluate(key => localStorage.getItem(key), choiceKey)).toBeNull();
-  expect(await page.context().cookies()).toEqual([]);
-  // Viewing time, sections and actions are detailed usage: never sent by default.
-  await page.locator('#evidence').evaluate(element => element.scrollIntoView({ block: 'start', behavior: 'instant' }));
-  await page.clock.runFor(310_000);
+  // Detailed usage is part of the default: sections, active time and named actions.
+  await page.locator('#find-your-way').evaluate(element => element.scrollIntoView({ block: 'start', behavior: 'instant' }));
+  await page.clock.runFor(10_000);
+  await expect.poll(() => events(sent, 'Section reached')).toContainEqual({ section: 'find-your-way' });
+  await expect.poll(() => events(sent, 'Section viewed 10s')).toEqual([{ section: 'find-your-way' }]);
+  for (let interval = 0; interval < 10; interval += 1) {
+    await page.evaluate(() => window.dispatchEvent(new Event('pointerdown')));
+    await page.clock.runFor(30_000);
+  }
+  await expect.poll(() => events(sent, 'Active viewing')).toEqual([15, 30, 60, 120, 300].map(seconds => ({ seconds })));
   const download = page.waitForEvent('download');
   await page.locator('a[download][href="response-checklist.pdf"]').first().click();
   await download;
-  expect(sent).toHaveLength(1);
+  await expect.poll(() => events(sent, 'Action opened')).toEqual([{ action: 'Download clicked: checklist' }]);
+  expect(pageViews(sent)).toHaveLength(1);
+  expect(await page.evaluate(key => localStorage.getItem(key), choiceKey)).toBeNull();
+  expect(await page.context().cookies()).toEqual([]);
+  for (const request of sent) {
+    expect(Object.keys(request.body.payload).sort()).toEqual(request.body.payload.name
+      ? ['data', 'hostname', 'name', 'referrer', 'title', 'url', 'website'] : ['hostname', 'referrer', 'title', 'url', 'website']);
+    expect(request.headers).not.toHaveProperty('cookie');
+  }
   const panel = await choices(page);
   await expect(panel.getByRole('heading')).toBeFocused();
-  await expect(panel.getByRole('status')).toContainText('basic page counts only');
-  await expect(panel.getByRole('button', { name: BASIC, exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await expect(panel.getByRole('status')).toContainText('basic page counts and detailed usage (the default)');
+  await expect(panel.getByRole('button', { name: ALLOW, exact: true })).toHaveAttribute('aria-pressed', 'true');
   for (const name of [ALLOW, BASIC, OFF]) {
     const button = panel.getByRole('button', { name, exact: true });
     await expect(button).toBeEnabled();
@@ -256,16 +269,43 @@ for (const signal of ['globalPrivacyControl', 'doNotTrack']) {
   });
 }
 
-test('An expired detailed-usage permission falls back to basic counts only', async ({ page, context }) => {
+test('An expired allow choice falls back to the default, which includes detailed usage', async ({ page, context }) => {
   const { sent } = await virtualProduction(context);
   await controlledAttention(page);
   await savedChoice(page, 'allow', 'past');
   await page.goto(site);
   await freezeAfterLoad(page);
+  await expect.poll(() => pageViews(sent).length).toBe(1);
+  await page.clock.runFor(15_000);
+  await expect.poll(() => events(sent, 'Active viewing')).toEqual([{ seconds: 15 }]);
+});
+
+// Before 25 September 2026 detailed usage was opt-in. A saved basic-only choice
+// (or a later one) must never widen to the new default.
+test('A saved Basic counts only choice sends page views but no detailed usage', async ({ page, context }) => {
+  const { sent } = await virtualProduction(context);
+  await controlledAttention(page);
+  await savedChoice(page, 'basic');
+  await page.goto(site + 'evidence.html');
+  await freezeAfterLoad(page);
   await expect.poll(() => sent.length).toBe(1);
+  await page.locator('#gaps').evaluate(element => element.scrollIntoView({ block: 'start', behavior: 'instant' }));
+  for (let interval = 0; interval < 11; interval += 1) {
+    await page.evaluate(() => window.dispatchEvent(new Event('pointerdown')));
+    await page.clock.runFor(30_000);
+  }
+  const download = page.waitForEvent('download');
+  await page.locator('a[download][href="sources.csv"]').first().click();
+  await download;
+  await page.reload();
+  await freezeAfterLoad(page);
+  await expect.poll(() => sent.length).toBe(2);
   await page.clock.runFor(30_000);
-  expect(sent).toHaveLength(1);
-  expect(events(sent, 'Active viewing')).toEqual([]);
+  expect(sent).toHaveLength(2);
+  expect(sent.every(request => !request.body.payload.name)).toBe(true);
+  const panel = await choices(page);
+  await expect(panel.getByRole('status')).toContainText('basic page counts only');
+  await expect(panel.getByRole('button', { name: BASIC, exact: true })).toHaveAttribute('aria-pressed', 'true');
 });
 
 for (const state of ['disabled', 'invalid-id', 'unavailable']) {
@@ -378,6 +418,64 @@ test('Real visible sections distinguish reaching, ten seconds of viewing and act
   await expect.poll(() => events(sent, 'Active viewing')).toEqual([15, 30, 60, 120, 300].map(seconds => ({ seconds })));
   expect(events(sent, 'Section viewed 10s')).toHaveLength(1);
   expect(events(sent, 'Section reached').filter(event => event.section === 'visual-guide')).toHaveLength(1);
+});
+
+// Section IDs are fixed, reviewed labels. Each must still exist on its page, and
+// a heading ID stands for its enclosing section, as in analytics.js.
+test('Every configured analytics section exists on its public page', async ({ page, context }) => {
+  await virtualProduction(context);
+  const source = readFileSync(path.join(root, 'analytics.js'), 'utf8');
+  const literal = source.match(/const SECTIONS = (\{[\s\S]*?\n  \});/)[1];
+  const sections = new Function('return ' + literal)();
+  expect(Object.keys(sections)).toEqual(expect.arrayContaining(['evidence.html', 'options.html', 'letters.html', 'index.html']));
+  for (const [file, ids] of Object.entries(sections)) {
+    await page.goto(site + file);
+    const found = await page.evaluate(list => list.map(id => {
+      const element = document.getElementById(id);
+      const target = element && /^H[1-6]$/.test(element.tagName) ? element.closest('section') : element;
+      return target && !target.closest('.legacy-route') ? id : null;
+    }), ids);
+    expect(found, file).toEqual(ids);
+  }
+});
+
+test('Default visitors report Evidence and Options sections, and the nested source library gets its own viewing time', async ({ page, context }) => {
+  const { sent } = await virtualProduction(context);
+  await controlledAttention(page);
+  await page.goto(site + 'evidence.html');
+  await freezeAfterLoad(page);
+  // Scripts keep the library closed until a visitor opens it.
+  await page.locator('#source-library > summary').click();
+  await expect(page.locator('#source-library')).toHaveAttribute('open', '');
+  await page.locator('#source-search').evaluate(element => element.scrollIntoView({ block: 'start', behavior: 'instant' }));
+  await page.clock.runFor(1000);
+  await expect.poll(() => events(sent, 'Section reached')).toContainEqual({ section: 'source-search' });
+  for (const id of ['gaps', 'source-library']) {
+    await page.locator('#' + id).evaluate(element => element.scrollIntoView({ block: 'start', behavior: 'instant' }));
+    await page.evaluate(() => window.dispatchEvent(new Event('pointerdown')));
+    await page.clock.runFor(11_000);
+    await expect.poll(() => events(sent, 'Section reached')).toContainEqual({ section: id });
+    await expect.poll(() => events(sent, 'Section viewed 10s')).toContainEqual({ section: id });
+  }
+  // Time in the library is its own, not its parent's key findings.
+  expect(events(sent, 'Section viewed 10s')).not.toContainEqual({ section: 'records' });
+  await page.goto(site + 'options.html');
+  await freezeAfterLoad(page);
+  await page.locator('#options-navigation').evaluate(element => element.scrollIntoView({ block: 'start', behavior: 'instant' }));
+  await page.evaluate(() => window.dispatchEvent(new Event('pointerdown')));
+  await page.clock.runFor(11_000);
+  await expect.poll(() => events(sent, 'Section viewed 10s')).toContainEqual({ section: 'options-navigation' });
+  expect(pageViews(sent)).toHaveLength(2);
+  expect(JSON.stringify(sent)).not.toMatch(/scrollY|innerText|query/);
+});
+
+test('At 320px, every analytics choice is visible when the panel opens', async ({ page, context }) => {
+  await virtualProduction(context);
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.goto(site + 'evidence.html');
+  const panel = await choices(page);
+  for (const name of [ALLOW, BASIC, OFF]) await expect(panel.getByRole('button', { name, exact: true })).toBeInViewport({ ratio: 1 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
 });
 
 test('Hidden, unfocused, idle and open-choice time is excluded from active viewing', async ({ page, context }) => {
@@ -538,7 +636,11 @@ test('At 320px, the choices panel fits, keeps letter fields unobstructed and ret
   await panel.getByRole('button', { name: OFF, exact: true }).click();
   await expect(panel).toBeHidden();
   await expect(page.getByRole('link', { name: 'Analytics choices', exact: true })).toBeFocused();
-  expect(sent).toHaveLength(1);
+  // Detailed usage runs by default on a real clock here; nothing follows the objection.
+  const atObjection = sent.length;
+  await page.waitForTimeout(2500);
+  expect(sent).toHaveLength(atObjection);
+  expect(pageViews(sent)).toHaveLength(1);
 });
 
 test('On the privacy page at 320px, How analytics works closes the panel to reveal the explanation', async ({ page, context }) => {
