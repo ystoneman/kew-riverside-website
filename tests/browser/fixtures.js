@@ -7,7 +7,7 @@ const root = path.resolve(__dirname, '../..');
 // handoff/Back/no-JavaScript/fallback coverage in qr.spec.js instead of site menus.
 const manifest = readFileSync(path.join(root, '.github/scripts/check_site.py'), 'utf8');
 const publicFiles = manifest.match(/PUBLIC_FILES = frozenset\('''([\s\S]*?)'''\.split\(\)\)/)[1].trim().split(/\s+/);
-const redirectPages = ['visit/index.html'];
+const redirectPages = ['gatherings/index.html', 'visit/index.html'];
 const allPages = publicFiles.filter(name => name.endsWith('.html')).sort();
 const pages = allPages.filter(name => !redirectPages.includes(name));
 function headerLinks(file, selector) {

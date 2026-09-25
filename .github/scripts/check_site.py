@@ -11,7 +11,7 @@ from public_data import validate_board
 
 ROOT = Path(__file__).resolve().parents[2]
 PUBLIC_FILES = frozenset('''
-visit/index.html
+visit/index.html gatherings/index.html gatherings.html gatherings.css
 theme.css theme.js
 analytics.js analytics.css analytics-config.json
 videos.html videos.css evidence.html options.html options.css options.js homepage.css homepage.js
@@ -29,7 +29,7 @@ og-home.png og-letters.png og-ideas.png og-videos.png
 MAINTENANCE_FILES = frozenset('''
 .github/scripts/build_navigation.py tests/browser/orientation.spec.js
 tests/browser/clarity.spec.js
-tests/browser/qr.spec.js
+tests/browser/qr.spec.js tests/browser/gatherings.spec.js
 tests/browser/theme.spec.js
 VIDEO-PERMISSIONS.md CONTRIBUTING.md .github/CODEOWNERS .github/pull_request_template.md .github/branch-protection.json
 .agents/skills/kew-campaign-review/SKILL.md .agents/skills/kew-campaign-review/agents/openai.yaml
@@ -57,7 +57,7 @@ SECRET_PATTERNS = [
 ]
 
 # Redirect entry points have dedicated journey tests instead of shared navigation.
-REDIRECT_PAGES = frozenset({'visit/index.html'})
+REDIRECT_PAGES = frozenset({'visit/index.html', 'gatherings/index.html'})
 
 
 def require(ok, message):

@@ -216,12 +216,18 @@ class SiteStructureTests(unittest.TestCase):
 
     def test_printed_visit_route_has_matching_immediate_and_native_destinations(self):
         destination = 'https://www.kewriverside.richmond.sch.uk/page/?pid=525&title=Contact+Us'
-        self.assertEqual(REDIRECT_PAGES, {'visit/index.html'})
-        for name in REDIRECT_PAGES:
+        self.assertEqual(REDIRECT_PAGES, {'visit/index.html', 'gatherings/index.html'})
+        for name in ['visit/index.html']:
             page = self.pages[name]
             self.assertEqual(page.refreshes, ['0; url=' + destination])
             self.assertIn(('a', 'href', destination), page.references)
             self.assertEqual(page.scripts, [], 'This handoff needs no scripts or tracking')
+
+    def test_gatherings_printed_route_preserves_local_info_page(self):
+        page = self.pages['gatherings/index.html']
+        self.assertEqual(page.refreshes, ['0; url=../gatherings.html'])
+        self.assertIn(('a', 'href', '../gatherings.html'), page.references)
+        self.assertEqual(page.scripts, [], 'The printed handoff needs no scripts or tracking')
 
     def test_source_library_and_downloads_contain_the_same_records(self):
         records = json.loads((ROOT / 'sources.json').read_text(encoding='utf-8'))['records']
