@@ -67,6 +67,14 @@ These choices are design judgments to verify, not measured conversion improvemen
 
 ## Selected page and interaction design
 
+### Unanswered questions menu shortcut — 25 September 2026
+
+Visitor need (J6): parents want a direct way to find the questions and evidence gaps that remain unresolved. The owner approved exposing this destination through the main menu. Add **Unanswered questions** as a visible, indented link immediately after Evidence once Menu is open, targeting the existing `evidence.html#gaps` section. Use the same label for the section heading, its local navigator entry and its introductory shortcut.
+
+The placement adds one row within the existing scrollable menu. An additional nested disclosure would add an unnecessary interaction, while another exposed header control would compete with existing participation routes. Keep the native anchor, existing section URL and all question content, and preserve the exposed Community letters and Share ideas tiles and Parent action plan. This is a navigation judgment, not a measured usability result.
+
+Independent UX planning review supported the direct sub-item and consistent wording. Before release, verify rendered desktop/mobile menu access, visible heading arrival, repeated same-page activation, keyboard and no-JavaScript navigation, and protected routes. Implementation verification and publication are recorded in TESTING.md and CHANGELOG.md.
+
 ### Page and section orientation; plain Proposal questions — 24 September 2026
 
 Visitor need (J1–J9): the owner wants to know which page and subsection they are reading while scrolling, distinguish homepage shortcuts from a second menu, and make Proposal questions manageable for a busy parent. The approved navigation plan, including the full verbatim Proposal suggestions, is retained privately in the parent workspace. These changes preserve the protected journey priorities.

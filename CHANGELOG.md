@@ -4,6 +4,14 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Unanswered questions menu shortcut
+
+- Add a direct, indented **Unanswered questions** link immediately beneath Evidence in the full Menu on every content page. The link is exposed when Menu opens and retains the existing `evidence.html#gaps` destination.
+- Use the same label for the destination heading, its section-navigation entry and the Evidence page's introduction shortcut. Existing questions, evidence status and source links are unchanged.
+- Preserve the exposed participation links, Parent action plan, short desktop navigation and native no-JavaScript links. Refresh the shared stylesheet version across generated pages.
+
+Independent UX planning and implementation reviews found no actionable issues. Rendered checks covered desktop Chromium, 320/390 px WebKit, keyboard, repeated activation and no JavaScript. Privacy/security/structure checks and 95-public-file validation passed. Full regression and publication results are tracked in the pull request; native iOS interaction remains unverified because the simulator input controls were disabled. See TESTING.md for the checked scope.
+
 ### Stable arrivals and Back recovery before publication
 
 - Settle the final stylesheet before navigation measures the persistent bar, then initialize navigation before page-specific fragment handlers. Preserve the stylesheet cascade and regenerate consistent navigation versions across all 16 pages. A delayed-stylesheet regression checks the initial offsets and the existing 600ms arrival-stability requirement.

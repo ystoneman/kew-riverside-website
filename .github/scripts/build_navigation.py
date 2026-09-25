@@ -5,7 +5,7 @@ import html
 import re
 
 ROOT = Path(__file__).resolve().parents[2]
-VERSION = '2026092405'
+VERSION = '2026092501'
 PAGES = {
     'index.html': 'Home', 'about.html': 'About', 'proposal.html': 'Proposal & dates',
     'faq.html': 'FAQ', 'understand.html': 'Understand', 'options.html': 'Options',
@@ -17,7 +17,7 @@ PAGES = {
 # Explicit destinations avoid navigation generated from hidden templates or every source card.
 SECTIONS = {
     'index.html': [('meeting-invitation','Council meeting'),('find-your-way','Find what you need'),('research-shortcut','Historical research','find-your-way'),('quick-answers','Before you respond'),('visit-school','Considering Kew Riverside?')],
-    'evidence.html': [('records','Key findings'),('finding-st-john','St John the Divine','records'),('finding-linked-schools','Fenstanton & Holy Trinity','records'),('finding-pooles','Pooles Park','records'),('source-search','Find a source'),('source-library','Original sources','source-search'),('evidence','Numbers behind the proposal'),('timeline','Dates and next steps'),('earlier-record','Earlier public record'),('gaps','Evidence still needed'),('gap-budget','Budget','gaps'),('gap-alternatives','Alternatives','gaps'),('gap-closure-costs','Closure costs','gaps'),('gap-forecasts','Pupil forecasts','gaps'),('gap-pupil-impacts',"Children’s needs",'gaps'),('method','Method and limits')],
+    'evidence.html': [('records','Key findings'),('finding-st-john','St John the Divine','records'),('finding-linked-schools','Fenstanton & Holy Trinity','records'),('finding-pooles','Pooles Park','records'),('source-search','Find a source'),('source-library','Original sources','source-search'),('evidence','Numbers behind the proposal'),('timeline','Dates and next steps'),('earlier-record','Earlier public record'),('gaps','Unanswered questions'),('gap-budget','Budget','gaps'),('gap-alternatives','Alternatives','gaps'),('gap-closure-costs','Closure costs','gaps'),('gap-forecasts','Pupil forecasts','gaps'),('gap-pupil-impacts',"Children’s needs",'gaps'),('method','Method and limits')],
     'options.html': [('option-7','Your official response'),('options-prep-title','Prepare together'),('options-findings-title','What an alternative needs'),('options-navigation','Ways to help'),('option-recovery-plan','A practical recovery plan','options-navigation'),('option-crowdfunding','Funding','options-navigation'),('option-demand','Pupil demand','options-navigation'),('option-enrolment','School enquiries','options-navigation'),('option-5','Closure costs','options-navigation'),('option-6',"Children’s needs",'options-navigation'),('option-8','Legal experience','options-navigation'),('options-sources-title','Evidence and next steps')],
     'proposal.html': [('parent-plan','Parent action plan'),('prep-sessions','PTA information sessions','parent-plan'),('plan-attend','Council meeting','parent-plan'),('plan-respond','Your response','parent-plan'),('timetable','Timeline'),('questions','Questions worth asking'),('question-continuity',"Your child’s next school",'questions'),('question-learning',"Your child’s learning",'questions'),('question-budget','The budget','questions'),('question-closure-costs','Closure costs','questions'),('question-demand','Pupil forecasts','questions'),('question-alternatives','Alternatives','questions'),('who-decides','Who decides'),('other-schools','Lessons from other schools'),('decision-record','Decision record'),('take-part','Official response routes')],
     'understand.html': [('pupil-trends','Pupil numbers'),('forecast-checks','Forecast checks'),('school-places','Unfilled places'),('year-groups','Year groups'),('budget','School finances'),('closure-costs','Closure costs','budget'),('other-proposals','Other Richmond proposals'),('learning-and-results','Learning and results'),('inspection-summary','Inspection findings','learning-and-results'),('mixed-age-curriculum','Mixed-age learning','learning-and-results'),('methodology','Method and limits')],
@@ -73,6 +73,8 @@ def render_navigation(name, document):
         if file == 'sent.html' and name != file: continue
         href = file+'#records' if file == 'evidence.html' else file
         menu_links += link(href,label)
+        if file == 'evidence.html':
+            menu_links += '<a class="nav-subitem" href="evidence.html#gaps">Unanswered questions</a>'
     menu = '<details class="mobile-menu" name="site-navigation"><summary>Menu <span aria-hidden="true">⌄</span></summary><nav aria-label="All website pages">'+menu_links+'</nav></details>'
     ids = set(re.findall(r'\bid="([^"]+)"', document))
     sections = [entry for entry in SECTIONS.get(name,[]) if entry[0] in ids]

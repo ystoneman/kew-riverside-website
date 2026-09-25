@@ -59,7 +59,7 @@ const mainPages = [
   ['faq.html', 'FAQ'], ['understand.html', 'Understand'], ['options.html', 'Options'],
   ['lessons.html', 'Lessons'], ['evidence.html', 'Evidence'],
 ];
-const menuNames = ['Parent action plan', 'Home', 'About', 'Proposal & dates', 'FAQ', 'Understand', 'Options', 'Lessons', 'Evidence'];
+const menuNames = ['Parent action plan', 'Home', 'About', 'Proposal & dates', 'FAQ', 'Understand', 'Options', 'Lessons', 'Evidence', 'Unanswered questions'];
 
 async function activeSection(page) {
   return page.locator('.section-links a[aria-current="location"]').evaluateAll(links => links.length === 1 ? links[0].dataset.sectionId : null);
@@ -148,10 +148,56 @@ test('Orientation: each main page has a stable identity and the complete menu in
     const names = await menu.locator('a').allTextContents();
     expect(names.slice(0, menuNames.length).map(text => text.trim())).toEqual(menuNames);
     await expect(menu.getByRole('link', { name, exact: true })).toHaveAttribute('aria-current', 'page');
+    const questions = menu.getByRole('link', { name: 'Unanswered questions', exact: true });
+    await expect(questions).toBeVisible();
+    await expect(questions).toHaveAttribute('href', 'evidence.html#gaps');
+    await expect(questions).not.toHaveAttribute('aria-current', 'page');
     for (const [label, href] of [['Community letters', 'letters.html'], ['Share ideas', 'feedback.html']]) {
       await expect(menu.getByRole('link', { name: label, exact: true })).toHaveAttribute('href', href);
     }
   }
+});
+
+test('Orientation: Unanswered questions opens its named section and repeated menu visits return there', async ({ page, hasTouch }) => {
+  await page.goto('/index.html');
+  const menu = page.locator('.mobile-menu');
+  const questions = menu.getByRole('link', { name: 'Unanswered questions', exact: true });
+  await activate(menu.locator(':scope > summary'), hasTouch);
+  await activate(questions, hasTouch);
+  await expect(page).toHaveURL(/evidence\.html#gaps$/);
+  const heading = page.locator('#gaps h2');
+  await expect(heading).toHaveText('Unanswered questions');
+  await expectUncovered(page, heading);
+  await expect(page.locator('.page-name')).toHaveText('Evidence');
+  await expect(page.locator('.section-links a[data-section-id="gaps"]')).toHaveText('Unanswered questions');
+  await expect(menu).not.toHaveAttribute('open', '');
+
+  // Reading farther down leaves the hash unchanged; the same menu link must
+  // still return to the questions instead of doing nothing on a repeated hash.
+  await page.locator('#method').evaluate(node => node.scrollIntoView({ block: 'start', behavior: 'instant' }));
+  await expect(heading).not.toBeInViewport();
+  await expect(page).toHaveURL(/evidence\.html#gaps$/);
+  await activate(menu.locator(':scope > summary'), hasTouch);
+  await activate(questions, hasTouch);
+  await expectUncovered(page, heading);
+  await expectScrollSettled(page, 'Repeated Unanswered questions menu arrival');
+  await expect(menu).not.toHaveAttribute('open', '');
+});
+
+test('Orientation: keyboard users reach Unanswered questions directly after Evidence', async ({ page, browserName }) => {
+  await page.goto('/index.html');
+  const menu = page.locator('.mobile-menu');
+  const next = browserName === 'webkit' && process.platform === 'darwin' ? 'Alt+Tab' : 'Tab';
+  await menu.locator(':scope > summary').focus();
+  await page.keyboard.press('Enter');
+  for (let i = 0; i <= menuNames.indexOf('Evidence'); i++) await page.keyboard.press(next);
+  await expect(menu.getByRole('link', { name: 'Evidence', exact: true })).toBeFocused();
+  await page.keyboard.press(next);
+  await expect(menu.getByRole('link', { name: 'Unanswered questions', exact: true })).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/evidence\.html#gaps$/);
+  await expectUncovered(page, page.getByRole('heading', { name: 'Unanswered questions', exact: true }));
+  await expect(menu).not.toHaveAttribute('open', '');
 });
 
 test('Orientation: the complete menu works on desktop and retains a return to the current section', async ({ page, hasTouch }) => {
