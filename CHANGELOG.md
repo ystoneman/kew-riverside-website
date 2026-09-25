@@ -4,6 +4,18 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Plainer wording across the site
+
+- Reword 231 passages on 15 pages in plainer English: everyday words instead of long ones (for example “does not show” for “does not establish” in negative statements), fewer abstract nouns, and long, qualifier-heavy sentences split. Facts, figures, dates, hedges, attributions, decision-stage wording, consent conditions and protected labels are unchanged. Sentences of 25 words or more fall from 95 to 38.
+- Measured Flesch Reading Ease on the rendered pages (community letters excluded) rises on every edited page, for example Proposal & dates 53.6 → 58.9, FAQ 52.8 → 59.2, Options 47.2 → 53.5, Evidence 39.9 → 48.9, Letters 58.6 → 63.8 and Corrections 50.0 → 59.1.
+- Use one wording for the November stage in the homepage and FAQ answers (“whether to move to formal consultation”, checked against the council leaflet and FAQ). Use “what visits are available now” consistently on Home, FAQ and Options; three browser assertions were updated for the new visit wording.
+- Replace the coverage note on the 53 “Reviewed” Evidence source cards with a plainer definition; Index-only and Not-retrieved cards keep their note. Source summaries stay aligned across `sources.json`, the cards, their search keywords and `sources.csv`, and removed words remain searchable. FAQ search keeps “amendment”, “transferring”, “proceed”, “judgements”, “application”, “acceptance” and “guaranteed”.
+- Regenerate Understand, Lessons and Research citations from their templates and data. `lessons-report.pdf` and the exhibit graphics keep their earlier wording (same facts).
+- Make Privacy wording clearer without changing any permission, recipient, processor, retention period or right. Consent checkbox labels, notice versions and checkbox values are unchanged; the Privacy page date is updated.
+- Keep the current wording wherever a question was open: meeting-invitation text, consent checkbox labels, the indicative-timeline sentence, the Letters link to videos and several formal terms.
+
+Review: independent evidence (two), UX and campaign planning reviews changed or withdrew draft wording before implementation. Independent implementation reviews of the actual diff (evidence, UX with rendered WebKit 320 × 568 and 390 × 844 and Chromium 1440 × 900, and campaign) found no blocking or material issues; their optional search-keyword suggestions were applied. Checks before rebasing onto the fundraising-briefs release: all 50 Python checks, 95-public-file validation and navigation, comparison, research and source freshness checks passed. The complete local browser suite passed 1,513 checks with 15 expected skips, and the FAQ-related specs passed again after the final keyword additions. After rebasing, all 51 Python checks, 98-public-file validation and the freshness checks passed. A rendered comparison confirmed that all 231 edits display the approved wording and that no other visible text changed except the Privacy date. Native iOS Safari was not run, because no touch, focus, menu or layout behaviour changed. Hosted checks and publication are tracked in the pull request.
+
 ### Direct-link fundraising role briefs
 
 - Add concise trustee and authorised account administrator briefs as public pages for sharing by URL. Both retain proposal status, pending charity approval and no donations; neither grants authority to set up accounts or launch a fundraiser.

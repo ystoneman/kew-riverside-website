@@ -33,7 +33,7 @@ test('Homepage: responsive copy keeps words separated on mobile and desktop', as
       await expect(story).toHaveAccessibleName(/family|story|chose/i);
       for (const [selector, wording] of [
         ['.discovery-heading > p', 'Shortcuts to pages and answers on this website.'],
-        ['#visit-school .visit-school-action > p', 'page. Please check visit availability'],
+        ['#visit-school .visit-school-action > p', 'page. Please check directly'],
       ]) {
         const copy = page.locator(selector);
         await expect(copy).toBeVisible();
@@ -49,7 +49,7 @@ test('Prospective families can enquire directly from Home and Options without a 
   const schoolContact = 'https://www.kewriverside.richmond.sch.uk/page/?pid=525&title=Contact+Us';
   await page.goto('/index.html#visit-school');
   const homeVisit = page.locator('#visit-school');
-  await expect(homeVisit).toContainText('what visits are currently available');
+  await expect(homeVisit).toContainText('what visits are available now');
   await expect(homeVisit).toContainText('Closure is proposed, not decided');
   await expect(homeVisit.locator('a.button.primary')).toHaveAttribute('href', schoolContact);
   await expect(homeVisit.locator('a[href="https://www.richmond.gov.uk/primary_school_admissions"]')).toBeVisible();
@@ -58,7 +58,7 @@ test('Prospective families can enquire directly from Home and Options without a 
   const option = page.locator('#option-enrolment');
   await option.locator('.option-evidence > summary').click();
   await expect(option.locator('.option-evidence')).toHaveAttribute('open', '');
-  await expect(option).toContainText('Ask the school what visits are currently available');
+  await expect(option).toContainText('Ask the school what visits are available now');
   await expect(option).toContainText('applications and admissions can continue');
   await expect(option.locator('a[href^="https://www.kewriverside.richmond.sch.uk/page/"]').filter({ hasText: 'Ask the school about visits and places' })).toBeVisible();
 });

@@ -22,6 +22,20 @@ On Linux, install browser system dependencies with `npx playwright install --wit
 
 The browser harness serves the site locally over HTTP/2, as GitHub Pages does, uses fictional form inputs, and intercepts external requests. The four legacy-route tests observe requests instead of routing them (see Legacy redirect fix below). It never delivers a test submission to Formspree. Hosted CAPTCHA, real inbox delivery, council submission and real contribution moderation are outside the automated suite.
 
+## Plainer wording — 25 September 2026
+
+This is a wording-only release: 231 passages across 15 pages. A rendered comparison of every visible text block against the deployed baseline confirmed three things. All 231 edits display the approved wording. 52 further Evidence cards carry the replaced coverage note, while the 4 Index-only and Not-retrieved cards keep theirs. No other visible text changed except the Privacy page date. A tag-by-tag comparison found identical element sequences, links and ids. Only the FAQ `data-keywords` and Evidence card `data-search` values changed, and each keeps every earlier word.
+
+Three `visitor-journeys.spec.js` assertions now expect the new visit wording. Each still protects the same behaviour; the word-separation check still covers the space after “page.”. No assertion was removed or weakened.
+
+Before rebasing onto the fundraising-briefs release, all 50 Python checks, the 95-public-file validation and the navigation, comparison, research and source freshness checks passed. The complete local browser suite passed 1,513 checks with 15 expected skips, on two workers. An earlier attempt on a heavily loaded machine produced eight iPhone WebKit timeouts. All 13 checks in those tests passed when rerun on one worker, and the full two-worker run then passed. After the final FAQ keyword additions, the seven FAQ-related spec files passed again: 543 passed, 15 skipped. After rebasing, all 51 Python checks, the 98-public-file validation and the freshness checks passed again, and a static check confirmed all 231 edits were still in place. Browser results for the rebased revision are tracked in the pull request.
+
+Independent evidence, UX and campaign reviews of the actual diff found no blocking or material issues. The UX review inspected WebKit at 320 × 568 and 390 × 844 and Chromium at 1440 × 900:
+- The Parent action plan shortcut, the Proposal response button, the Parent plan jump link, the Options arrival and the Letters board order are unchanged or higher on the page.
+- FAQ and source search still find the removed words.
+
+Native iOS Safari was not run, because no touch, focus, menu or layout behaviour changed. No real form was submitted.
+
 ## Direct-link fundraising briefs — 25 September 2026
 
 The public allowlist contains only the trustee brief, account setup brief and their stylesheet in addition to existing assets. A structure regression requires no incoming links from any public HTML, no form, no private worksheet/PDF/localhost references, and noindex metadata. All-page shared navigation, appearance, mobile and no-JavaScript checks continue to discover both new pages; neither is exempted.
