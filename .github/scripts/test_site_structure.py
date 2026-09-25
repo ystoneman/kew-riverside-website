@@ -3,6 +3,7 @@ from collections import Counter
 import csv
 from html.parser import HTMLParser
 import json
+import re
 import posixpath
 import unittest
 from urllib.parse import parse_qs, unquote, urlsplit
@@ -181,6 +182,21 @@ class SiteStructureTests(unittest.TestCase):
                 filename, fragment = local_destination('index.html', destination)
                 self.assertIn(fragment, self.pages[filename].ids,
                               'A legacy route must reach the original named content')
+
+    def test_fundraising_briefs_are_public_direct_links_without_incoming_routes(self):
+        briefs = {'fundraising-trustees.html', 'fundraising-admin.html'}
+        self.assertTrue(briefs <= PUBLIC_FILES)
+        for name, page in self.pages.items():
+            text = (ROOT / name).read_text()
+            for brief in briefs:
+                self.assertNotRegex(text, r'href=[\"\'][^\"\']*' + re.escape(brief),
+                                    'Role briefs must not be linked from public pages')
+            if name in briefs:
+                self.assertIn('name="robots" content="noindex,nofollow"', text)
+                self.assertNotIn('<form', text)
+                self.assertNotRegex(text, r'fundraising(?:-checklist)?\.html|output/pdf|127\.0\.0\.1|local preview')
+        self.assertNotIn('fundraising.html', PUBLIC_FILES)
+        self.assertNotIn('fundraising-checklist.html', PUBLIC_FILES)
 
     def test_every_page_uses_the_same_versioned_navigation_script(self):
         baseline = [src for src in self.pages['index.html'].scripts if urlsplit(src).path == 'navigation.js']

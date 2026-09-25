@@ -14,6 +14,12 @@ PAGES = {
     'privacy.html': 'Privacy', 'corrections.html': 'Corrections',
     'lessons-sources.html': 'Research citations', 'sent.html': 'Next steps',
 }
+# Direct-link briefs retain the shared shell without appearing in any menu.
+UNLISTED_PAGES = {
+    'fundraising-trustees.html': 'Trustee brief',
+    'fundraising-admin.html': 'Account setup brief',
+}
+PAGE_LABELS = PAGES | UNLISTED_PAGES
 # Explicit destinations avoid navigation generated from hidden templates or every source card.
 SECTIONS = {
     'index.html': [('meeting-invitation','Council meeting'),('find-your-way','Find what you need'),('research-shortcut','Historical research','find-your-way'),('quick-answers','Before you respond'),('visit-school','Considering Kew Riverside?')],
@@ -33,7 +39,7 @@ SECTIONS = {
 }
 
 def render_navigation(name, document):
-    if name not in PAGES or 'class="site-header"' not in document:
+    if name not in PAGE_LABELS or 'class="site-header"' not in document:
         return document
     esc = html.escape
     document = re.sub(r'<!-- orientation:start -->.*?<!-- orientation:end -->', '', document, flags=re.S)
@@ -86,7 +92,7 @@ def render_navigation(name, document):
             parent = f' data-parent="{esc(entry[2])}"' if len(entry)>2 else ''
             items.append(f'<a href="#{esc(ident)}" data-section-id="{esc(ident)}"{parent}>{esc(label)}</a>')
         section_html = '<details class="page-sections" name="site-navigation"><summary><span class="section-prompt">On this page</span><span class="section-trail">Choose a section</span><span class="section-chevron" aria-hidden="true">⌄</span></summary><div class="section-panel"><nav class="section-links" aria-label="On this page">'+''.join(items)+'<a href="#main" class="section-top">Back to top</a></nav><div class="section-share" hidden><button type="button" class="section-copy">Copy link to this section</button><input class="section-copy-fallback" aria-label="Section link" readonly hidden><span class="section-copy-status" role="status"></span></div></div></details>'
-    orientation = '<!-- orientation:start --><div class="site-orientation"><div class="wrap orientation-inner"><span class="page-name">'+esc(PAGES[name])+'</span>'+section_html+menu+'</div></div><!-- orientation:end -->'
+    orientation = '<!-- orientation:start --><div class="site-orientation"><div class="wrap orientation-inner"><span class="page-name">'+esc(PAGE_LABELS[name])+'</span>'+section_html+menu+'</div></div><!-- orientation:end -->'
     header = header.replace('</header>',orientation+'</header>')
     return document[:match.start()]+header+document[match.end():]
 
@@ -94,7 +100,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--check', action='store_true')
     args = parser.parse_args()
-    for name in PAGES:
+    for name in PAGE_LABELS:
         path = ROOT/name
         before = path.read_text()
         after = render_navigation(name,before)

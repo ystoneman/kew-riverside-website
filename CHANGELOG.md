@@ -4,6 +4,13 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Direct-link fundraising role briefs
+
+- Add concise trustee and authorised account administrator briefs as public pages for sharing by URL. Both retain proposal status, pending charity approval and no donations; neither grants authority to set up accounts or launch a fundraiser.
+- Keep the briefs out of incoming site navigation and all existing pages. Retain the standard outgoing navigation, appearance controls and public source links. Mark the pages noindex; they are publicly accessible, not access-controlled.
+- Remove local preview, private worksheet and PDF references. Publish only the two HTML pages and their small stylesheet; keep the broader setup pack outside the public repository.
+- Independent campaign/evidence/UX planning and implementation reviews found no remaining material issue. Verification is recorded in TESTING.md; publication remains pending until deployment and live checks complete.
+
 ### Prioritised unanswered questions
 
 - Replace the document-led gap list with eight plain questions: viability; children’s outcomes; selection criteria; net closure costs and the site; costed alternatives; recruitment support; forecasts and housing; and written answers. Keep existing question anchors, source links and dated request records, while distinguishing new questions from earlier requests.

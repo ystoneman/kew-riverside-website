@@ -32,6 +32,6 @@ module.exports = defineConfig({
     { name: 'android-chromium', use: { ...devices['Pixel 7'] }, testIgnore: ['**/desktop.spec.js', '**/no-javascript.spec.js'] },
     { name: 'desktop-chromium', use: { browserName: 'chromium', viewport: { width: 1440, height: 1000 } }, testIgnore: ['**/mobile.spec.js', '**/no-javascript.spec.js'] },
     { name: 'desktop-webkit', use: { browserName: 'webkit', viewport: { width: 1440, height: 1000 } }, testIgnore: ['**/mobile.spec.js', '**/no-javascript.spec.js'] },
-    { name: 'iphone-no-javascript', use: { ...devices['iPhone 13'], javaScriptEnabled: false }, testMatch: ['**/no-javascript.spec.js', '**/qr.spec.js'] },
+    { name: 'iphone-no-javascript', use: { ...devices['iPhone 13'], javaScriptEnabled: false }, testMatch: ['**/no-javascript.spec.js', '**/qr.spec.js', '**/fundraising-briefs.spec.js'] },
   ],
 });

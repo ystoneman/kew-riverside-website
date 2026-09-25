@@ -11,6 +11,7 @@ from public_data import validate_board
 
 ROOT = Path(__file__).resolve().parents[2]
 PUBLIC_FILES = frozenset('''
+fundraising-trustees.html fundraising-admin.html fundraising-briefs.css
 visit/index.html
 theme.css theme.js
 analytics.js analytics.css analytics-config.json
@@ -27,6 +28,7 @@ voice.css voice.js contribute.css sent.html sent.js private-form.js respond-remi
 og-home.png og-letters.png og-ideas.png og-videos.png
 '''.split())
 MAINTENANCE_FILES = frozenset('''
+tests/browser/fundraising-briefs.spec.js
 .github/scripts/build_navigation.py tests/browser/orientation.spec.js
 tests/browser/clarity.spec.js
 tests/browser/qr.spec.js
