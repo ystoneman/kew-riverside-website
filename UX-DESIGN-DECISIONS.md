@@ -419,3 +419,8 @@ Keep the standard outgoing site shell, named role label, reading width, light/da
 Alternative considered: PDF attachments or publishing the full working checklist. Direct web pages meet the requested sharing need without publishing the wider draft pack. The short briefs need no additional local navigation. They include primary source links and ask readers to reply to the sender, with no collection form or named private contacts. Noindex discourages search indexing but is not access control.
 
 Verification: independent campaign/evidence reviews of the actual text; independent Chromium/WebKit visual review at 320, 390 and 1440 px in both appearances, with doubled text at 390 px. No horizontal overflow or obscured direct reply headings remained. Automated direct-link, navigation, appearance, privacy and no-JavaScript checks are included; see TESTING.md for results and native Safari limitations. Existing visitor priorities are unchanged.
+
+
+### Direct-link brief sharing previews — 25 September 2026
+
+Recipients need to recognise why they were sent a trustee or account-setup brief before opening the link (J1/J9). Add distinct role-first titles and descriptions, plus small original green/cream preview cards. Both cards carry proposed-fund and donations-closed wording; essential status is not left only to a description that a messaging client may truncate. Use centrally placed text so square crops preserve role and status. Absolute canonical and image URLs support script-free crawlers; preserve noindex and add no incoming navigation. Visible page bodies and all existing journeys are unchanged. Actual client cropping and cached previews remain under the sharing service's control; metadata validation does not certify WhatsApp rendering.
