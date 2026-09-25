@@ -4,6 +4,12 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Sharing previews for the fundraising briefs
+
+- Add role-specific Open Graph and Twitter titles, descriptions, canonical URLs and original 1200 × 630 PNG cards to both direct-link briefs. The images identify the recipient role and proposed fund, with donations closed; no charity approval or live appeal is implied.
+- Preserve the entire visible page body, noindex metadata and absence of incoming visitor links. Only the two preview images are added to public assets. Canonical metadata is distinguished from visitor hyperlinks in the no-incoming-link regression.
+- Validate raw, script-free metadata and image responses, PNG dimensions and file sizes. Visual review and release results are recorded in TESTING.md; a commit alone is not a verified WhatsApp client preview or deployment.
+
 ### Plainer wording across the site
 
 - Reword 231 passages on 15 pages in plainer English: everyday words instead of long ones (for example “does not show” for “does not establish” in negative statements), fewer abstract nouns, and long, qualifier-heavy sentences split. Facts, figures, dates, hedges, attributions, decision-stage wording, consent conditions and protected labels are unchanged. Sentences of 25 words or more fall from 95 to 38.

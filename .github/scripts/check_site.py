@@ -26,6 +26,7 @@ attainment-data.json attainment.csv case-evidence-data.json case-evidence.csv
 understand.html understand.css understand.js understand-data.json richmond-schools.csv
 voice.css voice.js contribute.css sent.html sent.js private-form.js respond-reminder.ics
 og-home.png og-letters.png og-ideas.png og-videos.png
+og-fundraising-trustees-v1.png og-fundraising-admin-v1.png
 '''.split())
 MAINTENANCE_FILES = frozenset('''
 tests/browser/fundraising-briefs.spec.js

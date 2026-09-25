@@ -5,6 +5,7 @@ from html.parser import HTMLParser
 import json
 import re
 import posixpath
+import struct
 import unittest
 from urllib.parse import parse_qs, unquote, urlsplit
 
@@ -51,6 +52,7 @@ class Document(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.ids = []
         self.references = []
+        self.metadata = []
         self.scripts = []
         self.refreshes = []
         self.navigation = {name: [] for name in ('desktop-explore', 'mobile-menu', 'participation-nav')}
@@ -63,6 +65,8 @@ class Document(HTMLParser):
 
     def handle_starttag(self, tag, attributes):
         attrs = dict(attributes)
+        if tag == 'meta':
+            self.metadata.append(attrs)
         if tag == 'meta' and attrs.get('http-equiv', '').lower() == 'refresh':
             self.refreshes.append(attrs.get('content', ''))
         classes = set(attrs.get('class', '').split())
@@ -188,15 +192,48 @@ class SiteStructureTests(unittest.TestCase):
         self.assertTrue(briefs <= PUBLIC_FILES)
         for name, page in self.pages.items():
             text = (ROOT / name).read_text()
-            for brief in briefs:
-                self.assertNotRegex(text, r'href=[\"\'][^\"\']*' + re.escape(brief),
-                                    'Role briefs must not be linked from public pages')
+            # A self-canonical <link> is metadata, not an incoming visitor link.
+            for tag, attribute, reference in page.references:
+                if tag == 'a' and attribute == 'href':
+                    self.assertNotIn(posixpath.basename(unquote(urlsplit(reference).path)), briefs,
+                                     'Role briefs must not be linked from public pages')
             if name in briefs:
                 self.assertIn('name="robots" content="noindex,nofollow"', text)
                 self.assertNotIn('<form', text)
                 self.assertNotRegex(text, r'fundraising(?:-checklist)?\.html|output/pdf|127\.0\.0\.1|local preview')
         self.assertNotIn('fundraising.html', PUBLIC_FILES)
         self.assertNotIn('fundraising-checklist.html', PUBLIC_FILES)
+
+    def test_brief_previews_have_distinct_public_images_and_proposal_context(self):
+        base = 'https://ystoneman.github.io/kew-riverside-website/'
+        images = set()
+        for role in ('trustees', 'admin'):
+            name = f'fundraising-{role}.html'
+            page = self.pages[name]
+            meta = {a.get('property', a.get('name')): a.get('content') for a in page.metadata}
+            self.assertEqual(meta['og:url'], base + name)
+            self.assertEqual(meta['og:type'], 'website')
+            self.assertEqual(meta['og:locale'], 'en_GB')
+            self.assertEqual(meta['twitter:card'], 'summary_large_image')
+            self.assertEqual(meta['twitter:image'], meta['og:image'])
+            self.assertEqual(meta['twitter:title'], meta['og:title'])
+            self.assertEqual(meta['description'], meta['og:description'])
+            self.assertIn('donations are not open', meta['og:description'].lower())
+            self.assertIn('proposal' if role == 'trustees' else 'approval pending', meta['og:description'].lower())
+            self.assertIn('trustee' if role == 'trustees' else 'account', meta['og:title'].lower())
+            self.assertTrue(meta['og:image:alt'])
+            self.assertIn(('link', 'href', base + name), page.references)
+            image_url = meta['og:image']
+            self.assertTrue(image_url.startswith(base))
+            filename = image_url.removeprefix(base)
+            self.assertIn(filename, PUBLIC_FILES)
+            data = (ROOT / filename).read_bytes()
+            self.assertEqual(data[:8], b'\x89PNG\r\n\x1a\n')
+            self.assertEqual(struct.unpack('>II', data[16:24]), (1200, 630))
+            self.assertLess(len(data), 300_000)
+            self.assertEqual((meta['og:image:width'], meta['og:image:height'], meta['og:image:type']), ('1200', '630', 'image/png'))
+            images.add(filename)
+        self.assertEqual(len(images), 2, 'The recipient roles need distinct preview images')
 
     def test_every_page_uses_the_same_versioned_navigation_script(self):
         baseline = [src for src in self.pages['index.html'].scripts if urlsplit(src).path == 'navigation.js']
