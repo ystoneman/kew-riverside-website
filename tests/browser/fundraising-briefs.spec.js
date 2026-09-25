@@ -12,6 +12,8 @@ for (const [file, title] of [
     await expect(page.locator('form')).toHaveCount(0);
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,nofollow');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+    // A shared anchor is a fresh arrival, not a same-document smooth scroll.
+    await page.goto('about:blank');
     await page.goto('/kew-riverside-website/' + file + '#reply');
     await expect(page.locator('#reply')).toBeInViewport();
     await expect(page.locator('#reply')).toContainText('reply to the person who sent this brief');
@@ -19,10 +21,21 @@ for (const [file, title] of [
     // Readers can check the site's privacy terms and return to the brief.
     // Activating the footer link changes the departure position, so this checks
     // recovery of the correct document, separately from direct reply arrival.
+    const privacy = page.locator('footer a[href="privacy.html"]');
+    await privacy.scrollIntoViewIfNeeded();
+    await expect(privacy).toBeInViewport();
+    // Native smooth scrolling still runs without page scripts. Poll from the
+    // test process so disabled in-page timers cannot freeze actionability.
+    let previousY = null, stableReadings = 0;
+    await expect.poll(async () => {
+      const y = await page.evaluate(() => scrollY);
+      stableReadings = y === previousY ? stableReadings + 1 : 0;
+      previousY = y;
+      return stableReadings;
+    }, { intervals: [100] }).toBeGreaterThanOrEqual(3);
     await Promise.all([
       page.waitForURL(/kew-riverside-website\/privacy\.html$/, { waitUntil: 'load' }),
-      hasTouch ? page.locator('footer a[href="privacy.html"]').tap()
-        : page.locator('footer a[href="privacy.html"]').click(),
+      hasTouch ? privacy.tap() : privacy.click(),
     ]);
     await expect(page).toHaveURL(/kew-riverside-website\/privacy\.html$/);
     await page.goBack();
