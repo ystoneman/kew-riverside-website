@@ -1,8 +1,9 @@
 /* First-party collector. Only fixed, reviewed labels leave the page.
  * Protocol: https://docs.umami.is/docs/api/sending-stats
  * No provider JavaScript, DOM recording, form listeners or visitor identity API.
- * Two tiers: a basic page view (on unless the visitor or their browser objects)
- * and detailed usage (sections, active time, named actions) only after opt-in.
+ * Two tiers, both on unless the visitor or their browser objects: a basic page
+ * view, and detailed usage (sections, active time, named actions). A visitor can
+ * keep page views only ("Basic counts only") or turn both off.
  * No cookie is set and nothing is written to storage unless a choice is made.
  */
 (() => {
@@ -12,8 +13,8 @@
   const ROOT = '/kew-riverside-website/';
   const KEY = 'kew-analytics-choice-v1';
   const DAY = 24 * 60 * 60 * 1000;
-  // Detailed-usage permission is asked again after 180 days; an objection or a
-  // basic-only choice is kept far longer so tracking never silently widens.
+  // An explicit allow matches the default and lapses after 180 days. An objection
+  // or a basic-only choice is kept for five years before the default applies again.
   const LIFETIME = { allow: 180 * DAY, basic: 5 * 365 * DAY, deny: 5 * 365 * DAY };
   const PAGES = {
     'index.html': 'Home & evidence', 'proposal.html': 'Proposal & action plan',
@@ -26,13 +27,18 @@
     'corrections.html': 'Corrections'
   };
   // Broad editorial sections only: no individual letters, questions or form fields.
+  // Each ID is an entry in the page's own "On this page" list (top level, plus the
+  // Evidence source library); a heading ID stands for its enclosing section.
   const SECTIONS = {
-    'index.html': ['meeting-invitation', 'top', 'find-your-way', 'overview', 'evidence', 'timeline', 'options', 'records', 'gaps', 'method'],
+    'index.html': ['meeting-invitation', 'find-your-way', 'quick-answers', 'visit-school'],
     'proposal.html': ['parent-plan', 'timetable', 'who-decides', 'questions', 'other-schools', 'decision-record', 'take-part'],
     'faq.html': ['taking-part', 'decisions', 'money', 'school-places', 'learning'],
-    'understand.html': ['pupil-trends', 'school-places', 'year-groups', 'other-proposals', 'learning-and-results', 'methodology'],
+    'understand.html': ['pupil-trends', 'forecast-checks', 'school-places', 'year-groups', 'budget', 'other-proposals', 'learning-and-results', 'methodology'],
     'lessons.html': ['key-lessons', 'visual-guide', 'catalogue', 'method'],
-    'letters.html': ['letters']
+    'letters.html': ['letter-form', 'letter-guidelines', 'letters'],
+    'evidence.html': ['records', 'source-search', 'source-library', 'evidence', 'timeline', 'earlier-record', 'gaps', 'method'],
+    'options.html': ['option-7', 'options-prep-title', 'options-findings-title', 'options-navigation', 'options-sources-title'],
+    'videos.html': ['upload', 'prompt-title', 'process-title']
   };
   const ACTIONS = {
     'https://docs.google.com/forms/d/e/1FAIpQLSda5oPsdUlrJkf6vACC_AjvXFR6-ki3iBymNIF5BAWNxf85xQ/viewform': 'Opened official response form',
@@ -54,7 +60,14 @@
   let config, choice = null, storageOK = true, collecting = false;
   let timer, previousTick = 0, lastActivity = 0, seconds = 0, pageSent = false;
   let opener, panel, status, buttons;
-  const sections = (SECTIONS[file] || []).map(id => ({ id, element: document.getElementById(id), seconds: 0, reached: false, engaged: false })).filter(s => s.element);
+  const sectionElement = id => {
+    const element = document.getElementById(id);
+    return element && /^H[1-6]$/.test(element.tagName) ? element.closest('section') : element;
+  };
+  const sections = (SECTIONS[file] || []).map(id => ({ id, element: sectionElement(id), seconds: 0, reached: false, engaged: false })).filter(s => s.element);
+  // A listed section nested in another (such as source search within Evidence's key
+  // findings) takes its own area out of its parent's, so it can be the one in view.
+  sections.forEach(s => { s.nested = sections.filter(other => other !== s && s.element.contains(other.element)); });
   const milestones = new Set();
   const actionsSent = new Set();
   const pending = new Set();
@@ -66,13 +79,14 @@
         Number.isFinite(saved.until) && saved.until > Date.now() ? saved.choice : null;
     } catch (_) { storageOK = false; choice = null; }
   }
-  // Basic page views: on by default, off after an objection, a browser privacy
-  // signal, unreadable storage (an objection could not be honoured) or a private route.
+  // Page views: on by default, off after an objection, a browser privacy signal,
+  // unreadable storage (an objection could not be honoured) or a private route.
   function counting() {
     return config?.enabled === true && storageOK && choice !== 'deny' && !browserObjects() &&
       location.hostname === HOST && location.pathname.startsWith(ROOT) && !privateRoute;
   }
-  function detailed() { return counting() && choice === 'allow'; }
+  // Detailed usage: also on by default, unless the visitor kept basic counts only.
+  function detailed() { return counting() && choice !== 'basic'; }
   function referrer() {
     // Fixed source buckets only. No external hostname, private path or campaign ID.
     try {
@@ -131,7 +145,8 @@
         s.reached = true; send('Section reached', { section: s.id });
       }
     }
-    const dominant = areas.sort((a, b) => b.area - a.area)[0];
+    const own = areas.map(({ section, area }) => ({ section, area: area - areas.filter(other => section.nested.includes(other.section)).reduce((sum, other) => sum + other.area, 0) }));
+    const dominant = own.sort((a, b) => b.area - a.area)[0];
     if (dominant && dominant.area >= innerWidth * Math.min(innerHeight, 200) * .25) {
       const s = dominant.section; s.seconds += elapsed;
       if (!s.engaged && s.seconds >= 10) { s.engaged = true; send('Section viewed 10s', { section: s.id }); }
@@ -165,7 +180,7 @@
   function update() {
     const ready = config?.enabled === true;
     const locked = !ready || !storageOK || browserObjects();
-    const current = choice || 'basic';
+    const current = choice || 'allow';
     for (const [value, el] of Object.entries(buttons)) {
       el.disabled = locked;
       el.setAttribute('aria-pressed', String(!locked && !privateRoute && value === current));
@@ -174,7 +189,7 @@
       !storageOK ? 'Your browser could not save a choice, so analytics stays off.' :
       browserObjects() ? 'Your browser’s privacy signal is keeping all analytics off.' :
       privateRoute ? 'Analytics is off on this ' + (file === 'feedback.html' ? 'Share ideas' : 'private request') + ' page.' :
-      current === 'allow' ? 'Current setting: basic page counts and detailed usage.' :
+      current === 'allow' ? 'Current setting: basic page counts and detailed usage' + (choice ? '.' : ' (the default).') :
       current === 'deny' ? 'Current setting: analytics off.' : 'Current setting: basic page counts only.';
   }
   function close() { panel.hidden = true; update(); if (opener?.isConnected && !opener.closest('[hidden]')) opener.focus({ preventScroll: true }); }
@@ -187,20 +202,21 @@
     const dismiss = button('×', close); dismiss.className = 'analytics-close'; dismiss.setAttribute('aria-label', 'Close analytics choices');
     panel.append(title, dismiss,
       node('p', 'Basic page counts are on by default. Umami records which page opened, which search engine or page of this site led you here (or a broad category), and the device, browser and approximate location it works out from your connection. No cookies are set.'),
-      node('p', 'Detailed usage is off unless you allow it: which sections you view, active viewing time, and which key links or downloads you open.'),
-      node('p', 'We never record your screen, words you type, names or contact details. Everything on the site works whatever you choose.'));
-    const more = node('a', 'How analytics works'); more.href = 'privacy.html#analytics'; panel.append(more);
-    // Close without returning focus, so the explanation it leads to is not covered.
-    more.addEventListener('click', () => { panel.hidden = true; });
+      node('p', 'Detailed usage is on by default too: which broad sections you view, active viewing time, and which key links or downloads you open. Choose Basic counts only to stop it, or Turn analytics off to stop everything.'));
+    // The choices come before the longer explanation so they fit a small phone screen.
     status = node('p'); status.setAttribute('role', 'status'); panel.append(status);
     const actions = node('div', '', 'analytics-actions');
     const choose = value => () => { persist(value); if (storageOK) close(); };
     buttons = {
-      allow: button('Allow detailed usage', choose('allow')),
+      allow: button('Include detailed usage', choose('allow')),
       basic: button('Basic counts only', choose('basic')),
       deny: button('Turn analytics off', choose('deny'))
     };
     actions.append(...Object.values(buttons)); panel.append(actions);
+    panel.append(node('p', 'We never record your screen, words you type, names or contact details. Everything on the site works whatever you choose.'));
+    const more = node('a', 'How analytics works'); more.href = 'privacy.html#analytics'; panel.append(more);
+    // Close without returning focus, so the explanation it leads to is not covered.
+    more.addEventListener('click', () => { panel.hidden = true; });
     document.querySelectorAll('a[data-analytics-choices]').forEach(link => link.addEventListener('click', event => { event.preventDefault(); open(link); }));
     panel.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
     update();
@@ -213,8 +229,9 @@
     let url;
     try { url = new URL(a.href); } catch (_) { return; }
     if (url.origin === location.origin && url.pathname.startsWith(ROOT)) {
-      const name = url.pathname.split('/').pop();
-      if (PRIVATE_PAGES.has(name)) return;
+      const name = url.pathname.split('/').pop() || 'index.html';
+      // A jump within this page (menus, Back to top) is not opening a page.
+      if (PRIVATE_PAGES.has(name) || name === file) return;
       if (!label && Object.hasOwn(DOWNLOADS, name)) label = DOWNLOADS[name];
       if (!label && Object.hasOwn(PAGES, name) && !url.search) label = 'Opened ' + PAGES[name];
     }
