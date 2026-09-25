@@ -4,6 +4,14 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Analytics receiving check and report-reading notes
+
+- Investigated why Umami's Events report showed no custom events in the seven days to 25 September 2026. Live `analytics.js`, `analytics-config.json` and `lessons.html` matched `main`. In one deliberate operator visit to live Lessons (Claude's built-in Chromium browser, 20:01–20:04 UTC), “Allow detailed usage” was chosen through the footer control. A scripted click on the menu's Parent action plan link followed, with its navigation held locally for inspection. The collector sent the fixed `Action opened` / `Opened Proposal & action plan` payload. `cloud.umami.is/api/send` returned HTTP 200 with session and visit identifiers, as for page views. The visit sent three Lessons page views and that one event. The browser was then set to “Turn analytics off”. Display in the private dashboard was not checked: it needs the operator's sign-in.
+- Finding: the provider accepts the site's named events, so zero events reflects no recorded opted-in activity, not a demonstrated delivery failure. Consent is only in the footer/privacy control, by design. A local two-server experiment found no click event lost to the collector aborting in-flight requests at `pagehide`: 0 of 20 in each Chromium/WebKit case, with cached and uncached slow CORS preflights. That behaviour is unchanged.
+- Add “Reading the free reports” to ANALYTICS.md: opted-in-only Events, device-filtered entry pages and Journey start steps, path-filtered bounce, hourly visit grouping, user-agent device type, questions pageviews cannot answer, and Umami Cloud's newer collection host. No collector code, public page, Umami setting or plan changed. Section labels are unchanged; without opted-in traffic, new Evidence or Options labels would produce no data.
+
+Verification: all 50 Python checks and 95-public-file validation passed. Under Node 24.19.0, 1,513 local browser checks passed with 15 expected skips, including 120 intercepted analytics checks. This is an internal documentation change, so no specialist panel was needed; claims were checked against the cited Umami sources. Not committed or deployed.
+
 ### Sharing previews for the fundraising briefs
 
 - Add role-specific Open Graph and Twitter titles, descriptions, canonical URLs and original 1200 × 630 PNG cards to both direct-link briefs. The images identify the recipient role and proposed fund, with donations closed; no charity approval or live appeal is implied.
