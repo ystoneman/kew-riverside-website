@@ -195,10 +195,12 @@ test('Evidence arrival leads with London outcomes and reaches source search in o
 });
 
 test('Unanswered questions overview presents eight priorities without opening one or mixing in resolved evidence', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
   await page.goto('/evidence.html#gaps');
   const questions = page.locator('#gaps .gaps-grid > article');
   expect(await questions.evaluateAll(nodes => nodes.map(node => node.id))).toEqual(unansweredQuestionIds);
   await expect(page.locator('#gaps .gap-detail[open]')).toHaveCount(0);
+  await expect(page.locator('#gap-budget summary')).toBeInViewport({ ratio: 1 });
   for (const question of await questions.all()) {
     await expect(question.locator('summary h3')).toBeVisible();
     await expect(question.locator('summary .gap-state')).toBeVisible();
