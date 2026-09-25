@@ -66,6 +66,53 @@ for (const file of pages) {
   });
 }
 
+test('Unanswered questions links, status labels and disclosure controls have readable contrast in both appearances', async ({ page }) => {
+  const targets = [
+    '#gaps .gaps-intro a', '#evidence-found a', '#gap-records a',
+    '#gaps .gap-detail > summary > span:first-child', '#gaps .gap-state',
+  ];
+  for (const scheme of ['light', 'dark']) {
+    await page.emulateMedia({ colorScheme: scheme });
+    await page.goto('/evidence.html#gaps');
+    for (const id of ['evidence-found', 'gap-records']) {
+      const detail = page.locator(`#${id} .gap-detail`);
+      if (await detail.getAttribute('open') === null) await detail.locator(':scope > summary').click();
+    }
+    for (const selector of targets) {
+      const elements = page.locator(selector);
+      expect(await elements.count(), selector + ' is present').toBeGreaterThan(0);
+      for (const element of await elements.all()) await expect(element).toBeVisible();
+    }
+    const measurements = await page.evaluate(selectors => {
+      const parse = value => (value.match(/[\d.]+/g) || []).map(Number);
+      const lum = rgb => rgb.slice(0,3).map(v => v / 255).map(v => v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4).reduce((sum,v,i) => sum + v * [.2126,.7152,.0722][i], 0);
+      const blend = (foreground, background) => foreground.slice(0,3).map((v, i) => v * (foreground[3] ?? 1) + background[i] * (1 - (foreground[3] ?? 1)));
+      function measure(element, pseudo = null) {
+        const ancestors = [];
+        for (let current = element; current; current = current.parentElement) ancestors.unshift(current);
+        let background = ancestors.reduce((bg, ancestor) => blend(parse(getComputedStyle(ancestor).backgroundColor), bg), [255,255,255]);
+        const style = getComputedStyle(element, pseudo);
+        if (pseudo) background = blend(parse(style.backgroundColor), background);
+        const color = blend(parse(style.color), background);
+        const ratio = (Math.max(lum(color),lum(background))+.05)/(Math.min(lum(color),lum(background))+.05);
+        const large = parseFloat(style.fontSize)>=24 || (parseFloat(style.fontSize)>=18.66 && parseInt(style.fontWeight)>=700);
+        return { element: element.closest('article')?.id || 'intro', text: pseudo ? style.content : element.textContent.trim(), pseudo, ratio, minimum: large ? 3 : 4.5 };
+      }
+      return [
+        ...selectors.flatMap(selector => [...document.querySelectorAll(selector)].map(element => measure(element))),
+        ...[...document.querySelectorAll('#gaps .gap-detail > summary')].map(element => measure(element, '::after')),
+      ];
+    }, targets);
+    const controls = measurements.filter(item => item.pseudo);
+    expect(controls).toHaveLength(10);
+    expect(controls.some(item => item.text.includes('+'))).toBe(true);
+    expect(controls.some(item => item.text.includes('−'))).toBe(true);
+    for (const measurement of measurements) {
+      expect(measurement.ratio, `${scheme}: ${measurement.element} ${measurement.text}`).toBeGreaterThanOrEqual(measurement.minimum - .02);
+    }
+  }
+});
+
 test('Manual choices persist across pages and Back; System resumes live device changes', async ({ page }) => {
   await page.emulateMedia({ colorScheme:'dark' });
   await page.goto('/index.html');

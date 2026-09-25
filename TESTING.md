@@ -22,6 +22,16 @@ On Linux, install browser system dependencies with `npx playwright install --wit
 
 The browser harness serves the site locally over HTTP/2, as GitHub Pages does, uses fictional form inputs, and intercepts external requests. The four legacy-route tests observe requests instead of routing them (see Legacy redirect fix below). It never delivers a test submission to Formspree. Hosted CAPTCHA, real inbox delivery, council submission and real contribution moderation are outside the automated suite.
 
+## Prioritised unanswered questions — 25 September 2026
+
+The first focused run passed **58 browser checks** across desktop/mobile Chromium and WebKit and no-JavaScript iPhone WebKit. Coverage protects the eight-question order, collapsed overview, Known/Still unanswered distinction, incoming question links, repeated links after closing a disclosure, keyboard/touch, Back, dated request notes and resolved inspection evidence outside the unresolved list. The inspection source/filter/repeated-link assertions remain intact, using its new stable destination instead of its former item number. Direct-arrival cases use isolated pages so they do not incorrectly require one same-document question visit to close another.
+
+All **50 Python checks** and **95-public-file validation** passed, as did generated navigation/source/comparison freshness and JavaScript/diff checks. Independent evidence/campaign review passed the actual copy, including freshly checked council admissions and sibling commitments.
+
+Independent rendered UX review covered Chromium at 1440px and WebKit at 320/390px, light/dark themes, keyboard, touch, stable arrivals, direct/repeated old and new anchors, source/filter recovery and Back, no JavaScript and doubled-font reflow. It identified an overlong phone introduction and insufficient light-theme contrast in introductory/follow-up links and inherited summary labels. The final introduction places the full first question on the normal-text 320 × 568 arrival screen; the complete status/disclosure row and all section links now use readable foreground colours. The reviewer rechecked and visually inspected all fixes and found no remaining material issues. All **70 focused checks** passed after the arrival/link fixes, including the new full-first-summary viewport regression. The later summary-colour fix has separate light/dark contrast coverage. Full regression and exact-revision hosted results are tracked in the pull request.
+
+Native iPhone 17 / iOS 26.5 Safari was attempted through Simulator. The URL field accepted the local preview address but Return did not navigate; Send Keyboard Input to Device, Connect Hardware Keyboard and Toggle Software Keyboard were disabled. Native interaction is therefore unverified, distinct from the passing emulated checks. No real form was submitted.
+
 ## Unanswered questions menu shortcut — 25 September 2026
 
 New regression coverage requires the direct `evidence.html#gaps` link immediately after Evidence across every content page. Browser cases check the complete menu order, matching section labels, cross-page and repeated same-hash arrival, keyboard navigation from Evidence to the new link, and native navigation with JavaScript disabled. Existing all-page navigation checks also follow the added link.

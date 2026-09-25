@@ -43,11 +43,15 @@
     }
   }
   function reset() { fields.forEach(key => controls[key].value = ''); apply(); }
+  function revealQuestion(id) {
+    const target = document.getElementById(id);
+    // The overview stays compact; only a specific record opens its own detail.
+    const detail = target && target.matches('#gaps article') && target.querySelector('.gap-detail');
+    if (detail) detail.open = true;
+  }
   function revealAnchor() {
     const id = window.location.hash.slice(1);
-    const gap = document.getElementById(id);
-    const detail = gap && gap.querySelector('.gap-detail');
-    if (detail) detail.open = true;
+    revealQuestion(id);
     if (id === 'evidence') figures.open = true;
     if (!id.startsWith('source-')) return;
     const card = document.getElementById(id);
@@ -82,6 +86,8 @@
   // A click can repeat an existing hash after filters hid its target.
   document.addEventListener('click', event => {
     if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    const questionLink = event.target.closest && event.target.closest('a[href^="#gap-"], a[href="#evidence-found"]');
+    if (questionLink) revealQuestion(questionLink.getAttribute('href').slice(1));
     const localLink = event.target.closest && event.target.closest('a[href="#evidence"]');
     if (localLink) figures.open = true;
     const anchor = event.target.closest && event.target.closest('a[href^="#source-"]');

@@ -219,7 +219,7 @@ test('Inspection: original-source counts, search and the resolved gap agree', as
   await expect(inspection.locator('h3 a')).toHaveAttribute('href', 'https://www.kewriverside.richmond.sch.uk/attachments/download.asp?file=3619&type=pdf');
   await page.getByRole('button', { name: 'Clear filters' }).click();
   await expect(page.locator('.source-card:visible')).toHaveCount(57);
-  const gap = page.locator('#gaps article').filter({ has: page.locator('span', { hasText: /^07$/ }) });
+  const gap = page.locator('#evidence-found');
   await expect(gap).toContainText(/resolved/i);
   await activate(gap.locator('summary'), hasTouch);
   await activate(gap.locator('a[href="#source-inspection-2026"]'), hasTouch);

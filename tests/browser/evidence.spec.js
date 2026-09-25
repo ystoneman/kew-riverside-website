@@ -1,6 +1,29 @@
 const fs = require('node:fs/promises');
 const { test, expect } = require('./fixtures');
 
+const unansweredQuestionIds = [
+  'gap-budget', 'gap-pupil-impacts', 'gap-selection', 'gap-closure-costs',
+  'gap-alternatives', 'gap-recruitment', 'gap-forecasts', 'gap-answers',
+];
+
+async function openQuestionFromSections(page, id, hasTouch) {
+  const sections = page.locator('.page-sections');
+  if (hasTouch) await sections.locator(':scope > summary').tap();
+  else await sections.locator(':scope > summary').click();
+  const link = sections.locator(`a[data-section-id="${id}"]`);
+  // Scroll the popup alone so activating a sticky control cannot move the
+  // document away from the reading position that this journey is testing.
+  await link.evaluate(node => {
+    const panel = node.closest('.section-panel');
+    const item = node.getBoundingClientRect(), bounds = panel.getBoundingClientRect();
+    if (item.top < bounds.top) panel.scrollTop -= bounds.top - item.top;
+    else if (item.bottom > bounds.bottom) panel.scrollTop += item.bottom - bounds.bottom;
+  });
+  const bounds = await link.boundingBox();
+  if (hasTouch) await page.touchscreen.tap(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+  else await page.mouse.click(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+}
+
 async function refine(page, label, value) {
   const filters = page.locator('#record-refinements');
   if (!await filters.evaluate(node => node.open)) await filters.locator('summary').click();
@@ -171,9 +194,69 @@ test('Evidence arrival leads with London outcomes and reaches source search in o
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
 });
 
+test('Unanswered questions overview presents eight priorities without opening one or mixing in resolved evidence', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.goto('/evidence.html#gaps');
+  const questions = page.locator('#gaps .gaps-grid > article');
+  expect(await questions.evaluateAll(nodes => nodes.map(node => node.id))).toEqual(unansweredQuestionIds);
+  await expect(page.locator('#gaps .gap-detail[open]')).toHaveCount(0);
+  await expect(page.locator('#gap-budget summary')).toBeInViewport({ ratio: 1 });
+  for (const question of await questions.all()) {
+    await expect(question.locator('summary h3')).toBeVisible();
+    await expect(question.locator('summary .gap-state')).toBeVisible();
+    await expect(question.locator('summary .gap-state')).not.toHaveText('Evidence found');
+  }
+  const sectionIds = await page.locator('.section-links a[data-section-id]').evaluateAll(links => links.map(link => link.dataset.sectionId));
+  const questionSections = [...unansweredQuestionIds, 'evidence-found', 'gap-records'];
+  expect(sectionIds.filter(id => questionSections.includes(id))).toEqual(questionSections);
+  await expect(page.locator('#gaps .gaps-grid #evidence-found')).toHaveCount(0);
+  const resolved = page.locator('#evidence-found');
+  await expect(resolved.getByRole('heading', { name: 'The complete 2026 inspection report' })).toBeVisible();
+  await expect(resolved.locator('.gap-state')).toHaveText('Evidence found');
+  await expect(resolved.locator('a[href="#source-inspection-2026"]')).toHaveCount(1);
+  await expect(page.locator('#gaps .gaps-grid #gap-records')).toHaveCount(0);
+});
+
+for (const id of unansweredQuestionIds) {
+  test(`Unanswered questions: incoming ${id} reveals only its answer and distinguishes evidence from missing answers`, async ({ page }) => {
+    await page.goto('/evidence.html#' + id);
+    const question = page.locator('#' + id);
+    await expect(question.locator('.gap-detail')).toHaveAttribute('open', '');
+    await expect(page.locator('#gaps .gap-detail[open]')).toHaveCount(1);
+    await expect(question.locator('summary')).toBeInViewport();
+    const known = question.locator('.gap-detail > p').filter({ has: page.locator('strong', { hasText: /^Known:$/ }) });
+    const missing = question.locator('.gap-detail > p').filter({ has: page.locator('strong', { hasText: /^Still unanswered:$/ }) });
+    await expect(known).toBeVisible();
+    await expect(missing).toBeVisible();
+    expect(await known.locator('a[href]').count(), `${id} links its known position to evidence`).toBeGreaterThan(0);
+  });
+}
+
+for (const id of ['gap-selection', 'gap-recruitment', 'gap-answers']) {
+  test(`Unanswered questions: ${id} supports section navigation, repeated activation and Back`, async ({ page, hasTouch }) => {
+    await page.goto('/evidence.html#gaps');
+    await openQuestionFromSections(page, id, hasTouch);
+    const detail = page.locator('#' + id + ' > .gap-detail');
+    await expect(page).toHaveURL(new RegExp('#' + id + '$'));
+    await expect(detail).toHaveAttribute('open', '');
+    await expect(page.locator('#gaps .gap-detail[open]')).toHaveCount(1);
+    await expect(detail.locator('summary')).toBeInViewport();
+    // Use the native disclosure control, including keyboard operation on desktop.
+    if (hasTouch) await detail.locator('summary').tap();
+    else { await detail.locator('summary').focus(); await page.keyboard.press('Enter'); }
+    await expect(detail).not.toHaveAttribute('open', '');
+    await openQuestionFromSections(page, id, hasTouch);
+    await expect(detail).toHaveAttribute('open', '');
+    await expect(detail.locator('summary')).toBeInViewport();
+    await page.goBack();
+    await expect(page).toHaveURL(/evidence\.html#gaps$/);
+    await expect(page.locator('#gaps h2')).toBeInViewport();
+  });
+}
+
 test('Evidence gaps show dated requests without treating dispatch as disclosure', async ({ page }) => {
   await page.goto('/evidence.html#gap-budget');
-  await expect(page.locator('#gaps .section-heading')).toContainText('Request dates record dispatch, not disclosure or agreement');
+  await expect(page.locator('#gaps .gaps-note')).toContainText('Request dates record dispatch, not disclosure or agreement');
   for (const [id, subject] of [
     ['gap-budget', /budget.*forecast/i],
     ['gap-alternatives', /options appraisal/i],

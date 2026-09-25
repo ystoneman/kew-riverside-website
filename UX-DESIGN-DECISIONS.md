@@ -67,6 +67,16 @@ These choices are design judgments to verify, not measured conversion improvemen
 
 ## Selected page and interaction design
 
+### Prioritised unanswered questions — 25 September 2026
+
+Visitor need (J1, J3, J6–J8): the newly exposed Unanswered questions menu route should explain which answers matter, rather than require parents to infer them from document titles. The owner approved eight questions in this order: conditions for keeping Kew open; children’s outcomes; why Kew was selected; net closure costs and site use; costed alternatives; recruitment support; pupil and housing forecasts; and written answers. This is an editorial priority, not a measured parent ranking or an agreed school/PTA meeting script.
+
+Keep the existing `evidence.html#gaps` destination and five named question anchors. Use the existing single-column native disclosures, with all question titles and status labels visible; distinguish Known from Still unanswered inside. Separate resolved inspection evidence and future/background record tracking below the eight unresolved questions, retaining their source routes. Link to maintained financial, options and family explanations rather than duplicating their full answers. No new homepage band or global menu entry is needed.
+
+The overview stays collapsed when scripts run, while a direct question link opens only its own record. A repeated same-fragment link reopens a question after it has been closed; modified clicks retain their normal behaviour. Static-open HTML remains readable when scripts fail or are disabled. The existing local navigator follows the new priority order and includes resolved/background destinations. Dates describe only the requests actually sent; new questions are not represented as dispatched. Responding to the council remains possible without waiting for answers.
+
+Independent planning review identified the overview-expansion and repeated-link issues before implementation. Evidence/campaign implementation review confirmed capacity qualifications, council commitments, family choice, privacy and the distinction between requests and answers. Rendered review and completed checks are recorded in TESTING.md; deployment is verified separately.
+
 ### Unanswered questions menu shortcut — 25 September 2026
 
 Visitor need (J6): parents want a direct way to find the questions and evidence gaps that remain unresolved. The owner approved exposing this destination through the main menu. Add **Unanswered questions** as a visible, indented link immediately after Evidence once Menu is open, targeting the existing `evidence.html#gaps` section. Use the same label for the section heading, its local navigator entry and its introductory shortcut.
