@@ -22,6 +22,14 @@ On Linux, install browser system dependencies with `npx playwright install --wit
 
 The browser harness serves the site locally over HTTP/2, as GitHub Pages does, uses fictional form inputs, and intercepts external requests. The four legacy-route tests observe requests instead of routing them (see Legacy redirect fix below). It never delivers a test submission to Formspree. Hosted CAPTCHA, real inbox delivery, council submission and real contribution moderation are outside the automated suite.
 
+## Unanswered questions menu shortcut — 25 September 2026
+
+New regression coverage requires the direct `evidence.html#gaps` link immediately after Evidence across every content page. Browser cases check the complete menu order, matching section labels, cross-page and repeated same-hash arrival, keyboard navigation from Evidence to the new link, and native navigation with JavaScript disabled. Existing all-page navigation checks also follow the added link.
+
+All 50 Python privacy/security/data/structure checks and 95-public-file validation passed. Independent rendered UX review inspected Chromium at 1440 × 1000, WebKit at 320 × 568 and 390 × 844, and no-JavaScript WebKit at 390 × 844. The link retains a 44px target, the menu fits and scrolls within the viewport, and the heading is visible after navigation. Keyboard and repeated same-page activation passed. Screenshots confirm that the Parent action plan, Community letters and Share ideas remain exposed at 320px. External requests were blocked; no real forms were submitted.
+
+Native iPhone 17 / iOS 26.5 Safari verification was attempted through Simulator. The address field accepted the local preview URL but Return did not navigate; the simulator's Send Keyboard Input to Device, Connect Hardware Keyboard and Toggle Software Keyboard controls were disabled. Native menu/touch/Back behaviour is therefore unverified. Full local and hosted suite results and publication verification are tracked in the associated pull request; the checks above do not claim deployment.
+
 ## Navigation and plain Proposal questions — 24 September 2026
 
 ### Stable arrivals and Back recovery before publication

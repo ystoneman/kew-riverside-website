@@ -206,6 +206,10 @@ class SiteStructureTests(unittest.TestCase):
                 participation = navigation_destinations(name, page.navigation['participation-nav'])
                 self.assertEqual(desktop, expected_desktop, 'Desktop destinations differ between pages')
                 self.assertTrue(desktop | {('index.html', '')} <= mobile, 'Full menu must retain every desktop destination and Home')
+                menu_routes = [local_destination(name, href) for href in page.navigation['mobile-menu']]
+                evidence_index = menu_routes.index(('evidence.html', 'records'))
+                self.assertEqual(menu_routes[evidence_index + 1], ('evidence.html', 'gaps'),
+                                 'Unanswered questions must remain a direct menu route immediately after Evidence')
                 required_pages = {'index.html', 'about.html', 'proposal.html', 'faq.html', 'understand.html', 'options.html', 'lessons.html', 'evidence.html', 'letters.html', 'feedback.html', 'videos.html', 'supporters.html', 'privacy.html', 'corrections.html', 'lessons-sources.html'}
                 self.assertEqual({file for file, fragment in mobile}, required_pages | ({'sent.html'} if name == 'sent.html' else set()), 'Full menu must expose the agreed page set')
                 self.assertEqual(participation, {('letters.html', ''), ('feedback.html', '')})
