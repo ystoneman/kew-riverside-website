@@ -408,3 +408,14 @@ Independent evidence, campaign and rendered UX implementation reviews passed. A 
 ## Stable initial section position — 24 September 2026
 
 J1/J2/J6: a linked section must be settled before a parent taps. Hosted and local traces found that WebKit could run deferred navigation while the final stylesheet was still pending, then change the measured header and scroll offsets after arrival. Preserve the stylesheet cascade, place the existing synchronous pre-paint theme initializer after every stylesheet, and initialize navigation before page-specific section reveals. This uses existing resource loading rather than delayed corrective scrolling. A delayed-stylesheet regression checks the initial offsets and unchanged 600ms scroll stability assertion. The incomplete deferred-only fix demonstrably failed that regression; the final stylesheet barrier passed 12 repeated checks. Full-suite, rendered specialist recheck and publication evidence are maintained in TESTING.md and CHANGELOG.md.
+
+
+### Fundraising role briefs shared by direct link — 25 September 2026
+
+Visitor need: trustees and the authorised account administrator need a short, readable request that can be shared as a web link. The owner specifically requested publication without incoming navigation. The two canonical destinations are `fundraising-trustees.html` and `fundraising-admin.html`; `#reply` links directly to each initial response request.
+
+Keep the standard outgoing site shell, named role label, reading width, light/dark appearance and native links. Register the role labels separately from the menu's page list, so generating shared navigation cannot add incoming routes. Do not add homepage bands, menu entries, source-search records or links from other public pages. J1/J9 gain a bounded direct-sharing route; J2–J8 lose no entry or space. Essential proposal/no-donations status stays visible outside disclosures. Publishing the brief does not authorise the fundraiser.
+
+Alternative considered: PDF attachments or publishing the full working checklist. Direct web pages meet the requested sharing need without publishing the wider draft pack. The short briefs need no additional local navigation. They include primary source links and ask readers to reply to the sender, with no collection form or named private contacts. Noindex discourages search indexing but is not access control.
+
+Verification: independent campaign/evidence reviews of the actual text; independent Chromium/WebKit visual review at 320, 390 and 1440 px in both appearances, with doubled text at 390 px. No horizontal overflow or obscured direct reply headings remained. Automated direct-link, navigation, appearance, privacy and no-JavaScript checks are included; see TESTING.md for results and native Safari limitations. Existing visitor priorities are unchanged.
