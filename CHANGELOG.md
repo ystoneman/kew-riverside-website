@@ -4,6 +4,14 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Prioritised unanswered questions
+
+- Replace the document-led gap list with eight plain questions: viability; children’s outcomes; selection criteria; net closure costs and the site; costed alternatives; recruitment support; forecasts and housing; and written answers. Keep existing question anchors, source links and dated request records, while distinguishing new questions from earlier requests.
+- Put resolved inspection evidence and process/background records below the unresolved list. Keep all eight summaries and status labels visible, with Known and Still unanswered detail and a reminder that parents can respond now.
+- Keep the overview compact on arrival and reopen a specific question through direct or repeated section links. Preserve native disclosure, keyboard, touch, source-filter recovery and no-JavaScript access. Update the section navigator and version the changed script and stylesheet.
+
+Independent evidence and campaign reviews passed the actual copy and primary-source checks. Initial verification passed all 50 Python checks, 95-public-file validation and 58 focused browser checks. Full regression, rendered UX and publication results are recorded when complete; native iOS interaction remains unverified because Simulator input is disabled. No private discussion text, personal details or meeting documents were added to the public files.
+
 ### Unanswered questions menu shortcut
 
 - Add a direct, indented **Unanswered questions** link immediately beneath Evidence in the full Menu on every content page. The link is exposed when Menu opens and retains the existing `evidence.html#gaps` destination.

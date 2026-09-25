@@ -66,6 +66,29 @@ test('No JavaScript: Unanswered questions is a direct menu route with a matching
   await expect(heading).toBeInViewport();
 });
 
+test('No JavaScript: all eight unanswered questions expose known evidence and missing answers', async ({ page }) => {
+  await page.goto('/evidence.html#gaps');
+  const ids = ['gap-budget', 'gap-pupil-impacts', 'gap-selection', 'gap-closure-costs', 'gap-alternatives', 'gap-recruitment', 'gap-forecasts', 'gap-answers'];
+  const questions = page.locator('#gaps .gaps-grid > article');
+  expect(await questions.evaluateAll(nodes => nodes.map(node => node.id))).toEqual(ids);
+  for (const id of ids) {
+    const question = page.locator('#' + id);
+    await expect(question.locator('.gap-detail')).toHaveAttribute('open', '');
+    await expect(question.locator('.gap-detail > p').filter({ has: page.locator('strong', { hasText: /^Known:$/ }) })).toBeVisible();
+    await expect(question.locator('.gap-detail > p').filter({ has: page.locator('strong', { hasText: /^Still unanswered:$/ }) })).toBeVisible();
+  }
+  await expect(page.locator('#evidence-found .gap-detail')).toHaveAttribute('open', '');
+  await expect(page.locator('#evidence-found a[href="#source-inspection-2026"]')).toBeVisible();
+  await expect(page.locator('#gap-records .gap-detail')).toHaveAttribute('open', '');
+  await page.goto('/evidence.html#gap-recruitment');
+  await expect(page.locator('#gap-recruitment summary')).toBeInViewport();
+  const detail = page.locator('#gap-recruitment .gap-detail');
+  await detail.locator('summary').tap();
+  await expect(detail).not.toHaveAttribute('open', '');
+  await detail.locator('summary').tap();
+  await expect(detail).toHaveAttribute('open', '');
+});
+
 test('Clarity pages preserve findings, funding questions and native process details without scripts', async ({ page }) => {
   await page.goto('/options.html#options');
   await expect(page.locator('#options h1')).toBeInViewport();
