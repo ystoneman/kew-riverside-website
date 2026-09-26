@@ -4,6 +4,11 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Community letter, 26 September 2026
+
+- Added one new community letter to the Community letters board through the existing v3 automatic-screening route: processing and publication-with-display-name consent were present, and the letter was screened as relevant, clearly authored and free of contact details, abuse or specific allegations. Wording and paragraph structure are preserved exactly; it is labelled “AI screened · Opinion” and appears first (newest). A duplicate form submission of the identical letter is published once.
+- No interface, permission or schema changes (J4).
+
 ### Sharing previews for the fundraising briefs
 
 - Add role-specific Open Graph and Twitter titles, descriptions, canonical URLs and original 1200 × 630 PNG cards to both direct-link briefs. The images identify the recipient role and proposed fund, with donations closed; no charity approval or live appeal is implied.
