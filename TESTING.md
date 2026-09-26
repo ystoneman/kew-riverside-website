@@ -80,7 +80,9 @@ Content-only change to `proposal.html` (#plan-respond, #question-demand, #questi
 
 Local results: 52 Python checks and 100-public-file validation passed. The first revision's full browser suite passed 1,588 checks with 15 expected skips. On the final revision, the affected specs passed 164 checks. The final full run passed 1,586 with 15 skips and 17 timeouts on unchanged pages (Evidence, FAQ, Supporters, theme and analytics: page loads over 10 s, touch taps not landing) while the machine's load average was about 38; all 17 passed when rerun with `--last-failed`. The checklist PDF was rebuilt with `build_checklist.py` (Liberation fonts), stays at two A4 pages, and both pages were inspected.
 
-Rendered review: independent UX review at WebKit 320 × 568 and 390 × 844 and Chromium 1440 × 900 against an origin/main baseline, with external requests blocked, and lead-agent WebKit 320 × 568 phone screenshots of the final response step and forecast card. Native iOS Safari, dark mode and enlarged text were not rechecked for this text-only change. No form or message was submitted. Hosted exact-head and production results are required before release.
+Rendered review: independent UX review at WebKit 320 × 568 and 390 × 844 and Chromium 1440 × 900 against an origin/main baseline, with external requests blocked, and lead-agent WebKit 320 × 568 phone screenshots of the final response step and forecast card. Native iOS Safari, dark mode and enlarged text were not rechecked for this text-only change. No form or message was submitted.
+
+Hosted: exact-head PR run 36248354446 and production run 36249108145 each passed `validate` and all five browser projects; Pages deployed merged commit `1a0f483` at 14:46:27 UTC. All 100 published HTTPS files matched the merged commit byte for byte (one earlier comparison attempt lost network access partway and was repeated in full). Live emulated WebKit 320 × 568 phone and Chromium 1440 × 900 checks confirmed the citations, the fully visible response button (537 px on the phone) and the Options citation, with no overflow or script errors.
 
 ## Navigation and plain Proposal questions — 24 September 2026
 
