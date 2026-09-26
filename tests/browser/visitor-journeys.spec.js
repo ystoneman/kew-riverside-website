@@ -81,6 +81,29 @@ test('Proposal presents six plain questions with children first and the official
   await expect(page.locator('#plan-respond a.button.primary')).toHaveAttribute('href', /docs\.google\.com\/forms/);
 });
 
+test.describe('Government closure guidance on a 320 × 568 phone', () => {
+  // Mobile emulation wraps text differently from a resized desktop window.
+  test.use({ viewport: { width: 320, height: 568 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
+  test('the response citation keeps the official response button fully on screen', async ({ page }) => {
+    await page.goto('/proposal.html#plan-respond');
+    await expect(page.locator('#plan-respond a.button.primary')).toBeInViewport({ ratio: 1 });
+  });
+});
+
+test('Government closure guidance is cited at the point of use without adding response actions', async ({ page }) => {
+  const guidance = 'https://assets.publishing.service.gov.uk/media/6a034409e71c4cdf4026bab8/Closing_maintained_schools_guidance_-_May_2026.pdf';
+  await page.goto('/proposal.html#plan-respond');
+  const respond = page.locator('#plan-respond');
+  await expect(respond.locator(`a[href="${guidance}#page=6"]`)).toBeVisible();
+  await expect(respond).toContainText('every view should be considered');
+  await expect(respond.locator('a.button')).toHaveCount(1);
+  await expect(page.locator(`#question-demand a[href="${guidance}#page=8"]`)).toBeVisible();
+  await expect(page.locator(`#question-alternatives a[href="${guidance}#page=8"]`)).toBeVisible();
+  await page.goto('/options.html#options');
+  await page.locator('.response-detail > summary').click();
+  await expect(page.locator(`.response-detail a[href="${guidance}#page=6"]`)).toBeVisible();
+});
+
 test('Options ranking links to the council’s published alternatives rather than site questions', async ({ page }) => {
   await page.goto('/options.html#options');
   await page.locator('.options-method > summary').click();
