@@ -74,6 +74,14 @@ All 50 Python privacy/security/data/structure checks and 95-public-file validati
 
 Native iPhone 17 / iOS 26.5 Safari verification was attempted through Simulator. The address field accepted the local preview URL but Return did not navigate; the simulator's Send Keyboard Input to Device, Connect Hardware Keyboard and Toggle Software Keyboard controls were disabled. Native menu/touch/Back behaviour is therefore unverified. Full local and hosted suite results and publication verification are tracked in the associated pull request; the checks above do not claim deployment.
 
+## Government closure guidance citations — 26 September 2026
+
+Content-only change to `proposal.html` (#plan-respond, #question-demand, #question-alternatives), the closed Options response disclosure and the response checklist (Markdown and regenerated PDF). New checks in `visitor-journeys.spec.js` cover the four citation links and their PDF page anchors, a single button in the response step, the Options citation after opening its disclosure, and full visibility of the official response button on arrival at `proposal.html#plan-respond` in an emulated 320 × 568 phone (`isMobile`, touch, 2× scale). That phone check failed in all four scripted projects on an intermediate draft (button bottom 588 px) and passes on the final wording (537 px; 511 px before the change). A resized desktop window at 320 × 568 had not caught the draft's overflow, so the new check emulates a phone.
+
+Local results: 52 Python checks and 100-public-file validation passed. The first revision's full browser suite passed 1,588 checks with 15 expected skips. On the final revision, the affected specs passed 164 checks. The final full run passed 1,586 with 15 skips and 17 timeouts on unchanged pages (Evidence, FAQ, Supporters, theme and analytics: page loads over 10 s, touch taps not landing) while the machine's load average was about 38; all 17 passed when rerun with `--last-failed`. The checklist PDF was rebuilt with `build_checklist.py` (Liberation fonts), stays at two A4 pages, and both pages were inspected.
+
+Rendered review: independent UX review at WebKit 320 × 568 and 390 × 844 and Chromium 1440 × 900 against an origin/main baseline, with external requests blocked, and lead-agent WebKit 320 × 568 phone screenshots of the final response step and forecast card. Native iOS Safari, dark mode and enlarged text were not rechecked for this text-only change. No form or message was submitted. Hosted exact-head and production results are required before release.
+
 ## Navigation and plain Proposal questions — 24 September 2026
 
 ### Stable arrivals and Back recovery before publication

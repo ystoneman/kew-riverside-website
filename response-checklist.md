@@ -1,10 +1,10 @@
 # Kew Riverside: evidence checklist for a consultation response
 
-Prepared by Yann Stoneman, a Kew Riverside parent seeking to keep the school open. Research checked 23 September 2026. This is not an official consultation form or legal advice.
+Prepared by Yann Stoneman, a Kew Riverside parent seeking to keep the school open. Research checked 23 September 2026; deadline and government guidance rechecked 26 September 2026. This is not an official consultation form or legal advice.
 
 ## Before submitting
 
-- Respond by 16 October 2026, the date on the council-linked form when checked on 23 September. No closing time is stated; check for updates.
+- Respond by 16 October 2026, the date on the council-linked form when checked on 26 September. No closing time is stated; check for updates.
 - This is pre-statutory consultation. A later statutory notice would have a separate representation period.
 - Read the council's proposal and supporting evidence. Choose the questions that matter to you; personal experience matters too.
 - State the outcome you seek: retention of the current school, teaching on the site, or another specific arrangement.
@@ -28,10 +28,10 @@ Which costed arrangements could retain education at Kew? Ask about the delivery 
 Ask which PFI and other costs stop, continue or arise because of closure, including transition, receiving-school support and travel. Compare annual net costs, not the school deficit alone. [Closure costs](understand.html#closure-costs).
 
 ### 4. Local pupil demand
-Ask which cohort and housing assumptions changed between forecast versions. Compare forecasts with actuals for the same year and area; the earlier 2025/26 planning-area total was close to actual. [Forecast check](understand.html#forecast-checks).
+Ask which cohort and housing assumptions changed between forecast versions, and what is forecast after 2031/32. A key test in government guidance is whether the need for places is forecast to rise over the medium to long term ([Closing maintained schools, May 2026, page 8](https://assets.publishing.service.gov.uk/media/6a034409e71c4cdf4026bab8/Closing_maintained_schools_guidance_-_May_2026.pdf#page=8)). Compare forecasts with actuals for the same year and area; the earlier 2025/26 planning-area total was close to actual. [Forecast check](understand.html#forecast-checks).
 
 ### 5. Continuity and equality
-Ask for staffed places by year group, the Kew-specific equality assessment, SEND support, safe journeys and funded transition arrangements. Use anonymised public examples; share a child's individual needs privately through official services. [School-place answers](faq.html#school-places).
+Ask for staffed places by year group, the Kew-specific equality assessment, SEND support, safe journeys, effects on disadvantaged pupils and funded transition arrangements. Decision-makers should consider travel, extra car use and the quality of alternative places, balanced against the need to reduce surplus places ([same guidance, pages 21-22](https://assets.publishing.service.gov.uk/media/6a034409e71c4cdf4026bab8/Closing_maintained_schools_guidance_-_May_2026.pdf#page=21)). Use anonymised public examples; share a child's individual needs privately through official services. [School-place answers](faq.html#school-places).
 
 ### 6. Learning
 Ask what each option would preserve or change about teaching, relationships, curriculum and support. Current results and inspection describe existing provision, not the effects of a future option. [Learning evidence](understand.html#learning-and-results).
@@ -42,7 +42,7 @@ Ask what each option would preserve or change about teaching, relationships, cur
 2. My requested outcome.
 3. My strongest evidence, with document titles, dates and page references.
 4. A viable alternative or a precise request for further appraisal.
-5. Specific pupil or community impacts.
+5. Specific pupil or community impacts, with evidence. A statutory proposal must address community impact ([same guidance, page 28](https://assets.publishing.service.gov.uk/media/6a034409e71c4cdf4026bab8/Closing_maintained_schools_guidance_-_May_2026.pdf#page=28)).
 6. Questions that remain unanswered.
 7. A request for acknowledgement and a response to the substantive points.
 
