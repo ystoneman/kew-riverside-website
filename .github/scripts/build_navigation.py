@@ -5,13 +5,13 @@ import html
 import re
 
 ROOT = Path(__file__).resolve().parents[2]
-VERSION = '2026092702'
+VERSION = '2026092703'
 PAGES = {
     # Page identity labels only. The Menu and footer come from MENU_GROUPS and
     # FOOTER_LINKS, so registering a page never adds a Menu row by itself.
     'letters.html': 'Community letters', 'videos.html': 'Share a video', 'feedback.html': 'Share ideas',
     'index.html': 'Home', 'about.html': 'About', 'proposal.html': 'Proposal & dates',
-    'faq.html': 'FAQ', 'understand.html': 'Understand', 'options.html': 'Options',
+    'faq.html': 'FAQ', 'understand.html': 'Numbers & results', 'options.html': 'Ways to keep Kew open',
     'lessons.html': 'Lessons', 'evidence.html': 'Evidence', 'supporters.html': 'Supporters',
     'privacy.html': 'Privacy', 'corrections.html': 'Corrections',
     'lessons-sources.html': 'Research citations', 'sent.html': 'Next steps',
@@ -36,8 +36,8 @@ MENU_GROUPS = [
     ('Understand the proposal', [
         ('proposal.html', 'Proposal & dates', ''),
         ('faq.html', 'FAQ', ''),
-        ('understand.html', 'Understand', ''),
-        ('options.html', 'Options', ''),
+        ('understand.html', 'Numbers & results', ''),
+        ('options.html', 'Ways to keep Kew open', ''),
         ('evidence.html#records', 'Evidence', ''),
         ('evidence.html#gaps', 'Unanswered questions', 'sub'),
     ]),
@@ -101,7 +101,7 @@ def render_navigation(name, document):
     header = re.sub(r'<details class="mobile-menu">.*?</details>', '', header, flags=re.S)
     header = re.sub(r' aria-current="page"', '', header)
     # Keep the short wide-screen exploration row. The full menu is available at every width.
-    desktop = [('proposal.html#parent-plan','Parent action plan'),('about.html','About'),('proposal.html','Proposal & dates'),('understand.html','Understand'),('faq.html','FAQ'),('evidence.html#records','Evidence')]
+    desktop = [('proposal.html#parent-plan','Parent action plan'),('about.html','About'),('proposal.html','Proposal & dates'),('understand.html','Numbers & results'),('faq.html','FAQ'),('evidence.html#records','Evidence')]
     def link(href, label, parent=False):
         current = ' aria-current="page"' if href.split('#')[0] == name and not parent else ''
         cls = ' class="nav-parent-plan"' if parent else ''
@@ -116,7 +116,7 @@ def render_navigation(name, document):
     def menu_link(href, label, kind=''):
         base = href.split('#')[0]
         current = ' aria-current="page"' if base == name and kind == '' else ''
-        cls = {'plan': ' class="nav-parent-plan"', 'sub': ' class="nav-subitem"'}.get(kind, '')
+        cls = {'plan': ' class="nav-parent-plan"', 'action': ' class="nav-respond"', 'sub': ' class="nav-subitem"'}.get(kind, '')
         return f'<a href="{esc(href)}"{cls}{current}>{esc(label)}</a>'
     groups = []
     for index, (heading, entries) in enumerate(MENU_GROUPS, 1):
