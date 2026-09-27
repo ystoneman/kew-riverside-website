@@ -114,7 +114,7 @@ test('Video: direct arrival explains publication and offers private contact with
   await page.goto('/videos.html#upload');
   const card = page.locator('#upload');
   await expect(card).toContainText('New submissions require your explicit YouTube permission');
-  await expect(card).toContainText('News-media permission is optional');
+  await expect(card).toContainText('News-media and paid-ads permissions are optional');
   const councilNote = card.locator('.video-council-note');
   await expect(councilNote).toContainText('not an official council response');
   await expect(councilNote).toContainText('16 October 2026');
@@ -134,5 +134,34 @@ test('Video: direct arrival explains publication and offers private contact with
   await expect(page).toHaveURL(/videos.html#upload$/);
   await page.locator('#video-choices summary').click();
   await expect(page.locator('#video-choices')).toContainText('News-media permission is optional and unchecked');
-  await expect(page.locator('#video-choices')).toContainText('withdraw YouTube or news-media permission separately');
+  await expect(page.locator('#video-choices')).toContainText('withdraw YouTube, news-media or paid-ads permission separately');
+  await expect(page.locator('#video-choices')).toContainText('Paid-ads permission is optional and unchecked');
+  await expect(page.locator('#video-choices')).toContainText('they are not fundraising appeals');
+  await expect(page.locator('#video-choices')).toContainText('before an ad first runs');
+  await expect(page.locator('#video-choices')).toContainText('public ad libraries');
+  await expect(page.locator('#video-choices')).toContainText('normally within two working days');
+  const earlierAds = page.locator('#video-choices a[href="about.html#contact"]');
+  await expect(earlierAds).toHaveText('contact Yann privately');
+});
+
+test('Video: paid-ads permission is separate, versioned and never inferred from earlier records', async ({ page }) => {
+  await page.goto('/videos.html');
+  await expect(page.locator('.video-process')).toContainText('paid ads on YouTube, Facebook and Instagram');
+  await expect(page.locator('.video-process')).toContainText('You can still send your video without either');
+  await page.locator('#upload-help summary').click();
+  await expect(page.locator('#upload-help')).toContainText('optional news-media and paid-ads choices');
+  await expect(page.locator('#video-upload-link')).toHaveAttribute('href', upload);
+  await expect(page.locator('#dropbox-upload-link')).toHaveAttribute('href', dropbox);
+  await expect(page.locator('#legacy-google-upload-link')).toHaveAttribute('href', legacy);
+  await page.goto('/privacy.html');
+  const notice = page.locator('section[aria-labelledby="video-privacy"]');
+  for (const version of ['2026-09-26-videos-v3', '2026-09-26-videos-dropbox-v3', '2026-09-22-videos-v1', '2026-09-22-videos-v2', '2026-09-22-videos-dropbox-v1']) await expect(notice).toContainText(version);
+  await expect(notice).toContainText('an earlier record grants no paid-ads permission');
+  await expect(notice).toContainText('The YouTube permission alone does not allow Yann to use the recording on other social platforms, in a council collection, in paid ads or in a mailing list.');
+  await expect(notice).not.toContainText('in advertising or in a mailing list');
+  await expect(page.locator('#video-ads-privacy')).toContainText('not run for the school or PTA');
+  await expect(page.locator('#video-ads-privacy')).toContainText('up to seven years');
+  await expect(page.locator('#video-ads-privacy')).toContainText('some platforms show who paid');
+  await page.goto('/letters.html');
+  await expect(page.locator('main')).toContainText('Not in paid adverts');
 });
