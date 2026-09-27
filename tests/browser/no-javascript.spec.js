@@ -19,7 +19,7 @@ test('No JavaScript: page identity and native section routes retain nested conte
   await expect(page.locator('#option-crowdfunding')).toBeInViewport();
   const menu = page.locator('.mobile-menu');
   await menu.locator(':scope > summary').tap();
-  expect((await menu.locator('a').allTextContents()).slice(0, 4)).toEqual(['Parent action plan', 'Home', 'About', 'Proposal & dates']);
+  expect((await menu.locator('a').allTextContents()).slice(0, 5)).toEqual(['Parent action plan', 'Community letters', 'Share a video', 'Share ideas', 'Home']);
   await expect(menu.getByRole('link', { name: 'Options', exact: true })).toHaveAttribute('aria-current', 'page');
   await menu.getByRole('link', { name: 'FAQ', exact: true }).tap();
   await expect(page.locator('h1')).toHaveText('FAQ');
@@ -500,6 +500,9 @@ test('No JavaScript: the exact video QR upload address keeps a working permissio
   await expect(page).toHaveURL(/\/videos\.html#upload$/);
   await expect(page.locator('#upload')).toBeInViewport();
   await expect(page.locator('#upload .video-council-note')).toContainText('not an official council response');
+  // Without scripts, the main action and the council reminder are both in view on arrival.
+  await expect(page.locator('#video-upload-link')).toBeInViewport({ ratio: 1 });
+  await expect(page.locator('#upload .video-council-note a')).toBeInViewport({ ratio: 1 });
   await expect(page.locator('#upload-requirements')).toContainText('Adults recording themselves only');
   await expect(page.locator('#upload-requirements')).toContainText('No Google or Dropbox sign-in required');
   const link = page.locator('#video-upload-link');
@@ -550,4 +553,12 @@ test('No JavaScript: London outcomes and their explanations precede source searc
   await findings.locator('a[href="lessons.html#case-st-john"]').tap();
   await expect(page.locator('#case-st-john')).toBeInViewport();
   await expect(page.locator('#case-st-john')).toContainText('St John the Divine');
+});
+
+test('No JavaScript: the Parent action plan opens with its own response button in view', async ({ page }) => {
+  await page.goto('/proposal.html#parent-plan');
+  await expect(page.locator('#parent-plan-title')).toBeInViewport({ ratio: 1 });
+  const respond = page.locator('#parent-plan .parent-plan-respond a');
+  await expect(respond).toHaveAttribute('href', 'https://docs.google.com/forms/d/e/1FAIpQLSda5oPsdUlrJkf6vACC_AjvXFR6-ki3iBymNIF5BAWNxf85xQ/viewform');
+  await expect(respond).toBeInViewport({ ratio: 1 });
 });

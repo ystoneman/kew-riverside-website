@@ -8,13 +8,13 @@ for (const source of ['letters.html', 'feedback.html']) {
   test(`Video: discover private upload from ${source}`, async ({ page, baseURL, hasTouch }) => {
     await page.goto('/' + source);
     const entry = page.locator('main a[href="videos.html"]');
-    if (source === 'letters.html') await expect(page.locator('.form-route').filter({ has: page.locator('a[href="videos.html"]') })).toContainText('for possible YouTube publication after review, with optional news-media permission');
+    if (source === 'letters.html') await expect(page.locator('.form-route').filter({ has: page.locator('a[href="videos.html"]') })).toHaveText('Prefer to talk? Share a video.');
     await expect(entry).toBeVisible();
     if (hasTouch) await entry.tap(); else await entry.click();
     await expectDestination(page, 'videos.html', baseURL);
     await expect(page.locator('#upload-requirements')).toContainText('No Google or Dropbox sign-in required');
     await expect(page.locator('#upload-requirements')).toContainText('Adults recording themselves only');
-    await expect(page.locator('#video-title')).toHaveText('Some things are best said in your own voice.');
+    await expect(page.locator('#video-title')).toHaveText('Share a video');
   });
 }
 
@@ -27,7 +27,8 @@ test('Video: upload is a clear external handoff without embedded trackers or loc
   await page.goto('/videos.html');
   await expect(page.locator('iframe,video,form,input[type="file"]')).toHaveCount(0);
   await expect(page.locator('.video-process')).toContainText('Nothing is published automatically');
-  await expect(page.locator('#upload-requirements')).toContainText('Step 2: follow its confirmation link to Dropbox');
+  await expect(page.locator('#video-upload-link')).toHaveText(/^Give permission/);
+  await expect(page.locator('#upload-step-two')).toContainText('After you press Submit, the form gives you the Dropbox upload link');
   await expect(page.locator('#resume-instructions')).toContainText('same email in both steps');
   await expect(page.locator('.video-process')).toContainText('An unmatched upload stays private');
   await expect(page.locator('#video-upload-link')).toHaveAttribute('aria-describedby', 'upload-requirements');
@@ -119,7 +120,8 @@ test('Video: direct arrival explains publication and offers private contact with
   await expect(councilNote).toContainText('not an official council response');
   await expect(councilNote).toContainText('16 October 2026');
   await expect(councilNote.locator('a')).toHaveAttribute('href', official);
-  expect(await councilNote.evaluate(element => Boolean(element.compareDocumentPosition(document.querySelector('#video-upload-link')) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
+  // The reminder now sits directly under the two steps, not in front of the main action.
+  expect(await councilNote.evaluate(element => element.previousElementSibling?.matches('ol.video-steps'))).toBe(true);
   if (hasTouch) await councilNote.locator('a').tap(); else await councilNote.locator('a').click();
   await expect(page).toHaveURL(official);
   await page.goBack();
@@ -167,4 +169,43 @@ test('Video: paid-ads permission is separate, versioned and never inferred from 
   await expect(page.locator('#video-ads-privacy')).toContainText('some platforms show who paid');
   await page.goto('/letters.html');
   await expect(page.locator('main')).toContainText('Not in paid adverts');
+});
+
+// Owner-reported 26 September: a first-time visitor tapped three times and still
+// could not find where to submit. The permission step is the main action, labelled
+// as what it is, and the council reminder stays in view without preceding it.
+for (const [width, height] of [[375, 667], [390, 844]]) {
+  test(`Video: ${width}×${height} upload arrival shows the permission step and council reminder together`, async ({ page }) => {
+    await page.setViewportSize({ width, height });
+    await page.goto('/videos.html#upload');
+    await expectScrollSettled(page, 'Upload arrival');
+    const button = page.locator('#video-upload-link');
+    await expect(button).toBeInViewport({ ratio: 1 });
+    await expect(button).toHaveText(/^Give permission/);
+    await expect(page.locator('#upload .video-steps > li')).toHaveCount(2);
+    await expect(page.locator('#upload-step-two')).toContainText('Upload your video');
+    const reminder = page.locator('#upload .video-council-note');
+    await expect(reminder).toContainText('16 October 2026');
+    await expect(reminder.locator('a')).toHaveAttribute('href', official);
+    await expect(reminder.locator('a')).toBeInViewport({ ratio: 1 });
+  });
+}
+
+test('Video: the permission step is on the first screen from the top of the page', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/videos.html');
+  await expect(page.locator('#video-upload-link')).toBeInViewport({ ratio: 1 });
+  // The short page has no separate section list competing with the Menu.
+  await expect(page.locator('.site-orientation .page-sections')).toHaveCount(0);
+  await expect(page.locator('.site-orientation .page-name')).toHaveText('Share a video');
+});
+
+test('Video: at 320×568 the permission step is in view and the reminder follows the steps', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.goto('/videos.html#upload');
+  await expectScrollSettled(page, 'Narrow upload arrival');
+  await expect(page.locator('#video-upload-link')).toBeInViewport({ ratio: 1 });
+  expect(await page.locator('#upload .video-council-note').evaluate(element => element.previousElementSibling?.matches('ol.video-steps'))).toBe(true);
+  // Returning uploaders keep their direct Dropbox route, outside the main path.
+  await expect(page.locator('#resume-instructions a#dropbox-upload-link')).toHaveAttribute('href', dropbox);
 });

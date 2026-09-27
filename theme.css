@@ -17,6 +17,7 @@
     --theme-readable:initial; --theme-strong:initial; --theme-warm-text:initial;
     --theme-border:initial; --theme-focus:initial; --theme-header:initial;
     --theme-chart-main:initial; --theme-chart-secondary:initial; --theme-chart-third:initial;
+    --theme-primary:initial; --theme-on-primary:initial;
   }
   :root[data-theme="dark"], :root[data-theme="dark"] body {
     color-scheme: dark;
@@ -26,6 +27,7 @@
     --theme-readable:#c1d2c6; --theme-strong:#eef4ec; --theme-warm-text:#f0cc94;
     --theme-border:#577461; --theme-focus:#f4c37b; --theme-header:#101e1bf7;
     --theme-chart-main:#8bd7cf; --theme-chart-secondary:#a9c5ac; --theme-chart-third:#e9c68b;
+    --theme-primary:#8bd7cf; --theme-on-primary:#101e1b;
   }
 }
 @media screen and (prefers-color-scheme:dark) {
@@ -37,8 +39,15 @@
     --theme-readable:#c1d2c6; --theme-strong:#eef4ec; --theme-warm-text:#f0cc94;
     --theme-border:#577461; --theme-focus:#f4c37b; --theme-header:#101e1bf7;
     --theme-chart-main:#8bd7cf; --theme-chart-secondary:#a9c5ac; --theme-chart-third:#e9c68b;
+    --theme-primary:#8bd7cf; --theme-on-primary:#101e1b;
   }
 }
+/* Primary actions keep a visible fill in dark mode. The brand green is almost
+ * the dark page and card colour, which left main buttons reading as text. The
+ * teal matches the existing Options response button; lime stays reserved for
+ * the Parent action plan spotlight and the Share ideas tile. */
+.primary { background:var(--theme-primary,var(--green)); color:var(--theme-on-primary,#fff); }
+
 /* Bright participation accents intentionally retain dark lettering. */
 .light,.parent-plan-spotlight,.site-header .nav-contribute,.visual-preview .button {
   --theme-strong:#143936;

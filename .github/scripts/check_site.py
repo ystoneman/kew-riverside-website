@@ -40,7 +40,7 @@ VIDEO-PERMISSIONS.md CONTRIBUTING.md .github/CODEOWNERS .github/pull_request_tem
 .agents/skills/kew-evidence-review/SKILL.md .agents/skills/kew-evidence-review/agents/openai.yaml
 ANALYTICS.md tests/browser/analytics.spec.js
 ENROLMENT-OUTREACH-BRIEF.md .github/scripts/build_learning.py .github/scripts/test_learning.py .github/scripts/build_case_evidence.py .github/scripts/test_case_evidence.py .github/scripts/build_checklist.py .github/scripts/build_sources.py tests/browser/sofiya.spec.js
-tests/browser/videos.spec.js tests/browser/homepage.spec.js tests/browser/harness.spec.js
+tests/browser/videos.spec.js tests/browser/top-journeys.spec.js tests/browser/homepage.spec.js tests/browser/harness.spec.js
 .github/scripts/build_lessons.py .github/scripts/test_lessons.py tests/browser/lessons.spec.js
 .nojekyll .gitignore .gitattributes README.md CODEX-HANDOFF.md .github/workflows/pages.yml
 .github/scripts/check_site.py .github/scripts/public_data.py
