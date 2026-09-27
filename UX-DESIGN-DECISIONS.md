@@ -73,6 +73,18 @@ These choices are design judgments to verify, not measured conversion improvemen
 
 ## Selected page and interaction design
 
+### Grouped, curated Menu — 27 September 2026
+
+Visitor need (J1–J9): the owner found the 17-link Menu cluttered and confusing (“I'm getting a little lost again”). The navigation builder produced it by listing every registered page, so each new page added a row without anyone deciding the Menu's size. The owner approved the grouped rebuild in the private plan and asked for it straight after the Phase 0 release.
+
+Decision: the Menu comes from a curated list in three labelled groups: Take part, Understand the proposal and This website. It has 13 links, including the owner-requested Unanswered questions line. “Respond to the council” leads the Take part group so website contributions are never presented as the official response; it opens the site’s own `#take-part` explanation of the council’s response routes. Lessons, Supporters, Corrections and Research citations move to every footer, which the builder now generates from `FOOTER_LINKS`, alongside Privacy and Analytics choices. Lessons keeps its homepage research shortcut and Evidence routes (J6). Menu labels still match page names, so the persistent page label and the current-page mark agree; action links such as Respond, Parent action plan and Unanswered questions never claim the current page.
+
+Rejected: nested disclosures inside the Menu (an extra tap per group); moving Letters and Share ideas out because they have header tiles (the tiles scroll away on phones, so the Menu is their only route further down a page); renaming Understand, Options and Evidence in the same release (the owner has not decided, and a rename must reach page labels, homepage cards, footers and tests together).
+
+Cost: at 375 × 667, Home and About need a short scroll inside the open Menu; at 320 × 568 Evidence and below do. These are the least-used entries, and the brand link also leads home. The Menu stays scrollable on short landscape screens.
+
+Verification is recorded in TESTING.md. An independent UX implementation review is recorded there too; this is not a user study.
+
 ### Video route, dark-mode buttons and top journeys — 27 September 2026
 
 Visitor need (J2, J3, J7, J9): on 26 September a first-time visitor tapped three times and still could not find where to submit a video. The owner also found the Menu, which had grown from 7 to 17 links in two days, hard to use. The owner approved the analysis and plan (kept privately in the parent workspace) and asked for this release on 27 September. The private monitor recorded no permission forms or uploads between 22 and 26 September; low traffic may also contribute, so this is not a measured cause.

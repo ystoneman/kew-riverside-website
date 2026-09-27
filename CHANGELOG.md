@@ -4,6 +4,19 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### A shorter, grouped Menu
+
+The Menu had grown from 7 to 17 flat links in two days because the navigation builder listed every page. The owner approved the grouped rebuild on 27 September.
+
+- **Three labelled groups, 13 links:**
+  - **Take part:** Respond to the council (`proposal.html#take-part`), Parent action plan, Community letters, Share a video and Share ideas.
+  - **Understand the proposal:** Proposal & dates, FAQ, Understand, Options, Evidence and the indented Unanswered questions.
+  - **This website:** Home and About.
+- **Official response first**, so “Take part” never suggests website contributions are the official response (J3).
+- **Moved to the footer:** Lessons, Supporters, Corrections and Research citations now sit in every page’s footer, next to Privacy and Analytics choices. Lessons also stays linked from the homepage research shortcut and Evidence (J6). No page, URL or anchor was removed.
+- **Chosen, not generated:** the builder now renders the Menu and every footer from curated lists (`MENU_GROUPS`, `FOOTER_LINKS`), so registering a page never adds a Menu row by itself. Group labels are visible headings for accessible groups. Deep action links never claim the current page.
+- **No renames:** the Understand, Options and Evidence names are unchanged; renaming them remains an open owner decision.
+
 ### Video route, dark-mode buttons and top parent journeys (Phase 0)
 
 The owner reported on 26 September that a first-time visitor tapped three times and still could not find where to submit a video. The route's button said “Start your video submission” but opened a permissions-only form. In dark mode the main buttons across the site were almost the colour of the page. The private submission monitor recorded no permission forms or uploads between 22 and 26 September. The owner approved this release on 27 September.

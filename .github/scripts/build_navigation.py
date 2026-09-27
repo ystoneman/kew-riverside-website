@@ -5,10 +5,10 @@ import html
 import re
 
 ROOT = Path(__file__).resolve().parents[2]
-VERSION = '2026092501'
+VERSION = '2026092702'
 PAGES = {
-    # Participation routes follow the Parent action plan so they are visible
-    # without scrolling the Menu on small phones.
+    # Page identity labels only. The Menu and footer come from MENU_GROUPS and
+    # FOOTER_LINKS, so registering a page never adds a Menu row by itself.
     'letters.html': 'Community letters', 'videos.html': 'Share a video', 'feedback.html': 'Share ideas',
     'index.html': 'Home', 'about.html': 'About', 'proposal.html': 'Proposal & dates',
     'faq.html': 'FAQ', 'understand.html': 'Understand', 'options.html': 'Options',
@@ -22,6 +22,40 @@ UNLISTED_PAGES = {
     'fundraising-admin.html': 'Account setup brief',
 }
 PAGE_LABELS = PAGES | UNLISTED_PAGES
+# Curated Menu: (group heading, [(href, label, kind)]); kind 'plan' keeps the
+# Parent action plan style, 'sub' indents, and deep action links never claim the
+# current page. Labels match page names so the persistent page label is familiar.
+MENU_GROUPS = [
+    ('Take part', [
+        ('proposal.html#take-part', 'Respond to the council', 'action'),
+        ('proposal.html#parent-plan', 'Parent action plan', 'plan'),
+        ('letters.html', 'Community letters', ''),
+        ('videos.html#upload', 'Share a video', ''),
+        ('feedback.html', 'Share ideas', ''),
+    ]),
+    ('Understand the proposal', [
+        ('proposal.html', 'Proposal & dates', ''),
+        ('faq.html', 'FAQ', ''),
+        ('understand.html', 'Understand', ''),
+        ('options.html', 'Options', ''),
+        ('evidence.html#records', 'Evidence', ''),
+        ('evidence.html#gaps', 'Unanswered questions', 'sub'),
+    ]),
+    ('This website', [
+        ('index.html', 'Home', ''),
+        ('about.html', 'About', ''),
+    ]),
+]
+# Every page's footer, including the destinations kept out of the Menu.
+FOOTER_LINKS = [
+    ('about.html', 'About & contact', ''), ('proposal.html', 'Proposal & dates', ''),
+    ('faq.html', 'FAQ', ''), ('evidence.html#records', 'Evidence', ''),
+    ('letters.html', 'Community letters', ''), ('feedback.html', 'Share ideas', ''),
+    ('videos.html#upload', 'Share a video', ''), ('lessons.html', 'Lessons', ''),
+    ('supporters.html', 'Supporters', ''), ('corrections.html', 'Corrections', ''),
+    ('lessons-sources.html', 'Research citations', ''), ('privacy.html', 'Privacy', ''),
+    ('privacy.html#analytics', 'Analytics choices', ' data-analytics-choices'),
+]
 # Explicit destinations avoid navigation generated from hidden templates or every source card.
 SECTIONS = {
     'index.html': [('meeting-invitation','Council meeting'),('find-your-way','Find what you need'),('research-shortcut','Historical research','find-your-way'),('quick-answers','Before you respond'),('visit-school','Considering Kew Riverside?')],
@@ -76,15 +110,22 @@ def render_navigation(name, document):
     header = re.sub(r'<nav class="desktop-explore".*?</nav>', desktop_html, header, flags=re.S)
     # Participation tiles remain exposed on arrival and identify their own pages.
     header = re.sub(r'<a href="(letters|feedback)\.html"', lambda m:m.group()+(' aria-current="page"' if m.group(1)+'.html' == name else ''), header)
-    menu_links = link('proposal.html#parent-plan','Parent action plan',True)
-    for file, label in PAGES.items():
-        if file == 'sent.html' and name != file: continue
-        # Share a video opens at its permission step, like the flyer QR code.
-        href = {'evidence.html': 'evidence.html#records', 'videos.html': 'videos.html#upload'}.get(file, file)
-        menu_links += link(href,label)
-        if file == 'evidence.html':
-            menu_links += '<a class="nav-subitem" href="evidence.html#gaps">Unanswered questions</a>'
-    menu = '<details class="mobile-menu" name="site-navigation"><summary>Menu <span aria-hidden="true">⌄</span></summary><nav aria-label="All website pages">'+menu_links+'</nav></details>'
+    # The Menu is chosen, not generated from every page label: three groups, with
+    # the official response first. Adding an entry means removing or merging one.
+    # Pages not listed here stay one tap away in every footer (FOOTER_LINKS).
+    def menu_link(href, label, kind=''):
+        base = href.split('#')[0]
+        current = ' aria-current="page"' if base == name and kind == '' else ''
+        cls = {'plan': ' class="nav-parent-plan"', 'sub': ' class="nav-subitem"'}.get(kind, '')
+        return f'<a href="{esc(href)}"{cls}{current}>{esc(label)}</a>'
+    groups = []
+    for index, (heading, entries) in enumerate(MENU_GROUPS, 1):
+        entries = list(entries)
+        if heading == 'This website' and name == 'sent.html':
+            entries.append(('sent.html', 'Next steps', ''))
+        links = ''.join(menu_link(*entry) for entry in entries)
+        groups.append(f'<div class="menu-group" role="group" aria-labelledby="menu-group-{index}"><p class="menu-group-label" id="menu-group-{index}">{esc(heading)}</p>{links}</div>')
+    menu = '<details class="mobile-menu" name="site-navigation"><summary>Menu <span aria-hidden="true">⌄</span></summary><nav aria-label="All website pages">'+''.join(groups)+'</nav></details>'
     ids = set(re.findall(r'\bid="([^"]+)"', document))
     sections = [entry for entry in SECTIONS.get(name,[]) if entry[0] in ids]
     section_html = ''
@@ -97,7 +138,10 @@ def render_navigation(name, document):
         section_html = '<details class="page-sections" name="site-navigation"><summary><span class="section-prompt">On this page</span><span class="section-trail">Choose a section</span><span class="section-chevron" aria-hidden="true">⌄</span></summary><div class="section-panel"><nav class="section-links" aria-label="On this page">'+''.join(items)+'<a href="#main" class="section-top">Back to top</a></nav><div class="section-share" hidden><button type="button" class="section-copy">Copy link to this section</button><input class="section-copy-fallback" aria-label="Section link" readonly hidden><span class="section-copy-status" role="status"></span></div></div></details>'
     orientation = '<!-- orientation:start --><div class="site-orientation"><div class="wrap orientation-inner"><span class="page-name">'+esc(PAGE_LABELS[name])+'</span>'+section_html+menu+'</div></div><!-- orientation:end -->'
     header = header.replace('</header>',orientation+'</header>')
-    return document[:match.start()]+header+document[match.end():]
+    document = document[:match.start()]+header+document[match.end():]
+    footer_links = ''.join(f'<a href="{esc(href)}"{extra}>{esc(label)}</a>' for href, label, extra in FOOTER_LINKS)
+    document = re.sub(r'(<footer><div class="wrap footer-inner"><div>.*?</div>)<div>.*?</div>(</div></footer>)', lambda m: m.group(1)+'<div>'+footer_links+'</div>'+m.group(2), document, count=1, flags=re.S)
+    return document
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

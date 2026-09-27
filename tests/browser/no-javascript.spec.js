@@ -19,7 +19,7 @@ test('No JavaScript: page identity and native section routes retain nested conte
   await expect(page.locator('#option-crowdfunding')).toBeInViewport();
   const menu = page.locator('.mobile-menu');
   await menu.locator(':scope > summary').tap();
-  expect((await menu.locator('a').allTextContents()).slice(0, 5)).toEqual(['Parent action plan', 'Community letters', 'Share a video', 'Share ideas', 'Home']);
+  expect((await menu.locator('a').allTextContents()).slice(0, 5)).toEqual(['Respond to the council', 'Parent action plan', 'Community letters', 'Share a video', 'Share ideas']);
   await expect(menu.getByRole('link', { name: 'Options', exact: true })).toHaveAttribute('aria-current', 'page');
   await menu.getByRole('link', { name: 'FAQ', exact: true }).tap();
   await expect(page.locator('h1')).toHaveText('FAQ');
