@@ -11,5 +11,5 @@ html:has(.video-page){scroll-behavior:auto}
 .video-steps li>p:first-child{margin:0 0 .6rem;line-height:1.55}
 .video-steps .video-small{margin:.5rem 0 0}
 .video-upload .video-steps .button{margin:0;font-size:1rem;gap:1.5rem}
-@media(max-width:760px){.video-symbol,.video-hero .eyebrow{display:none}.video-upload h2{margin-top:0}}
+@media(max-width:760px){.video-symbol,.video-hero .eyebrow{display:none}.video-upload h2{margin-top:0}.video-page{padding-top:.8rem}.video-back{margin-bottom:.8rem}.video-hero h1{margin:.3rem 0 .8rem}}
 @media(max-width:400px){.video-upload{padding:1.1rem}}
