@@ -67,6 +67,10 @@ These choices are design judgments to verify, not measured conversion improvemen
 
 ## Selected page and interaction design
 
+### Optional paid-ads permission for videos — 26 September 2026
+
+Visitor need (J9): contributors should decide separately whether their video may appear in paid ads, which reach people who did not choose to watch and can remain in public ad libraries. Options: fold ads into YouTube permission (rejected: changes an agreed scope); two checkboxes for recruitment and consultation ads (rejected for now: a fourth permission adds friction for a small, local pool); one optional checkbox naming both purposes and excluding fundraising (chosen). Placement: after news-media on both forms and in the existing video-choices disclosure; no new navigation, homepage content or required step. Earlier records keep their scope; paid ads for an earlier video need a private, dated agreement to the full wording. Verification: browser assertions in `videos.spec.js`; live forms checked in preview without submitting.
+
 ### Prioritised unanswered questions — 25 September 2026
 
 Visitor need (J1, J3, J6–J8): the newly exposed Unanswered questions menu route should explain which answers matter, rather than require parents to infer them from document titles. The owner approved eight questions in this order: conditions for keeping Kew open; children’s outcomes; why Kew was selected; net closure costs and site use; costed alternatives; recruitment support; pupil and housing forecasts; and written answers. This is an editorial priority, not a measured parent ranking or an agreed school/PTA meeting script.
