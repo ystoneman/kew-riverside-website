@@ -471,9 +471,12 @@ for (const [moment, open] of [['2026-10-16T23:30:00', true], ['2026-10-17T00:30:
     const openRoute = page.locator('#ideas-official-open');
     await expect(openRoute).toBeVisible({ visible: open });
     await expect(page.locator('#ideas-official-closed')).toBeVisible({ visible: !open });
-    const route = open ? openRoute : page.locator('#ideas-official-closed');
-    await expect(route.getByRole('link', { name: 'Write a community letter' })).toBeVisible();
+    // Letters and videos stay one tap away either way, and each link appears once.
+    const route = page.locator('.ideas-letter-route');
+    await expect(route).toContainText(open ? 'You can also write a community letter' : 'Personal view? You can write a community letter', { useInnerText: true });
+    await expect(route.getByRole('link', { name: 'write a community letter' })).toBeVisible();
     await expect(route.getByRole('link', { name: 'share a short video' })).toBeVisible();
+    await expect(page.locator('main a[href="videos.html"]')).toHaveCount(1);
     if (!open) return;
     const official = openRoute.getByRole('link', { name: 'official response form' });
     await expect(official).toHaveAttribute('href', /^https:\/\/docs\.google\.com\/forms\//);
