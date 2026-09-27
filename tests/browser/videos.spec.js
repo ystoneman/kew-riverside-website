@@ -137,9 +137,10 @@ test('Video: direct arrival explains publication and offers private contact with
   await expect(page.locator('#video-choices')).toContainText('withdraw YouTube, news-media or paid-ads permission separately');
   await expect(page.locator('#video-choices')).toContainText('Paid-ads permission is optional and unchecked');
   await expect(page.locator('#video-choices')).toContainText('they are not fundraising appeals');
-  await expect(page.locator('#video-choices')).toContainText('before an ad first runs');
+  await expect(page.locator('#video-choices')).toContainText('before an ad first runs, and uses it only if you agree');
   await expect(page.locator('#video-choices')).toContainText('public ad libraries');
   await expect(page.locator('#video-choices')).toContainText('normally within two working days');
+  await expect(page.locator('#video-choices a[href="privacy.html#video-ads-privacy"]')).toHaveText('Read the paid-ads details');
   const earlierAds = page.locator('#video-choices a[href="about.html#contact"]');
   await expect(earlierAds).toHaveText('contact Yann privately');
 });
@@ -155,12 +156,14 @@ test('Video: paid-ads permission is separate, versioned and never inferred from 
   await expect(page.locator('#legacy-google-upload-link')).toHaveAttribute('href', legacy);
   await page.goto('/privacy.html');
   const notice = page.locator('section[aria-labelledby="video-privacy"]');
-  for (const version of ['2026-09-26-videos-v3', '2026-09-26-videos-dropbox-v3', '2026-09-22-videos-v1', '2026-09-22-videos-v2', '2026-09-22-videos-dropbox-v1']) await expect(notice).toContainText(version);
+  for (const version of ['2026-09-26-videos-v3', '2026-09-26-videos-dropbox-v3', '2026-09-22-videos-v1', '2026-09-22-videos-v2', '2026-09-22-videos-dropbox-v1', '2026-09-22-videos-dropbox-v2']) await expect(notice).toContainText(version);
   await expect(notice).toContainText('an earlier record grants no paid-ads permission');
   await expect(notice).toContainText('The YouTube permission alone does not allow Yann to use the recording on other social platforms, in a council collection, in paid ads or in a mailing list.');
   await expect(notice).not.toContainText('in advertising or in a mailing list');
   await expect(page.locator('#video-ads-privacy')).toContainText('not run for the school or PTA');
   await expect(page.locator('#video-ads-privacy')).toContainText('up to seven years');
+  await expect(page.locator('#video-ads-privacy')).toContainText('uses it only if you agree');
+  await expect(notice).toContainText('separate unlisted uploads');
   await expect(page.locator('#video-ads-privacy')).toContainText('some platforms show who paid');
   await page.goto('/letters.html');
   await expect(page.locator('main')).toContainText('Not in paid adverts');
