@@ -38,6 +38,12 @@ On Linux, install browser system dependencies with `npx playwright install --wit
 
 The browser harness serves the site locally over HTTP/2, as GitHub Pages does, uses fictional form inputs, and intercepts external requests. The four legacy-route tests observe requests instead of routing them (see Legacy redirect fix below). It never delivers a test submission to Formspree. Hosted CAPTCHA, real inbox delivery, council submission and real contribution moderation are outside the automated suite.
 
+## Ofsted publication date — 27 September 2026
+
+`test_site_structure.py` now compares each Evidence card's “Document location & context” note and access date with `sources.json` for all 57 records, not only its summary, URL and filter attributes. A simulated partial fix (JSON corrected, card left stale) fails that check. `test_july_2026_inspection_records_ofsteds_publication_date` requires the 24 September 2026 publication date in both Ofsted records and the FAQ answer, the FAQ link to the index record, and the absence of the superseded wording in public HTML, JSON, CSV and Markdown. It fails against the previous `origin/main` content. After rebasing onto `d9d059e` (28 September), all 53 Python checks, the generated-file freshness checks and 104-public-file validation and staging pass (Node 24.19.0).
+
+The complete local browser suite (`npm test`, four workers, all five projects) passed **1,686 checks with 15 expected skips and no failures** in 7.2 minutes on the final rebased revision, with no other test suite running. Earlier attempts on 27–28 September overlapped Playwright suites from other sessions on the same 18-core machine. Load averages reached about 530, and those runs produced only timeouts (page loads, taps, clicks and test limits), never an assertion about the changed content. After one rebase, the seven such failures all passed on a one-worker rerun before the final clean run. The Evidence, inspection-card and FAQ search/link checks passed in every project that runs them. No real form or external submission was sent.
+
 ## Owner-delegated decisions and live video test — 27 September 2026
 
 - The expectations in `orientation.spec.js`, `no-javascript.spec.js` and `visitor-journeys.spec.js` were updated deliberately for the new names: **Numbers & results** and **Ways to keep Kew open**. They cover page labels, the Menu groups and the homepage card labels. The curated Menu test now also requires the Take part “Respond to the council” link to carry the `nav-respond` emphasis.

@@ -79,12 +79,15 @@ class Document(HTMLParser):
             self.scripts.append(attrs['src'])
         if 'source-card' in classes:
             self.source_ids.append(attrs.get('id', ''))
-            self.source_cards[attrs.get('id', '')] = {'attrs': attrs, 'summary': [], 'url': None}
+            self.source_cards[attrs.get('id', '')] = {'attrs': attrs, 'summary': [], 'url': None, 'context': []}
         elif tag == 'a' and self.stack and self.stack[-1][0] == 'h3':
-            card = next((ancestor_attrs.get('id') for _, ancestor_classes, ancestor_attrs in reversed(self.stack)
-                         if 'source-card' in ancestor_classes), None)
+            card = self.enclosing_source_card()
             if card:
                 self.source_cards[card]['url'] = attrs.get('href')
+        elif tag == 'p' and self.stack and self.stack[-1][0] == 'details':
+            card = self.enclosing_source_card()
+            if card:
+                self.source_cards[card]['context'].append([])
         if 'legacy-route' in classes:
             self.legacy_routes[attrs.get('id', '')] = attrs.get('data-destination', '')
         if tag == 'a' and 'href' in attrs:
@@ -104,6 +107,14 @@ class Document(HTMLParser):
         parent_tag, parent_classes, parent_attrs = self.stack[-2]
         if tag == 'p' and parent_tag == 'article' and 'source-card' in parent_classes and 'publisher' not in classes:
             self.source_cards[parent_attrs['id']]['summary'].append(data)
+        elif tag == 'p' and parent_tag == 'details':
+            card = self.enclosing_source_card()
+            if card:
+                self.source_cards[card]['context'][-1].append(data)
+
+    def enclosing_source_card(self):
+        return next((ancestor_attrs.get('id') for _, ancestor_classes, ancestor_attrs in reversed(self.stack)
+                     if 'source-card' in ancestor_classes), None)
 
     def handle_startendtag(self, tag, attributes):
         self.handle_starttag(tag, attributes)
@@ -318,6 +329,31 @@ class SiteStructureTests(unittest.TestCase):
                 search = ' '.join(attrs['data-search'].lower().split())
                 self.assertIn(' '.join(record['summary'].lower().split()), search,
                               'A visible summary must also be searchable')
+                # The location note and access date carry dated checks; a correction must reach the card too.
+                context = [' '.join(''.join(part).split()) for part in card['context']]
+                self.assertEqual(context[0], ' '.join((record['locator'] or '').split()))
+                self.assertTrue(context[1].startswith(f"Access checked: {record['accessChecked']}."), context[1])
+
+    def test_july_2026_inspection_records_ofsteds_publication_date(self):
+        # Checked 27 September 2026: Ofsted's index lists the 8 July 2026 inspection as published on
+        # 24 September 2026. Earlier wording left the date unknown and said the index still showed 2021.
+        records = {record['id']: record
+                   for record in json.loads((ROOT / 'sources.json').read_text(encoding='utf-8'))['records']}
+        self.assertIn('published 24 September 2026', records['inspection-2026']['locator'])
+        self.assertIn('8 July 2026 school inspection as its latest report, published 24 September 2026',
+                      records['ofsted-index']['summary'])
+        faq = (ROOT / 'faq.html').read_text(encoding='utf-8')
+        answer = re.search(r'<details id="latest-inspection".*?</details>', faq, re.S).group(0)
+        self.assertIn('published on 24 September 2026', ' '.join(re.sub(r'<[^>]+>', ' ', answer).split()))
+        self.assertIn('href="evidence.html#source-ofsted-index"', answer, 'The date needs a route to its index record')
+        stale = ('publication date not inferred', 'not an inferred publication date',
+                 'still lists 2021 latest', 'still listed 2021 latest', 'central index can lag')
+        for name in sorted(PUBLIC_FILES):
+            if name.endswith(('.html', '.json', '.csv', '.md')):
+                text = ' '.join((ROOT / name).read_text(encoding='utf-8').lower().split())
+                for phrase in stale:
+                    with self.subTest(file=name, phrase=phrase):
+                        self.assertNotIn(phrase, text)
 
 
 if __name__ == '__main__':
