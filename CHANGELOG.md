@@ -4,6 +4,12 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Downloadable visit QR code for open-day flyers
+
+- Publish a QR code for the permanent enquiry address (`https://ystoneman.github.io/kew-riverside-website/visit/`, trailing slash included) at the permanent paths `qr/kew-riverside-visit-qr.png` (980 px, error correction H) and `qr/kew-riverside-visit-qr.svg`, both added to `PUBLIC_FILES`. The redirect and its destination are unchanged.
+- Parent action plan “More ways to help” adds a `#visit-qr` paragraph after the homepage QR. It says the code passes through this website to the school's contact page, that a future registration page is planned rather than promised, and asks makers to keep closure campaigning off open-day flyers and to agree wording with the school or PTA when using their branding (J8). Homepage QR link names now start “Homepage” so all four download names are distinct. No menu, page or homepage content was added.
+- Lead-agent generation check: the PNG and a rendered SVG decode to the `/visit/` URL (OpenCV). The browser test now pins each filename to its paragraph, exact link name and SVG title, and checks download filenames, signatures and served content types in four scripted projects. Independent UX and campaign plan reviews set the link names, conditional wording, branding caveat, exact-name test and direct-file sharing route; implementation reviews of the diff (UX rendered at 320 px; lead check at 390 and 1440 px, no overflow) left one wording split, now applied. Local: 52 Python checks, 104-public-file validation and the new test in all four scripted projects passed. The full local browser run (1,620 passed, 15 skipped) had iPhone WebKit menu/orientation timeouts under heavy machine load, partly from an overlapping run clearing its `test-results`; unchanged `main` failed the same menu spec under the same load, so hosted checks are the release gate. Native iOS Safari download behaviour is unverified.
+
 ### Downloadable homepage QR code for parent flyers
 
 - Publish a QR code for the homepage (`https://ystoneman.github.io/kew-riverside-website/`) at the permanent paths `qr/kew-riverside-website-qr.png` (980 px, error correction H) and `qr/kew-riverside-website-qr.svg`, both added to `PUBLIC_FILES`. It encodes the plain URL because analytics records no query strings. It is separate from the `/visit/` school-enquiry QR.

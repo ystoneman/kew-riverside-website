@@ -520,24 +520,34 @@ test('Action motion: reduced-motion links stay still and support keyboard activa
   }
 });
 
-test('Parent plan: flyer makers can download the permanent homepage QR code as PNG and SVG', async ({ page, hasTouch, request }) => {
+test('Parent plan: flyer makers can download the permanent homepage and visit QR codes as PNG and SVG', async ({ page, hasTouch, request }) => {
   await page.goto('/proposal.html#plan-keep-going');
   const more = page.locator('#more-parent-actions');
   await expect(more.locator('summary')).toContainText('sharing');
   await activate(more.locator('summary'), hasTouch);
-  const share = more.locator('#share-qr');
-  await expect(share).toBeVisible();
-  await expect(share).toContainText('in your own name');
-  for (const [name, type, start] of [['QR code, PNG image', 'image/png', '\x89PNG'], ['QR code, SVG', 'image/svg+xml', '<?xml']]) {
-    const link = share.getByRole('link', { name });
-    const file = (await link.getAttribute('href')).replace('qr/', '');
-    await expect(link).toHaveAttribute('download', file);
-    const [download] = await Promise.all([page.waitForEvent('download'), link.click()]);
-    expect(download.suggestedFilename()).toBe(file);
-    expect(await download.failure()).toBeNull();
-    expect((await fs.readFile(await download.path())).subarray(0, start.length).toString('latin1')).toBe(start);
-    const response = await request.get('/qr/' + file);
-    expect(response.status()).toBe(200);
-    expect(response.headers()['content-type']).toContain(type);
+  // Pin each filename to its own paragraph and link name so the two QR purposes cannot be swapped.
+  for (const [id, label, base, caveat, svgTitle] of [
+    ['share-qr', 'Homepage', 'kew-riverside-website-qr', 'in your own name', 'QR code for the Kew Riverside website'],
+    ['visit-qr', 'Visit', 'kew-riverside-visit-qr', 'agree its wording with them', 'QR code for Kew Riverside school visit enquiries'],
+  ]) {
+    const share = more.locator('#' + id);
+    await expect(share).toBeVisible();
+    await expect(share).toContainText(caveat);
+    await expect(share.getByRole('link')).toHaveCount(2);
+    for (const [kind, ext, type, start] of [['PNG image', 'png', 'image/png', '\x89PNG'], ['SVG', 'svg', 'image/svg+xml', '<?xml']]) {
+      const file = `${base}.${ext}`;
+      const link = share.getByRole('link', { name: `${label} QR code, ${kind}`, exact: true });
+      await expect(link).toHaveAttribute('href', 'qr/' + file);
+      await expect(link).toHaveAttribute('download', file);
+      const [download] = await Promise.all([page.waitForEvent('download'), link.click()]);
+      expect(download.suggestedFilename()).toBe(file);
+      expect(await download.failure()).toBeNull();
+      const body = await fs.readFile(await download.path());
+      expect(body.subarray(0, start.length).toString('latin1')).toBe(start);
+      if (ext === 'svg') expect(body.toString('utf8')).toContain(`<title>${svgTitle}</title>`);
+      const response = await request.get('/qr/' + file);
+      expect(response.status()).toBe(200);
+      expect(response.headers()['content-type']).toContain(type);
+    }
   }
 });
