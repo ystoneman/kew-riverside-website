@@ -14,6 +14,8 @@ The evidence pages need no build or API keys. Feedback and community letters use
 
 ## Permanent flyer QR link
 
+For the homepage rather than the school enquiry, parents can download `qr/kew-riverside-website-qr.png` or `.svg` from the Parent action plan. Keep both paths permanent.
+
 Print or encode **https://ystoneman.github.io/kew-riverside-website/visit/**. Keep that address and `visit/index.html` in place for the lifetime of the flyers. The current destination is the [school contact page](https://www.kewriverside.richmond.sch.uk/page/?pid=525&title=Contact+Us), verified on 24 September 2026. The redirect works without JavaScript and includes a normal link if automatic refresh is disabled. It adds no tracking or subscription.
 
 To point existing flyers to a future, verified school registration page:
