@@ -31,6 +31,11 @@ Maintenance only: no contributor records belong in this repository. The live for
 - Dropbox-route permission form: new title (“Share a video · Step 1 of 2: your permissions”), a new bold first line saying there is no upload on that page, and a confirmation message that leads with the Dropbox link. Dropbox request: a shorter description that starts with a link back to the permission form and now also names the optional paid-ads permission, matching v3.
 - No consent wording, privacy block, answer marker or notice version changed, so `2026-09-26-videos-dropbox-v3` still applies. The earlier texts are kept privately with the operator records.
 
+## Shorter permission-form summary (27 September 2026, about 12:25 UTC)
+
+- At the owner's request, the Dropbox-route permission form's own text was shortened, with details linked to `privacy.html#video-privacy`. The changes: the introduction became three short lines; the optional filming-prompts item was removed (the prompts stay on `videos.html`, linked from the form); the “Your privacy & choices” block became a short “Your privacy” block that names Yann as running the collection personally, not for the school, PTA or council; and the news-media, paid-ads, public-credit and filename descriptions were shortened.
+- Every tick-box label, answer marker (`[YouTube v2]`, `[Media v2]`, `[Ads v3]`), required setting and the website notice are unchanged, so `2026-09-26-videos-dropbox-v3` still applies. Responses after this time saw the shorter summary. The full previous form text is kept privately with the operator records.
+
 ## Fictional review cases
 
 | Saved record | Later event | Allowed outcome |
