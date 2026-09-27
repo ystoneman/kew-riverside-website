@@ -4,6 +4,19 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Participation after the post-release review
+
+A read-only post-release review of the participation pages on 27 September (UX, campaign and evidence lenses, against main `0ae8eb8`) found no blocking problems. Fixes:
+
+- **Share ideas now points to the official response (J3, J5).** A parent with a personal view meets "Send it to the council through the official response form (stated deadline: 16 October 2026)" above the categories, alongside letters and videos. Scripts switch it to the letters-and-videos line from 17 October (London date); without scripts it stays until the post-deadline content update. The next-steps page that carried this reminder is not reachable without Formspree's paid redirect.
+- **The 13 October calendar reminder is offered on the letters page (J3).** Step 3 now links `respond-reminder.ics` before 13 October, when scripts can retire it. The file was previously linked only from the unreachable next-steps page.
+- **Dark appearance: chosen cards look chosen (J4, J5).** Selected letter choices, the quote rule and the selected Share ideas card use the appearance palette, so a chosen card is stronger than an unchosen one (the ticked border was 2.4:1 against the page, now at least 3:1). The selected card's icon keeps dark lettering on its marigold circle. Light appearance is unchanged.
+- **Privacy wording.** "Those would need your new permission" follows a sentence split, so it could be read as covering only the last exclusion. It now reads "Any of these uses would need your new permission", restoring the original scope. The device-storage section now opens with every item this site stores. It states that expired drafts are deleted on the next visit, and mentions the fingerprint kept after "clear both copies now". Analytics states the 180-day "Include detailed usage" lifetime. Appearance says a manual choice stays until System is chosen or site data is cleared.
+- **Letters page.** The draft notice says drafts are restored for up to seven days, not kept for seven days. The official-form check date matches the 23 September check recorded on the next-steps and proposal pages. Script and stylesheet versions are bumped.
+- **Tests.** A regression guards that `sent.html` is never measured and gives no referrer, under both the default and allowed analytics choices. Others cover the Share ideas link at the 16/17 October boundary (placed above the categories at 320 px), the reminder at the 12/13 October boundary, and dark-mode selected-card contrast.
+
+The same review's dark-mode finding on `.primary` buttons (1.0–1.2:1 against dark panels) was passed to the concurrent theme change rather than fixed here. Owner actions for 29 September, 16–17 October, quote records and the council collection are listed in `CODEX-HANDOFF.md`. Native iPhone Air / iOS 26.5 Safari (Simulator) operated the live-equivalent letters flow, Share ideas and next-steps pages. It did not operate Send or Back, because no real submission was made.
+
 ### Community letter, 26 September 2026
 
 - Added one new community letter to the Community letters board through the existing v3 automatic-screening route: processing and publication-with-display-name consent were present, and the letter was screened as relevant, clearly authored and free of contact details, abuse or specific allegations. Wording and paragraph structure are preserved exactly; it is labelled “AI screened · Opinion” and appears first (newest). A duplicate form submission of the identical letter is published once.

@@ -10,6 +10,15 @@ const london = moment => new Date(moment + '+01:00');
 const readDraft = page => page.evaluate(() => localStorage.getItem('kr-letter-draft'));
 // Only file checks: run them once rather than in every browser project.
 const onceOnly = () => test.skip(test.info().project.name !== 'desktop-chromium', 'File check, not browser-specific');
+function contrast(a, b) {
+  const lum = colour => {
+    const [r, g, b] = colour.match(/[\d.]+/g).slice(0, 3).map(v => Number(v) / 255)
+      .map(v => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const [light, dark] = [lum(a), lum(b)].sort((x, y) => y - x);
+  return (light + 0.05) / (dark + 0.05);
+}
 
 async function sendFictionalLetter(page, options = {}) {
   await page.goto('/letters.html');
@@ -346,6 +355,16 @@ for (const [moment, open] of [['2026-10-16T23:30:00', true], ['2026-10-17T00:30:
   });
 }
 
+for (const [moment, shown] of [['2026-10-12T21:00:00', true], ['2026-10-13T00:30:00', false]]) {
+  test(`Letters at ${moment} London time: the calendar reminder is ${shown ? 'offered' : 'retired'}`, async ({ page }) => {
+    await page.clock.setFixedTime(london(moment));
+    await page.goto('/letters.html#email');
+    const reminder = page.locator('#step-reminder');
+    await expect(reminder).toBeVisible({ visible: shown });
+    if (shown) await expect(reminder.getByRole('link', { name: 'Add a calendar reminder' })).toHaveAttribute('href', 'respond-reminder.ics');
+  });
+}
+
 // ---------- Letters: optional quotes, only with publication ----------
 
 test('Letters: quoting is offered only with publication, starts unticked and is dropped with it', async ({ page }) => {
@@ -401,13 +420,69 @@ test('Privacy: the quote section states scope, exclusions, end date, records and
   await expect(heading).toHaveText('Quotes from letters (optional)');
   await expect(heading).toBeInViewport();
   const text = await page.locator('main').innerText();
-  for (const phrase of ['yes-quote-published-letter-v1', 'It is offered only with publication', 'paid adverts, fundraising appeals', 'news organisations', 'until 30 September 2028', 'withdraw quote permission on its own', 'also ends quote permission']) {
+  for (const phrase of ['yes-quote-published-letter-v1', 'It is offered only with publication', 'paid adverts, fundraising appeals', 'news organisations', 'Any of these uses would need your new permission', 'until 30 September 2028', 'withdraw quote permission on its own', 'also ends quote permission']) {
     expect(text, phrase).toContain(phrase);
   }
   await expect(page.locator('#device-storage')).toHaveText('Letter drafts in your browser');
 });
 
+test('Dark appearance: a chosen card looks stronger than an unchosen one', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await page.goto('/letters.html#email');
+  await page.locator('#allow-public').check();
+  const letters = await page.evaluate(() => {
+    const card = id => document.getElementById(id).closest('.choice-card');
+    return {
+      ticked: getComputedStyle(card('allow-public')).borderTopColor,
+      unticked: getComputedStyle(card('allow-council')).borderTopColor,
+      quoteRule: getComputedStyle(document.getElementById('quote-choice')).borderLeftColor,
+      page: getComputedStyle(document.body).backgroundColor,
+    };
+  });
+  expect(contrast(letters.ticked, letters.page)).toBeGreaterThanOrEqual(3);
+  expect(contrast(letters.ticked, letters.page)).toBeGreaterThan(contrast(letters.unticked, letters.page));
+  await page.locator('#allow-quotes').check();
+  const quoteTicked = await page.locator('#quote-choice').evaluate(el => getComputedStyle(el).borderLeftColor);
+  expect(contrast(quoteTicked, letters.page)).toBeGreaterThan(contrast(letters.quoteRule, letters.page));
+  await page.goto('/feedback.html');
+  const ideas = await page.evaluate(() => {
+    const selected = document.querySelector('input[name="kind"]:checked').closest('.kind-card');
+    const other = document.querySelector('input[name="kind"]:not(:checked)').closest('.kind-card');
+    return {
+      selected: getComputedStyle(selected).borderTopColor,
+      other: getComputedStyle(other).borderTopColor,
+      icon: getComputedStyle(selected.querySelector('.kind-icon svg')).stroke,
+      circle: getComputedStyle(selected.querySelector('.kind-icon')).backgroundColor,
+      page: getComputedStyle(document.body).backgroundColor,
+    };
+  });
+  expect(contrast(ideas.selected, ideas.page)).toBeGreaterThanOrEqual(3);
+  expect(contrast(ideas.selected, ideas.page)).toBeGreaterThan(contrast(ideas.other, ideas.page));
+  expect(contrast(ideas.icon, ideas.circle)).toBeGreaterThanOrEqual(3);
+});
+
 // ---------- Share ideas ----------
+
+for (const [moment, open] of [['2026-10-16T23:30:00', true], ['2026-10-17T00:30:00', false]]) {
+  test(`Share ideas at ${moment} London time: the official response link is ${open ? 'offered' : 'retired'}`, async ({ page }) => {
+    await page.clock.setFixedTime(london(moment));
+    await page.setViewportSize({ width: 320, height: 568 });
+    await page.goto('/feedback.html');
+    const openRoute = page.locator('#ideas-official-open');
+    await expect(openRoute).toBeVisible({ visible: open });
+    await expect(page.locator('#ideas-official-closed')).toBeVisible({ visible: !open });
+    const route = open ? openRoute : page.locator('#ideas-official-closed');
+    await expect(route.getByRole('link', { name: 'Write a community letter' })).toBeVisible();
+    await expect(route.getByRole('link', { name: 'share a short video' })).toBeVisible();
+    if (!open) return;
+    const official = openRoute.getByRole('link', { name: 'official response form' });
+    await expect(official).toHaveAttribute('href', /^https:\/\/docs\.google\.com\/forms\//);
+    // A personal view meets the official route before the private categories.
+    const link = await official.boundingBox();
+    const firstCard = await page.locator('#kind-cards .kind-card').first().boundingBox();
+    expect(link.y).toBeLessThan(firstCard.y);
+  });
+}
 
 test('Share ideas: visible choices start on a suggestion, with the meeting card dated before the meeting', async ({ page }) => {
   await page.clock.setFixedTime(london('2026-09-29T15:29:00'));
