@@ -43,7 +43,7 @@ MENU_GROUPS = [
     ]),
     ('This website', [
         ('index.html', 'Home', ''),
-        ('about.html', 'About', ''),
+        ('about.html', 'About & contact', ''),
     ]),
 ]
 # Every page's footer, including the destinations kept out of the Menu.

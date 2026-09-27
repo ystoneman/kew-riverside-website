@@ -64,7 +64,7 @@ const mainPages = [
 const menuGroups = [
   ['Take part', [['Respond to the council', 'proposal.html#take-part'], ['Parent action plan', 'proposal.html#parent-plan'], ['Community letters', 'letters.html'], ['Share a video', 'videos.html#upload'], ['Share ideas', 'feedback.html']]],
   ['Understand the proposal', [['Proposal & dates', 'proposal.html'], ['FAQ', 'faq.html'], ['Understand', 'understand.html'], ['Options', 'options.html'], ['Evidence', 'evidence.html#records'], ['Unanswered questions', 'evidence.html#gaps']]],
-  ['This website', [['Home', 'index.html'], ['About', 'about.html']]],
+  ['This website', [['Home', 'index.html'], ['About & contact', 'about.html']]],
 ];
 const menuNames = menuGroups.flatMap(([, links]) => links.map(([label]) => label));
 const footerLinks = ['about.html', 'proposal.html', 'faq.html', 'evidence.html#records', 'letters.html', 'feedback.html', 'videos.html#upload', 'lessons.html', 'supporters.html', 'corrections.html', 'lessons-sources.html', 'privacy.html', 'privacy.html#analytics'];
@@ -156,7 +156,8 @@ test('Orientation: each main page has a stable identity and the complete menu in
     const names = await menu.locator('a').allTextContents();
     expect(names.map(text => text.trim())).toEqual(menuNames);
     // A page outside the curated Menu is still one tap away in its footer.
-    if (menuNames.includes(name)) await expect(menu.getByRole('link', { name, exact: true })).toHaveAttribute('aria-current', 'page');
+    const label = name === 'About' ? 'About & contact' : name;
+    if (menuNames.includes(label)) await expect(menu.getByRole('link', { name: label, exact: true })).toHaveAttribute('aria-current', 'page');
     else await expect(page.locator('footer').getByRole('link', { name, exact: true })).toHaveCount(1);
     const questions = menu.getByRole('link', { name: 'Unanswered questions', exact: true });
     await expect(questions).toBeVisible();
@@ -214,7 +215,7 @@ test('Orientation: the complete menu works on desktop and retains a return to th
   await page.goto('/evidence.html#method');
   const menu = page.locator('.mobile-menu');
   await activate(menu.locator(':scope > summary'), hasTouch);
-  await activate(menu.getByRole('link', { name: 'About', exact: true }), hasTouch);
+  await activate(menu.getByRole('link', { name: 'About & contact', exact: true }), hasTouch);
   await expect(page).toHaveURL(/about\.html$/);
   await expect(page.locator('.page-name')).toHaveText('About');
   await page.goBack();
@@ -365,7 +366,7 @@ test('Orientation: failed navigation enhancement leaves native page and section 
   if (await sections.getAttribute('open') !== null) await activate(sections.locator(':scope > summary'), hasTouch);
   const menu = page.locator('.mobile-menu');
   await activate(menu.locator(':scope > summary'), hasTouch);
-  await activate(menu.getByRole('link', { name: 'About', exact: true }), hasTouch);
+  await activate(menu.getByRole('link', { name: 'About & contact', exact: true }), hasTouch);
   await expect(page).toHaveURL(/about\.html$/);
   await expect(page.locator('.page-name')).toHaveText('About');
 });
@@ -375,7 +376,7 @@ test('Orientation: short screens keep the complete menu scrollable and its last 
   await page.goto('/options.html#option-crowdfunding');
   await activate(page.locator('.mobile-menu > summary'), hasTouch);
   const panel = page.locator('.mobile-menu nav');
-  const last = panel.getByRole('link', { name: 'About', exact: true });
+  const last = panel.getByRole('link', { name: 'About & contact', exact: true });
   await last.scrollIntoViewIfNeeded();
   const bounds = await panel.boundingBox();
   expect(bounds.y).toBeGreaterThanOrEqual(0);
@@ -422,5 +423,12 @@ test('Orientation: the curated Menu keeps its three groups and every footer keep
     expect(await nav.locator(':scope > a').count(), `${file}: no link outside a group`).toBe(0);
     const footer = await page.locator('footer .footer-inner > div:last-child a').evaluateAll(links => links.map(link => link.getAttribute('href')));
     expect(footer, `${file} footer`).toEqual(footerLinks);
+  }
+  // The longer footer must wrap on every page, not run off landscape phones.
+  await page.setViewportSize({ width: 667, height: 375 });
+  for (const file of pages) {
+    await page.goto('/' + file);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth), `${file} at 667 × 375`).toBeLessThanOrEqual(0);
+    await expect(page.locator('footer .footer-inner > div:last-child a').last()).toBeVisible();
   }
 });

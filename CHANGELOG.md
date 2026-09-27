@@ -11,7 +11,7 @@ The Menu had grown from 7 to 17 flat links in two days because the navigation bu
 - **Three labelled groups, 13 links:**
   - **Take part:** Respond to the council (`proposal.html#take-part`), Parent action plan, Community letters, Share a video and Share ideas.
   - **Understand the proposal:** Proposal & dates, FAQ, Understand, Options, Evidence and the indented Unanswered questions.
-  - **This website:** Home and About.
+  - **This website:** Home and About & contact.
 - **Official response first**, so “Take part” never suggests website contributions are the official response (J3).
 - **Moved to the footer:** Lessons, Supporters, Corrections and Research citations now sit in every page’s footer, next to Privacy and Analytics choices. Lessons also stays linked from the homepage research shortcut and Evidence (J6). No page, URL or anchor was removed.
 - **Chosen, not generated:** the builder now renders the Menu and every footer from curated lists (`MENU_GROUPS`, `FOOTER_LINKS`), so registering a page never adds a Menu row by itself. Group labels are visible headings for accessible groups. Deep action links never claim the current page.
