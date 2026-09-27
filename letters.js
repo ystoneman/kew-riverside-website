@@ -249,6 +249,8 @@
   document.getElementById('official-line-past').hidden = !officialClosed;
   document.getElementById('step-official-open').hidden = officialClosed;
   document.getElementById('step-official-fallback').hidden = !officialClosed;
+  // The calendar reminder is for the evening of 13 October; offer it only before then.
+  document.getElementById('step-reminder').hidden = londonDate() >= '2026-10-13';
 
   form.addEventListener('submit', event => {
     updateChoices();
