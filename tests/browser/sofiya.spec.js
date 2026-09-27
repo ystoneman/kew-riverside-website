@@ -319,8 +319,8 @@ test('Contributions: letters lead to contextual evidence and optional video with
   await expect(page.locator('#message')).toHaveValue('');
   await page.goBack();
   await expect(page).toHaveURL(/letters\.html$/);
-  await activate(page.locator('main .form-route a[href="videos.html"]'), hasTouch);
-  await expect(page).toHaveURL(/videos\.html$/);
+  await activate(page.locator('main .form-route a[href="videos.html#upload"]'), hasTouch);
+  await expect(page).toHaveURL(/videos\.html#upload$/);
   await expect(page.locator('#upload-requirements')).toContainText('Adults recording themselves only');
   await activate(page.locator('#video-choices > summary'), hasTouch);
   await expect(page.locator('#video-choices')).toContainText('New submissions require YouTube publication permission');

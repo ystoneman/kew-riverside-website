@@ -7,10 +7,12 @@ import re
 ROOT = Path(__file__).resolve().parents[2]
 VERSION = '2026092501'
 PAGES = {
+    # Participation routes follow the Parent action plan so they are visible
+    # without scrolling the Menu on small phones.
+    'letters.html': 'Community letters', 'videos.html': 'Share a video', 'feedback.html': 'Share ideas',
     'index.html': 'Home', 'about.html': 'About', 'proposal.html': 'Proposal & dates',
     'faq.html': 'FAQ', 'understand.html': 'Understand', 'options.html': 'Options',
-    'lessons.html': 'Lessons', 'evidence.html': 'Evidence', 'letters.html': 'Community letters',
-    'feedback.html': 'Share ideas', 'videos.html': 'Parent Voices', 'supporters.html': 'Supporters',
+    'lessons.html': 'Lessons', 'evidence.html': 'Evidence', 'supporters.html': 'Supporters',
     'privacy.html': 'Privacy', 'corrections.html': 'Corrections',
     'lessons-sources.html': 'Research citations', 'sent.html': 'Next steps',
 }
@@ -33,7 +35,7 @@ SECTIONS = {
     'about.html': [('our-story','Our family story'),('site-responsibility','Who is responsible'),('updates','What has changed'),('contact','Contact Yann')],
     'letters.html': [('letter-form','Write a letter'),('letter-guidelines','Letter guidelines'),('letters','Read community letters')],
     'feedback.html': [('feedback-form','Share an idea or question'),('review-rules','How review works'),('suggestions','Read shared ideas')],
-    'videos.html': [('upload','Share a video'),('prompt-title','What to say'),('process-title','What happens next'),('recording-tips','Recording tips')],
+    # The short video page needs no section list beside the Menu.
     'supporters.html': [('supporter-form','Supporter statement'),('supporter-list-section','Confirmed supporters')],
     'privacy.html': [('public-roles','Public roles'),('funding-privacy','Funding ideas'),('supporters-privacy','Supporters'),('contact-privacy','Private contact'),('letters-privacy','Community letters'),('video-privacy','Videos'),('requests','Your choices'),('analytics','Analytics'),('device-storage','On-device storage')],
 }
@@ -77,7 +79,8 @@ def render_navigation(name, document):
     menu_links = link('proposal.html#parent-plan','Parent action plan',True)
     for file, label in PAGES.items():
         if file == 'sent.html' and name != file: continue
-        href = file+'#records' if file == 'evidence.html' else file
+        # Share a video opens at its permission step, like the flyer QR code.
+        href = {'evidence.html': 'evidence.html#records', 'videos.html': 'videos.html#upload'}.get(file, file)
         menu_links += link(href,label)
         if file == 'evidence.html':
             menu_links += '<a class="nav-subitem" href="evidence.html#gaps">Unanswered questions</a>'
