@@ -417,6 +417,8 @@ Retained: every URL and anchor, `letters.html#letters`, `feedback.html?kind=…`
 Owner and review triggers: after 16 October, check the next official process stage and update dated copy; decide the Formspree plan (the redirect address is `https://ystoneman.github.io/kew-riverside-website/sent.html`); keep quote permissions recorded within 30 days (private operations notes). Verification is recorded in TESTING.md and CHANGELOG.md.
 
 
+**Post-release review, 27 September 2026.** Share ideas had no route to the official response once the next-steps page proved unreachable without a paid redirect, so a personal view now meets the official form above the categories (J3 before J5), retiring with the other dated asks. The 13 October calendar reminder moved to letters step 3 for the same reason. In dark appearance, chosen cards now use the appearance palette so they read as chosen. No priority, destination or arrival position changed.
+
 ## 24 September 2026 — Findings before depth on Options, Lessons and Proposal
 
 Visitor need (J1–J3, J5–J8): understand the implications before choosing among a directory of topics. The owner approved the detailed three-page plan and requested implementation. Keep the shared journey register and global navigation priorities unchanged.
