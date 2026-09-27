@@ -7,7 +7,7 @@ This section supersedes the historical handoff below. The current source of trut
 - The shorter homepage, video consent, analytics, external-link arrow, WebKit test-harness, participation and appearance releases have merged. PRs #11, #12, #13, #14 and #2 passed their main deployment gates; the public files for #12, #13, #14 and #2 passed byte-for-byte artifact checks. The latest deployed commit is `c87d033` (#2), with all 89 public files verified over HTTPS. See the dated release record for run IDs and test counts.
 - The shared video QR URL remains `https://ystoneman.github.io/kew-riverside-website/videos.html#upload`. The analytics-panel and participation-cue fixes protect its Back position in scripted iPhone WebKit tests.
 - Google Forms, the Dropbox request and earlier permission records were not changed by these releases. No real form, video or council response was submitted in testing.
-- Later releases, through #34 (verified 26 September), are recorded in `CHANGELOG.md`; the bullets above were not refreshed for them. A post-release review of the participation pages on 27 September (UX, campaign, evidence) found no blocking problems; its fixes and owner actions are below.
+- Later releases, through #34 (verified 26 September) and #37 (participation post-release fixes, verified live 27 September), are recorded in `CHANGELOG.md`; the bullets above were not refreshed for them. The post-release review of the participation pages on 27 September (UX, campaign, evidence) found no blocking problems; its owner actions are below.
 - The `codex/letter-photos` branch is an unpublished draft with placeholder intake URLs. Resolve the real permission and upload arrangements before considering publication.
 
 ## Follow-ups
