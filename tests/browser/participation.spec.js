@@ -358,10 +358,16 @@ for (const [moment, open] of [['2026-10-16T23:30:00', true], ['2026-10-17T00:30:
 for (const [moment, shown] of [['2026-10-12T21:00:00', true], ['2026-10-13T00:30:00', false]]) {
   test(`Letters at ${moment} London time: the calendar reminder is ${shown ? 'offered' : 'retired'}`, async ({ page }) => {
     await page.clock.setFixedTime(london(moment));
+    await page.setViewportSize({ width: 320, height: 568 });
     await page.goto('/letters.html#email');
     const reminder = page.locator('#step-reminder');
     await expect(reminder).toBeVisible({ visible: shown });
-    if (shown) await expect(reminder.getByRole('link', { name: 'Add a calendar reminder' })).toHaveAttribute('href', 'respond-reminder.ics');
+    if (!shown) return;
+    await expect(reminder.getByRole('link', { name: 'Add a calendar reminder' })).toHaveAttribute('href', 'respond-reminder.ics');
+    // It reads as its own line, not part of the paragraph below.
+    const own = await reminder.boundingBox();
+    const next = await page.locator('#send-expectations').boundingBox();
+    expect(next.y - (own.y + own.height)).toBeGreaterThanOrEqual(12);
   });
 }
 

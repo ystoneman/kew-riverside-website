@@ -208,5 +208,7 @@ label.step-title{display:flex!important;margin-bottom:12px!important}
 .sent-return{margin:0 0 22px;padding:16px 18px;border-radius:12px;border:1.5px solid #2f6b4f;background:var(--theme-soft,#f3f8f1)}
 .sent-return p{font-size:15px;margin:0 0 8px;color:var(--ink)}
 .sent-return .next-actions{margin-top:10px}
+/* The calendar reminder sits above #send-expectations, whose negative top margin would otherwise overlap it. */
+.step-reminder{margin-bottom:24px}
 .sent-return:focus{outline:3px solid var(--teal);outline-offset:3px}
 .sent-return:focus:not(:focus-visible){outline:none}
