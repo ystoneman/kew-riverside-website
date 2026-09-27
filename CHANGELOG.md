@@ -4,6 +4,14 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Optional paid-ads permission for Parent Voices videos
+
+- Add a separate, optional and unchecked paid-ads permission (notices `2026-09-26-videos-v3` and `2026-09-26-videos-dropbox-v3`, answer marker `[Ads v3]`). It covers Yann's own paid ads on YouTube, Facebook and Instagram inviting families to learn about or visit the school and encouraging people to take part in decisions about its future; not fundraising. The contributor approves the exact excerpt and ad wording before an ad first runs. Withdrawal pauses ads normally within two working days; ads stop by 30 September 2028.
+- Videos and Privacy explain the choice, ad-library retention, who runs and pays for the ads (including Yann's PTA membership) and that earlier records grant no paid-ads permission. The YouTube-only limit now says “in paid ads”. Letters' quote permission (“Not in paid adverts”) and the Letters/Proposal route text are unchanged.
+- Existing YouTube and news-media choices and their markers are unchanged (J9).
+
+Review: independent campaign, UX and evidence planning reviews shaped the purposes, placement limits, approval-before-first-run rule, withdrawal time, ad-library and “who paid” wording, and the single private route for earlier contributors. Independent implementation reviews of the actual diff (campaign/evidence; UX rendered in Chromium and WebKit at 320 × 568, 390 × 844 and 1440 × 900) led to: approval before first run stated as “uses it only if you agree” on the site and both live forms; one route for adding paid ads to earlier videos, with a dated record of agreement; removal of unlisted ad-excerpt uploads on withdrawal; the full earlier Dropbox notice ID; and a shorter, split paid-ads paragraph with a link to the privacy detail. Local checks: 52 Python tests, 100-file validation, and 1,607 browser checks passed with 15 expected skips before the review fixes; the three affected specs (212 checks) passed after them. Both live Google Forms were checked in public view without submitting: the paid-ads question follows news-media, starts unchecked and is not required. Native iOS was not run; no touch, focus or menu behaviour changed.
+
 ### Community letter, 26 September 2026
 
 - Added one new community letter to the Community letters board through the existing v3 automatic-screening route: processing and publication-with-display-name consent were present, and the letter was screened as relevant, clearly authored and free of contact details, abuse or specific allegations. Wording and paragraph structure are preserved exactly; it is labelled “AI screened · Opinion” and appears first (newest). A duplicate form submission of the identical letter is published once.
