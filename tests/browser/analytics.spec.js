@@ -330,6 +330,7 @@ test('Query strings, individual anchors, incoming private routes and search word
     [site + 'letters.html?reply=' + sentinel + '#letter-' + sentinel, prefix + 'letters.html'],
     [site + 'feedback.html?kind=privacy&message=' + sentinel, ''],
     [site + 'corrections.html?email=' + sentinel, ''],
+    [site + 'sent.html', ''],
     ['https://www.google.com/search?q=' + sentinel, 'https://www.google.com/'],
   ];
   for (const [index, [referer, expected]] of sources.entries()) {
@@ -392,6 +393,23 @@ for (const file of ['feedback.html?kind=privacy', 'corrections.html']) {
       expect(JSON.stringify(sent)).not.toContain(sentinel);
     });
   }
+}
+
+for (const saved of ['allow', null]) {
+  test(`The next-steps page sent.html stays unmeasured (${saved || 'default'} choice)`, async ({ page, context }) => {
+    // It follows every form, including private requests, so a count would measure submissions.
+    const { sent } = await virtualProduction(context);
+    await controlledAttention(page);
+    if (saved) await savedChoice(page, saved);
+    await page.goto(site + 'sent.html');
+    await freezeAfterLoad(page);
+    await page.clock.runFor(30_000);
+    expect(sent).toEqual([]);
+    await page.getByRole('link', { name: 'FAQ', exact: true }).last().click();
+    await expect.poll(() => sent.length).toBe(1);
+    expect(sent[0].body.payload.url).toBe(prefix + 'faq.html');
+    expect(sent[0].body.payload.referrer).toBe('');
+  });
 }
 
 test('Real visible sections distinguish reaching, ten seconds of viewing and active page thresholds', async ({ page, context }) => {

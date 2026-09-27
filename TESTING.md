@@ -396,3 +396,12 @@ WebKit can still open, but does not use, a connection to a blocked navigation ta
 On macOS, WebKit uses CFNetwork rather than libsoup. There, the earlier probe's late redirected requests (6.5–11.8 s, on connections opened late) match WebKit's NetworkLoadScheduler. It can hold back a document load to an HTTP/1.1 origin until a 10 s preconnect finishes, and HTTP/2 origins are exempt. That match was not separately confirmed.
 
 When a Playwright release bundles libsoup 3.6.6 or later, rerun the stress with routing restored for the legacy tests before deciding whether they still need to run unrouted.
+
+## Participation post-release checks — 27 September 2026
+
+`participation.spec.js` adds:
+- the Share ideas official-response link at the London-time boundary between 16 and 17 October, including its placement above the categories at 320 px;
+- the letters calendar reminder at the boundary between 12 and 13 October;
+- a dark-appearance check that a ticked choice card, the quote rule and a selected Share ideas card contrast with the page at least 3:1 and more than their unticked state, and that the selected icon keeps at least 3:1.
+
+`analytics.spec.js` adds `sent.html` to the referrer table and checks that loading it sends nothing under the default or allowed choice. The local run of the participation, analytics, contributions and no-JavaScript specs passed 557 checks with 15 intended once-only skips, across all five projects with two workers. Local preview servers that pre-load the public-file allowlist must be restarted after new public assets are added; otherwise renders miss those stylesheets. Temporary local configs should run the checkout's own `tests/browser/server.js` (it accepts `KEW_TEST_PORT`) rather than a copied server: a four-day-old copy without HTTP/2 and the QR routes produced 64 false local failures. `theme.js` creates the footer `select#appearance` at runtime, so page anchors must not reuse the id `appearance`; the first hosted run of this change failed the appearance-label check for that reason. The Share ideas line keeps each letter and video link once, because the video discovery test expects a single `main a[href="videos.html"]`.

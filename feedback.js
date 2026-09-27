@@ -109,6 +109,11 @@
     const note = document.querySelector('#meeting-context p');
     if (note && note.firstChild) note.firstChild.textContent = 'Yann reviews questions privately. Sending one here does not put it on a meeting agenda or send it to the council. ';
   }
+  // The direct official-form ask retires after the stated deadline (London date).
+  if (`${values.year}-${values.month}-${values.day}` > '2026-10-16') {
+    document.getElementById('ideas-official-open').hidden = true;
+    document.getElementById('ideas-official-closed').hidden = false;
+  }
   kind.addEventListener('change', updateKind);
   updateKind();
   function updateCount() {
