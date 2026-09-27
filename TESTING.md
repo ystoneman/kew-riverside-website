@@ -22,7 +22,19 @@ On Linux, install browser system dependencies with `npx playwright install --wit
 
 The browser harness serves the site locally over HTTP/2, as GitHub Pages does, uses fictional form inputs, and intercepts external requests. The four legacy-route tests observe requests instead of routing them (see Legacy redirect fix below). It never delivers a test submission to Formspree. Hosted CAPTCHA, real inbox delivery, council submission and real contribution moderation are outside the automated suite.
 
-## Grouped Menu — 27 September 2026
+## Owner-delegated decisions and live video test — 27 September 2026
+
+- The expectations in `orientation.spec.js`, `no-javascript.spec.js` and `visitor-journeys.spec.js` were updated deliberately for the new names: **Numbers & results** and **Ways to keep Kew open**. They cover page labels, the Menu groups and the homepage card labels. The curated Menu test now also requires the Take part “Respond to the council” link to carry the `nav-respond` emphasis.
+- Local run of the affected specs (orientation, no-JavaScript, visitor journeys, desktop, top journeys, clarity, understand) with three workers: 465 passed. Python checks and the 104-file public validation passed.
+- Lead-agent review, not an independent specialist review: the renames and emphasis follow the owner-approved plan and earlier independent UX advice (“Numbers & results”). Headless Chromium at 320 × 568 (dark) and 390 × 844 (light) showed the longer page label wrapping inside the 63 px bar with no horizontal overflow, and both emphasised Take part links.
+- Live end-to-end test, native iOS 26.5 Safari (iPhone 17e simulator), fictional data:
+  - It started on the homepage and reached the permission form in three taps: Menu, Share a video, Give permission.
+  - It submitted `video-route-test@example.com` with only the required ticks and no sign-in.
+  - It followed the confirmation’s upload link, declined optional cookies, chose a 6-second TEST clip from Photos, entered a test name and email, and saw “Finished uploading”.
+  - The owner’s Google Forms and Dropbox dashboards then showed the test records; they are labelled for manual deletion.
+  - This is the first completed real upload through the route. It found that the Dropbox description cut off on phones, which has been fixed in the provider.
+
+
 
 - `orientation.spec.js`: on every public page, the Menu must match the approved groups, labels, hrefs and order exactly, with no link outside a group; `sent.html` adds only Next steps. Every footer must list the approved destinations in order. Deleting any Menu or footer link fails the test. Pages outside the Menu, such as Lessons, are checked for their footer route. The keyboard route to Unanswered questions and the short-screen scroll check (now ending at About) were updated deliberately.
 - `no-javascript.spec.js`: the first Menu links are now Respond to the council, Parent action plan, Community letters, Share a video and Share ideas.

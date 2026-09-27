@@ -4,6 +4,18 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Owner-delegated decisions and a live end-to-end video test
+
+The owner delegated the open Phase 0 and Menu decisions on 27 September.
+
+- **Clearer page names:** Understand is now **Numbers & results** and Options is **Ways to keep Kew open**, in the page labels, Menu, desktop link row and homepage cards. Evidence keeps its name. URLs and anchors are unchanged.
+- **Menu emphasis:** “Respond to the council” now has the same bold emphasis as the Parent action plan in the Menu’s Take part group (J3).
+- **Kept as they are:**
+  - At 320 × 568 the video card’s council reminder starts just below the permission button, rather than shrinking text or cutting consent wording.
+  - The Proposal page keeps two response buttons, at the page top and at the plan’s opening, because visitors arrive at both.
+- **Uploads without permission:** unmatched uploads are not watched; the person gets one reminder and the upload is deleted after 14 days (VIDEO-PERMISSIONS.md).
+- **Live end-to-end test:** native iOS 26.5 Safari (iPhone 17e simulator, dark) went from the homepage through Menu → Share a video → Give permission (three taps) to the shortened form. It submitted a labelled test permission with no sign-in, followed the confirmation’s upload link, chose a 6-second TEST clip from Photos and saw Dropbox confirm “Finished uploading”. The records are labelled TEST for the owner to delete. The same check found that the Dropbox description’s long form address could not wrap on a phone and cut off every line; the description now links to `videos.html#upload`, is shorter and wraps correctly.
+
 ### Downloadable visit QR code for open-day flyers
 
 - Publish a QR code for the permanent enquiry address (`https://ystoneman.github.io/kew-riverside-website/visit/`, trailing slash included) at the permanent paths `qr/kew-riverside-visit-qr.png` (980 px, error correction H) and `qr/kew-riverside-visit-qr.svg`, both added to `PUBLIC_FILES`. The redirect and its destination are unchanged.

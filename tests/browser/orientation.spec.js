@@ -56,14 +56,14 @@ async function activate(locator, hasTouch) {
 }
 const mainPages = [
   ['index.html', 'Home'], ['about.html', 'About'], ['proposal.html', 'Proposal & dates'],
-  ['faq.html', 'FAQ'], ['understand.html', 'Understand'], ['options.html', 'Options'],
+  ['faq.html', 'FAQ'], ['understand.html', 'Numbers & results'], ['options.html', 'Ways to keep Kew open'],
   ['lessons.html', 'Lessons'], ['evidence.html', 'Evidence'],
 ];
 // The curated Menu (27 September 2026): three labelled groups, official response
 // first. Pages outside it stay in every footer (footerLinks).
 const menuGroups = [
   ['Take part', [['Respond to the council', 'proposal.html#take-part'], ['Parent action plan', 'proposal.html#parent-plan'], ['Community letters', 'letters.html'], ['Share a video', 'videos.html#upload'], ['Share ideas', 'feedback.html']]],
-  ['Understand the proposal', [['Proposal & dates', 'proposal.html'], ['FAQ', 'faq.html'], ['Understand', 'understand.html'], ['Options', 'options.html'], ['Evidence', 'evidence.html#records'], ['Unanswered questions', 'evidence.html#gaps']]],
+  ['Understand the proposal', [['Proposal & dates', 'proposal.html'], ['FAQ', 'faq.html'], ['Numbers & results', 'understand.html'], ['Ways to keep Kew open', 'options.html'], ['Evidence', 'evidence.html#records'], ['Unanswered questions', 'evidence.html#gaps']]],
   ['This website', [['Home', 'index.html'], ['About & contact', 'about.html']]],
 ];
 const menuNames = menuGroups.flatMap(([, links]) => links.map(([label]) => label));
@@ -222,9 +222,9 @@ test('Orientation: the complete menu works on desktop and retains a return to th
   await expect(page).toHaveURL(/evidence\.html#method$/);
   await expect(page.locator('#method')).toBeInViewport();
   await activate(menu.locator(':scope > summary'), hasTouch);
-  await activate(menu.getByRole('link', { name: 'Options', exact: true }), hasTouch);
+  await activate(menu.getByRole('link', { name: 'Ways to keep Kew open', exact: true }), hasTouch);
   await expect(page).toHaveURL(/options\.html$/);
-  await expect(page.locator('.page-name')).toHaveText('Options');
+  await expect(page.locator('.page-name')).toHaveText('Ways to keep Kew open');
 });
 
 test('Orientation: passive reading updates location without changing URL, history or keyboard focus', async ({ page }) => {
@@ -357,7 +357,7 @@ test('Orientation: clipboard rejection exposes a selectable link instead of losi
 test('Orientation: failed navigation enhancement leaves native page and section routes available', async ({ page, hasTouch }) => {
   await page.route('**/navigation.js*', route => route.fulfill({ status: 503, contentType: 'application/javascript', headers: { 'x-test-fixture': 'intentional-error' }, body: '' }));
   await page.goto('/options.html');
-  await expect(page.locator('.page-name')).toHaveText('Options');
+  await expect(page.locator('.page-name')).toHaveText('Ways to keep Kew open');
   const sections = page.locator('.page-sections');
   await activate(sections.locator(':scope > summary'), hasTouch);
   await activate(sections.locator('a[data-section-id="option-crowdfunding"]'), hasTouch);
@@ -421,6 +421,8 @@ test('Orientation: the curated Menu keeps its three groups and every footer keep
     const expected = menuGroups.map(([heading, links]) => [heading, file === 'sent.html' && heading === 'This website' ? [...links, ['Next steps', 'sent.html']] : links]);
     expect(groups, file).toEqual(expected);
     expect(await nav.locator(':scope > a').count(), `${file}: no link outside a group`).toBe(0);
+    // The official response leads Take part with the Parent action plan's emphasis.
+    await expect(nav.locator('a[href="proposal.html#take-part"]')).toHaveClass(/\bnav-respond\b/);
     const footer = await page.locator('footer .footer-inner > div:last-child a').evaluateAll(links => links.map(link => link.getAttribute('href')));
     expect(footer, `${file} footer`).toEqual(footerLinks);
   }

@@ -58,3 +58,6 @@ html.has-orientation{scroll-behavior:auto}
 .footer-inner>div:first-child{max-width:460px}
 .footer-inner a{min-height:32px;display:inline-flex;align-items:center}
 @media(max-width:850px){.footer-inner>div:last-child{justify-content:flex-start}}
+/* The official response leads the Take part group with the same emphasis as the
+ * Parent action plan (owner decision, 27 September 2026). */
+.site-header .nav-respond{font-weight:700;color:var(--teal)}

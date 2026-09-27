@@ -36,6 +36,12 @@ Maintenance only: no contributor records belong in this repository. The live for
 - At the owner's request, the Dropbox-route permission form's own text was shortened, with details linked to `privacy.html#video-privacy`. The changes: the introduction became three short lines; the optional filming-prompts item was removed (the prompts stay on `videos.html`, linked from the form); the “Your privacy & choices” block became a short “Your privacy” block that names Yann as running the collection personally, not for the school, PTA or council; and the news-media, paid-ads, public-credit and filename descriptions were shortened.
 - Every tick-box label, answer marker (`[YouTube v2]`, `[Media v2]`, `[Ads v3]`), required setting and the website notice are unchanged, so `2026-09-26-videos-dropbox-v3` still applies. Responses after this time saw the shorter summary. The full previous form text is kept privately with the operator records.
 
+## Unmatched uploads and the live end-to-end test (27 September 2026)
+
+- Owner-delegated rule for an upload with no matching permission record: don't watch it; send one neutral reminder to the email Dropbox collected, asking the person to complete step 1; delete it after 14 days if no permission arrives. This sits within the privacy notice's existing "review for deletion within 90 days, sooner when no longer needed"; the notice is unchanged.
+- The Dropbox description now links back to `videos.html#upload` rather than the long form address, which could not wrap on phones and cut off the whole description, and it is shorter. It still states adults only, same email, one video per form, private review, no automatic publication, private unmatched uploads, and that saved choices always apply.
+- A labelled test ran through the live route on 27 September from native iOS Safari (simulator): permission response `video-route-test@example.com`, credit "TEST - please delete", with required choices only; upload `TEST-kew-video-route-check.mov`. It is not a contributor record; delete both by hand.
+
 ## Fictional review cases
 
 | Saved record | Later event | Allowed outcome |

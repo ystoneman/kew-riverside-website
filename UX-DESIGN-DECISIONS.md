@@ -73,6 +73,14 @@ These choices are design judgments to verify, not measured conversion improvemen
 
 ## Selected page and interaction design
 
+### Owner-delegated decisions — 27 September 2026
+
+The owner asked the implementing agent to decide the open points. Understand becomes **Numbers & results**, which covers finances, forecasts and learning results, and Options becomes **Ways to keep Kew open**, matching its homepage question. Evidence stays, being already clear. The labels change together in page identity, Menu, desktop row and homepage cards; the URLs and anchors are unchanged. “Respond to the council” gains the Parent action plan’s emphasis in the Take part group, because the official response is the campaign’s most important action (J3).
+
+Two stated deviations are accepted. At 320 × 568 the council reminder starts just below the video permission button, because fitting both would mean shrinking text or cutting consent wording. The Proposal page keeps two response buttons for its two arrival points. The unmatched-upload rule (no viewing, one reminder, delete after 14 days) is operational and recorded in VIDEO-PERMISSIONS.md.
+
+A live end-to-end test in native iOS Safari confirmed the full route: three taps from the homepage to the permission form, no sign-in, and a completed Dropbox upload. It also exposed a provider-side problem that no automated test could see: an unbreakable form address in the Dropbox description cut off every line on phones. The fix uses the website’s hyphenated address instead.
+
 ### Grouped, curated Menu — 27 September 2026
 
 Visitor need (J1–J9): the owner found the 17-link Menu cluttered and confusing (“I'm getting a little lost again”). The navigation builder produced it by listing every registered page, so each new page added a row without anyone deciding the Menu's size. The owner approved the grouped rebuild in the private plan and asked for it straight after the Phase 0 release.
