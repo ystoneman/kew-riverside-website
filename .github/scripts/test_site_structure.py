@@ -263,8 +263,14 @@ class SiteStructureTests(unittest.TestCase):
                 evidence_index = menu_routes.index(('evidence.html', 'records'))
                 self.assertEqual(menu_routes[evidence_index + 1], ('evidence.html', 'gaps'),
                                  'Unanswered questions must remain a direct menu route immediately after Evidence')
-                required_pages = {'index.html', 'about.html', 'proposal.html', 'faq.html', 'understand.html', 'options.html', 'lessons.html', 'evidence.html', 'letters.html', 'feedback.html', 'videos.html', 'supporters.html', 'privacy.html', 'corrections.html', 'lessons-sources.html'}
-                self.assertEqual({file for file, fragment in mobile}, required_pages | ({'sent.html'} if name == 'sent.html' else set()), 'Full menu must expose the agreed page set')
+                # The curated Menu (27 September 2026) holds these pages; the rest of the
+                # agreed set moved to every footer rather than disappearing.
+                required_pages = {'index.html', 'about.html', 'proposal.html', 'faq.html', 'understand.html', 'options.html', 'evidence.html', 'letters.html', 'feedback.html', 'videos.html'}
+                self.assertEqual({file for file, fragment in mobile}, required_pages | ({'sent.html'} if name == 'sent.html' else set()), 'The curated Menu must expose the agreed page set')
+                footer = re.search(r'<footer>.*?</footer>', (ROOT / name).read_text(), re.S)
+                self.assertIsNotNone(footer, 'Pages with the shared shell keep a footer')
+                footer_pages = {local_destination(name, href)[0] for href in re.findall(r'href="([^"]+)"', footer.group())}
+                self.assertTrue({'lessons.html', 'supporters.html', 'privacy.html', 'corrections.html', 'lessons-sources.html', 'about.html'} <= footer_pages, 'Routes moved out of the Menu must stay in every footer')
                 self.assertEqual(participation, {('letters.html', ''), ('feedback.html', '')})
 
     def test_printed_visit_route_has_matching_immediate_and_native_destinations(self):

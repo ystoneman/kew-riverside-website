@@ -22,6 +22,14 @@ On Linux, install browser system dependencies with `npx playwright install --wit
 
 The browser harness serves the site locally over HTTP/2, as GitHub Pages does, uses fictional form inputs, and intercepts external requests. The four legacy-route tests observe requests instead of routing them (see Legacy redirect fix below). It never delivers a test submission to Formspree. Hosted CAPTCHA, real inbox delivery, council submission and real contribution moderation are outside the automated suite.
 
+## Grouped Menu — 27 September 2026
+
+- `orientation.spec.js`: on every public page, the Menu must match the approved groups, labels, hrefs and order exactly, with no link outside a group; `sent.html` adds only Next steps. Every footer must list the approved destinations in order. Deleting any Menu or footer link fails the test. Pages outside the Menu, such as Lessons, are checked for their footer route. The keyboard route to Unanswered questions and the short-screen scroll check (now ending at About) were updated deliberately.
+- `no-javascript.spec.js`: the first Menu links are now Respond to the council, Parent action plan, Community letters, Share a video and Share ideas.
+- The footer check also loads every page at 667 × 375 and requires no horizontal overflow and a visible last footer link. It covers the review finding on FAQ and Understand.
+- The all-links no-JavaScript Menu test timed out on three pages during a heavily parallel local run. Re-run with two workers, all 18 page tests passed.
+- Rendered with headless Chromium and the Menu open after scrolling: at 375 × 667 in dark mode, every link through Unanswered questions is in view; at 320 × 568 in light mode, every link through Options.
+
 ## Video route, dark-mode buttons and top journeys — 27 September 2026
 
 New and changed checks:
