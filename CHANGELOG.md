@@ -22,6 +22,7 @@ The Menu had grown from 7 to 17 flat links in two days because the navigation bu
 - **Moved to the footer:** Lessons, Supporters, Corrections and Research citations now sit in every page’s footer, next to Privacy and Analytics choices. Lessons also stays linked from the homepage research shortcut and Evidence (J6). No page, URL or anchor was removed.
 - **Chosen, not generated:** the builder now renders the Menu and every footer from curated lists (`MENU_GROUPS`, `FOOTER_LINKS`), so registering a page never adds a Menu row by itself. Group labels are visible headings for accessible groups. Deep action links never claim the current page.
 - **No renames:** the Understand, Options and Evidence names are unchanged; renaming them remains an open owner decision.
+- **Published and verified:** PR #41 merged as `1782985` on 27 September 2026 after all required hosted checks passed. Main deployment run 36329517219 passed validation, all five browser projects and deploy. All 102 live public files then matched `1782985` byte for byte. Native iOS 26.5 Safari (iPhone 17e simulator, dark) showed the live grouped Menu with its Take part and Understand the proposal groups, and Community letters marked current. Earlier, after the Phase 0 release, the same device went Letters → Menu → Share a video → Give permission on the live site and reached the shortened permission form. Nothing was submitted.
 
 ### Video route, dark-mode buttons and top parent journeys (Phase 0)
 
