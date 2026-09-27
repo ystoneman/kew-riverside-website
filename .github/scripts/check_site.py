@@ -12,7 +12,7 @@ from public_data import validate_board
 ROOT = Path(__file__).resolve().parents[2]
 PUBLIC_FILES = frozenset('''
 fundraising-trustees.html fundraising-admin.html fundraising-briefs.css
-visit/index.html qr/kew-riverside-website-qr.png qr/kew-riverside-website-qr.svg
+visit/index.html qr/kew-riverside-website-qr.png qr/kew-riverside-website-qr.svg qr/kew-riverside-visit-qr.png qr/kew-riverside-visit-qr.svg
 theme.css theme.js
 analytics.js analytics.css analytics-config.json
 videos.html videos.css evidence.html options.html options.css options.js homepage.css homepage.js
