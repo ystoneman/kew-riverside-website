@@ -4,6 +4,12 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Downloadable homepage QR code for parent flyers
+
+- Publish a QR code for the homepage (`https://ystoneman.github.io/kew-riverside-website/`) at the permanent paths `qr/kew-riverside-website-qr.png` (980 px, error correction H) and `qr/kew-riverside-website-qr.svg`, both added to `PUBLIC_FILES`. It encodes the plain URL because analytics records no query strings. It is separate from the `/visit/` school-enquiry QR.
+- Proposal's Parent action plan “More ways to help” disclosure now names sharing and links both files next to “Invite family and friends to take part”, asking makers to publish flyers in their own name and leave out community letters, videos and children's details (J9). No menu, footer or page was added.
+- Lead-agent generation check: the PNG decodes to the homepage URL (OpenCV). New browser test covers the disclosure, descriptive link names, download filenames, file signatures and served content types in four scripted projects. Independent UX and campaign plan reviews moved placement from About to the Parent action plan and added the own-name caveat. Rendered paragraph inspected at 390 and 1440 px with no horizontal overflow. Full local run: **1,611 browser checks passed with 15 expected skips**, 52 Python checks and 102-public-file validation. Downloads are not yet in the analytics `DOWNLOADS` map. Native iOS Safari download behaviour is unverified.
+
 ### Participation after the post-release review
 
 A read-only post-release review of the participation pages on 27 September (UX, campaign and evidence lenses, against main `0ae8eb8`) found no blocking problems. Fixes:
