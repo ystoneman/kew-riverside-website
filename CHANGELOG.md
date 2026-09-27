@@ -15,6 +15,7 @@ The owner delegated the open Phase 0 and Menu decisions on 27 September.
   - The Proposal page keeps two response buttons, at the page top and at the plan’s opening, because visitors arrive at both.
 - **Uploads without permission:** unmatched uploads are not watched; the person gets one reminder and the upload is deleted after 14 days (VIDEO-PERMISSIONS.md).
 - **Live end-to-end test:** native iOS 26.5 Safari (iPhone 17e simulator, dark) went from the homepage through Menu → Share a video → Give permission (three taps) to the shortened form. It submitted a labelled test permission with no sign-in, followed the confirmation’s upload link, chose a 6-second TEST clip from Photos and saw Dropbox confirm “Finished uploading”. The records are labelled TEST for the owner to delete. The same check found that the Dropbox description’s long form address could not wrap on a phone and cut off every line; the description now links to `videos.html#upload`, is shorter and wraps correctly.
+- **Published and verified:** PR #44 merged as `b6653df` on 27 September 2026 after all required hosted checks passed. Main deployment run 36335713135 passed validation, all five browser projects and deploy. All 104 live public files then matched `b6653df` byte for byte.
 
 ### Downloadable visit QR code for open-day flyers
 
