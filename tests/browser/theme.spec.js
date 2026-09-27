@@ -249,3 +249,39 @@ test('Narrow dark arrival retains the parent plan and touch navigation', async (
   await expect(page).toHaveURL(/faq\.html$/); await appearance(page,dark);
   await expect(page.locator('.mobile-menu')).not.toHaveAttribute('open','');
 });
+
+// Primary buttons must read as buttons in both appearances. In dark mode the brand
+// green was almost the page and card colour (1.0–1.36:1), so the main action on the
+// video page, the homepage response button and the letter/idea Send buttons looked
+// like plain text. Text contrast alone did not catch it.
+test('Primary buttons stand out at least 3:1 from their background in both appearances', async ({ page }) => {
+  for (const colorScheme of ['light', 'dark']) {
+    // Two states appear only after a fictional letter: the letters return panel
+    // and the next-steps card. Both hold an official-response button.
+    const visits = [
+      ['index.html'], ['proposal.html'], ['letters.html'], ['feedback.html'], ['videos.html'], ['options.html'], ['faq.html'],
+      ['letters.html', () => localStorage.setItem('kr-letter-draft', JSON.stringify({ v: 1, text: 'A fictional letter for a colour check.', name: '', saved: Date.now(), pending: true }))],
+      ['sent.html', () => { sessionStorage.setItem('kr-sent-kind', JSON.stringify({ kind: 'letter', at: Date.now() })); sessionStorage.setItem('kr-sent-letter', JSON.stringify({ text: 'A fictional letter.', at: Date.now() })); }],
+    ];
+    for (const [file, seed] of visits) {
+      const context = page.context();
+      const fresh = await context.newPage();
+      await fresh.emulateMedia({ colorScheme });
+      if (seed) await fresh.addInitScript(seed);
+      await fresh.goto('/' + file);
+      if (seed) await expect(fresh.locator('main .primary[href^="https://docs.google.com/forms/d/e/1FAIpQLSda5oPsdUlrJkf6vACC"]').first()).toBeVisible();
+      const weak = await fresh.evaluate(() => {
+        const rgb = value => { const m = value.match(/[\d.]+/g); if (!m) return null; const [r, g, b, a = 1] = m.map(Number); return a === 0 ? null : [r, g, b]; };
+        const lum = c => { const [r, g, b] = c.map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+        const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+        const behind = el => { for (let node = el.parentElement; node; node = node.parentElement) { const c = rgb(getComputedStyle(node).backgroundColor); if (c) return c; } return rgb(getComputedStyle(document.documentElement).backgroundColor) || [255, 255, 255]; };
+        return [...document.querySelectorAll('main .primary')].filter(el => el.getClientRects().length).map(el => {
+          const own = rgb(getComputedStyle(el).backgroundColor);
+          return { label: el.textContent.replace(/\s+/g, ' ').trim().slice(0, 40), ratio: own ? +ratio(own, behind(el)).toFixed(2) : 0 };
+        }).filter(item => item.ratio < 3);
+      });
+      expect(weak, `${colorScheme}: ${file}${seed ? ' (after a letter)' : ''}`).toEqual([]);
+      await fresh.close();
+    }
+  }
+});

@@ -22,6 +22,32 @@ On Linux, install browser system dependencies with `npx playwright install --wit
 
 The browser harness serves the site locally over HTTP/2, as GitHub Pages does, uses fictional form inputs, and intercepts external requests. The four legacy-route tests observe requests instead of routing them (see Legacy redirect fix below). It never delivers a test submission to Formspree. Hosted CAPTCHA, real inbox delivery, council submission and real contribution moderation are outside the automated suite.
 
+## Video route, dark-mode buttons and top journeys — 27 September 2026
+
+New and changed checks:
+
+- `videos.spec.js`: the upload card has two steps, a “Give permission” main button and the council reminder directly after the steps. On arrival at `#upload` at 375 × 667 and 390 × 844, the button and the reminder link (16 October 2026, official form) are fully in view. At 320 × 568 the button is fully in view and the reminder follows the steps. From the top of the page at 390 × 844 the button is in view, and the page has no “On this page” list. Letters and Share ideas open the card at the permission step. The old “reminder before the button” order assertion was replaced deliberately.
+- `top-journeys.spec.js` (new): the homepage Parent action plan and response button are fully in view at 375 × 667 and 390 × 844. On arrival at `#parent-plan` at 320 × 568 and 390 × 844, the plan's title, its own response button and first action link are in view. “My child’s next steps” leads the homepage routes.
+- `theme.spec.js`: every visible primary button in `main` stands out at least 3:1 from its background in light and dark on Home, Proposal, Letters, Share ideas, Videos, Options and FAQ. It also covers the Letters return panel and the next-steps page after a fictional letter stored on the test device, asserting that their official-response buttons are shown. On the previous theme this test failed in dark mode (Home 1.36, 1.04, 1.0 and 1.0:1) and it passes with the new colours.
+- `no-javascript.spec.js`: the QR arrival keeps the button and reminder in view. The plan opens with its response button in view, and the homepage response button is in view without scripts. The Menu opens Share a video at `#upload`.
+- Deliberately updated expectations: Menu order (`orientation`, `no-javascript`), the page label “Share a video”, homepage route order (`visitor-journeys`), video link targets (`#upload`) and the Letters/Proposal link text. Each still protects the same destinations.
+
+Local results: the final full run passed 1,646 tests with 15 expected skips; one Sofiya contribution check still expected the old `videos.html` destination in four projects, was updated to `videos.html#upload`, and the affected specs then passed 112 of 112. The Python checks, JavaScript syntax check, navigation freshness check and public-file validation (100 files) also passed.
+
+Rendered and native checks:
+
+- Lead, Chromium emulation, dark: video `#upload` arrival at 320 × 568, 375 × 667 and 390 × 844; video page-top at 390 × 844; homepage at 375 × 667.
+- Independent UX review, headless Chromium, light and dark, with and without JavaScript: 320, 375, 390 and 1440 px; 200% text with no horizontal overflow; keyboard order in the card; visible focus.
+- Native iOS 26.5 Safari (iPhone 17e simulator, dark), serving the branch over local HTTPS:
+  - the video card on `#upload` arrival;
+  - the open Menu showing Share a video third and marked current;
+  - the homepage first screen showing the Parent action plan and a visible teal response button;
+  - the plan opening with its response button;
+  - tapping “Give permission” opened the live permission form with its new title and first line, and nothing was filled in.
+- A WebKit run over plain local HTTP loads without CSS because of the page's `upgrade-insecure-requests`; use HTTPS for native checks.
+
+Not yet done: the owner's end-to-end upload of a throwaway clip, and an unaided parent attempt from a WhatsApp link.
+
 ## Detailed usage analytics on by default — 25 September 2026
 
 `analytics.spec.js` now expects detailed usage without a saved choice, keeps a saved Basic counts only choice to page views (including after reload), checks that every configured section ID exists, that Evidence's source library and unanswered questions and Options' ways to help are reached and viewed, that a nested section's viewing time is its own, that all three choices fit a 320 × 568 screen, that jumps within a page are not counted as opening it (fails on the previous code), and that writing a letter pauses section timing but not page time and sends no typed words. `theme.spec.js` follows the new pressed default. Final local run: 52 Python checks, 100-file validation and 1,595 browser checks passed with 15 expected skips (Node 24.19.0). Exact-head PR run 36197894588 and production run 36199241944 passed all five browser projects; Pages deployed at 00:12:05 BST on 26 September 2026 and all 100 live files matched `b7927cc`. A live intercepted check in desktop Chromium and iPhone WebKit saw default section, viewing and active-time events on Evidence. Dashboard receipt of the new events remains to be confirmed.

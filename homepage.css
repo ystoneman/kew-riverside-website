@@ -45,7 +45,11 @@ html:has(.directory-page), html:has(.legacy-route:target) { scroll-behavior: aut
   .home-page .meeting-links { gap: 6px 18px; }
 }
 @media (max-width: 700px) {
-  .home-page .hero { padding-block: 26px 22px; }
+  /* Keep the official response on the first screen of common phones in Safari
+   * without shrinking text: tighter spacing only. */
+  .home-page .hero { padding-block: 10px 22px; }
+  .home-page .hero h1 { margin-bottom: 10px; }
+  .home-page .hero-intro { line-height: 1.5; margin-bottom: 14px; }
   .home-page .hero h1 { letter-spacing: -1.4px; }
   .home-page .hero .button-row { gap: 12px; }
   .home-page .discovery-guide { padding-top: 28px; }

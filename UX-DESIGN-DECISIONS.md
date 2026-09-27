@@ -40,6 +40,12 @@ Across all journeys, preserve About/contact, corrections/removal, privacy, the c
 
 For each material change, record the visitor need and journey IDs; canonical destination and entry label; existing tasks potentially displaced; added space/attention/interactions and how those costs are contained; retained links/search terms/downloads; actual checks; and owner/review trigger. The specialist workflow in [AGENTS.md](AGENTS.md#specialist-reviews) supplies the relevant review lenses.
 
+- Pages whose job is to hand visitors on to a form or upload, such as Share a video, keep one main action on the first screen at 320 × 568, 375 × 667 and 390 × 844 in both appearances, on arrival from the site’s own links and shared links, labelled with what happens next. The next screen must deliver what the label promises. Letters and Share ideas keep their accepted form layouts.
+- Put safeguards beside or after the action they qualify, not in front of it. Say each thing once and link to the full notice; consent wording stays where people tick.
+- Primary buttons must stand out at least 3:1 from their background in light and dark appearance, not only have readable text.
+- The Menu is curated: adding an entry means removing or merging one, with the owner's agreement. A generated page label does not by itself earn a Menu row.
+- For J2, J3 and J7, keep a written path record: entry points and their arrival position at 320 × 568 and 390 × 844, the taps, reading and decisions to the real action, and what sits in between. Judge it with emphasis and scroll depth rather than a universal click count. A change that adds a tap, decision, competing link or screen of scrolling needs a stated reason and the owner's agreement. Before shipping a participation change, watch one person who did not build it try it on a real phone from a realistic entry point.
+
 ### Verification and maintenance
 
 Start journey checks at realistic entry points, not only known destination URLs. Automatic all-page/link discovery tests must be supplemented by independent expectations for protected entries: a removed link must not disappear silently from the test's own input. Review relative emphasis and scroll depth as well as clicks; avoid a universal click-count rule or pixel-perfect snapshots as the sole usability test.
@@ -66,6 +72,24 @@ Review this register when user evidence changes a priority, an official process 
 These choices are design judgments to verify, not measured conversion improvements.
 
 ## Selected page and interaction design
+
+### Video route, dark-mode buttons and top journeys — 27 September 2026
+
+Visitor need (J2, J3, J7, J9): on 26 September a first-time visitor tapped three times and still could not find where to submit a video. The owner also found the Menu, which had grown from 7 to 17 links in two days, hard to use. The owner approved the analysis and plan (kept privately in the parent workspace) and asked for this release on 27 September. The private monitor recorded no permission forms or uploads between 22 and 26 September; low traffic may also contribute, so this is not a measured cause.
+
+Diagnosis: “Start your video submission” opened a permissions-only form of about 800 words with no upload field; the upload followed on Dropbox. On the video page the button came after 124 words and three competing links, and in dark mode it matched its card (1.0:1). Every safeguard had been added in front of the action, and the Menu builder listed every page. Tests intercepted the handoff, checked text contrast only, and pinned both the reminder-before-button order and the “Parent Voices” label, so none caught the problem.
+
+Decisions:
+
+- **Share a video.** The page label and Menu entry say what the page is for; Parent Voices stays the YouTube channel name. The card shows two numbered steps: the main button says “Give permission”, and step 2 says the upload link follows Submit. The council reminder moves from in front of the button to directly after the steps, with its date and official link, and stays in view on arrival at `#upload` at 375 × 667 and 390 × 844. At 320 × 568 the permission step fits and the reminder starts just below it; fitting both would have meant shrinking text or cutting consent wording. This is a stated deviation from the approved plan, raised with the owner. The Menu and every in-site video link now open `videos.html#upload`, as the flyer QR code does, because from the top of the page the permission step was still a screen down on common phones. The returning-visitor Dropbox link moves below the reminder so the main path stays permission-first. The short page drops its “On this page” list.
+- **Menu order.** Participation routes follow the Parent action plan, so Share a video is visible without scrolling the Menu at 320 × 568. This is an interim step before the grouped Menu rebuild. It pushes FAQ below the first screen of the open Menu at 320 × 568; FAQ stays in the Menu, the homepage cards and the footer.
+- **Dark-mode primary buttons** use the existing dark teal with dark text, matching the Options response button. Lime is left for the Parent action plan spotlight and the Share ideas tile so their hierarchy is kept.
+- **Top journeys.** The owner confirmed this focus for the response period: J3 (respond by 16 October), J1, J7, J2 with J6's unanswered questions, then J4/J9/J5, J6 depth and J8. “My child’s next steps” now leads the six homepage routes. The homepage hero lost its duplicate label and some phone spacing so the response button fits the first screen at 375 × 667 and 390 × 844, with text sizes unchanged. The Parent action plan's opening sentence gains its own response button, because visitors arrive at `#parent-plan` below the page-top deadline panel. That panel stays for page-top arrivals, so the page now has two response buttons about two screens apart; the owner is asked to confirm this. The homepage’s no-JavaScript saved-search note moved below the hero so the response button also fits without scripts. Dated plan steps change by normal release after 29 September, not by script. After 16 October, a normal release must also update the three new dated lines: the video card’s council reminder (keep “not an official response” and link `proposal.html#take-part`), the plan’s opening sentence and the homepage response button.
+- **Providers.** The permission form's title and first line say there is no upload on that page, and its confirmation leads with the upload link. The Dropbox description starts with a link back to step 1. The optional filming prompts stay where they are; moving them needs a reliable editor drag, which is left for manual editing. Consent wording and notice versions are unchanged.
+
+Rejected: moving the page-top Proposal deadline panel into the plan (it would push the response down for page-top arrivals); exposing the Dropbox upload as a second button (it invites uploads before explicit consent); shrinking headings to meet first-screen targets; a runtime reorder of the plan steps (stale text without JavaScript and moved sections after arrival).
+
+Verification and review status are recorded in TESTING.md. Automated first-screen and contrast checks are not a usability study. The owner asked for release before the observed attempts, so this release ships ahead of the new rule’s real-phone check: the owner’s own end-to-end upload and an unaided parent attempt from a WhatsApp link follow it and are recorded when done.
 
 ### Optional paid-ads permission for videos — 26 September 2026
 

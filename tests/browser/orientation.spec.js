@@ -59,7 +59,9 @@ const mainPages = [
   ['faq.html', 'FAQ'], ['understand.html', 'Understand'], ['options.html', 'Options'],
   ['lessons.html', 'Lessons'], ['evidence.html', 'Evidence'],
 ];
-const menuNames = ['Parent action plan', 'Home', 'About', 'Proposal & dates', 'FAQ', 'Understand', 'Options', 'Lessons', 'Evidence', 'Unanswered questions'];
+// Participation routes follow the Parent action plan so Share a video is visible
+// without scrolling the Menu on small phones.
+const menuNames = ['Parent action plan', 'Community letters', 'Share a video', 'Share ideas', 'Home', 'About', 'Proposal & dates', 'FAQ', 'Understand', 'Options', 'Lessons', 'Evidence', 'Unanswered questions'];
 
 async function activeSection(page) {
   return page.locator('.section-links a[aria-current="location"]').evaluateAll(links => links.length === 1 ? links[0].dataset.sectionId : null);
@@ -89,7 +91,7 @@ test('Orientation: Back preserves a later reading position and a subsequent depa
   const historyLength = await page.evaluate(() => history.length);
   await page.goBack();
   await page.waitForURL(originalURL, { waitUntil: 'load' });
-  await expect(page.locator('.page-name')).toHaveText('Parent Voices');
+  await expect(page.locator('.page-name')).toHaveText('Share a video');
   await expect.poll(() => page.evaluate(y => Math.abs(scrollY - y), departureY)).toBeLessThanOrEqual(2);
   await expectScrollSettled(page, 'Back to the later video section');
   await expect(link).toBeInViewport({ ratio: 0.5 });
@@ -105,7 +107,7 @@ test('Orientation: Back preserves a later reading position and a subsequent depa
   await expect(page.locator('#find-your-way')).toBeVisible();
   await page.goBack();
   await page.waitForURL(originalURL, { waitUntil: 'load' });
-  await expect(page.locator('.page-name')).toHaveText('Parent Voices');
+  await expect(page.locator('.page-name')).toHaveText('Share a video');
   await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
   expect(await page.evaluate(() => history.state.existingVisitorState)).toBe('keep');
   expect(await page.evaluate(() => history.state.kewReadingPosition)).toBeUndefined();
