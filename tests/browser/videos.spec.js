@@ -7,11 +7,13 @@ const official = 'https://docs.google.com/forms/d/e/1FAIpQLSda5oPsdUlrJkf6vACC_A
 for (const source of ['letters.html', 'feedback.html']) {
   test(`Video: discover private upload from ${source}`, async ({ page, baseURL, hasTouch }) => {
     await page.goto('/' + source);
-    const entry = page.locator('main a[href="videos.html"]');
-    if (source === 'letters.html') await expect(page.locator('.form-route').filter({ has: page.locator('a[href="videos.html"]') })).toHaveText('Prefer to talk? Share a video.');
+    const entry = page.locator('main a[href="videos.html#upload"]');
+    if (source === 'letters.html') await expect(page.locator('.form-route').filter({ has: page.locator('a[href="videos.html#upload"]') })).toHaveText('Prefer to talk? Share a video.');
     await expect(entry).toBeVisible();
     if (hasTouch) await entry.tap(); else await entry.click();
-    await expectDestination(page, 'videos.html', baseURL);
+    await expectDestination(page, 'videos.html#upload', baseURL);
+    // Site links open at the permission step, as the flyer QR code does.
+    await expect(page.locator('#video-upload-link')).toBeInViewport({ ratio: 1 });
     await expect(page.locator('#upload-requirements')).toContainText('No Google or Dropbox sign-in required');
     await expect(page.locator('#upload-requirements')).toContainText('Adults recording themselves only');
     await expect(page.locator('#video-title')).toHaveText('Share a video');

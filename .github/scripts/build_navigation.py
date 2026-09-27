@@ -79,7 +79,8 @@ def render_navigation(name, document):
     menu_links = link('proposal.html#parent-plan','Parent action plan',True)
     for file, label in PAGES.items():
         if file == 'sent.html' and name != file: continue
-        href = file+'#records' if file == 'evidence.html' else file
+        # Share a video opens at its permission step, like the flyer QR code.
+        href = {'evidence.html': 'evidence.html#records', 'videos.html': 'videos.html#upload'}.get(file, file)
         menu_links += link(href,label)
         if file == 'evidence.html':
             menu_links += '<a class="nav-subitem" href="evidence.html#gaps">Unanswered questions</a>'

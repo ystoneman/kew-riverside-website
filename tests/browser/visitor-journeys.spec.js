@@ -382,9 +382,9 @@ test('Parent plan: correct PTA dates, independent video permission and official 
   await expect(page.locator('#plan-respond')).toContainText('16 October');
   await expect(page.locator('#plan-respond')).toContainText('does not replace your own official response');
   await expect(page.locator('#plan-share')).toContainText('require explicit YouTube publication permission');
-  await expect(page.locator('#plan-share')).toContainText('optional news-media permission');
+  await expect(page.locator('#plan-share')).toContainText('News-media and paid-ads permissions are optional');
   await expect(page.locator('.parent-reassurance')).toContainText('Keep following any admissions or SEND (special educational needs and disabilities) instructions');
-  for (const href of ['letters.html', 'videos.html', 'feedback.html?kind=evidence#feedback-form', 'feedback.html?kind=meeting#feedback-form', 'options.html#options']) {
+  for (const href of ['letters.html', 'videos.html#upload', 'feedback.html?kind=evidence#feedback-form', 'feedback.html?kind=meeting#feedback-form', 'options.html#options']) {
     await page.goto('/proposal.html#parent-plan');
     await activate(page.locator(`#parent-plan a[href="${href}"]`), hasTouch);
     await expectDestination(page, href, baseURL);

@@ -26,6 +26,11 @@ Maintenance only: no contributor records belong in this repository. The live for
 - Withdrawal: pause or stop ads using the video as soon as possible, normally within two working days; start no new ones. Withdrawing YouTube permission also ends YouTube ads. Excerpts used in YouTube ads may be separate unlisted uploads on Yann's channel; withdrawing paid-ads or YouTube permission removes them too. Platform ad-library records (up to seven years for political/social-issue ads) and others' copies may remain.
 - Earlier records (v1, v2) grant no paid-ads permission, whatever else they include. To add it, the contributor contacts Yann privately, or Yann asks once by email (as disclosed in privacy.html); do not chase. Yann sends the full current paid-ads wording and privately records the dated agreement to it against the matching recording.
 
+## Presentation-only provider edits (27 September 2026)
+
+- Dropbox-route permission form: new title (“Share a video · Step 1 of 2: your permissions”), a new bold first line saying there is no upload on that page, and a confirmation message that leads with the Dropbox link. Dropbox request: a shorter description that starts with a link back to the permission form and now also names the optional paid-ads permission, matching v3.
+- No consent wording, privacy block, answer marker or notice version changed, so `2026-09-26-videos-dropbox-v3` still applies. The earlier texts are kept privately with the operator records.
+
 ## Fictional review cases
 
 | Saved record | Later event | Allowed outcome |

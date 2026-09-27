@@ -441,7 +441,7 @@ test('No JavaScript: shared research links land still before a graphic or source
 
 test('No JavaScript: video guidance and external upload route remain available', async ({ page }) => {
   await page.goto('/letters.html');
-  await page.locator('main a[href="videos.html"]').tap();
+  await page.locator('main a[href="videos.html#upload"]').tap();
   await expect(page.locator('#upload-requirements')).toContainText('No Google or Dropbox sign-in required');
   const destination = await page.locator('#video-upload-link').getAttribute('href');
   await page.route(destination, route => route.fulfill({contentType:'text/html',body:'<!doctype html><title>Fictional permission handoff</title><p>No upload sent.</p>'}));
@@ -561,4 +561,22 @@ test('No JavaScript: the Parent action plan opens with its own response button i
   const respond = page.locator('#parent-plan .parent-plan-respond a');
   await expect(respond).toHaveAttribute('href', 'https://docs.google.com/forms/d/e/1FAIpQLSda5oPsdUlrJkf6vACC_AjvXFR6-ki3iBymNIF5BAWNxf85xQ/viewform');
   await expect(respond).toBeInViewport({ ratio: 1 });
+});
+
+test('No JavaScript: the homepage shows the Parent action plan and the response button on arrival', async ({ page }) => {
+  await page.goto('/index.html');
+  await expect(page.locator('.parent-plan-spotlight a')).toBeInViewport({ ratio: 1 });
+  const respond = page.locator('#top .button.primary');
+  await expect(respond).toHaveAttribute('href', 'https://docs.google.com/forms/d/e/1FAIpQLSda5oPsdUlrJkf6vACC_AjvXFR6-ki3iBymNIF5BAWNxf85xQ/viewform');
+  await expect(respond).toBeInViewport({ ratio: 1 });
+  // The saved-search note for old evidence links stays available below the hero.
+  await expect(page.locator('.saved-search-note a[href="evidence.html#records"]')).toBeVisible();
+});
+
+test('No JavaScript: the Menu opens Share a video at its permission step', async ({ page }) => {
+  await page.goto('/letters.html');
+  await page.locator('.mobile-menu > summary').tap();
+  await page.locator('.mobile-menu').getByRole('link', { name: 'Share a video', exact: true }).tap();
+  await expect(page).toHaveURL(/videos\.html#upload$/);
+  await expect(page.locator('#video-upload-link')).toBeInViewport({ ratio: 1 });
 });
