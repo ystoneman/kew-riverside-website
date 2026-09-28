@@ -4,6 +4,10 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Community letter
+
+- Added one consented, human-reviewed letter to the existing Community letters board, preserving its submitted wording and display name. The board and submission flow are unchanged. Release checks and deployment are pending.
+
 ### Owner-delegated decisions and a live end-to-end video test
 
 The owner delegated the open Phase 0 and Menu decisions on 27 September.
