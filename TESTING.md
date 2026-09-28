@@ -2,6 +2,14 @@
 
 The suite covers the site's main visitor journeys across Chromium and WebKit, with touch, keyboard and JavaScript-disabled cases. It does not establish that every possible device, browser, assistive technology or third-party service works. Xcode Simulator Safari is checked separately for mobile interaction changes.
 
+## Domain cutover checks — 28 September 2026, before release
+
+- 52 Python checks passed; the public-file validator accepted 108 assets, including four new-domain QR images. Generated research HTML matched its source. JavaScript syntax and `git diff --check` passed.
+- The affected analytics, QR, visitor-journey, participation and funding-brief browser specs passed in five projects: 586 passed, 15 skipped. Requests to forms and analytics used local interception. The new-origin privacy regression seeded an old-origin denial and fictional draft, then confirmed the new site sent no analytics and did not claim to restore the draft.
+- Independent QR decoding with ZXing confirmed both new PNGs and rasterized SVGs encode exactly `https://savekewriverside.org/` and `https://savekewriverside.org/visit/`. The four earlier QR files remain in the public manifest.
+- The regenerated two-page checklist has nine new-domain PDF link annotations and matches the previous page render pixel for pixel. The 44-page research report has three new-domain annotations and one updated visible URL; a page-render comparison changed only that URL. No old-host PDF link annotations remain.
+- The official response Google Form opened on 28 September and displayed the 16 October 2026 deadline. No response was submitted. The full local browser run, hosted PR checks, deployment, provider settings, TLS and live old-link redirects remain release checks.
+
 ## Run locally
 
 Use Node.js 24, Python 3 and OpenSSL. From this repository:

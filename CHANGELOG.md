@@ -4,6 +4,13 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Campaign domain cutover
+
+- Prepare GitHub Pages to serve `savekewriverside.org` at the domain root. Update public link previews, share links, PDFs and current source links to the new address. New downloadable homepage and school-visit QR images use the new domain; the earlier four QR files and direct page anchors remain (J1–J9).
+- Restrict analytics collection to the new production hostname and root-level pages. Both levels start off on that hostname until a visitor chooses a level, because objections saved on the old origin cannot transfer. The privacy notice explains the change and that unfinished drafts remain in old-origin storage.
+- The Formspree domain restriction, Umami website domain, DNS, HTTPS and old-link redirects require live verification during the account cutover. Publication and those provider checks are not yet recorded by this commit.
+- Pre-release checks: 52 Python tests, 108-file public validation, generated research-page check, JavaScript syntax and 586 affected browser tests passed (15 skipped). Independent QR decoding and PDF link/render checks passed; the official response form opened and still states 16 October. Campaign and UX implementation reviewers rechecked their findings after the privacy, PDF, QR and draft-notice fixes; their remaining gate is live provider and redirect verification. See TESTING.md for the limits of each check.
+
 ### Community letter
 
 - Added one consented, human-reviewed letter to the existing Community letters board, preserving its submitted wording and display name. The board and submission flow are unchanged. Release checks and deployment are pending.

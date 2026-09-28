@@ -3,7 +3,7 @@ const { readFileSync } = require('node:fs');
 const path = require('node:path');
 
 const root = path.resolve(__dirname, '../..');
-const SITE = 'https://ystoneman.github.io/kew-riverside-website/';
+const SITE = 'https://savekewriverside.org/';
 const LETTER = 'A fictional community letter used only in this test.';
 // A fixed moment in London time, so dated copy is tested at its real boundaries.
 const london = moment => new Date(moment + '+01:00');
@@ -601,6 +601,7 @@ test('Thank-you page after a letter: make it official first, copy the words, the
   await expect(page.locator('#share-page')).toBeVisible({ visible: canShare });
   await expect(page.locator('#share-whatsapp')).toBeVisible({ visible: !canShare });
   expect(await page.locator('#share-whatsapp').getAttribute('href')).not.toContain('fictional');
+  expect(decodeURIComponent(await page.locator('#share-whatsapp').getAttribute('href'))).toContain(SITE);
   await page.getByRole('button', { name: 'clear both copies now' }).click();
   await expect(page.locator('#copy-step')).toBeHidden();
   await expect(page.locator('#open-step-number')).toHaveText('1');
