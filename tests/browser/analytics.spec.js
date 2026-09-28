@@ -3,8 +3,8 @@ const { readFileSync, readdirSync } = require('node:fs');
 const path = require('node:path');
 
 const root = path.resolve(__dirname, '../..');
-const origin = 'https://savekewriverside.org';
-const prefix = '/';
+const origin = 'https://ystoneman.github.io';
+const prefix = '/kew-riverside-website/';
 const site = origin + prefix;
 const endpoint = 'https://cloud.umami.is/api/send';
 const choiceKey = 'kew-analytics-choice-v1';
@@ -94,15 +94,6 @@ async function allowAnalytics(page) {
   await expect(panel).toBeHidden();
 }
 
-async function analyticsDownloadClick(page, selector) {
-  // Test the site's click listener without a download request to the registered
-  // domain. WebKit downloads can bypass the local fixture route.
-  await page.locator(selector).first().evaluate(link => {
-    link.addEventListener('click', event => event.preventDefault(), { once: true });
-    link.click();
-  });
-}
-
 function pageViews(sent) {
   return sent.filter(item => !item.body.payload.name);
 }
@@ -136,43 +127,9 @@ async function freezeAfterLoad(page) {
   await expect(page.locator('#analytics-panel')).toHaveCount(0);
 }
 
-test('First visit to the new domain sends no analytics until a level is chosen', async ({ page, context }) => {
-  const { sent, configReads } = await virtualProduction(context);
-  await page.goto(site);
-  await freezeAfterLoad(page);
-  expect(configReads).toHaveLength(1);
-  expect(sent).toEqual([]);
-  const panel = await choices(page);
-  await expect(panel.getByRole('status')).toContainText('analytics off (the default on this domain)');
-  await expect(panel.getByRole('button', { name: OFF, exact: true })).toHaveAttribute('aria-pressed', 'true');
-  await panel.getByRole('button', { name: BASIC, exact: true }).click();
-  await expect.poll(() => pageViews(sent).length).toBe(1);
-  expect(events(sent, 'Section reached')).toEqual([]);
-});
-
-test('An old-origin objection and unfinished draft cannot transfer, so the new origin starts private', async ({ page, context }) => {
-  await page.route('https://ystoneman.github.io/**', route => route.fulfill({
-    contentType: 'text/html', body: '<!doctype html><title>Old origin fixture</title>',
-  }));
-  await page.goto('https://ystoneman.github.io/kew-riverside-website/');
-  await page.evaluate(key => {
-    localStorage.setItem(key, JSON.stringify({ v: 1, choice: 'deny', until: Date.now() + 86_400_000 }));
-    localStorage.setItem('kr-letter-draft', JSON.stringify({ v: 1, text: 'Fictional unfinished letter', name: '', saved: Date.now() }));
-  }, choiceKey);
-  const { sent } = await virtualProduction(context);
-  await page.goto(site + 'letters.html');
-  await freezeAfterLoad(page);
-  expect(sent).toEqual([]);
-  await expect(page.locator('#message')).toHaveValue('');
-  await expect(page.locator('#draft-notice')).toContainText('Drafts saved on the old website address cannot appear here');
-  const panel = await choices(page);
-  await expect(panel.getByRole('status')).toContainText('analytics off (the default on this domain)');
-});
-
-test('An explicit detailed choice sends fixed events without a cookie', async ({ page, context }) => {
+test('By default a page view and detailed usage are sent without a banner, cookie or stored choice', async ({ page, context }) => {
   const { sent, configReads } = await virtualProduction(context);
   await controlledAttention(page);
-  await savedChoice(page);
   await page.goto(site);
   await freezeAfterLoad(page);
   await expect(page.locator('.analytics-invitation')).toHaveCount(0);
@@ -180,13 +137,13 @@ test('An explicit detailed choice sends fixed events without a cookie', async ({
   await expect.poll(() => sent.length).toBe(1);
   expect(configReads).toHaveLength(1);
   expect(sent[0].body).toEqual({ type: 'event', payload: {
-    website: fakeConfig.websiteId, hostname: 'savekewriverside.org',
+    website: fakeConfig.websiteId, hostname: 'ystoneman.github.io',
     url: prefix, title: 'Home & evidence', referrer: '',
   } });
   expect(sent[0].headers).not.toHaveProperty('cookie');
   expect(sent[0].headers).not.toHaveProperty('referer');
   expect(sent[0].headers).not.toHaveProperty('authorization');
-  // Explicit detailed usage includes sections, active time and named actions.
+  // Detailed usage is part of the default: sections, active time and named actions.
   await page.locator('#find-your-way').evaluate(element => element.scrollIntoView({ block: 'start', behavior: 'instant' }));
   await page.clock.runFor(10_000);
   await expect.poll(() => events(sent, 'Section reached')).toContainEqual({ section: 'find-your-way' });
@@ -196,11 +153,13 @@ test('An explicit detailed choice sends fixed events without a cookie', async ({
     await page.clock.runFor(30_000);
   }
   await expect.poll(() => events(sent, 'Active viewing')).toEqual([15, 30, 60, 120, 300].map(seconds => ({ seconds })));
-  await analyticsDownloadClick(page, 'a[download][href="response-checklist.pdf"]');
+  const download = page.waitForEvent('download');
+  await page.locator('a[download][href="response-checklist.pdf"]').first().click();
+  await download;
   await expect.poll(() => events(sent, 'Action opened')).toEqual([{ action: 'Download clicked: checklist' }]);
   expect(pageViews(sent)).toHaveLength(1);
-  expect(JSON.parse(await page.evaluate(key => localStorage.getItem(key), choiceKey)).choice).toBe('allow');
-  expect(await context.cookies()).toEqual([]);
+  expect(await page.evaluate(key => localStorage.getItem(key), choiceKey)).toBeNull();
+  expect(await page.context().cookies()).toEqual([]);
   for (const request of sent) {
     expect(Object.keys(request.body.payload).sort()).toEqual(request.body.payload.name
       ? ['data', 'hostname', 'name', 'referrer', 'title', 'url', 'website'] : ['hostname', 'referrer', 'title', 'url', 'website']);
@@ -208,7 +167,7 @@ test('An explicit detailed choice sends fixed events without a cookie', async ({
   }
   const panel = await choices(page);
   await expect(panel.getByRole('heading')).toBeFocused();
-  await expect(panel.getByRole('status')).toContainText('basic page counts and detailed usage.');
+  await expect(panel.getByRole('status')).toContainText('basic page counts and detailed usage (the default)');
   await expect(panel.getByRole('button', { name: ALLOW, exact: true })).toHaveAttribute('aria-pressed', 'true');
   for (const name of [ALLOW, BASIC, OFF]) {
     const button = panel.getByRole('button', { name, exact: true });
@@ -227,7 +186,6 @@ test('Turning analytics off survives reload; detailed usage can later be allowed
   await controlledAttention(page);
   await page.goto(site);
   await freezeAfterLoad(page);
-  await allowAnalytics(page);
   await expect.poll(() => sent.length).toBe(1);
   let panel = await choices(page);
   await panel.getByRole('button', { name: OFF, exact: true }).click();
@@ -285,8 +243,9 @@ for (const operation of ['getItem', 'setItem']) {
     }, operation);
     await page.goto(site);
     const panel = await choices(page);
-    // Neither missing storage nor a failed attempt to save can turn analytics on.
-    const expected = 0;
+    // An unreadable objection cannot be honoured, so nothing is counted. When only
+    // saving fails, the default page view precedes the failed attempt to save.
+    const expected = operation === 'getItem' ? 0 : 1;
     await expect.poll(() => sent.length).toBe(expected);
     if (operation === 'setItem') await panel.getByRole('button', { name: ALLOW, exact: true }).click();
     await expect(panel.getByRole('status')).toContainText('could not save a choice');
@@ -310,17 +269,15 @@ for (const signal of ['globalPrivacyControl', 'doNotTrack']) {
   });
 }
 
-test('An expired allow choice falls back to analytics off', async ({ page, context }) => {
+test('An expired allow choice falls back to the default, which includes detailed usage', async ({ page, context }) => {
   const { sent } = await virtualProduction(context);
   await controlledAttention(page);
   await savedChoice(page, 'allow', 'past');
   await page.goto(site);
   await freezeAfterLoad(page);
-  expect(sent).toEqual([]);
+  await expect.poll(() => pageViews(sent).length).toBe(1);
   await page.clock.runFor(15_000);
-  expect(sent).toEqual([]);
-  const panel = await choices(page);
-  await expect(panel.getByRole('status')).toContainText('analytics off (the default on this domain)');
+  await expect.poll(() => events(sent, 'Active viewing')).toEqual([{ seconds: 15 }]);
 });
 
 // Before 25 September 2026 detailed usage was opt-in. A saved basic-only choice
@@ -337,7 +294,9 @@ test('A saved Basic counts only choice sends page views but no detailed usage', 
     await page.evaluate(() => window.dispatchEvent(new Event('pointerdown')));
     await page.clock.runFor(30_000);
   }
-  await analyticsDownloadClick(page, 'a[download][href="sources.csv"]');
+  const download = page.waitForEvent('download');
+  await page.locator('a[download][href="sources.csv"]').first().click();
+  await download;
   await page.reload();
   await freezeAfterLoad(page);
   await expect.poll(() => sent.length).toBe(2);
@@ -428,10 +387,8 @@ for (const file of ['feedback.html?kind=privacy', 'corrections.html']) {
       await expect(panel.locator('[aria-pressed="true"]')).toHaveCount(0);
       await panel.getByRole('button', { name: 'Close analytics choices' }).click();
       await page.getByRole('link', { name: 'FAQ', exact: true }).last().click();
-      if (saved) {
-        await expect.poll(() => sent.length).toBe(1);
-        expect(sent[0].body.payload.referrer).toBe('');
-      } else expect(sent).toEqual([]);
+      await expect.poll(() => sent.length).toBe(1);
+      expect(sent[0].body.payload.referrer).toBe('');
       expect(events(sent, 'Action opened')).toEqual([]);
       expect(JSON.stringify(sent)).not.toContain(sentinel);
     });
@@ -449,11 +406,9 @@ for (const saved of ['allow', null]) {
     await page.clock.runFor(30_000);
     expect(sent).toEqual([]);
     await page.getByRole('link', { name: 'FAQ', exact: true }).last().click();
-    if (saved) {
-      await expect.poll(() => sent.length).toBe(1);
-      expect(sent[0].body.payload.url).toBe(prefix + 'faq.html');
-      expect(sent[0].body.payload.referrer).toBe('');
-    } else expect(sent).toEqual([]);
+    await expect.poll(() => sent.length).toBe(1);
+    expect(sent[0].body.payload.url).toBe(prefix + 'faq.html');
+    expect(sent[0].body.payload.referrer).toBe('');
   });
 }
 
@@ -502,10 +457,9 @@ test('Every configured analytics section exists on its public page', async ({ pa
   }
 });
 
-test('Visitors choosing detailed analytics report Evidence and Options sections, including the nested source library', async ({ page, context }) => {
+test('Default visitors report Evidence and Options sections, and the nested source library gets its own viewing time', async ({ page, context }) => {
   const { sent } = await virtualProduction(context);
   await controlledAttention(page);
-  await savedChoice(page);
   await page.goto(site + 'evidence.html');
   await freezeAfterLoad(page);
   // Scripts keep the library closed until a visitor opens it.
@@ -535,7 +489,6 @@ test('Visitors choosing detailed analytics report Evidence and Options sections,
 
 test('Jumps within a page are not counted as opening it; links to another page are', async ({ page, context }) => {
   const { sent } = await virtualProduction(context);
-  await savedChoice(page);
   await page.goto(site + 'proposal.html');
   await expect.poll(() => pageViews(sent).length).toBe(1);
   // Programmatic clicks exercise the collector's handler for links that may sit in closed menus.
@@ -555,7 +508,6 @@ test('Jumps within a page are not counted as opening it; links to another page a
 test('Writing a letter pauses section timing but not active page time, and sends no typed words', async ({ page, context }) => {
   const { sent } = await virtualProduction(context);
   await controlledAttention(page);
-  await savedChoice(page);
   await page.goto(site + 'letters.html');
   await freezeAfterLoad(page);
   await page.locator('#message').focus();
@@ -689,8 +641,9 @@ test('A checklist download records a fixed click label once per page, without cl
   await freezeAfterLoad(page);
   await allowAnalytics(page);
   for (let click = 0; click < 2; click += 1) {
-    expect(await page.locator('a[download][href="response-checklist.pdf"]').getAttribute('download')).toBe('kew-riverside-response-checklist.pdf');
-    await analyticsDownloadClick(page, 'a[download][href="response-checklist.pdf"]');
+    const download = page.waitForEvent('download');
+    await page.locator('a[download][href="response-checklist.pdf"]').click();
+    expect((await download).suggestedFilename()).toBe('kew-riverside-response-checklist.pdf');
   }
   await expect.poll(() => events(sent, 'Action opened')).toEqual([{ action: 'Download clicked: checklist' }]);
   expect(JSON.stringify(sent)).not.toMatch(/downloaded|completed/i);
@@ -717,7 +670,7 @@ test('At 320px, the choices panel fits, keeps letter fields unobstructed and ret
   const { sent } = await virtualProduction(context);
   await page.setViewportSize({ width: 320, height: 568 });
   await page.goto(site + 'letters.html#letter-form');
-  expect(sent).toEqual([]);
+  await expect.poll(() => sent.length).toBe(1);
   // The choices and Send step follow a written letter.
   await page.locator('#message').fill('An entirely fictional test letter for the layout check.');
   await revealLetterChoices(page);
@@ -737,11 +690,11 @@ test('At 320px, the choices panel fits, keeps letter fields unobstructed and ret
   await panel.getByRole('button', { name: OFF, exact: true }).click();
   await expect(panel).toBeHidden();
   await expect(page.getByRole('link', { name: 'Analytics choices', exact: true })).toBeFocused();
-  // No analytics ran before this explicit objection and none follows it.
+  // Detailed usage runs by default on a real clock here; nothing follows the objection.
   const atObjection = sent.length;
   await page.waitForTimeout(2500);
   expect(sent).toHaveLength(atObjection);
-  expect(pageViews(sent)).toHaveLength(0);
+  expect(pageViews(sent)).toHaveLength(1);
 });
 
 test('On the privacy page at 320px, How analytics works closes the panel to reveal the explanation', async ({ page, context }) => {
@@ -766,7 +719,7 @@ test('An enabled collector remains off on localhost', async ({ page }) => {
   expect(sent).toEqual([]);
 });
 
-test('An enabled collector remains off on a nested path of the production hostname', async ({ page, context }) => {
+test('An enabled collector remains off elsewhere on the GitHub hostname', async ({ page, context }) => {
   const { sent } = await virtualProduction(context, { prefix: '/unrelated-project/' });
   await savedChoice(page);
   await page.goto(origin + '/unrelated-project/index.html');

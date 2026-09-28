@@ -2,9 +2,18 @@
 
 Visitor-facing changes and significant maintenance changes, newest first. The historical entries below were reconstructed from repository commits on 22 September 2026. Dates are commit dates, not independently verified publication times. A commit records a change; it does not by itself prove a successful deployment or a particular test result.
 
+## Unreleased
+
+### Restore the original website address
+
+- Restore canonical, sharing, PDF and downloadable QR destinations to `https://ystoneman.github.io/kew-riverside-website/` after the custom-domain cutover failed to provide a working HTTPS site on phones (J1–J9). Preserve the approved community letter and later release records.
+- Restore the original-host analytics gate and existing browser choices, and remove the now-inapplicable new-domain draft notice. Browser storage on the original address is available again.
+- The custom-domain setting was removed before this code rollback. On 28 September the original slashless URL redirected only to its trailing-slash path, and that homepage plus all 17 stylesheets returned HTTPS 200. No custom-domain redirect may be reintroduced until the new domain is independently verified with HTTPS, styled mobile pages, deep links and provider configuration.
+- All public files match the previously deployed `26daa3d` revision byte for byte; 52 Python checks, 104-public-file validation and JavaScript syntax checks passed. Independent campaign and UX source review found no rollback blocker. Full browser verification and deployment are pending. Historical cutover checks below describe the attempted release, not the current domain configuration.
+
 ## 28 September 2026
 
-### Campaign domain cutover
+### Campaign domain cutover (rolled back)
 
 - Prepare GitHub Pages to serve `savekewriverside.org` at the domain root. Update public link previews, share links, PDFs and current source links to the new address. New downloadable homepage and school-visit QR images use the new domain; the earlier four QR files and direct page anchors remain (J1–J9).
 - Restrict analytics collection to the new production hostname and root-level pages. Both levels start off on that hostname until a visitor chooses a level, because objections saved on the old origin cannot transfer. The privacy notice explains the change and that unfinished drafts remain in old-origin storage.

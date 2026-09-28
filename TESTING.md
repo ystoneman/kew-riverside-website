@@ -2,7 +2,13 @@
 
 The suite covers the site's main visitor journeys across Chromium and WebKit, with touch, keyboard and JavaScript-disabled cases. It does not establish that every possible device, browser, assistive technology or third-party service works. Xcode Simulator Safari is checked separately for mobile interaction changes.
 
-## Domain cutover checks — 28 September 2026
+## Original-domain restoration — 28 September 2026
+
+- The domain-cutover public files are restored byte for byte from the previously deployed `26daa3d` revision. This restores the existing browser assertions for original-domain analytics, sharing, PDF links and QR destinations; no failing assertion is removed to make the rollback pass.
+- Before this code release, removing the GitHub Pages custom domain and redeploying `cffbb3d` restored the original HTTPS homepage and all 17 stylesheets. The slashless URL redirects only to the slash form. The migration records below are retained as historical evidence, not a claim that the new domain is ready.
+- Local validation passed: 52 Python checks, 104 public assets, JavaScript syntax and diff checks. Independent campaign and UX source review found no rollback blocker; rendered verification is tracked separately. Full browser checks and final rollback deployment verification are pending.
+
+## Domain cutover checks — 28 September 2026 (historical; cutover rolled back)
 
 - 52 Python checks passed; the public-file validator accepted 108 assets, including four new-domain QR images. Generated research HTML matched its source. JavaScript syntax and `git diff --check` passed.
 - The affected analytics, QR, visitor-journey, participation and funding-brief browser specs passed in five projects: 586 passed, 15 skipped. Requests to forms and analytics used local interception. The new-origin privacy regression seeded an old-origin denial and fictional draft, then confirmed the new site sent no analytics and did not claim to restore the draft.
