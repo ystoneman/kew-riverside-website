@@ -4,6 +4,16 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Ofsted publication date for the July 2026 inspection
+
+- Ofsted's report index for URN 133343 now lists the 8 July 2026 school inspection as published on 24 September 2026 (rechecked 27 September). The `inspection-2026` location note gives that date instead of “publication date not inferred”. The `ofsted-index` record describes the current listing and keeps the 22 September observation (2021 still shown as latest) as a dated note; its access date is 27 September. Both Evidence cards, their search text, `sources.csv` and the FAQ answer “What did the latest Ofsted inspection find?” match (J6). That answer now also links the index record that supports the date.
+- The reviewed copy remains the school-hosted PDF linked from the school's Ofsted page. On 27 September its extracted text matched Ofsted's own PDF on all 16 pages; the files are not byte-identical, so the site does not describe them as one file. Category judgements, record IDs, URLs, types, the 57-record/53-Reviewed coverage counts and all consultation dates are unchanged. The Understand inspection summary, the resolved evidence question and attainment data state only the inspection date and needed no change.
+- The source-library consistency test now also compares every Evidence card's location note and access date with `sources.json`. A new regression requires the publication date and rejects the superseded wording in public files; it fails on the previous content.
+
+Review: an independent evidence review of the actual diff found no blocking or material issues; its optional suggestion to link the index record from the FAQ answer was applied. The text-only correction changes no navigation, layout or participation route, so no UX or campaign panel was convened.
+
+Verification: rebased onto `d9d059e` (current main, 28 September). All 53 Python checks, generated source/comparison/navigation/research freshness checks, 104-public-file validation and staging and JavaScript syntax checks passed. The complete local browser suite (`npm test`, Node 24.19.0) passed **1,686 checks with 15 expected skips and no failures**. Committed on a branch; not pushed or deployed.
+
 ### Restore the original website address
 
 - Restore canonical, sharing, PDF and downloadable QR destinations to `https://ystoneman.github.io/kew-riverside-website/` after the custom-domain cutover failed to provide a working HTTPS site on phones (J1–J9). Preserve the approved community letter and later release records.
