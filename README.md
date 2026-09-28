@@ -8,15 +8,15 @@ School-community developers are welcome to contribute through fork-based pull re
 
 ## Publishing on GitHub Pages
 
-This directory is deployed from `main` at https://github.com/ystoneman/kew-riverside-website to https://ystoneman.github.io/kew-riverside-website/ using GitHub Pages and the validated `.github/workflows/pages.yml` workflow. Only the explicitly listed public assets are deployed; repository notes, workflow code and private working files are excluded from the website artifact.
+This directory is deployed from `main` at https://github.com/ystoneman/kew-riverside-website to https://savekewriverside.org/ using GitHub Pages and the validated `.github/workflows/pages.yml` workflow. Only the explicitly listed public assets are deployed; repository notes, workflow code and private working files are excluded from the website artifact.
 
 The evidence pages need no build or API keys. Feedback and community letters use the private Formspree inbox behind the public form endpoint. Secrets and private submissions must never enter this repository. Relative asset paths support the repository subpath.
 
 ## Permanent flyer QR link
 
-Ready-made QR images are linked from the Parent action plan: `qr/kew-riverside-visit-qr.png` and `.svg` encode exactly the `/visit/` address below (with its trailing slash) for open-day and visit flyers; `qr/kew-riverside-website-qr.png` and `.svg` encode the homepage. Keep all four paths permanent. Changing the `/visit/` destination never requires new QR images.
+Ready-made QR images linked from the Parent action plan use the new domain: `qr/savekewriverside-visit-qr.png` and `.svg` encode the `/visit/` address below (with its trailing slash) for open-day and visit flyers; `qr/savekewriverside-home-qr.png` and `.svg` encode the homepage. The earlier `qr/kew-riverside-visit-qr.*` and `qr/kew-riverside-website-qr.*` files encode the old GitHub Pages address and stay published for existing flyers. Keep all eight paths permanent. Changing the `/visit/` destination never requires new QR images.
 
-Print or encode **https://ystoneman.github.io/kew-riverside-website/visit/**. Keep that address and `visit/index.html` in place for the lifetime of the flyers. The current destination is the [school contact page](https://www.kewriverside.richmond.sch.uk/page/?pid=525&title=Contact+Us), verified on 24 September 2026. The redirect works without JavaScript and includes a normal link if automatic refresh is disabled. It adds no tracking or subscription.
+For new flyers, print or encode **https://savekewriverside.org/visit/**. Existing QR images encode **https://ystoneman.github.io/kew-riverside-website/visit/**; keep that old GitHub Pages address working for the lifetime of those flyers. Keep `visit/index.html` in place. The current destination is the [school contact page](https://www.kewriverside.richmond.sch.uk/page/?pid=525&title=Contact+Us), verified on 24 September 2026. The redirect works without JavaScript and includes a normal link if automatic refresh is disabled. It adds no tracking or subscription.
 
 To point existing flyers to a future, verified school registration page:
 
@@ -115,7 +115,7 @@ Run `python3 .github/scripts/check_site.py` **before committing** and `python3 -
 
 Every push and pull request runs privacy/schema checks, JavaScript syntax checks, asset validation and browser regression tests. Only a passing `main` build can deploy. GitHub Actions are pinned to exact commits, checkout credentials are not retained, and the separate deployment job has only Pages and deployment-identity permissions. The workflow packages an explicit asset list and excludes repository maintenance files. New intended assets must be deliberately added to the list in `.github/scripts/check_site.py`.
 
-All eight HTML pages declare a restrictive Content Security Policy before resources: local scripts/styles/data only, no inline scripts or handlers, no embedded frames/plugins or base-URL changes, and form submissions restricted to this origin and Formspree. External source links still work. Formspree remains responsible for CAPTCHA, spam filtering, intake validation and private storage. Its project is restricted to `ystoneman.github.io`; localhost and file previews should not submit to the live inbox. Keep `strict-origin-when-cross-origin` so the domain check works without sending page query strings.
+All HTML pages declare a restrictive Content Security Policy before resources: local scripts/styles/data only, no inline scripts or handlers, no embedded frames/plugins or base-URL changes, and form submissions restricted to this origin and Formspree. External source links still work. Formspree remains responsible for CAPTCHA, spam filtering, intake validation and private storage. Its project must be restricted to `savekewriverside.org` at cutover; localhost and file previews should not submit to the live inbox. Keep `strict-origin-when-cross-origin` so the domain check works without sending page query strings.
 
 Public boards have exact field allowlists, bounds, valid dates and unique IDs checked **before deployment**; browser validation also fails closed and renders only text. These checks do not establish real identity, consent or the suitability of free text. Private moderation and each category's human-review requirements remain in force. Council identity inputs are disabled in the initial HTML and require an explicit council-sharing choice and working JavaScript to be enabled.
 
