@@ -2,6 +2,13 @@
 
 The suite covers the site's main visitor journeys across Chromium and WebKit, with touch, keyboard and JavaScript-disabled cases. It does not establish that every possible device, browser, assistive technology or third-party service works. Xcode Simulator Safari is checked separately for mobile interaction changes.
 
+## Video route for families choosing a school — 28 September 2026
+
+- `videos.spec.js`: the Letters entry line now reads “Share a short video for families choosing a school.” The direct-arrival test also requires the council line to open “Views on the closure proposal?”, the card summary to say “For families choosing a school. May be posted”, and the prompts to contain no council prompt. Each fails on the previous copy.
+- `visitor-journeys.spec.js`: the plan jump link is “Letters”; step 1 no longer links to the video page; step 5 carries the video line with “Adults only.” The plan's destination loop still opens `videos.html#upload`.
+- Local results on the final revision: 52 Python checks, 108-file public validation, JavaScript syntax and `git diff --check` passed; the full browser suite passed 1,699 tests with 15 expected skips. After rebasing onto the original-domain restoration, the Python checks, 104-file validation and syntax checks passed again, and the affected specs (videos, visitor journeys, participation, Sofiya, boards, orientation, theme and no-JavaScript) passed again in five projects: 812 passed, 15 skipped.
+- Rendered measurements (headless Chromium and WebKit, JavaScript on): on `#upload` arrival the button is unchanged at 320 × 568 and 375 × 667 and 26 px lower at 390 × 844; from the page top at 390 × 844 it stays on the first screen (745–798 px). Step 2 is unchanged at 320 × 568. Independent UX implementation review repeated this in light, dark and no-JavaScript modes and found the council link in view at 375 × 667 and 390 × 844. Emulation only; no native iOS check, because layout and interaction are unchanged.
+
 ## Original-domain restoration — 28 September 2026
 
 - The domain-cutover public files are restored byte for byte from the previously deployed `26daa3d` revision. This restores the existing browser assertions for original-domain analytics, sharing, PDF links and QR destinations; no failing assertion is removed to make the rollback pass.

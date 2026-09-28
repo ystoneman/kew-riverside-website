@@ -4,6 +4,13 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Video route for families choosing a school
+
+- The Share a video page now says the videos are for families choosing a school. The council line under the steps redirects views on the closure proposal to the official response, keeping its date and link (J3, J9).
+- Replaced the council prompt and one other prompt with questions about everyday school life; “What happens next” says videos mainly about the proposal are not posted. Recording tips no longer say “All viewpoints are welcome”.
+- Letters, Share ideas and the Parent action plan describe the video's audience; on Share ideas it leaves the “Personal view?” sentence. The plan's video link moves from step 1 to its own line in step 5, marked “Adults only.”, and the jump link becomes “Letters”. The card summary says a video “may be” posted. Link-preview title and description updated. Consent wording, channel name and Menu unchanged.
+- Pre-release checks: 52 Python tests, public-file validation (104 files after the domain restoration), JavaScript syntax and the full browser suite (1,699 passed, 15 skipped, before rebasing). Independent campaign and UX reviews of the plan and of the diff; their fixes (“may be posted”, “Adults only.” in the plan, the Share ideas split, no prompt-count assertion) are included.
+
 ### Restore the original website address
 
 - Restore canonical, sharing, PDF and downloadable QR destinations to `https://ystoneman.github.io/kew-riverside-website/` after the custom-domain cutover failed to provide a working HTTPS site on phones (J1–J9). Preserve the approved community letter and later release records.
