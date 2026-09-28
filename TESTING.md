@@ -2,13 +2,15 @@
 
 The suite covers the site's main visitor journeys across Chromium and WebKit, with touch, keyboard and JavaScript-disabled cases. It does not establish that every possible device, browser, assistive technology or third-party service works. Xcode Simulator Safari is checked separately for mobile interaction changes.
 
-## Domain cutover checks — 28 September 2026, before release
+## Domain cutover checks — 28 September 2026
 
 - 52 Python checks passed; the public-file validator accepted 108 assets, including four new-domain QR images. Generated research HTML matched its source. JavaScript syntax and `git diff --check` passed.
 - The affected analytics, QR, visitor-journey, participation and funding-brief browser specs passed in five projects: 586 passed, 15 skipped. Requests to forms and analytics used local interception. The new-origin privacy regression seeded an old-origin denial and fictional draft, then confirmed the new site sent no analytics and did not claim to restore the draft.
 - Independent QR decoding with ZXing confirmed both new PNGs and rasterized SVGs encode exactly `https://savekewriverside.org/` and `https://savekewriverside.org/visit/`. The four earlier QR files remain in the public manifest.
 - The regenerated two-page checklist has nine new-domain PDF link annotations and matches the previous page render pixel for pixel. The 44-page research report has three new-domain annotations and one updated visible URL; a page-render comparison changed only that URL. No old-host PDF link annotations remain.
-- The official response Google Form opened on 28 September and displayed the 16 October 2026 deadline. No response was submitted. The full local browser run, hosted PR checks, deployment, provider settings, TLS and live old-link redirects remain release checks.
+- The official response Google Form opened on 28 September and displayed the 16 October 2026 deadline. No response was submitted. The complete local browser run was stopped after a stale theme assertion was corrected; its focused four-project rerun passed. The complete hosted PR and main workflows each passed validation and all five browser projects; main deployment run 36451812804 succeeded.
+- Squarespace shows the nine intended GitHub Pages website records at 30-minute TTL and retains its separate Domain Connect and Email Security presets. Google's public DNS over HTTPS returned all four expected A and AAAA records and `www` CNAME; GitHub Pages reported a successful DNS check. Formspree's project restriction and the existing Umami website's domain were saved and verified after reload. No real form or analytics event was sent.
+- A direct GitHub Pages request to the new HTTP hostname served the updated homepage and `/visit/` document. The old GitHub Pages homepage and visit URLs returned 301 redirects to the corresponding new paths, and the new `www` hostname returned a 301 to the apex. Certificate issuance, enforced HTTPS and secure redirect checks remain pending; a local recursive DNS cache still returned the former Squarespace address during this check.
 
 ## Run locally
 

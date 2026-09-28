@@ -2,14 +2,15 @@
 
 Visitor-facing changes and significant maintenance changes, newest first. The historical entries below were reconstructed from repository commits on 22 September 2026. Dates are commit dates, not independently verified publication times. A commit records a change; it does not by itself prove a successful deployment or a particular test result.
 
-## Unreleased
+## 28 September 2026
 
 ### Campaign domain cutover
 
 - Prepare GitHub Pages to serve `savekewriverside.org` at the domain root. Update public link previews, share links, PDFs and current source links to the new address. New downloadable homepage and school-visit QR images use the new domain; the earlier four QR files and direct page anchors remain (J1–J9).
 - Restrict analytics collection to the new production hostname and root-level pages. Both levels start off on that hostname until a visitor chooses a level, because objections saved on the old origin cannot transfer. The privacy notice explains the change and that unfinished drafts remain in old-origin storage.
-- The Formspree domain restriction, Umami website domain, DNS, HTTPS and old-link redirects require live verification during the account cutover. Publication and those provider checks are not yet recorded by this commit.
-- Pre-release checks: 52 Python tests, 108-file public validation, generated research-page check, JavaScript syntax and 586 affected browser tests passed (15 skipped). Independent QR decoding and PDF link/render checks passed; the official response form opened and still states 16 October. Campaign and UX implementation reviewers rechecked their findings after the privacy, PDF, QR and draft-notice fixes; their remaining gate is live provider and redirect verification. See TESTING.md for the limits of each check.
+- [PR #47](https://github.com/ystoneman/kew-riverside-website/pull/47) merged as `0503892` on 28 September after [PR run 36450310218](https://github.com/ystoneman/kew-riverside-website/actions/runs/36450310218) passed validation and all five browser projects. [Main run 36451812804](https://github.com/ystoneman/kew-riverside-website/actions/runs/36451812804) passed the same gates and Pages deployment.
+- Squarespace's website-default DNS preset was replaced by GitHub Pages' four apex A records, four apex AAAA records and `www` CNAME, all with 30-minute TTL. The Domain Connect and Email Security presets were retained. Public DNS and GitHub's DNS check confirmed the new records. Formspree's project restriction now accepts `savekewriverside.org`; the existing Umami website ID is retained with that domain. The new homepage and `/visit/` route are served by Pages, and old GitHub Pages homepage and visit URLs redirect to matching new paths. HTTPS certificate issuance and final secure-link checks remain in progress.
+- Pre-release checks: 52 Python tests, 108-file public validation, generated research-page check, JavaScript syntax and 586 affected browser tests passed (15 skipped). Independent QR decoding and PDF link/render checks passed; the official response form opened and still states 16 October. Campaign and UX implementation reviewers rechecked their findings after the privacy, PDF, QR and draft-notice fixes. Provider settings and HTTP redirects were verified after release; secure-link checks await GitHub's certificate. See TESTING.md for the limits of each check.
 
 ### Community letter
 
