@@ -11,6 +11,10 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 - The custom-domain setting was removed before this code rollback. On 28 September the original slashless URL redirected only to its trailing-slash path, and that homepage plus all 17 stylesheets returned HTTPS 200. No custom-domain redirect may be reintroduced until the new domain is independently verified with HTTPS, styled mobile pages, deep links and provider configuration.
 - All public files match the previously deployed `26daa3d` revision byte for byte; 52 Python checks, 104-public-file validation and JavaScript syntax checks passed. Independent campaign and UX source review found no rollback blocker. Full browser verification and deployment are pending. Historical cutover checks below describe the attempted release, not the current domain configuration.
 
+### Community letter
+
+- Add one author-approved, human-reviewed letter to the Community letters board, with its approved display name. It appears first in newest-first order; the contribution form and consent choices are unchanged (J4).
+
 ## 28 September 2026
 
 ### Campaign domain cutover (rolled back)
