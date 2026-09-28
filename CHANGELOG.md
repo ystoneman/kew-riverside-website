@@ -13,7 +13,8 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ### Community letter
 
-- Added one consented, human-reviewed letter to the existing Community letters board, preserving its submitted wording and display name. The board and submission flow are unchanged. Release checks and deployment are pending.
+- Added one consented, human-reviewed letter to the existing Community letters board, preserving its submitted wording and display name. It appears first in newest-first order; the submission flow is unchanged.
+- **Published and verified:** [PR #46](https://github.com/ystoneman/kew-riverside-website/pull/46) merged as `26daa3d` on 28 September 2026 after [PR run 36447694507](https://github.com/ystoneman/kew-riverside-website/actions/runs/36447694507) passed validation and all five browser projects. [Main run 36449216756](https://github.com/ystoneman/kew-riverside-website/actions/runs/36449216756) passed the same gates and Pages deployment. Local checks passed: 52 website Python tests, 64 letter-specific moderation tests, 1,686 browser checks with 15 expected skips, and 104-public-file validation. All 104 live files matched the deployed commit byte for byte; the rendered board showed the full letter first with its submitted display name, joint signature and Human reviewed label. Campaign and evidence reviews found no remaining publication issue after the board-order correction.
 
 ### Owner-delegated decisions and a live end-to-end video test
 
