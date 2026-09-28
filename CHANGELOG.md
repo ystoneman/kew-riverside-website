@@ -4,6 +4,12 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Independent new-domain candidate
+
+- Prepare `savekewriverside.org` as a separate deployment candidate from authoritative source `d9d059e`. The original GitHub Pages address remains independent and receives no redirect. Share/preview/PDF addresses and new QR downloads use the new domain; the four earlier QR files remain unchanged (J1–J9).
+- Reuse the previously validated PR #47 domain assets without regenerating the PDFs or QR images. New-origin analytics starts off until a visitor explicitly chooses, because original-origin objections and drafts cannot transfer. The letter draft notice links to the still-working original Letters page for recovery in the same browser.
+- Use the separate Formspree endpoint `xjykjyrk` for all five new-domain forms and preserve private-submission state clearing, exact validation and intercepted tests. The original site keeps its working project. All 52 Python checks, 108-public-file validation, generated research freshness, script syntax and whitespace checks passed. The draft-recovery regression passed all four scripted browser projects. Independent campaign/UX source review found no additional code blocker; full browser, rendered and live verification remain pending. This entry does not claim publication, HTTPS availability or provider receipt.
+
 ### Restore the original website address
 
 - Restore canonical, sharing, PDF and downloadable QR destinations to `https://ystoneman.github.io/kew-riverside-website/` after the custom-domain cutover failed to provide a working HTTPS site on phones (J1–J9). Preserve the approved community letter and later release records.

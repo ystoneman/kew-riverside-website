@@ -12,7 +12,7 @@ from public_data import validate_board
 ROOT = Path(__file__).resolve().parents[2]
 PUBLIC_FILES = frozenset('''
 fundraising-trustees.html fundraising-admin.html fundraising-briefs.css
-visit/index.html qr/kew-riverside-website-qr.png qr/kew-riverside-website-qr.svg qr/kew-riverside-visit-qr.png qr/kew-riverside-visit-qr.svg
+visit/index.html qr/kew-riverside-website-qr.png qr/kew-riverside-website-qr.svg qr/kew-riverside-visit-qr.png qr/kew-riverside-visit-qr.svg qr/savekewriverside-home-qr.png qr/savekewriverside-home-qr.svg qr/savekewriverside-visit-qr.png qr/savekewriverside-visit-qr.svg
 theme.css theme.js
 analytics.js analytics.css analytics-config.json
 videos.html videos.css evidence.html options.html options.css options.js homepage.css homepage.js
@@ -111,7 +111,7 @@ class Page(HTMLParser):
             url = urlsplit(a.get('href', ''))
             require(url.scheme in {'', 'https', 'mailto'}, 'Unsafe link scheme.')
         if tag == 'form' and a.get('id') != 'record-filters':
-            require(a.get('action') == 'https://formspree.io/f/mwlpollw' and a.get('method', '').lower() == 'post', 'Unexpected form destination or method.')
+            require(a.get('action') == 'https://formspree.io/f/xjykjyrk' and a.get('method', '').lower() == 'post', 'Unexpected form destination or method.')
         if tag == 'input':
             self.inputs[a.get('id', '')] = a
             if a.get('name'):

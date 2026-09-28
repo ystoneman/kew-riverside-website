@@ -2,6 +2,10 @@
 
 The suite covers the site's main visitor journeys across Chromium and WebKit, with touch, keyboard and JavaScript-disabled cases. It does not establish that every possible device, browser, assistive technology or third-party service works. Xcode Simulator Safari is checked separately for mobile interaction changes.
 
+## Independent new-domain candidate — 28 September 2026
+
+The candidate starts from authoritative source `d9d059e` and reuses PR #47’s public domain assets. Both PDFs and all four new QR images match their previously checked PR #47 bytes exactly; the original QR files and public boards match authoritative `main`. The original GitHub Pages site remains independent; nothing in local candidate testing establishes the new domain’s TLS certificate or live asset delivery. All five form actions and private-form state clearing use the separate endpoint `xjykjyrk`; the validator and intercepted browser fixture require that exact endpoint. All 52 Python checks, 108-public-file validation, generated research freshness, JavaScript syntax and whitespace checks passed. The new draft-recovery link regression passed all four scripted browser projects. Full browser validation, rendered candidate review and live HTTPS verification are pending. Tests intercept external form and analytics requests and use fictional inputs; provider inbox receipt is a separate release check.
+
 ## Original-domain restoration — 28 September 2026
 
 - The domain-cutover public files are restored byte for byte from the previously deployed `26daa3d` revision. This restores the existing browser assertions for original-domain analytics, sharing, PDF links and QR destinations; no failing assertion is removed to make the rollback pass.
