@@ -4,6 +4,27 @@ async function board(page, rows = [row]) {
   await page.route('**/letters.json', route => route.fulfill({ json: { version: 1, letters: rows } }));
 }
 
+test('Video letter: Load video stands out with readable text in light and dark', async ({page}) => {
+  await board(page);
+  for (const scheme of ['light','dark']) {
+    await page.emulateMedia({colorScheme:scheme});
+    await page.goto('/letters.html#letters');
+    const load=page.getByRole('button',{name:'Load video letter by Fictional parent'});
+    await expect(load).toBeVisible();
+    const measured=await load.evaluate(el=>{
+      const parse=v=>(v.match(/[\d.]+/g)||[]).map(Number);
+      const lum=rgb=>rgb.slice(0,3).map(v=>v/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);
+      const contrast=(a,b)=>(Math.max(lum(a),lum(b))+.05)/(Math.min(lum(a),lum(b))+.05);
+      const style=getComputedStyle(el),background=parse(style.backgroundColor);
+      let parent=el.parentElement;
+      while(parent && parse(getComputedStyle(parent).backgroundColor)[3]===0) parent=parent.parentElement;
+      return {text:contrast(parse(style.color),background),control:contrast(background,parse(getComputedStyle(parent).backgroundColor))};
+    });
+    expect(measured.text).toBeGreaterThanOrEqual(4.5);
+    expect(measured.control).toBeGreaterThanOrEqual(3);
+  }
+});
+
 test('Video letter: no Google request before activation; one removable player and truthful labels', async ({ page, hasTouch }) => {
   await board(page);
   const requests = [];

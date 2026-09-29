@@ -6,7 +6,7 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 - Add click-to-load video letters within the existing Letters feed, with truthful review/opinion labels, shareable-Unlisted notice, removable privacy-enhanced player and generated no-JavaScript watch/removal links. Only Letters permits the YouTube frame origin; automated browser fixtures scrub real entries, including static fallback content.
 - Prepare v4 video notices for AI screening/editing, faithful excerpts and automatic release; keep earlier permission scopes and separate media/paid-ad choices. Runtime/provider rollout and deployment are not yet verified.
-- Add output-routing and resume/verification tooling in the separate private workflow repository. Public assets contain only the existing approved public schema plus strict YouTube IDs. Verification pending full browser suite, simulator and required independent review.
+- Add output-routing and resume/verification tooling in the separate private workflow repository. Public assets contain only the existing approved public schema plus strict YouTube IDs. 56 Python checks, 104-public-file validation and the affected 124 browser checks passed. Independent campaign and rendered UX reviews passed. The complete browser run’s four stale permission assertions were corrected. Native iOS preview stopped at its local certificate warning; current hosted checks and the real-phone release prerequisite remain pending.
 
 ### Video route for families choosing a school
 

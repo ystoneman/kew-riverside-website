@@ -373,7 +373,7 @@
           note.textContent = 'This unlisted video is public here and shareable by link. Loading the player connects to YouTube (Google).';
           const load = document.createElement('button');
           load.type = 'button';
-          load.className = 'button video-letter-load';
+          load.className = 'button primary video-letter-load';
           load.textContent = 'Load video';
           load.setAttribute('aria-label', 'Load video letter by ' + item.displayName);
           const stop = document.createElement('button');

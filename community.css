@@ -16,4 +16,5 @@
 .video-letter-actions{display:flex;flex-wrap:wrap;gap:12px 24px;margin:16px 0}
 .video-letter-note{font-size:.9rem;line-height:1.5}
 .video-letter-load,.video-letter-stop{margin:12px 0;min-height:44px}
+.video-letter-load{border:0}
 .video-letter-load[hidden],.video-letter-stop[hidden]{display:none}
