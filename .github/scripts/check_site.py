@@ -29,6 +29,7 @@ og-home.png og-letters.png og-ideas.png og-videos.png
 og-fundraising-trustees-v1.png og-fundraising-admin-v1.png
 '''.split())
 MAINTENANCE_FILES = frozenset('''
+.github/scripts/build_video_letters.py .github/scripts/test_video_letters.py tests/browser/video-letters.spec.js
 tests/browser/fundraising-briefs.spec.js
 .github/scripts/build_navigation.py tests/browser/orientation.spec.js
 tests/browser/clarity.spec.js
@@ -52,6 +53,7 @@ tests/browser/contributions.spec.js tests/browser/evidence.spec.js tests/browser
 tests/browser/visitor-journeys.spec.js tests/browser/understand.spec.js tests/browser/participation.spec.js .github/scripts/build_understand.py .github/scripts/test_understand.py
 '''.split())
 CSP = "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self' https://cloud.umami.is/api/send; base-uri 'none'; object-src 'none'; frame-src 'none'; form-action 'self' https://formspree.io; upgrade-insecure-requests"
+LETTERS_CSP = CSP.replace("frame-src 'none'", 'frame-src https://www.youtube-nocookie.com')
 SECRET_PATTERNS = [
     r'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----',
     r'\b(?:gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{50,})\b',
@@ -68,8 +70,9 @@ def require(ok, message):
 
 
 class Page(HTMLParser):
-    def __init__(self, text):
+    def __init__(self, text, allow_video_frames=False):
         super().__init__()
+        self.expected_csp = LETTERS_CSP if allow_video_frames else CSP
         self.csp = False
         self.referrer = False
         self.inputs = {}
@@ -82,7 +85,7 @@ class Page(HTMLParser):
         require(not any(k.startswith('on') or k == 'style' for k in a), 'Inline handler or style is forbidden.')
         require(tag not in {'base', 'iframe', 'object', 'embed', 'style'}, 'Unexpected active or embedded content.')
         if tag == 'meta' and a.get('http-equiv', '').lower() == 'content-security-policy':
-            require(a.get('content') == CSP, 'Security policy has changed; review it explicitly.')
+            require(a.get('content') == self.expected_csp, 'Security policy has changed; review it explicitly.')
             self.csp = True
         if tag == 'meta' and a.get('name') == 'referrer':
             require(a.get('content') == 'strict-origin-when-cross-origin', 'Keep form domain validation compatible without leaking query strings.')
@@ -131,7 +134,7 @@ def validate_site(root=ROOT):
         data = p.read_bytes().decode('utf-8', errors='replace')
         require(not any(re.search(pattern, data) for pattern in SECRET_PATTERNS), 'Possible credential in ' + name + ' (value withheld).')
         if name.endswith('.html'):
-            page = Page(data)
+            page = Page(data, allow_video_frames=(name == 'letters.html'))
             if name == 'letters.html':
                 require(all('disabled' in page.inputs.get(field, {}) for field in ('council-name', 'council-postcode')), 'Council identity must be disabled before consent is checked.')
                 for field, value in {
@@ -151,6 +154,11 @@ def validate_site(root=ROOT):
     require((analytics['enabled'] and isinstance(analytics['websiteId'], str) and re.fullmatch(r'[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}', analytics['websiteId'])) or (analytics['enabled'] is False and analytics['websiteId'] == ''), 'Analytics must have a valid public website ID or stay disabled.')
     for kind in ('suggestions', 'letters', 'supporters'):
         validate_board(json.loads((root / (kind + '.json')).read_text()), kind)
+    from build_video_letters import render_fallback, START, END
+    letters_html = (root / 'letters.html').read_text()
+    expected = render_fallback(json.loads((root / 'letters.json').read_text()))
+    require(letters_html.count(START) == 1 and letters_html.count(END) == 1, 'Missing video-letter fallback markers.')
+    require(letters_html.split(START, 1)[1].split(END, 1)[0] == expected, 'Video-letter fallback is stale; run build_video_letters.py.')
     return len(PUBLIC_FILES)
 
 

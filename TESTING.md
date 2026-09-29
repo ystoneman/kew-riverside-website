@@ -2,6 +2,14 @@
 
 The suite covers the site's main visitor journeys across Chromium and WebKit, with touch, keyboard and JavaScript-disabled cases. It does not establish that every possible device, browser, assistive technology or third-party service works. Xcode Simulator Safari is checked separately for mobile interaction changes.
 
+## Parent Voices video letters and v4 notices — 29 September 2026
+
+- Strict optional YouTube IDs on Letters only; click-to-load player, persistent watch/removal links, immediate iframe focus, Close restoring focus and no delayed focus stealing. The generated no-JavaScript fallback has escaped text and is checked for freshness. Browser fixtures scrub real static fallback entries.
+- 56 Python checks, validation of 104 public assets, generated video fallback freshness, JavaScript syntax and diff checks passed. The complete local run passed 1,695 tests with 15 expected skips; four failures were the former paid-ads assertion, deliberately corrected to preserve an affirmative earlier agreement and require exact excerpt/ad-wording approval. The affected final-source rerun and hosted current-revision suite are pending.
+- Independent campaign and UX reviews inspected the actual diff; their privacy, generated-fallback, narrow-CSP and focus findings are resolved. Independent Chromium rendering at 320 × 568 light, 390 × 844 dark and 1440 × 1000 light, plus phone no-JavaScript, found readable cards, no overflow, usable keyboard focus and a visible upload permission button. Fictional entries and an intercepted player were used.
+- Native iPhone 17 / iOS 26.5 Safari attempted the local HTTPS upload route, but stopped at its certificate warning. No warning was bypassed. Native interaction and a real YouTube player remain unverified. The existing unfamiliar-person real-phone release prerequisite remains pending, separately from browser emulation.
+- Live Google Forms/Dropbox v4 notice synchronization, website deployment, the real export/upload pilot and hourly processing activation are separately gated; source changes do not establish rollout. The private workflow source repository excludes live recordings, responses and queue data.
+
 ## Video route for families choosing a school — 28 September 2026
 
 - `videos.spec.js`: the Letters entry line now reads “Share a short video for families choosing a school.” The direct-arrival test also requires the council line to open “Views on the closure proposal?”, the card summary to say “For families choosing a school. May be posted”, and the prompts to contain no council prompt. Each fails on the previous copy.

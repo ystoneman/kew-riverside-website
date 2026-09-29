@@ -2,7 +2,7 @@ const http = require('node:http');
 const { test, expect } = require('./fixtures');
 
 // Properties of the test harness that the visitor-journey tests rely on.
-const unroutedTest = test.extend({ routeRequests: [false, { option: true }] });
+const unroutedTest = test.extend({ routeRequests: [false, { option: true }], unroutedPages: [["index.html"], { option: true }] });
 
 // A local stand-in for another origin, which records any request that reaches it.
 // Its probe is reported by URL, whichever scheme the browser uses.

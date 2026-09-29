@@ -42,6 +42,15 @@ Maintenance only: no contributor records belong in this repository. The live for
 - The Dropbox description now links back to `videos.html#upload` rather than the long form address, which could not wrap on phones and cut off the whole description, and it is shorter. It still states adults only, same email, one video per form, private review, no automatic publication, private unmatched uploads, and that saved choices always apply.
 - A labelled test ran through the live route on 27 September from native iOS Safari (simulator): permission response `video-route-test@example.com`, credit "TEST - please delete", with required choices only; upload `TEST-kew-video-route-check.mov`. It is not a contributor record; delete both by hand.
 
+## Automated video workflow (v4, 29 September 2026; rollout pending verification)
+
+- New notice versions: `2026-09-29-videos-dropbox-v4` and `2026-09-29-videos-v4`. New required processing consent describes Claude (Anthropic), OpenAI and VEED assessing the complete recording, transcription, editing and orchestration, including the face, voice and any political opinions supplied. New publication marker is `[YouTube v4]`; `[Media v2]` and `[Ads v3]` remain optional and unchanged.
+- Publication scope describes automated release after checks, complete public school-life testimonials, complete Unlisted proposal-focused video letters publicly embedded on Letters, and meaningful excerpts preserving intent and tone. Unlisted is shareable and public on the website. No written campaign quotation or council-sharing permission is inferred.
+- Earlier records keep their scope. Additional agreement for AI processing, embedding or substantive excerpts is recorded privately against the applicable recording. It cannot override a private-only choice or withdrawal. A changed notice or later upload never supplies missing permission.
+- The complete recording must be assessed before routing. If the complete edit fits a square/vertical Short of at most three minutes, it is the only testimonial output. Longer testimonials may also have a meaningful permitted Short; mixed recordings may have a faithful independent positive excerpt alongside their complete video letter. Closure-only recordings have no forced positive cut.
+- All derivatives and embeds are tracked privately together for withdrawal. Human-review and AI-screened labels reflect the actual assessment. No contributor data or live processing ledger goes in workflow-source backups.
+- This records the source implementation. Live form/Dropbox wording, runtime skill installation, processing pilot and heartbeat activation require separate observed verification; do not infer rollout from this file.
+
 ## Fictional review cases
 
 | Saved record | Later event | Allowed outcome |

@@ -8,7 +8,7 @@ for (const source of ['letters.html', 'feedback.html']) {
   test(`Video: discover private upload from ${source}`, async ({ page, baseURL, hasTouch }) => {
     await page.goto('/' + source);
     const entry = page.locator('main a[href="videos.html#upload"]');
-    if (source === 'letters.html') await expect(page.locator('.form-route').filter({ has: page.locator('a[href="videos.html#upload"]') })).toHaveText('Share a short video for families choosing a school.');
+    if (source === 'letters.html') await expect(page.locator('.form-route').filter({ has: page.locator('a[href="videos.html#upload"]') })).toHaveText('Share a video: a school-life testimonial or a video letter.');
     await expect(entry).toBeVisible();
     if (hasTouch) await entry.tap(); else await entry.click();
     await expectDestination(page, 'videos.html#upload', baseURL);
@@ -28,13 +28,13 @@ test('Video: upload is a clear external handoff without embedded trackers or loc
   });
   await page.goto('/videos.html');
   await expect(page.locator('iframe,video,form,input[type="file"]')).toHaveCount(0);
-  await expect(page.locator('.video-process')).toContainText('Nothing is published automatically');
+  await expect(page.locator('.video-process')).toContainText('may publish automatically');
   await expect(page.locator('#video-upload-link')).toHaveText(/^Give permission/);
   await expect(page.locator('#upload-step-two')).toContainText('After you press Submit, the form gives you the Dropbox upload link');
   await expect(page.locator('#resume-instructions')).toContainText('same email in both steps');
   await expect(page.locator('.video-process')).toContainText('An unmatched upload stays private');
   await expect(page.locator('#video-upload-link')).toHaveAttribute('aria-describedby', 'upload-requirements');
-  await expect(page.locator('.video-process a')).toHaveAttribute('href', 'https://www.youtube.com/@KewParentVoices');
+  await expect(page.locator('.video-process a[href="https://www.youtube.com/@KewParentVoices"]')).toHaveAttribute('href', 'https://www.youtube.com/@KewParentVoices');
   if (hasTouch) await page.locator('#video-upload-link').tap(); else await page.locator('#video-upload-link').click();
   await expect(page).toHaveURL(upload);
   expect(requests).toEqual(['GET']);
@@ -116,13 +116,13 @@ test('Video: direct arrival explains publication and offers private contact with
   await page.route(official, route => route.fulfill({ contentType: 'text/html', body: '<h1>Fictional official response destination</h1><p>No response sent.</p>' }));
   await page.goto('/videos.html#upload');
   const card = page.locator('#upload');
-  await expect(card).toContainText('New submissions require your explicit YouTube permission');
-  await expect(card).toContainText('News-media and paid-ads permissions are optional');
+  await expect(card).toContainText('New submissions require permission for AI processing, edits and YouTube publication');
+  await expect(card).toContainText('News-media and paid-ads choices are optional');
   const councilNote = card.locator('.video-council-note');
   await expect(councilNote).toContainText('not an official council response');
-  // Videos are for families choosing a school; views on the proposal are sent to the council instead.
+  // School-life testimonials and video letters are both accepted; the council response remains a separate action.
   await expect(councilNote).toContainText('Views on the closure proposal?');
-  await expect(card.locator('#upload-requirements')).toContainText('For families choosing a school. May be posted');
+  await expect(card.locator('#upload-requirements')).toContainText('School-life videos or video letters. AI tools may edit and publish with your permission.');
   await expect(page.locator('.video-prompts')).not.toContainText('council');
   await expect(councilNote).toContainText('16 October 2026');
   await expect(councilNote.locator('a')).toHaveAttribute('href', official);
@@ -165,7 +165,8 @@ test('Video: paid-ads permission is separate, versioned and never inferred from 
   await page.goto('/privacy.html');
   const notice = page.locator('section[aria-labelledby="video-privacy"]');
   for (const version of ['2026-09-26-videos-v3', '2026-09-26-videos-dropbox-v3', '2026-09-22-videos-v1', '2026-09-22-videos-v2', '2026-09-22-videos-dropbox-v1', '2026-09-22-videos-dropbox-v2']) await expect(notice).toContainText(version);
-  await expect(notice).toContainText('an earlier record grants no paid-ads permission');
+  await expect(notice).toContainText('earlier records grant no paid-ads permission unless they include an affirmative recorded paid-ads choice or a later specific agreement');
+  await expect(notice).toContainText('Exact excerpt and ad-wording approval is still required before an ad runs');
   await expect(notice).toContainText('The YouTube permission alone does not allow Yann to use the recording on other social platforms, in a council collection, in paid ads or in a mailing list.');
   await expect(notice).not.toContainText('in advertising or in a mailing list');
   await expect(page.locator('#video-ads-privacy')).toContainText('not run for the school or PTA');

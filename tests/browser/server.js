@@ -38,7 +38,11 @@ const server = http2.createSecureServer({ key: fs.readFileSync(key), cert: fs.re
   }
   response.writeHead(200, { 'Content-Type': types[extension], 'Cache-Control': 'no-store' });
   if (request.method === 'HEAD') response.end();
-  else fs.createReadStream(path.join(root, name)).pipe(response);
+  else if (name === 'letters.html') {
+    // Never expose real contributors in browser tests, including the no-script fallback.
+    const safe = fs.readFileSync(path.join(root, name), 'utf8').replace(/(<!-- video-letters-fallback:start -->)[\s\S]*?(<!-- video-letters-fallback:end -->)/, '$1\n\n$2');
+    response.end(safe);
+  } else fs.createReadStream(path.join(root, name)).pipe(response);
 });
 function cleanUp() { server.close(); fs.rmSync(temporary, { recursive: true, force: true }); }
 process.on('exit', cleanUp);

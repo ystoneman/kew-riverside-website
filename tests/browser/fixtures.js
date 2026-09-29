@@ -36,9 +36,10 @@ const test = base.extend({
   // Only journeys that submit no forms and follow no links to other origins may turn
   // routing off (the legacy-route tests); without routes nothing is aborted.
   routeRequests: [true, { option: true }],
+  unroutedPages: [[], { option: true }],
   // An unexpected external request fails the test and, with routing, is aborted before
   // sending. Form tests install a more specific page route that returns a local fake response.
-  networkGuard: [async ({ context, baseURL, routeRequests }, use) => {
+  networkGuard: [async ({ context, baseURL, routeRequests, unroutedPages }, use) => {
     const unexpected = [];
     if (!routeRequests) {
       // In WebKit any route pauses every request until Playwright continues it, which keeps
@@ -47,9 +48,12 @@ const test = base.extend({
       // Without routes nothing can abort a request: no page's policy may let it reach another
       // origin from this server, and the journey must not submit forms or leave the site.
       // Requests to other origins, local writes and the letters board are still reported.
-      for (const file of pages) expect(staysOnSite(file), `${file} can reach no other origin from this server`).toBe(true);
+      expect(unroutedPages.length, 'Unrouted journeys declare every reachable page').toBeGreaterThan(0);
+      for (const file of unroutedPages) expect(pages).toContain(file);
+      for (const file of unroutedPages) expect(staysOnSite(file), `${file} can reach no other origin from this server`).toBe(true);
       context.on('request', request => {
         const url = new URL(request.url());
+        if (request.resourceType() === 'document' && url.origin === new URL(baseURL).origin && !unroutedPages.includes(url.pathname.replace(/^\//, '') || 'index.html')) unexpected.push('Undeclared page: ' + url.pathname);
         if (url.origin !== new URL(baseURL).origin || !['GET', 'HEAD'].includes(request.method()) || url.pathname === '/letters.json') unexpected.push(`${request.method()} ${request.url()}`);
       });
       await use(unexpected);
