@@ -8,7 +8,7 @@ for (const source of ['letters.html', 'feedback.html']) {
   test(`Video: discover private upload from ${source}`, async ({ page, baseURL, hasTouch }) => {
     await page.goto('/' + source);
     const entry = page.locator('main a[href="videos.html#upload"]');
-    if (source === 'letters.html') await expect(page.locator('.form-route').filter({ has: page.locator('a[href="videos.html#upload"]') })).toHaveText('Prefer to talk? Share a video.');
+    if (source === 'letters.html') await expect(page.locator('.form-route').filter({ has: page.locator('a[href="videos.html#upload"]') })).toHaveText('Share a short video for families choosing a school.');
     await expect(entry).toBeVisible();
     if (hasTouch) await entry.tap(); else await entry.click();
     await expectDestination(page, 'videos.html#upload', baseURL);
@@ -120,6 +120,10 @@ test('Video: direct arrival explains publication and offers private contact with
   await expect(card).toContainText('News-media and paid-ads permissions are optional');
   const councilNote = card.locator('.video-council-note');
   await expect(councilNote).toContainText('not an official council response');
+  // Videos are for families choosing a school; views on the proposal are sent to the council instead.
+  await expect(councilNote).toContainText('Views on the closure proposal?');
+  await expect(card.locator('#upload-requirements')).toContainText('For families choosing a school. May be posted');
+  await expect(page.locator('.video-prompts')).not.toContainText('council');
   await expect(councilNote).toContainText('16 October 2026');
   await expect(councilNote.locator('a')).toHaveAttribute('href', official);
   // The reminder now sits directly under the two steps, not in front of the main action.
