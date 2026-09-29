@@ -518,8 +518,8 @@ test('No JavaScript: the exact video QR upload address keeps a working permissio
 
 test('No JavaScript: video publication purpose and private alternative survive direct arrival', async ({ page, baseURL }) => {
   await page.goto('/videos.html#upload');
-  await expect(page.locator('#upload')).toContainText('New submissions require your explicit YouTube permission');
-  await expect(page.locator('#upload')).toContainText('News-media and paid-ads permissions are optional');
+  await expect(page.locator('#upload')).toContainText('New submissions require permission for AI processing, edits and YouTube publication');
+  await expect(page.locator('#upload')).toContainText('News-media and paid-ads choices are optional');
   await expect(page.locator('#resume-instructions')).toContainText('including any earlier private-only choice');
   await page.locator('#private-video-alternative a').tap();
   await expect(page).toHaveURL(/about.html#contact$/);
@@ -579,4 +579,20 @@ test('No JavaScript: the Menu opens Share a video at its permission step', async
   await page.locator('.mobile-menu').getByRole('link', { name: 'Share a video', exact: true }).tap();
   await expect(page).toHaveURL(/videos\.html#upload$/);
   await expect(page.locator('#video-upload-link')).toBeInViewport({ ratio: 1 });
+});
+
+test('No JavaScript: video letters retain a watch link and private removal route', async ({ page }) => {
+  // Server strips all real entries; insert only this fictional generated fallback.
+  await page.route('**/letters.html', async route => {
+    const response=await route.fetch();
+    const html=(await response.text()).replace('<!-- video-letters-fallback:start -->\n\n', '<!-- video-letters-fallback:start -->\n<article id="letter-012345abcdef"><h3>Fictional parent</h3><p>Video letter · AI screened · Opinion</p><p>This unlisted video is public here and shareable by link.</p><a href="https://www.youtube.com/watch?v=AbC0123_-xy">Watch on YouTube</a><a href="feedback.html?kind=privacy&amp;letter=letter-012345abcdef#feedback-form">Report this letter or request removal</a></article>\n');
+    await route.fulfill({ response, body:html });
+  });
+  await page.goto('/letters.html#letters');
+  const card=page.locator('#letter-012345abcdef');
+  await expect(card).toContainText('Video letter · AI screened · Opinion');
+  await expect(card.getByRole('link',{name:'Watch on YouTube'})).toHaveAttribute('href','https://www.youtube.com/watch?v=AbC0123_-xy');
+  await expect(page.locator('iframe')).toHaveCount(0);
+  await card.getByRole('link',{name:'Report this letter or request removal'}).tap();
+  await expect(page).toHaveURL(/feedback\.html\?kind=privacy&letter=letter-012345abcdef#feedback-form$/);
 });

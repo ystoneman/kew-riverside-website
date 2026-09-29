@@ -302,11 +302,12 @@
   fetch('letters.json', {cache: 'no-store'})
     .then(response => { if (!response.ok) throw new Error('Letters unavailable'); return response.json(); })
     .then(data => {
-      const allowed = ['id', 'body', 'displayName', 'date', 'review'];
+      const allowed = ['id', 'body', 'displayName', 'date', 'review', 'youtubeId'];
       if (!data || Object.keys(data).sort().join(',') !== 'letters,version' || data.version !== 1 || !Array.isArray(data.letters)) throw new Error('Invalid letters');
       const seen = new Set();
       if (data.letters.some(item => !item || Object.values(item).some(value => typeof value !== 'string') || Object.keys(item).some(key => !allowed.includes(key)) || typeof item.id !== 'string' || !/^letter-[a-f0-9]{12}$/.test(item.id) || typeof item.body !== 'string' || item.body.length < 10 || item.body.length > 30000 || typeof item.displayName !== 'string' || !item.displayName.trim() || item.displayName.length > 60 || !/^\d{4}-\d{2}-\d{2}$/.test(item.date) || !['Human reviewed', 'AI screened'].includes(item.review))) throw new Error('Invalid letter');
       data.letters.forEach(item => {
+        if ('youtubeId' in item && !/^[A-Za-z0-9_-]{11}$/.test(item.youtubeId)) throw new Error('Invalid video letter');
         if (seen.has(item.id) || Number.isNaN(Date.parse(item.date))) throw new Error('Invalid letter');
         seen.add(item.id);
       });
@@ -321,7 +322,7 @@
         const meta = document.createElement('div');
         meta.className = 'suggestion-meta';
         const review = document.createElement('span');
-        review.textContent = item.review + ' · Opinion';
+        review.textContent = (item.youtubeId ? 'Video letter · ' : '') + item.review + ' · Opinion';
         const date = document.createElement('time');
         date.dateTime = item.date;
         date.textContent = new Date(item.date + 'T12:00:00Z').toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric',timeZone:'UTC'});
@@ -363,6 +364,55 @@
           article.append(excerpt, story);
         } else {
           article.append(body);
+        }
+        if (item.youtubeId) {
+          const player = document.createElement('div');
+          player.className = 'video-letter-player';
+          const note = document.createElement('p');
+          note.className = 'video-letter-note';
+          note.textContent = 'This unlisted video is public here and shareable by link. Loading the player connects to YouTube (Google).';
+          const load = document.createElement('button');
+          load.type = 'button';
+          load.className = 'button primary video-letter-load';
+          load.textContent = 'Load video';
+          load.setAttribute('aria-label', 'Load video letter by ' + item.displayName);
+          const stop = document.createElement('button');
+          stop.type = 'button';
+          stop.className = 'video-letter-stop';
+          stop.textContent = 'Close video player';
+          stop.hidden = true;
+          const actions = document.createElement('div');
+          actions.className = 'video-letter-actions';
+          const watch = document.createElement('a');
+          watch.href = 'https://www.youtube.com/watch?v=' + item.youtubeId;
+          watch.textContent = 'Watch on YouTube';
+          const privacy = document.createElement('a');
+          privacy.href = 'privacy.html#video-privacy';
+          privacy.textContent = 'Video privacy';
+          actions.append(watch, privacy);
+          let frame;
+          load.addEventListener('click', () => {
+            if (frame) return;
+            frame = document.createElement('iframe');
+            frame.src = 'https://www.youtube-nocookie.com/embed/' + item.youtubeId + '?rel=0';
+            frame.title = 'Video letter by ' + item.displayName;
+            frame.allow = 'fullscreen';
+            frame.allowFullscreen = true;
+            frame.referrerPolicy = 'strict-origin-when-cross-origin';
+            player.append(frame);
+            load.hidden = true;
+            stop.hidden = false;
+            // Focus belongs to activation now; a later load must not steal it back.
+            frame.focus({ preventScroll: true });
+          });
+          stop.addEventListener('click', () => {
+            if (frame) frame.remove();
+            frame = undefined;
+            stop.hidden = true;
+            load.hidden = false;
+            load.focus({ preventScroll: true });
+          });
+          article.append(note, load, player, stop, actions);
         }
         article.append(removal);
         fragment.append(article);

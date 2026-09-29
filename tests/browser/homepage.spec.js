@@ -3,7 +3,7 @@ const { test, expect, expectScrollSettled } = require('./fixtures');
 // Legacy links redirect while the homepage is still loading. These tests run without
 // request routing, which in WebKit left requests in flight to be cancelled and could
 // lose the redirected navigation (TESTING.md); the network guard still checks them.
-const legacyTest = test.extend({ routeRequests: [false, { option: true }] });
+const legacyTest = test.extend({ routeRequests: [false, { option: true }], unroutedPages: [["index.html", "evidence.html", "options.html", "faq.html"], { option: true }] });
 
 // Independently pinned public destinations from the former homepage. These are
 // not derived from the new alias map, so removing a mapping cannot remove its test.

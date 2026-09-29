@@ -31,6 +31,7 @@ def validate_board(board, kind):
     if kind == 'letters': required.add('displayName')
     if kind == 'suggestions': required.add('status')
     allowed = required | {'displayName'}
+    if kind == 'letters': allowed.add('youtubeId')
     seen = set()
     for row in board[kind]:
         if not isinstance(row, dict) or not required <= set(row) <= allowed or any(not isinstance(v, str) for v in row.values()):
@@ -38,6 +39,8 @@ def validate_board(board, kind):
         if not re.fullmatch(prefix + r'-[a-f0-9]{12}', row['id']) or row['id'] in seen:
             raise ValueError('Invalid or duplicate public ID.')
         seen.add(row['id'])
+        if 'youtubeId' in row and not re.fullmatch(r'[A-Za-z0-9_-]{11}', row['youtubeId']):
+            raise ValueError('Invalid YouTube video ID.')
         if not re.fullmatch(r'\d{4}-\d{2}-\d{2}', row['date']):
             raise ValueError('Invalid public date.')
         dt.date.fromisoformat(row['date'])

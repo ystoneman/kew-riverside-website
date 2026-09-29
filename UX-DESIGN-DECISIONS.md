@@ -502,3 +502,12 @@ Verification: independent campaign/evidence reviews of the actual text; independ
 ### Direct-link brief sharing previews — 25 September 2026
 
 Recipients need to recognise why they were sent a trustee or account-setup brief before opening the link (J1/J9). Add distinct role-first titles and descriptions, plus small original green/cream preview cards. Both cards carry proposed-fund and donations-closed wording; essential status is not left only to a description that a messaging client may truncate. Use centrally placed text so square crops preserve role and status. Absolute canonical and image URLs support script-free crawlers; preserve noindex and add no incoming navigation. Visible page bodies and all existing journeys are unchanged. Actual client cropping and cached previews remain under the sharing service's control; metadata validation does not certify WhatsApp rendering.
+
+
+### Video letters in the existing community feed (29 September 2026; verification pending)
+
+J4/J9 contributors need to express views on the proposal as spoken letters without putting closure footage in the channel's public recruitment listings. J8 retains the school-life lead on Share a video; the existing Letters entry and upload route also name video letters. Complete proposal-focused recordings use Unlisted YouTube uploads embedded on Letters, with a clear notice that website publication and link sharing are public.
+
+A privacy-enhanced iframe is created only after Load video; before activation there is no YouTube request. Focus enters the player immediately and is never moved again by a delayed load event. Close video player removes it and returns focus to the load button. Watch on YouTube and a private report/removal route remain available, including generated static links without JavaScript. The narrow CSP exception applies only to Letters. Direct embedding on arrival was rejected because it would contact Google before the visitor chose to load it.
+
+Automated tests use fictional videos and strip all real static entries from the local server. Verification still requires the full suite, independent rendered review, iOS simulator and the existing real-phone release check (or explicit owner exception). No such check is claimed here.
