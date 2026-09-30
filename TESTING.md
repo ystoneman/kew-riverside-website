@@ -2,6 +2,10 @@
 
 The suite covers the site's main visitor journeys across Chromium and WebKit, with touch, keyboard and JavaScript-disabled cases. It does not establish that every possible device, browser, assistive technology or third-party service works. Xcode Simulator Safari is checked separately for mobile interaction changes.
 
+## Video focus readiness — 30 September 2026
+
+Hosted iPhone WebKit trace for run 36682831347 shows a native focus call returning before the initial scroll is painted: the sampler starts at the page top, then sees one jump to the focused upload-help summary. The test now first requires that exact summary to be focused, fully visible and clear of the persistent orientation bar. Both existing 600 ms movement assertions remain unchanged, including after opening the disclosure. No public code, timeout, retry or tolerance changes. Fresh verification is recorded in the separate deployment release evidence.
+
 ## Calendar-independent invitation checks — 30 September 2026
 
 Three existing invitation and motion tests now fix only the browser date to 28 September, before the meeting invitation expires. Every assertion remains. Separate calendar-boundary coverage still checks expiry through 30 September and the London evening boundary, including no-JavaScript fallback. This is test setup only; it changes no public asset.
