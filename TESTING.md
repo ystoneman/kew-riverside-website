@@ -2,6 +2,10 @@
 
 The suite covers the site's main visitor journeys across Chromium and WebKit, with touch, keyboard and JavaScript-disabled cases. It does not establish that every possible device, browser, assistive technology or third-party service works. Xcode Simulator Safari is checked separately for mobile interaction changes.
 
+## Calendar-independent invitation checks — 30 September 2026
+
+Three existing invitation and motion tests now fix only the browser date to 28 September, before the meeting invitation expires. Every assertion remains. Separate calendar-boundary coverage still checks expiry through 30 September and the London evening boundary, including no-JavaScript fallback. This is test setup only; it changes no public asset.
+
 ## Video route for families choosing a school — 28 September 2026
 
 - `videos.spec.js`: the Letters entry line now reads “Share a short video for families choosing a school.” The direct-arrival test also requires the council line to open “Views on the closure proposal?”, the card summary to say “For families choosing a school. May be posted”, and the prompts to contain no council prompt. Each fails on the previous copy.
