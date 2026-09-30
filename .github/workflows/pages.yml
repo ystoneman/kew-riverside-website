@@ -23,14 +23,16 @@ jobs:
       - name: Test privacy and security guards
         run: python3 -m unittest discover -s .github/scripts -p 'test_*.py' -v
       - name: Check JavaScript syntax
-        run: for script in *.js; do node --check "$script"; done
+        run: for script in *.js .github/scripts/old_site_redirect.js; do node --check "$script"; done
       - name: Validate and stage only public assets
         run: python3 .github/scripts/check_site.py --stage "$RUNNER_TEMP/public-site"
+      - name: Prepare legacy-origin redirects with draft recovery
+        run: python3 .github/scripts/build_old_site_redirect.py --source "$RUNNER_TEMP/public-site" --output "$RUNNER_TEMP/legacy-site"
       - name: Upload checked site
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
         with:
-          path: ${{ runner.temp }}/public-site
+          path: ${{ runner.temp }}/legacy-site
           retention-days: 1
 
   browser-shards:

@@ -4,6 +4,14 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Forward the original address after verified new-domain launch
+
+- Prepare browser forwarding from the old GitHub address to the matching page, query and section at `https://savekewriverside.org/` (J1–J9). Keep the custom domain assigned only to its separate deployment repository.
+- Preserve complete no-JavaScript/manual fallback, old-origin letter drafts and pending return controls; leave downloads, public JSON and the school `/visit/` handoff unchanged. Omit analytics from generated old pages without changing saved consent.
+- Handle inaccessible browser storage getters inside the Letters form's existing error guard, so recovery remains usable with blocked site data. Form fields, permissions, retention and provider bindings are unchanged.
+- Add artifact boundary and fictional browser regression coverage. Planning campaign/UX review accepted the refined design. Release checks, implementation review and production forwarding verification are pending.
+
+
 ### Independent new-domain candidate
 
 - Prepare `savekewriverside.org` as a separate deployment candidate from authoritative source `d9d059e`. The original GitHub Pages address remains independent and receives no redirect. Share/preview/PDF addresses and new QR downloads use the new domain; the four earlier QR files remain unchanged (J1–J9).

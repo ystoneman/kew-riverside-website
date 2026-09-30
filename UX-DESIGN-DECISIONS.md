@@ -509,3 +509,26 @@ Recipients need to recognise why they were sent a trustee or account-setup brief
 After the failed custom-domain cutover, visitors need the original GitHub Pages address to stay functional while the new domain is verified independently. Prepare the same protected J1–J9 journeys as a separate deployment, with no redirect from the original repository. New-domain shares and downloads use its own address; existing printed QR links continue to use the original site. The original site’s Formspree project and browser choices remain usable; the candidate uses a separate new-domain form endpoint. Analytics on the new origin starts off until explicitly chosen, and its draft notice links to the original Letters page for recovery in the same browser.
 
 The alternative of setting the original repository’s custom domain again would redirect existing visitors before the destination is proven. It is excluded during verification. Every source update, especially a correction or removal, needs promotion to both deployments during overlap. Independent campaign/UX planning review identified provider intake integration and live styled HTTPS checks as release conditions. Independent campaign/UX source review of the candidate diff found no additional code blocker after the draft-recovery wording was clarified. The new endpoint is pinned in all five forms and in the private-state handler and validation/tests. Full browser, rendered and live checks remain pending; this record is not a claim of successful publication.
+
+## Legacy address forwarding — 30 September 2026 (J1–J9)
+
+The user authorized forwarding the old GitHub website after verified HTTPS launch
+of the separate custom-domain deployment. Deep links preserve their page, query
+and section with replace navigation so Back does not bounce between sites.
+Moving the custom domain onto the original repository would prevent old-origin
+draft recovery, so that Pages field remains empty.
+
+The old artifact keeps complete original HTML and a visible manual new-address
+link for visitors without JavaScript. Letters and Sent retain valid seven-day
+drafts, unfinished words, pending thirty-minute returns and explicit recovery
+arrivals. Inaccessible storage keeps the old recovery form usable. Drafts and
+consent are never migrated, and retained drafts do not establish receipt. The
+notice sits inside the Letters form so the `#letter-form` arrival sees it. A
+new-domain referrer bridges the existing recovery link until an explicit recovery
+query is promoted. Old downloads, public boards and `/visit/` are retained.
+
+The source remains complete; only the original Pages upload is transformed.
+Separate-domain promotion excludes maintenance/redirect tooling and preserves
+the new host's provider and analytics settings. Generated old HTML omits analytics
+without changing saved choices. Planning campaign and UX review accepted these
+conditions; implementation, hosted gates and live verification are still pending.
