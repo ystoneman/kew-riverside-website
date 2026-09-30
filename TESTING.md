@@ -2,6 +2,10 @@
 
 The suite covers the site's main visitor journeys across Chromium and WebKit, with touch, keyboard and JavaScript-disabled cases. It does not establish that every possible device, browser, assistive technology or third-party service works. Xcode Simulator Safari is checked separately for mobile interaction changes.
 
+## Calendar-independent invitation checks — 30 September 2026
+
+The new-domain release rerun exposed three existing tests that expected the meeting invitation after its 29 September expiry. Those invitation and motion scenarios now fix only the browser date to 28 September; every existing assertion remains. The separate calendar-boundary test still checks the transition through 30 September and the London evening boundary, including no-JavaScript fallback. This changes test setup only, with no public asset change. Fresh local and hosted results are recorded in the deployment release evidence.
+
 ## Independent new-domain candidate — 28 September 2026
 
 The candidate starts from authoritative source `d9d059e` and reuses PR #47’s public domain assets. Both PDFs and all four new QR images match their previously checked PR #47 bytes exactly; the original QR files and public boards match authoritative `main`. The original GitHub Pages site remains independent; nothing in local candidate testing establishes the new domain’s TLS certificate or live asset delivery. All five form actions and private-form state clearing use the separate endpoint `xjykjyrk`; the validator and intercepted browser fixture require that exact endpoint. All 52 Python checks, 108-public-file validation, generated research freshness, JavaScript syntax and whitespace checks passed. The new draft-recovery link regression passed all four scripted browser projects. Full browser validation, rendered candidate review and live HTTPS verification are pending. Tests intercept external form and analytics requests and use fictional inputs; provider inbox receipt is a separate release check.
