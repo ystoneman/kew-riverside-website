@@ -4,6 +4,14 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Forward the original address after verified new-domain launch
+
+- Prepare browser forwarding from the old GitHub address to the matching page, query and section at `https://savekewriverside.org/` (J1–J9). Keep the custom domain assigned only to its separate deployment repository.
+- Preserve complete no-JavaScript/manual fallback, old-origin letter drafts and pending return controls; leave downloads, public JSON and the school `/visit/` handoff unchanged. Omit analytics from generated old pages without changing saved consent.
+- Handle inaccessible browser storage getters inside the Letters form's existing error guard, so recovery remains usable with blocked site data. Form fields, permissions, retention and provider bindings are unchanged.
+- Add artifact boundary and fictional browser regression coverage. Planning campaign/UX review accepted the refined design. Release checks, implementation review and production forwarding verification are pending.
+
+
 ### Video route for families choosing a school
 
 - The Share a video page now says the videos are for families choosing a school. The council line under the steps redirects views on the closure proposal to the official response, keeping its date and link (J3, J9).

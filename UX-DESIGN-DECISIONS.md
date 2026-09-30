@@ -502,3 +502,26 @@ Verification: independent campaign/evidence reviews of the actual text; independ
 ### Direct-link brief sharing previews — 25 September 2026
 
 Recipients need to recognise why they were sent a trustee or account-setup brief before opening the link (J1/J9). Add distinct role-first titles and descriptions, plus small original green/cream preview cards. Both cards carry proposed-fund and donations-closed wording; essential status is not left only to a description that a messaging client may truncate. Use centrally placed text so square crops preserve role and status. Absolute canonical and image URLs support script-free crawlers; preserve noindex and add no incoming navigation. Visible page bodies and all existing journeys are unchanged. Actual client cropping and cached previews remain under the sharing service's control; metadata validation does not certify WhatsApp rendering.
+
+## Legacy address forwarding — 30 September 2026 (J1–J9)
+
+The user authorized forwarding the old GitHub website after verified HTTPS launch
+of the separate custom-domain deployment. Deep links preserve their page, query
+and section with replace navigation so Back does not bounce between sites.
+Moving the custom domain onto the original repository would prevent old-origin
+draft recovery, so that Pages field remains empty.
+
+The old artifact keeps complete original HTML and a visible manual new-address
+link for visitors without JavaScript. Letters and Sent retain valid seven-day
+drafts, unfinished words, pending thirty-minute returns and explicit recovery
+arrivals. Inaccessible storage keeps the old recovery form usable. Drafts and
+consent are never migrated, and retained drafts do not establish receipt. The
+notice sits inside the Letters form so the `#letter-form` arrival sees it. A
+new-domain referrer bridges the existing recovery link until an explicit recovery
+query is promoted. Old downloads, public boards and `/visit/` are retained.
+
+The source remains complete; only the original Pages upload is transformed.
+Separate-domain promotion excludes maintenance/redirect tooling and preserves
+the new host's provider and analytics settings. Generated old HTML omits analytics
+without changing saved choices. Planning campaign and UX review accepted these
+conditions; implementation, hosted gates and live verification are still pending.

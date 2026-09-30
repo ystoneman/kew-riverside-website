@@ -178,3 +178,27 @@ The homepage retains each former fragment as a `.legacy-route` with an explicit 
 ## Video publication permissions
 
 New Parent Voices submissions require explicit YouTube publication permission and offer separate optional unchecked news-media permission. Receipt/storage/personal review remains a separate required consent. Earlier saved permissions, including delayed uploads, keep their original scope. Use [the permission-version rules](VIDEO-PERMISSIONS.md) before manual publication or media disclosure; store actual records privately outside this repository. Both Google form routes and the Dropbox request retain their existing public URLs.
+
+## Legacy address forwarding — 30 September 2026
+
+The new website is `https://savekewriverside.org/`, served by the separate
+`ystoneman/savekewriverside-site` deployment repository. Keep the original
+repository's Pages custom-domain field empty. Its main workflow first validates
+and stages the ordinary public allowlist, then builds the legacy artifact with
+`.github/scripts/build_old_site_redirect.py`. Only this final artifact is
+uploaded from original main. Separate-domain promotion still stages the ordinary
+source assets, so it never inherits the legacy forwarding script.
+
+Legacy HTML uses a local early script and `location.replace` to preserve page,
+query and fragment. This is browser forwarding, not an HTTP 301. Without scripts,
+the full original page and a manual new-site link remain. Old Letters and Sent
+pages stay available for recoverable drafts, pending returns, inaccessible
+storage or `?recover=draft`; they retain the original provider and consent
+controls. Letters arrivals referred from the exact new-domain origin also stay
+for old-draft recovery. No browser data is transferred or consent rewritten.
+Analytics is omitted from the generated legacy HTML. Public downloads, JSON and
+the approved `/visit/` school handoff remain unchanged.
+
+After every source release, synchronize and promote the new-domain candidate
+using the separate repository's documented gates. Check both public boards and
+the new-domain destination before calling publication or removal complete.
