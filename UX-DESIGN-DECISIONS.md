@@ -75,6 +75,18 @@ These choices are design judgments to verify, not measured conversion improvemen
 
 ## Selected page and interaction design
 
+### Video route for families choosing a school — 28 September 2026
+
+Visitor need (J3, J8, J9): the owner confirmed that Parent Voices videos exist to help families choosing a primary school, not to argue about the proposal. Recent submissions did not fit that purpose: children appeared on camera, and a video addressed the closure. The page never named its audience. Every entry point sat inside the council-response flow, and one prompt asked what the council should understand.
+
+Decision: name the audience at the point of use and redirect views on the proposal to the official response, without adding elements. The lead and card summary say the videos are for families choosing a school; the summary says a video “may be” posted, matching “Publication is not guaranteed”. The council line under the steps opens “Views on the closure proposal?” and keeps its single official link and date (J3). Two prompts now ask about everyday school life, and “What happens next” says videos mainly about the proposal are not posted, with another route suggested. Entry links on Letters, Share ideas and the Parent action plan describe the audience. On Share ideas the video link leaves the “Personal view?” sentence. The plan's video link moves from step 1 (Share what matters) to its own line in step 5's visible text, with “Adults only.”, and the jump link becomes “Letters”. Consent wording, the channel name and the Menu are unchanged.
+
+Cost: the video page gains 32 words (5 above the button); plan steps 1 and 5 lose 22; no links, buttons, sections or disclosures were added. At 390 × 844 the card summary wraps to four lines, moving the button down 26 px; it stays on the first screen from both the page top and `#upload`. Reaching the video from the plan now needs more scrolling, which is intentional because the video is not part of responding.
+
+Rejected: a “Talk about / Leave out” list in the card (about 80 px, pushing Step 2 below the first screen at 320 × 568); a longer lead (pushed the button off the first screen from the top at 390 × 844); an absolute ban on mentioning the proposal (reads as muting keep-open parents); renaming the channel (the consent wording names it). Provider pages carry the rules for every uploader; their text is edited separately by the owner.
+
+Reviews: independent campaign and UX planning reviews, then independent implementation reviews of the diff. Verification is recorded in TESTING.md; this is not a user study.
+
 ### Owner-delegated decisions — 27 September 2026
 
 The owner asked the implementing agent to decide the open points. Understand becomes **Numbers & results**, which covers finances, forecasts and learning results, and Options becomes **Ways to keep Kew open**, matching its homepage question. Evidence stays, being already clear. The labels change together in page identity, Menu, desktop row and homepage cards; the URLs and anchors are unchanged. “Respond to the council” gains the Parent action plan’s emphasis in the Take part group, because the official response is the campaign’s most important action (J3).

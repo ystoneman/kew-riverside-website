@@ -351,7 +351,7 @@ test('Parent plan: homepage invitation and meeting details both lead to preparat
   await expect(page).toHaveURL(/proposal\.html#parent-plan$/);
   await expect(page.locator('#parent-plan-title')).toBeInViewport();
   await expect(page.locator('#parent-plan')).toContainText('Closure is proposed, not decided.');
-  for (const [name, id] of [['PTA prep times', 'prep-sessions'], ['Letters & videos', 'plan-share'], ['Council meeting', 'plan-attend'], ['Your response', 'plan-respond'], ['More ways to help', 'plan-keep-going']]) {
+  for (const [name, id] of [['PTA prep times', 'prep-sessions'], ['Letters', 'plan-share'], ['Council meeting', 'plan-attend'], ['Your response', 'plan-respond'], ['More ways to help', 'plan-keep-going']]) {
     await activate(page.getByRole('navigation', { name: 'Choose a parent action' }).getByRole('link', { name, exact: true }), hasTouch);
     await expect(page).toHaveURL(new RegExp('#' + id + '$'));
     await expect(page.locator('#' + id)).toBeInViewport();
@@ -361,7 +361,7 @@ test('Parent plan: homepage invitation and meeting details both lead to preparat
   await expect(page.locator('#parent-plan-title')).toBeInViewport();
 });
 
-test('Parent plan: correct PTA dates, independent video permission and official deadline stay distinct', async ({ page, hasTouch, baseURL }) => {
+test('Parent plan: correct PTA dates, the video route for new families and official deadline stay distinct', async ({ page, hasTouch, baseURL }) => {
   await page.goto('/proposal.html#parent-plan');
   const prep = page.locator('#prep-sessions');
   await expect(prep).toContainText('school grounds');
@@ -382,8 +382,9 @@ test('Parent plan: correct PTA dates, independent video permission and official 
   await expect(page.locator('#plan-respond')).toContainText('You can respond now if you are ready.');
   await expect(page.locator('#plan-respond')).toContainText('16 October');
   await expect(page.locator('#plan-respond')).toContainText('does not replace your own official response');
-  await expect(page.locator('#plan-share')).toContainText('require explicit YouTube publication permission');
-  await expect(page.locator('#plan-share')).toContainText('News-media and paid-ads permissions are optional');
+  // The video route sits with longer-term help, not beside the council response.
+  await expect(page.locator('#plan-share a[href="videos.html#upload"]')).toHaveCount(0);
+  await expect(page.locator('#plan-keep-going')).toContainText('To help families choosing a school, share a short video about everyday life here. Adults only.');
   await expect(page.locator('.parent-reassurance')).toContainText('Keep following any admissions or SEND (special educational needs and disabilities) instructions');
   for (const href of ['letters.html', 'videos.html#upload', 'feedback.html?kind=evidence#feedback-form', 'feedback.html?kind=meeting#feedback-form', 'options.html#options']) {
     await page.goto('/proposal.html#parent-plan');
