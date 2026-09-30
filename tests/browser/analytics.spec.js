@@ -169,9 +169,9 @@ test('An old-origin objection and unfinished draft cannot transfer, so the new o
   await expect(panel.getByRole('status')).toContainText('analytics off (the default on this domain)');
   await panel.getByRole('button', { name: 'Close analytics choices' }).click();
   const recovery = page.locator('#draft-notice').getByRole('link', { name: 'open the old letters page' });
-  await expect(recovery).toHaveAttribute('href', 'https://ystoneman.github.io/kew-riverside-website/letters.html');
+  await expect(recovery).toHaveAttribute('href', 'https://ystoneman.github.io/kew-riverside-website/letters.html?recover=draft#letter-form');
   await recovery.click();
-  await expect(page).toHaveURL('https://ystoneman.github.io/kew-riverside-website/letters.html');
+  await expect(page).toHaveURL('https://ystoneman.github.io/kew-riverside-website/letters.html?recover=draft#letter-form');
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('kr-letter-draft')).text)).toBe('Fictional unfinished letter');
   expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)).choice, choiceKey)).toBe('deny');
 });
