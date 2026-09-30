@@ -78,7 +78,20 @@ test('Video: withdrawal leads to private request and non-Google alternative stay
 // WebKit, which moved the original-form link beneath the following click.
 test('Video: focusing and opening upload help stays still before a link is used', async ({ page }) => {
   await page.goto('/videos.html');
-  await page.locator('#upload-help summary').focus();
+  const summary = page.locator('#upload-help summary');
+  await summary.focus();
+  // WebKit can return from focus before its native scroll is painted. Observe
+  // the focused target, then retain the full check for continuing movement.
+  await expect(summary).toBeFocused();
+  await expect(summary).toBeInViewport({ ratio: 1 });
+  const focusedPosition = await summary.evaluate(element => ({
+    top: element.getBoundingClientRect().top,
+    bottom: element.getBoundingClientRect().bottom,
+    barBottom: document.querySelector('.site-orientation').getBoundingClientRect().bottom,
+    viewport: innerHeight,
+  }));
+  expect(focusedPosition.top).toBeGreaterThanOrEqual(focusedPosition.barBottom);
+  expect(focusedPosition.bottom).toBeLessThanOrEqual(focusedPosition.viewport);
   await expectScrollSettled(page, 'Focusing upload help');
   await page.keyboard.press('Enter');
   await expect(page.locator('#upload-help')).toHaveAttribute('open', '');

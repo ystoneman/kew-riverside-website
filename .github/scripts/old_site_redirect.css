@@ -1,0 +1,3 @@
+.cutover-notice { margin: 1rem 0; padding: 1rem; border: 2px solid currentColor; border-radius: .75rem; background: var(--paper, #fff); color: var(--ink, #143936); overflow-wrap: anywhere; }
+.cutover-notice p { margin: .5rem 0; }
+.cutover-notice a { text-decoration: underline; font-weight: 700; }

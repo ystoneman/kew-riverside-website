@@ -186,6 +186,8 @@ test('Homepage: six clear entry routes lead to answers, dates, evidence and part
 });
 
 test('Homepage: compact dates lead to the school meeting and official response route', async ({ page, hasTouch }) => {
+  // Exercise this invitation before the meeting; the calendar-boundary test covers expiry.
+  await page.clock.setFixedTime(new Date('2026-09-28T12:00:00Z'));
   await page.goto('/index.html');
   const notice = page.locator('#meeting-invitation');
   await expect(notice).toBeVisible();
@@ -468,6 +470,8 @@ test('Parent plan: the shared navigation names the plan at desktop and mobile si
 });
 
 test('Action motion: the brief invitation keeps the link target still and usable', async ({ page, hasTouch }) => {
+  // Exercise this invitation before the meeting; the calendar-boundary test covers expiry.
+  await page.clock.setFixedTime(new Date('2026-09-28T12:00:00Z'));
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/index.html');
   const shortcut = page.locator('.parent-plan-spotlight a');
@@ -503,6 +507,8 @@ test('Action motion: the brief invitation keeps the link target still and usable
 });
 
 test('Action motion: reduced-motion links stay still and support keyboard activation', async ({ page }) => {
+  // Exercise this invitation before the meeting; the calendar-boundary test covers expiry.
+  await page.clock.setFixedTime(new Date('2026-09-28T12:00:00Z'));
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/index.html');
   for (const selector of ['.parent-plan-spotlight a', '.meeting-links a[href="proposal.html#parent-plan"]']) {
