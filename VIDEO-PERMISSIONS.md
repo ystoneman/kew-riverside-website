@@ -42,6 +42,13 @@ Maintenance only: no contributor records belong in this repository. The live for
 - The Dropbox description now links back to `videos.html#upload` rather than the long form address, which could not wrap on phones and cut off the whole description, and it is shorter. It still states adults only, same email, one video per form, private review, no automatic publication, private unmatched uploads, and that saved choices always apply.
 - A labelled test ran through the live route on 27 September from native iOS Safari (simulator): permission response `video-route-test@example.com`, credit "TEST - please delete", with required choices only; upload `TEST-kew-video-route-check.mov`. It is not a contributor record; delete both by hand.
 
+## Parent-testimonial guidance — 1 October 2026
+
+- Both live Google Forms and the Dropbox request now ask for one 30 second–3 minute adult parent/carer testimonial helping new families discover Kew Riverside. They say to film only yourself, keep children off camera, and leave the council consultation out of this video. Recording guidance and the privacy page no longer exclude incidental background voices.
+- The adult attestation now says “I am the only identifiable person in the picture.” Preserve its earlier “in it” wording with earlier records privately. This presentation/guidance edit does not expand an earlier contributor's permissions.
+- Receipt/storage/review, YouTube, news-media and paid-ads consent labels, v2/v3 answer markers, required settings and optional unchecked choices are unchanged. The v3 publication/storage notices still apply; upload alone never supplies or expands permission. Provider URLs, Google sign-in requirements on the older upload route, and the private Dropbox destination are unchanged.
+- Published provider views were checked after saving, without submitting a response or uploading a recording. The page retains separate withdrawal/removal help and the saved-permissions resume route; it no longer invites private praise of the school.
+
 ## Fictional review cases
 
 | Saved record | Later event | Allowed outcome |

@@ -481,7 +481,7 @@ for (const [moment, open] of [['2026-10-16T23:30:00', true], ['2026-10-17T00:30:
     const route = page.locator('.ideas-letter-route');
     await expect(route).toContainText(open ? 'You can also write a community letter' : 'Personal view? You can write a community letter', { useInnerText: true });
     await expect(route.getByRole('link', { name: 'write a community letter' })).toBeVisible();
-    await expect(route.getByRole('link', { name: 'share a short video' })).toBeVisible();
+    await expect(route.getByRole('link', { name: 'share your parent testimonial' })).toBeVisible();
     await expect(page.locator('main a[href="videos.html#upload"]')).toHaveCount(1);
     if (!open) return;
     const official = openRoute.getByRole('link', { name: 'official response form' });
