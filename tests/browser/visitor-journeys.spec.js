@@ -353,7 +353,7 @@ test('Parent plan: homepage invitation and meeting details both lead to preparat
   await expect(page).toHaveURL(/proposal\.html#parent-plan$/);
   await expect(page.locator('#parent-plan-title')).toBeInViewport();
   await expect(page.locator('#parent-plan')).toContainText('Closure is proposed, not decided.');
-  for (const [name, id] of [['PTA prep times', 'prep-sessions'], ['Letters', 'plan-share'], ['Council meeting', 'plan-attend'], ['Your response', 'plan-respond'], ['More ways to help', 'plan-keep-going']]) {
+  for (const [name, id] of [['Past PTA sessions', 'prep-sessions'], ['Letters', 'plan-share'], ['Past council meeting', 'plan-attend'], ['Your response', 'plan-respond'], ['More ways to help', 'plan-keep-going']]) {
     await activate(page.getByRole('navigation', { name: 'Choose a parent action' }).getByRole('link', { name, exact: true }), hasTouch);
     await expect(page).toHaveURL(new RegExp('#' + id + '$'));
     await expect(page.locator('#' + id)).toBeInViewport();
