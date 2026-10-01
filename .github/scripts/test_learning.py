@@ -18,7 +18,7 @@ from build_learning import csv_text, render
 
 ROOT = Path(__file__).resolve().parents[2]
 YEARS = ('2022/23', '2023/24', '2024/25')
-GROUPS = ('Kew Riverside', 'Richmond upon Thames', 'England', 'Darell')
+GROUPS = ('Kew Riverside Primary School', 'Richmond upon Thames', 'England', 'Darell')
 COMBINED = 'Reading, writing and maths'
 SUBJECTS = ('Reading', 'Writing', 'Maths')
 CHECKED = '2026-09-22'
@@ -36,13 +36,13 @@ SOURCES = {
 }
 # Each pair is expected / higher standard, in academic-year order.
 COMBINED_RESULTS = {
-    'Kew Riverside': ((75, 17), (67, 7), (73, 13)),
+    'Kew Riverside Primary School': ((75, 17), (67, 7), (73, 13)),
     'Richmond upon Thames': ((74, 18), (76, 17), (78, 21)),
     'England': ((60, 8), (61, 8), (62, 8)),
     'Darell': ((52, 22), (53, 19), (39, 9)),
 }
 SUBJECT_RESULTS_2025 = {
-    'Kew Riverside': ((80, 47), (80, 20), (73, 33)),
+    'Kew Riverside Primary School': ((80, 47), (80, 20), (73, 33)),
     'Richmond upon Thames': ((88, 54), (83, 26), (88, 46)),
     'England': ((75, 33), (72, 13), (74, 26)),
     'Darell': ((57, 26), (57, 22), (43, 9)),
@@ -52,7 +52,7 @@ NEWER_RESULTS = {
     'Darell': ((68, 14), (68, 27), (73, 23), (73, 23)),
     'England': ((63, 9), (75, 31), (73, 13), (75, 27)),
 }
-COHORTS = {'Kew Riverside': (12, None, 15), 'Darell': (27, None, 23)}
+COHORTS = {'Kew Riverside Primary School': (12, None, 15), 'Darell': (27, None, 23)}
 CSV_HEADERS = ['School or area', 'Academic year', 'Subject', 'Measure', 'Value', 'Unit',
                'Cohort definition', 'Status', 'Source URL', 'Source location', 'Checked on']
 
@@ -69,7 +69,7 @@ def expected_records():
                     SUBJECT_RESULTS_2025[group][subject_index] if year == '2024/25' else (None, None))
     for year, percentages in INSPECTION_RESULTS.items():
         for subject, percentage in zip(SUBJECTS, percentages):
-            records['Kew Riverside', year, subject, 'inspection'] = (percentage, None)
+            records['Kew Riverside Primary School', year, subject, 'inspection'] = (percentage, None)
     for group, pairs in NEWER_RESULTS.items():
         source = 'darell-2026' if group == 'Darell' else 'england-2026'
         for subject, pair in zip((COMBINED,) + SUBJECTS, pairs):
@@ -304,7 +304,7 @@ class LearningDataTests(unittest.TestCase):
         leads = [node for node in self.section.find('p') if 'section-lead' in node.attrs.get('class', '').split()]
         self.assertEqual(re.findall(r'\d+%', leads[0].text), ['73%', '62%', '78%'])
         lead = leads[1]
-        lead_values = [f'{pair[0]}%' for group in ('Kew Riverside', 'England', 'Richmond upon Thames')
+        lead_values = [f'{pair[0]}%' for group in ('Kew Riverside Primary School', 'England', 'Richmond upon Thames')
                        for pair in COMBINED_RESULTS[group]]
         self.assertEqual(re.findall(r'\d+%', lead.text), lead_values)
         self.assertIn('below the borough figure in 2024 and 2025', lead.text)
@@ -315,11 +315,11 @@ class LearningDataTests(unittest.TestCase):
     def test_chart_and_table_values_come_from_data_instead_of_literal_markup(self):
         changed = copy.deepcopy(self.data)
         record = next(r for r in changed['records'] if (r['group'], r['academicYear'], r['subject']) ==
-                      ('Kew Riverside', '2022/23', COMBINED))
+                      ('Kew Riverside Primary School', '2022/23', COMBINED))
         record['expectedPercent'] = 42
         section = learning_section(render(changed))
         combined = table_rows(section)['Combined reading, writing and maths · final DfE results']
-        self.assertEqual(combined[1], ['2022/23', 'Kew Riverside', '42%', '17%', '12'])
+        self.assertEqual(combined[1], ['2022/23', 'Kew Riverside Primary School', '42%', '17%', '12'])
         before = [node for node in self.section.find('rect') if 'attainment-bar' in node.attrs.get('class', '').split()]
         after = [node for node in section.find('rect') if 'attainment-bar' in node.attrs.get('class', '').split()]
         self.assertEqual(len(after), len(before))

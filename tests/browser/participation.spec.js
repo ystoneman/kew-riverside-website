@@ -136,11 +136,11 @@ test('Letters: a sentence starter begins the letter and leaves the cursor at the
   await expect(page.locator('#starter-static')).toBeHidden();
   const message = page.locator('#message');
   await page.getByRole('button', { name: 'We chose it because…' }).click();
-  await expect(message).toHaveValue('We chose Kew Riverside because ');
+  await expect(message).toHaveValue('We chose Kew Riverside Primary School because ');
   await expect(message).toBeFocused();
   expect(await message.evaluate(el => el.selectionStart === el.value.length)).toBe(true);
   await page.getByRole('button', { name: 'If it closed, our family would…' }).click();
-  await expect(message).toHaveValue('We chose Kew Riverside because\n\nIf Kew Riverside closed, our family would ');
+  await expect(message).toHaveValue('We chose Kew Riverside Primary School because\n\nIf Kew Riverside Primary School closed, our family would ');
 });
 
 test('Letters: the character counter appears only near the limit', async ({ page }) => {

@@ -1,5 +1,13 @@
 # UX design decisions
 
+## Full school name on the site — 1 October 2026
+
+Visitor need (J1–J9): the shared brand and appeal must identify Kew Riverside Primary School clearly, including when a page or image is shared without surrounding context. The owner's phone screenshot showed the shorter name in the header and opening appeal.
+
+Decision: use the full name in the brand, appeal and editorial material. Break the header brand after “Riverside” to keep the existing icon, action tiles and Menu legible on narrow screens. Begin the appeal with “Keep” so the full name fits without reducing its type size. Keep the Parent action plan and official response in their protected arrival positions. Expose the full name in text-based graphics, downloads and accessible labels as well as the rendered page. Direct quotations and submitted letters retain their authors' wording.
+
+Alternative considered: shrinking the brand and heading to retain single-line text. The two-line treatment maintains readable type and a clear hierarchy. The priority release's focused 375 × 667 and 390 × 844 iPhone WebKit arrival checks found and resolved response-button displacement; its hosted candidate checks and live asset verification are recorded in TESTING.md and CHANGELOG.md. A later, wider editorial and downloadable-asset sweep receives its own rendered review and checked deployment. No journey priority, destination or consent choice changes.
+
 ## Simple parent testimonials — 1 October 2026
 
 The owner wanted a stressed parent to reach the main button without scrolling, understand that this is a parent testimonial for prospective families, and keep children off camera. The approved mockup places the CTA immediately after the short consent cue, then three illustrated rules: adult filming, 30 seconds–3 minutes, and no council-consultation discussion. The private-praise invitation and background-audio exclusion are removed. This refines J9's contribution route in support of J8; it does not replace J3's official response or J4's written alternative.
@@ -22,7 +30,7 @@ Keep the static site, working incoming links, source citations, accessible table
 
 Adopted 22 September 2026 for ongoing change review. Owner: Yann Stoneman; the implementing agent maintains this register when an intentional change affects it. These priorities reflect the owner's goals and inspection of the site, not a measured ranking from a visitor study. This section is the canonical current register; the dated decisions below explain its history.
 
-The attempted September domain cutover was rolled back after mobile visitors received an unstyled page while the new domain's HTTPS certificate was unavailable. The canonical address remains `https://ystoneman.github.io/kew-riverside-website/`; sharing, PDFs and downloadable QR destinations use it. Existing routes and anchors remain (J1–J9), and the original origin's saved analytics choices and letter drafts remain usable. Removing the custom-domain setting restored the HTTPS homepage and stylesheets before the code rollback. A future migration must establish working HTTPS and styled mobile/deep-link/provider journeys separately before redirecting the functioning original site. Final code rollback checks and deployment are recorded in CHANGELOG.md and TESTING.md.
+The attempted September domain cutover was rolled back after mobile visitors received an unstyled page while the new domain's HTTPS certificate was unavailable. The later checked migration established `https://savekewriverside.org/` as the canonical address; the old GitHub Pages address now forwards page routes to it. The canonical site's full-name priority release was verified on 1 October. Existing page routes and anchors remain (J1–J9). Migration and release evidence are recorded in CHANGELOG.md and TESTING.md.
 
 Priority allocates attention; every existing task retains usable access. Visitors may start with an action, evidence or a family question. Do not require them to follow a learning sequence before reaching their destination. The ranking of campaign options on the dedicated Options page is separate from journey priority.
 

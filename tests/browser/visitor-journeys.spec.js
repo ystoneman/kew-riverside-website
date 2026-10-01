@@ -123,7 +123,7 @@ test('Homepage: orientation leads to a compact meeting invitation with its date,
   await expect(invitation.getByRole('heading', { name: 'Come and speak with the council.', exact: true })).toBeVisible();
   expect((await invitation.locator('time').innerText()).replace(/\s+/g, ' ')).toContain('Tuesday 29 September 2026');
   await expect(invitation).toContainText(/3[.:]30\s*p\.?m\.?/i);
-  await expect(invitation).toContainText('Kew Riverside');
+  await expect(invitation).toContainText('Kew Riverside Primary School');
   await expect(invitation).toContainText('Meet local authority representatives');
   await expect(invitation).toContainText('share your views');
   await expect(invitation.locator('blockquote, .meeting-attribution')).toHaveCount(0);
@@ -535,8 +535,8 @@ test('Parent plan: flyer makers can download the permanent homepage and visit QR
   await activate(more.locator('summary'), hasTouch);
   // Pin each filename to its own paragraph and link name so the two QR purposes cannot be swapped.
   for (const [id, label, base, caveat, svgTitle] of [
-    ['share-qr', 'Homepage', 'kew-riverside-website-qr', 'in your own name', 'QR code for the Kew Riverside website'],
-    ['visit-qr', 'Visit', 'kew-riverside-visit-qr', 'agree its wording with them', 'QR code for Kew Riverside school visit enquiries'],
+    ['share-qr', 'Homepage', 'kew-riverside-website-qr', 'in your own name', 'QR code for the Kew Riverside Primary School website'],
+    ['visit-qr', 'Visit', 'kew-riverside-visit-qr', 'agree its wording with them', 'QR code for Kew Riverside Primary School visit enquiries'],
   ]) {
     const share = more.locator('#' + id);
     await expect(share).toBeVisible();
