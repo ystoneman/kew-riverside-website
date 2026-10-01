@@ -8,7 +8,7 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 - Use Kew Riverside Primary School in the shared brand, homepage appeal, page titles, sharing metadata and footer (J1–J9). Split the brand across two lines and allow text reflow to retain the existing participation tiles.
 - Owner requested the priority release before local browser checks; a wider naming/content/download sweep and rendered review follow publication. Required hosted deployment gates remain applicable.
-- Lead validation: 54 Python tests, 104-public-file validation, generated navigation/research/comparison freshness and whitespace checks passed. Independent UX source review flagged the longer hero; shortened its introduction to “Keep” while retaining the full name. Hosted and live results remain pending.
+- Lead validation: 54 Python tests, 104-public-file validation, generated navigation/research/comparison freshness and whitespace checks passed. Independent UX source review flagged the longer hero; shortened its introduction to “Keep” while retaining the full name. A two-case iPhone WebKit arrival check caught the 375×667 response button below the screen; reduced mobile header/hero spacing without shrinking text, then both 375×667 and 390×844 passed. Hosted and live results remain pending.
 
 ### Forward the original address after verified new-domain launch
 
