@@ -9,7 +9,7 @@ VERSION = '2026092703'
 PAGES = {
     # Page identity labels only. The Menu and footer come from MENU_GROUPS and
     # FOOTER_LINKS, so registering a page never adds a Menu row by itself.
-    'letters.html': 'Community letters', 'videos.html': 'Share a video', 'feedback.html': 'Share ideas',
+    'rally.html': 'Tuesday rally', 'letters.html': 'Community letters', 'videos.html': 'Share a video', 'feedback.html': 'Share ideas',
     'index.html': 'Home', 'about.html': 'About', 'proposal.html': 'Proposal & dates',
     'faq.html': 'FAQ', 'understand.html': 'Numbers & results', 'options.html': 'Ways to keep Kew open',
     'lessons.html': 'Lessons', 'evidence.html': 'Evidence', 'supporters.html': 'Supporters',
@@ -58,6 +58,7 @@ FOOTER_LINKS = [
 ]
 # Explicit destinations avoid navigation generated from hidden templates or every source card.
 SECTIONS = {
+    'rally.html': [('when-and-where','When and where'),('schedule','Tuesday schedule'),('attending','Coming along'),('photos','Photo choices'),('council-and-response','Council and your response'),('updates','Questions and updates')],
     'index.html': [('meeting-invitation','Council meeting'),('find-your-way','Find what you need'),('research-shortcut','Historical research','find-your-way'),('quick-answers','Before you respond'),('visit-school','Considering Kew Riverside?')],
     'evidence.html': [('records','Key findings'),('finding-st-john','St John the Divine','records'),('finding-linked-schools','Fenstanton & Holy Trinity','records'),('finding-pooles','Pooles Park','records'),('source-search','Find a source'),('source-library','Original sources','source-search'),('evidence','Numbers behind the proposal'),('timeline','Dates and next steps'),('earlier-record','Earlier public record'),('gaps','Unanswered questions'),('gap-budget','Keeping Kew open','gaps'),('gap-pupil-impacts',"Children’s needs",'gaps'),('gap-selection','Why Kew?','gaps'),('gap-closure-costs','Closure costs and site','gaps'),('gap-alternatives','Costed alternatives','gaps'),('gap-recruitment','Recruitment support','gaps'),('gap-forecasts','Pupil and housing forecasts','gaps'),('gap-answers','Written answers','gaps'),('evidence-found','Evidence obtained','gaps'),('gap-records','Process and records','gaps'),('method','Method and limits')],
     'options.html': [('option-7','Your official response'),('options-prep-title','Prepare together'),('options-findings-title','What an alternative needs'),('options-navigation','Ways to help'),('option-recovery-plan','A practical recovery plan','options-navigation'),('option-crowdfunding','Funding','options-navigation'),('option-demand','Pupil demand','options-navigation'),('option-enrolment','School enquiries','options-navigation'),('option-5','Closure costs','options-navigation'),('option-6',"Children’s needs",'options-navigation'),('option-8','Legal experience','options-navigation'),('options-sources-title','Evidence and next steps')],

@@ -1,5 +1,12 @@
 # Testing the website
 
+## Tuesday rally information — 1 October 2026
+
+- New rally journeys cover the Parent plan entry and Back, past-meeting follow-up destination, mobile/shared photo arrival, native menu routes, official-response and question eligibility wording, and the tentative calendar download. Automatic all-page/link/mobile/no-script coverage includes the page; calendar time is 6–6.45pm BST (17:00–17:45 UTC).
+- Local Python/privacy/security suite: 54 passed; allowlist: 108 public assets. Complete browser run: 1,936 passed, 49 expected skips. After review corrections, the affected rally/top-journey/visitor-journey run passed 159 checks across five projects. Final rally regression including header assertions: 15 passed. Exact-revision hosted checks are required before merge.
+- Independent campaign, UX and evidence reviews inspected the proposed design and actual implementation. Rechecks resolved the expired meeting invitation, borough eligibility for Full Council questions, and rally header spacing. Rendered arrivals at 320/390/1101/1250/1440px show separate participation labels and wrapped desktop navigation without overlap.
+- Native iPhone 17 / iOS 26.5 Safari: styled local rally arrival, Menu → Parent action plan and Safari Back worked. The local HTTP preview removes only its response's upgrade-insecure directive; production CSP is unchanged. No council response, email, analytics event or police notification was submitted. Live deployment verification is pending.
+
 ## Simple parent testimonials — 1 October 2026
 
 - Extend video journeys for plain-page and `#upload` arrival, three adult/purpose/duration rules, keyboard Help, direct/repeated older anchors, saved private-only permissions, withdrawal and provider handoffs. Static Help stays open without scripts; broad navigation/mobile/privacy checks remain enabled.

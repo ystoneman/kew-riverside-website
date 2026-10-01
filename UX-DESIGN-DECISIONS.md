@@ -83,6 +83,10 @@ These choices are design judgments to verify, not measured conversion improvemen
 
 ## Selected page and interaction design
 
+### Tuesday rally information — 1 October 2026
+
+J1/J2/J3/J9: parents need one shareable event address with the schedule, location, access status and photo choices. `rally.html` is reached through one dated line after the Parent plan action shortcuts. A new homepage band or global menu item would compete with protected family and official-response entries; the contextual route contains that cost. All September event anchors remain, clearly marked as past. The tentative calendar includes the pending gathering/access status and uses UTC for 6–6.45pm London time. Map and calendar are native links; no new script, embed or collection is needed. Essential status and photo guidance stay visible. Check venue confirmations before changing the location/access claims and retire the invitation after 6 October while preserving its address. Independent planning reviews completed; rendered implementation and release checks pending.
+
 ### Video route for families choosing a school — 28 September 2026
 
 Visitor need (J3, J8, J9): the owner confirmed that Parent Voices videos exist to help families choosing a primary school, not to argue about the proposal. Recent submissions did not fit that purpose: children appeared on camera, and a video addressed the closure. The page never named its audience. Every entry point sat inside the council-response flow, and one prompt asked what the council should understand.
