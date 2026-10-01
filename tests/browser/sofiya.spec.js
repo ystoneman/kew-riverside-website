@@ -321,9 +321,9 @@ test('Contributions: letters lead to contextual evidence and optional video with
   await expect(page).toHaveURL(/letters\.html$/);
   await activate(page.locator('main .form-route a[href="videos.html#upload"]'), hasTouch);
   await expect(page).toHaveURL(/videos\.html#upload$/);
-  await expect(page.locator('#upload-requirements')).toContainText('Adults recording themselves only');
-  await activate(page.locator('#video-choices > summary'), hasTouch);
-  await expect(page.locator('#video-choices')).toContainText('New submissions require YouTube publication permission');
-  await expect(page.locator('#video-choices')).toContainText(/separate|permission/i);
-  await expect(page.locator('main a[href="letters.html"]')).toBeVisible();
+  await expect(page.locator('#recording-rule')).toContainText('Adults only. Keep children off camera.');
+  await activate(page.locator('#upload-help > summary'), hasTouch);
+  await expect(page.locator('section[aria-labelledby="video-choices"]')).toContainText('New submissions require YouTube publication permission');
+  await expect(page.locator('section[aria-labelledby="video-choices"]')).toContainText(/separate|permission/i);
+  await expect(page.locator('main a[href="letters.html#letter-form"]').last()).toBeVisible();
 });
