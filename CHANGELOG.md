@@ -4,6 +4,13 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Anonymous community letter
+
+- Add one contributor-consented letter under Anonymous, preserving the original wording and using Human reviewed after explicit operator approval. Existing letters, labels, consent controls and removal routes remain unchanged (J4).
+- Reconciled the private moderation decision; no private identity, contact details, queue reference or consent record is included in the public change.
+
+Verification and deployment pending.
+
 ### Tuesday rally information
 
 - Add a shareable parent-led rally page for 6 October, with the planned York House schedule, map and tentative calendar, optional photography guidance, visible pending gathering/access arrangements and official-response reminder (J1/J2/J3/J9). Link it within the Parent action plan after the existing action shortcuts. Mark the September prep sessions and meeting as past while retaining their shared anchors.
