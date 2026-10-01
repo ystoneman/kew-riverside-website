@@ -225,7 +225,7 @@ class SiteStructureTests(unittest.TestCase):
             self.assertIn(('link', 'href', base + name), page.references)
             image_url = meta['og:image']
             self.assertTrue(image_url.startswith(base))
-            filename = image_url.removeprefix(base)
+            filename = urlsplit(image_url).path.removeprefix(urlsplit(base).path)
             self.assertIn(filename, PUBLIC_FILES)
             data = (ROOT / filename).read_bytes()
             self.assertEqual(data[:8], b'\x89PNG\r\n\x1a\n')

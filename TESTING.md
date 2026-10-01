@@ -1,5 +1,11 @@
 # Testing the website
 
+## Full school name — 1 October 2026
+
+- Priority release: 54 Python tests and public validation passed. A focused iPhone WebKit arrival check at 375 × 667 and 390 × 844 caught and then cleared a first-screen response-button regression. The checked new-domain candidate passed validation and all five hosted browser projects. Canonical Pages deployment succeeded, and all 109 live public assets matched the promoted hashes. The complete local browser suite was deferred at the owner's request for this first release.
+- Follow-up sweep: local 54-test Python suite, 105-file original-source allowlist, JavaScript syntax and 147 focused desktop Chromium journey tests passed after updating the evidence-search terms. A structural comparison confirmed that the 16 edited HTML pages retain every ID, link and form destination; five edited JSON files retain all non-text data. The eight exhibit SVGs and their 4800 × 3000 PNGs, six sharing images, the two-page checklist and selected pages of the 44-page report were rendered and inspected. The report keeps 44 pages, the same source and claim ledger and the original citation links apart from the site's proposal link moving to the working canonical address. Submitted letters and source quotations retain their original wording.
+- The follow-up's rendered browser review, exact-revision hosted tests, deployment and live verification are recorded when complete. No form was sent to a real provider by these checks.
+
 ## Simple parent testimonials — 1 October 2026
 
 Release follow-up: source PR #57 passed validation and all five browser projects at `9281259` (run `36876649899`, attempt 2). A stalled dependency installation was restarted; no check was bypassed. Native iPhone 17 / iOS 26.5 Safari then opened Help and the live permission form by tapping, and Back returned to the styled page with Help open. No response or upload was submitted. These later checks supersede the initial native-interaction uncertainty below. The unfamiliar-person real-phone trial remains unperformed.

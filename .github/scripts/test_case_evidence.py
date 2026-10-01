@@ -144,7 +144,7 @@ class CaseEvidenceTests(unittest.TestCase):
         self.assertIn('one forecast vintage and one period', forecast)
         self.assertIn('not itself a measured forecasting error', forecast)
         tables = {table['caption']: table['rows'] for table in Tables(budget + forecast).tables}
-        actuals = tables['Kew Riverside reported financial actuals · years ending in March']
+        actuals = tables['Kew Riverside Primary School reported financial actuals · years ending in March']
         self.assertIn(['2025/26', '£1,015,098', '£1,090,201', '−£75,103', '£231,685'], actuals)
         self.assertIn(['2022/23', '£1,152,466.12', '£1,079,134.19', '+£73,331.93', '£240,343.48'], actuals)
         check = tables['2025/26 Kew planning-area forecast compared with January 2026 census']

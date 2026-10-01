@@ -17,7 +17,7 @@ async function activate(locator, hasTouch) {
 
 test('Learning: contextual homepage and evidence entries reach the results and support Back', async ({ page, hasTouch }) => {
   for (const [path, entry] of [
-    ['/evidence.html', page.getByRole('complementary', { name: 'How does Kew Riverside compare?' })],
+    ['/evidence.html', page.getByRole('complementary', { name: 'How does Kew Riverside Primary School compare?' })],
     ['/index.html', page.locator('#visit-school')],
   ]) {
     await page.goto(path);
@@ -60,7 +60,7 @@ test('Learning: the local jump retains previous comparison sections and visible 
   expect((await chart.locator('text').allTextContents()).filter(text => /^\d+%$/.test(text))).toEqual(['75%', '67%', '73%']);
   const charts = section.locator('.attainment-figure svg');
   await expect(charts).toHaveCount(3);
-  for (const [index, name] of ['Kew Riverside', 'Richmond', 'England'].entries()) {
+  for (const [index, name] of ['Kew Riverside Primary School', 'Richmond', 'England'].entries()) {
     await expect(charts.nth(index)).toHaveAttribute('role', 'img');
     await expect(charts.nth(index)).toHaveAccessibleName(new RegExp(name));
   }
@@ -127,7 +127,7 @@ test('Learning: native data and method disclosures work by keyboard and download
       expect(await details.locator('table:visible').count()).toBeGreaterThan(0);
       const rows = await details.locator('tbody tr').allTextContents();
       for (const { year, kew, england, richmond } of combinedResults) {
-        for (const [group, expected] of [['Kew Riverside', kew], ['England', england], ['Richmond', richmond]]) {
+        for (const [group, expected] of [['Kew Riverside Primary School', kew], ['England', england], ['Richmond', richmond]]) {
           expect(rows.some(row => (row.includes(String(year)) || row.includes(`${year - 1}/${String(year).slice(-2)}`)) && row.includes(group) && row.includes(`${expected}%`)), `${group} combined result for ${year}`).toBe(true);
         }
       }
@@ -145,7 +145,7 @@ test('Learning: native data and method disclosures work by keyboard and download
     expect(download.suggestedFilename()).toBe(filename);
     expect(await download.failure()).toBeNull();
     const contents = await fs.readFile(await download.path(), 'utf8');
-    expect(contents).toMatch(/Kew Riverside/);
+    expect(contents).toMatch(/Kew Riverside Primary School/);
     expect(contents).toMatch(/England/);
     expect(contents).toMatch(/Richmond/);
     for (const { year } of combinedResults) expect(contents).toContain(`${year - 1}/${String(year).slice(-2)}`);
@@ -153,7 +153,7 @@ test('Learning: native data and method disclosures work by keyboard and download
       const data = JSON.parse(contents);
       expect(data.schemaVersion).toBe(1);
       for (const { year, kew, england, richmond } of combinedResults) {
-        for (const [group, expectedPercent] of [['Kew Riverside', kew], ['England', england], ['Richmond upon Thames', richmond]]) {
+        for (const [group, expectedPercent] of [['Kew Riverside Primary School', kew], ['England', england], ['Richmond upon Thames', richmond]]) {
           expect(data.records).toContainEqual(expect.objectContaining({
             group,
             academicYear: `${year - 1}/${String(year).slice(-2)}`,
@@ -167,7 +167,7 @@ test('Learning: native data and method disclosures work by keyboard and download
       const rows = contents.trim().split(/\r?\n/);
       expect(rows.length).toBeGreaterThan(3);
       for (const { year, kew, england, richmond } of combinedResults) {
-        for (const [group, expected] of [['Kew Riverside', kew], ['England', england], ['Richmond upon Thames', richmond]]) {
+        for (const [group, expected] of [['Kew Riverside Primary School', kew], ['England', england], ['Richmond upon Thames', richmond]]) {
           expect(rows.some(row => row.includes(group) && row.includes(`${year - 1}/${String(year).slice(-2)}`) && row.includes('Reading, writing and maths') && row.includes('Expected standard') && new RegExp(`,\"?${expected}\"?,`).test(row)), `${group} CSV combined result for ${year}`).toBe(true);
         }
       }

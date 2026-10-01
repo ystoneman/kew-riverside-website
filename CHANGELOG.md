@@ -4,6 +4,14 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Full school name: priority identity update
+
+- Use Kew Riverside Primary School in the shared brand, homepage appeal, page titles, sharing metadata and footer (J1–J9). Split the brand across two lines and allow text reflow to retain the existing participation tiles.
+- The owner requested a priority release before the complete local browser suite. Independent UX source review flagged the longer hero; shorten its introduction to “Keep” while retaining the full name. A focused iPhone WebKit arrival check caught the 375×667 response button below the screen; adjust mobile spacing without shrinking text, then confirm both 375×667 and 390×844 arrivals.
+- **Priority release published:** the [canonical-site PR #4](https://github.com/ystoneman/savekewriverside-site/pull/4) merged as `a491a4d` on 1 October after its checked candidate revision passed validation and all five hosted browser projects. [Pages run 36886080401](https://github.com/ystoneman/savekewriverside-site/actions/runs/36886080401) succeeded. All 109 public assets at `https://savekewriverside.org/` returned HTTP 200 and matched the promoted file hashes. The wider sweep below is a subsequent release.
+- Extend the full name through editorial page copy, summaries, evidence-search terms, downloadable data, calendar reminder, the two-page response checklist, eight exhibit images, the 44-page research report and six sharing images. Version the six preview-image URLs so sharing services can request their refreshed artwork. Preserve submitted letters and direct quotations; keep the external Parent Voices channel's actual identity. Update exact-label test expectations without weakening the journey assertions.
+- The follow-up retains the same source IDs, figures, provider destinations, permissions and official-response routes. Local static validation, 54 Python checks and 147 focused desktop Chromium journey tests passed. A structural comparison confirmed that all 16 edited HTML pages retain their IDs, links and form destinations, and five edited JSON files retain all non-text data. Rendered implementation review and current-revision hosted checks are required before the follow-up publishes.
+
 ### Simple parent testimonials — 1 October 2026
 
 Source PR #57 merged as `ff4bc7a` after exact-head validation and all five browser projects passed (run `36876649899`, attempt 2; stalled dependency setup retried). Later native iPhone 17 / iOS 26.5 taps opened Help and the live permission form; Back returned correctly. No response/upload was submitted. The synchronized new-domain candidate retains its existing host/provider bindings and passed 54 Python checks plus 109-file validation. Source-main deployment, candidate hosted checks, guarded promotion and final live verification are pending.

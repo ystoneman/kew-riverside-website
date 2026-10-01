@@ -135,7 +135,7 @@ test('Video: direct arrival explains testimonial purpose and retains upload help
   await expect(councilNote).toContainText('not an official council response');
   // Videos are for families choosing a school; views on the proposal are sent to the council instead.
   await expect(councilNote).toContainText('Views on the council consultation?');
-  await expect(card.locator('.video-lead')).toHaveText('Help new families discover Kew Riverside.');
+  await expect(card.locator('.video-lead')).toHaveText('Help new families discover Kew Riverside Primary School.');
   await expect(page.locator('.video-prompts')).not.toContainText('council');
   await expect(councilNote).toContainText('16 October 2026');
   await expect(councilNote.locator('a').first()).toHaveAttribute('href', official);
