@@ -6,6 +6,8 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ### Simple parent testimonials — 1 October 2026
 
+Source PR #57 merged as `ff4bc7a` after exact-head validation and all five browser projects passed (run `36876649899`, attempt 2; stalled dependency setup retried). Later native iPhone 17 / iOS 26.5 taps opened Help and the live permission form; Back returned correctly. No response/upload was submitted. The synchronized new-domain candidate retains its existing host/provider bindings and passed 54 Python checks plus 109-file validation. Source-main deployment, candidate hosted checks, guarded promotion and final live verification are pending.
+
 - Put “Share your parent testimonial” before the instructions, fully visible on plain-page and shared `#upload` arrivals at 320 × 568. Three custom icons explain: film only yourself, 30 seconds–3 minutes, and do not discuss the council consultation. The purpose is helping new families discover the school (J8/J9).
 - Remove the private-praise invitation and the background-audio exclusion. Keep children off camera and retain the exclusions for identifying/private details. Keep the short consent cue beside the button, all existing permission scopes, saved private-only choices and separate council/letter routes.
 - Put prompts, recording help, permissions and older-upload recovery in one optional Help disclosure. Preserve old section links and native no-script access; retain Help state on browser Back without changing shared navigation.

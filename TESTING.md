@@ -2,6 +2,10 @@
 
 ## Simple parent testimonials — 1 October 2026
 
+Release follow-up: source PR #57 passed validation and all five browser projects at `9281259` (run `36876649899`, attempt 2). A stalled dependency installation was restarted; no check was bypassed. Native iPhone 17 / iOS 26.5 Safari then opened Help and the live permission form by tapping, and Back returned to the styled page with Help open. No response or upload was submitted. These later checks supersede the initial native-interaction uncertainty below. The unfamiliar-person real-phone trial remains unperformed.
+
+The new-domain candidate includes source main `ff4bc7ad9a87173413f1ad6cfd8ae1ca04e6d30f`. All 19 source changes match after normalizing only the pre-existing host/provider bindings. Its public allowlist contains 109 files; 54 Python checks pass. The candidate preserves the new-domain form endpoint, default-off analytics, canonical/share URLs, existing QR/PDF destinations and draft/privacy recovery. Current candidate dispatch and deployment are still pending.
+
 - Extend video journeys for plain-page and `#upload` arrival, three adult/purpose/duration rules, keyboard Help, direct/repeated older anchors, saved private-only permissions, withdrawal and provider handoffs. Static Help stays open without scripts; broad navigation/mobile/privacy checks remain enabled.
 - Update contextual-link assertions for the approved wording. The Back regression now uses a deep older-upload link and retains exact reading-position, viewport, history-length and unrelated-state assertions. Its fictional state is merged with application state; replacing all state had incorrectly erased the new disclosure state. It also asserts Help stays open on return.
 - Local Python suite: 54 passed. Public allowlist: 105 files. Focused desktop Chromium video suite: 24 passed. Complete five-project run: 1,896 passed, 48 skipped, two Safari Back fixture failures; after preserving the disclosure state in the fixture, both Back cases passed. Final exact-revision hosted all-project checks are required before merging.
