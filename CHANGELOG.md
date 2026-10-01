@@ -15,6 +15,12 @@ Source PR #57 merged as `ff4bc7a` after exact-head validation and all five brows
 - Independent campaign and UX planning and implementation reviews; rendered Chromium/WebKit mobile and desktop evidence. Local Python/privacy/security checks: 54 passed; public allowlist: 105 files. Full local browser run: 1,896 passed, 48 skipped, two Back tests failed because the fixture overwrote the disclosure state. Preserve unrelated history state in that fixture; both Safari cases then passed with every scroll/history assertion retained. Current-revision hosted checks and both-site deployment remain pending.
 - Native iPhone 17 / iOS 26.5 Safari: styled local arrival and complete first-screen button visually verified. An unfamiliar person's real-phone attempt has not occurred; this is an owner-directed release of the approved mockup, not a user-study result. Native interaction and hosted provider receipt are recorded separately in TESTING.md.
 
+### Full school name: priority identity update
+
+- Use Kew Riverside Primary School in the shared brand, homepage appeal, page titles, sharing metadata and footer (J1–J9). Split the brand across two lines and allow text reflow to retain the existing participation tiles.
+- Owner requested the priority release before local browser checks; a wider naming/content/download sweep and rendered review follow publication. Required hosted deployment gates remain applicable.
+- Lead validation: 54 Python tests, 104-public-file validation, generated navigation/research/comparison freshness and whitespace checks passed. Independent UX source review flagged the longer hero; shortened its introduction to “Keep” while retaining the full name. A two-case iPhone WebKit arrival check caught the 375×667 response button below the screen; reduced mobile header/hero spacing without shrinking text, then both 375×667 and 390×844 passed. Hosted and live results remain pending.
+
 ### Forward the original address after verified new-domain launch
 
 - Prepare browser forwarding from the old GitHub address to the matching page, query and section at `https://savekewriverside.org/` (J1–J9). Keep the custom domain assigned only to its separate deployment repository.
