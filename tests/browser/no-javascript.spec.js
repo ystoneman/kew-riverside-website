@@ -442,13 +442,15 @@ test('No JavaScript: shared research links land still before a graphic or source
 test('No JavaScript: video guidance and external upload route remain available', async ({ page }) => {
   await page.goto('/letters.html');
   await page.locator('main a[href="videos.html#upload"]').tap();
-  await expect(page.locator('#upload-requirements')).toContainText('No Google or Dropbox sign-in required');
+  await expect(page.locator('#upload-step-two')).toContainText('No account needed');
   const destination = await page.locator('#video-upload-link').getAttribute('href');
   await page.route(destination, route => route.fulfill({contentType:'text/html',body:'<!doctype html><title>Fictional permission handoff</title><p>No upload sent.</p>'}));
-  for (const id of ['recording-tips','video-choices','upload-help']) {
-    await page.locator('#'+id+' summary').tap();
-    await expect(page.locator('#'+id)).toHaveAttribute('open','');
-  }
+  await expect(page.locator('#upload-help')).toHaveAttribute('open','');
+  for (const id of ['recording-tips','video-choices','prompt-title','process-title']) await expect(page.locator('#'+id)).toBeVisible();
+  await page.locator('#upload-help summary').tap();
+  await expect(page.locator('#upload-help')).not.toHaveAttribute('open','');
+  await page.locator('#upload-help summary').tap();
+  await expect(page.locator('#upload-help')).toHaveAttribute('open','');
   await page.locator('#video-upload-link').tap();
   await expect(page).toHaveURL(destination);
 });
@@ -500,11 +502,11 @@ test('No JavaScript: the exact video QR upload address keeps a working permissio
   await expect(page).toHaveURL(/\/videos\.html#upload$/);
   await expect(page.locator('#upload')).toBeInViewport();
   await expect(page.locator('#upload .video-council-note')).toContainText('not an official council response');
-  // Without scripts, the main action and the council reminder are both in view on arrival.
+  // Without scripts, the complete main action remains in view on arrival.
   await expect(page.locator('#video-upload-link')).toBeInViewport({ ratio: 1 });
-  await expect(page.locator('#upload .video-council-note a')).toBeInViewport({ ratio: 1 });
-  await expect(page.locator('#upload-requirements')).toContainText('Adults recording themselves only');
-  await expect(page.locator('#upload-requirements')).toContainText('No Google or Dropbox sign-in required');
+  await expect(page.locator('#upload .video-council-note a').first()).toHaveAttribute('href', 'https://docs.google.com/forms/d/e/1FAIpQLSda5oPsdUlrJkf6vACC_AjvXFR6-ki3iBymNIF5BAWNxf85xQ/viewform');
+  await expect(page.locator('.video-three')).toContainText('Adults only. Keep children off camera.');
+  await expect(page.locator('#upload-step-two')).toContainText('No account needed');
   const link = page.locator('#video-upload-link');
   const destination = await link.getAttribute('href');
   await page.route(destination, route => route.fulfill({ contentType: 'text/html', body: '<h1>Fictional video permission handoff</h1><p>No upload sent.</p>' }));
@@ -513,15 +515,16 @@ test('No JavaScript: the exact video QR upload address keeps a working permissio
   await page.goBack();
   await expect(page).toHaveURL(/\/videos\.html#upload$/);
   await expect(page.locator('#upload')).toBeInViewport();
-  await expect(page.locator('main a[href="letters.html"]')).toBeVisible();
+  await expect(page.locator('main a[href="letters.html#letter-form"]').last()).toBeVisible();
 });
 
-test('No JavaScript: video publication purpose and private alternative survive direct arrival', async ({ page, baseURL }) => {
+test('No JavaScript: video publication purpose and upload support survive direct arrival', async ({ page, baseURL }) => {
   await page.goto('/videos.html#upload');
-  await expect(page.locator('#upload')).toContainText('New submissions require your explicit YouTube permission');
-  await expect(page.locator('#upload')).toContainText('News-media and paid-ads permissions are optional');
+  await expect(page.locator('#upload')).toContainText('YouTube permission required');
+  await expect(page.locator('#upload')).toContainText('News-media and paid-ads permissions optional');
   await expect(page.locator('#resume-instructions')).toContainText('including any earlier private-only choice');
-  await page.locator('#private-video-alternative a').tap();
+  await expect(page.locator('#private-video-alternative')).toHaveCount(0);
+  await page.locator('#upload-help a[href="about.html#contact"]').last().tap();
   await expect(page).toHaveURL(/about.html#contact$/);
 });
 
@@ -580,3 +583,11 @@ test('No JavaScript: the Menu opens Share a video at its permission step', async
   await expect(page).toHaveURL(/videos\.html#upload$/);
   await expect(page.locator('#video-upload-link')).toBeInViewport({ ratio: 1 });
 });
+
+for (const id of ['prompt-title','process-title','recording-tips','video-choices','upload-help']) {
+  test(`No JavaScript: video #${id} guidance stays readable`,async({page})=>{
+    await page.goto('/videos.html#'+id);
+    await expect(page.locator('#upload-help')).toHaveAttribute('open','');
+    await expect(page.locator('#'+id)).toBeInViewport();
+  });
+}
