@@ -1,5 +1,11 @@
 # Testing the website
 
+## Full school name — 1 October 2026
+
+- Priority release: 54 Python tests and public validation passed. A focused iPhone WebKit arrival check at 375 × 667 and 390 × 844 caught and then cleared a first-screen response-button regression. The checked new-domain candidate passed validation and all five hosted browser projects. Canonical Pages deployment succeeded, and all 109 live public assets matched the promoted hashes. The complete local browser suite was deferred at the owner's request for this first release.
+- Follow-up sweep: local 54-test Python suite, 105-file original-source allowlist, JavaScript syntax and 147 focused desktop Chromium journey tests passed after updating the evidence-search terms. A structural comparison confirmed that the 16 edited HTML pages retain every ID, link and form destination; five edited JSON files retain all non-text data. The eight exhibit SVGs and their 4800 × 3000 PNGs, six sharing images, the two-page checklist and selected pages of the 44-page report were rendered and inspected. The report keeps 44 pages, the same source and claim ledger and the original citation links apart from the site's proposal link moving to the working canonical address. Submitted letters and source quotations retain their original wording.
+- The follow-up's rendered browser review, exact-revision hosted tests, deployment and live verification are recorded when complete. No form was sent to a real provider by these checks.
+
 ## Simple parent testimonials — 1 October 2026
 
 - Extend video journeys for plain-page and `#upload` arrival, three adult/purpose/duration rules, keyboard Help, direct/repeated older anchors, saved private-only permissions, withdrawal and provider handoffs. Static Help stays open without scripts; broad navigation/mobile/privacy checks remain enabled.

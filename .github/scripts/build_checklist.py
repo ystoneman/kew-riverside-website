@@ -122,9 +122,9 @@ def footer(canvas, doc):
     canvas.line(44, 39, w - 44, 39)
     canvas.setFont(FONT_SANS, 8)
     canvas.setFillColor(MUTED)
-    canvas.drawString(44, 26, f'Yann Stoneman | Kew Riverside parent | Checked {CHECKED_DATE}')
+    canvas.drawString(44, 26, f'Yann Stoneman | Kew Riverside Primary School | Checked {CHECKED_DATE}')
 
-story = [para('KEW RIVERSIDE / PARENT-LED EVIDENCE & ACTION', 'subtitle'),
+story = [para('KEW RIVERSIDE PRIMARY SCHOOL / PARENT-LED EVIDENCE & ACTION', 'subtitle'),
          para('Consultation response checklist', 'title'),
          para(source.split('\n\n')[1], 'small'),
          para('Before submitting', 'heading')]
@@ -162,7 +162,7 @@ for block in section('Source control').split('\n\n'):
 
 output = SITE / 'response-checklist.pdf'
 doc = SimpleDocTemplate(str(output), pagesize=A4, rightMargin=44, leftMargin=44, topMargin=38, bottomMargin=51,
-    title='Kew Riverside: consultation response checklist', author='Yann Stoneman',
+    title='Kew Riverside Primary School: consultation response checklist', author='Yann Stoneman',
     subject='Parent-prepared evidence checklist for a consultation response')
 doc.build(story, onFirstPage=footer, onLaterPages=footer, canvasmaker=NumberedCanvas)
 print(output)
