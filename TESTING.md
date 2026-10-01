@@ -1,5 +1,15 @@
 # Testing the website
 
+## Simple parent testimonials — 1 October 2026
+
+- Extend video journeys for plain-page and `#upload` arrival, three adult/purpose/duration rules, keyboard Help, direct/repeated older anchors, saved private-only permissions, withdrawal and provider handoffs. Static Help stays open without scripts; broad navigation/mobile/privacy checks remain enabled.
+- Update contextual-link assertions for the approved wording. The Back regression now uses a deep older-upload link and retains exact reading-position, viewport, history-length and unrelated-state assertions. Its fictional state is merged with application state; replacing all state had incorrectly erased the new disclosure state. It also asserts Help stays open on return.
+- Local Python suite: 54 passed. Public allowlist: 105 files. Focused desktop Chromium video suite: 24 passed. Complete five-project run: 1,896 passed, 48 skipped, two Safari Back fixture failures; after preserving the disclosure state in the fixture, both Back cases passed. Final exact-revision hosted all-project checks are required before merging.
+- Rendered Chromium/WebKit at 320 × 568 light/dark with and without scripts, 390 × 844 and 1440 × 1000: complete CTA, no horizontal overflow. At 320px the button's bottom is 486.2px. Independent UX review inspected keyboard Help, incoming anchors and final screenshots; campaign review inspected the implementation and permission wording. No unresolved actionable findings remain.
+- Native iPhone 17 / iOS 26.5 Safari: styled local arrival showed the complete button and three rules. Coordinate interaction automation was unreliable; successful native Help/form interaction is not claimed. The local HTTP preview removed only its preview copy's upgrade-insecure directive; production CSP is unchanged. Recheck secure live styling after deployment.
+- Published Google Forms and Dropbox instructions were inspected after saving. Duration, adult attestation and school-marketing purpose agree; optional media/ads choices remain unchecked. No new response, recording, real council submission or analytics event was sent. Successful provider receipt was not retested in this change.
+- The owner approved the mockup and requested build/deploy. An unfamiliar person's real-phone attempt remains unperformed; simulator/emulation and specialist review are not that test. Deployment and live verification are recorded separately.
+
 The suite covers the site's main visitor journeys across Chromium and WebKit, with touch, keyboard and JavaScript-disabled cases. It does not establish that every possible device, browser, assistive technology or third-party service works. Xcode Simulator Safari is checked separately for mobile interaction changes.
 
 

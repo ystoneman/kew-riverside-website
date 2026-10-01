@@ -1,5 +1,13 @@
 # UX design decisions
 
+## Simple parent testimonials — 1 October 2026
+
+The owner wanted a stressed parent to reach the main button without scrolling, understand that this is a parent testimonial for prospective families, and keep children off camera. The approved mockup places the CTA immediately after the short consent cue, then three illustrated rules: adult filming, 30 seconds–3 minutes, and no council-consultation discussion. The private-praise invitation and background-audio exclusion are removed. This refines J9's contribution route in support of J8; it does not replace J3's official response or J4's written alternative.
+
+Keep one optional Help disclosure for prompts, process, recording guidance and full permission consequences. Expose saved-permissions upload recovery separately. Older section anchors reveal Help when scripts work; static HTML remains open if scripts fail. Remember the disclosure state only in its history entry so browser Back can restore a deep reading position. Existing scopes and independent optional choices remain visible beside the action and in the forms; no new global navigation row is added.
+
+Independent campaign and UX reviews covered the plan and actual implementation. Rendered mobile/desktop evidence shows a complete first-screen button at 320 × 568 in light/dark and without scripts, with no horizontal overflow. Native simulator arrival was visually checked; automated and hosted results are in TESTING.md. The owner approved this mockup and requested deployment without an unfamiliar person's real-phone trial; do not describe these builder checks as that trial. Both-site publishing status is tracked in CHANGELOG.md.
+
 Recorded: 22 September 2026. Status: implementation in progress; final verification and publication are recorded separately in [CHANGELOG.md](CHANGELOG.md). This is a design rationale, not a report of a user study or a claim that every visitor will complete these tasks successfully.
 
 ## Purpose and constraints

@@ -4,6 +4,15 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Simple parent testimonials — 1 October 2026
+
+- Put “Share your parent testimonial” before the instructions, fully visible on plain-page and shared `#upload` arrivals at 320 × 568. Three custom icons explain: film only yourself, 30 seconds–3 minutes, and do not discuss the council consultation. The purpose is helping new families discover the school (J8/J9).
+- Remove the private-praise invitation and the background-audio exclusion. Keep children off camera and retain the exclusions for identifying/private details. Keep the short consent cue beside the button, all existing permission scopes, saved private-only choices and separate council/letter routes.
+- Put prompts, recording help, permissions and older-upload recovery in one optional Help disclosure. Preserve old section links and native no-script access; retain Help state on browser Back without changing shared navigation.
+- Update both live Google Forms and the Dropbox request to match the adult-only filming guidance, duration and purpose. Publication/storage/media/ads wording, answer markers, required/optional settings and provider URLs remain unchanged; the adult attestation now says “in the picture”. Original records retain their original wording and scope.
+- Independent campaign and UX planning and implementation reviews; rendered Chromium/WebKit mobile and desktop evidence. Local Python/privacy/security checks: 54 passed; public allowlist: 105 files. Full local browser run: 1,896 passed, 48 skipped, two Back tests failed because the fixture overwrote the disclosure state. Preserve unrelated history state in that fixture; both Safari cases then passed with every scroll/history assertion retained. Current-revision hosted checks and both-site deployment remain pending.
+- Native iPhone 17 / iOS 26.5 Safari: styled local arrival and complete first-screen button visually verified. An unfamiliar person's real-phone attempt has not occurred; this is an owner-directed release of the approved mockup, not a user-study result. Native interaction and hosted provider receipt are recorded separately in TESTING.md.
+
 ### Forward the original address after verified new-domain launch
 
 - Prepare browser forwarding from the old GitHub address to the matching page, query and section at `https://savekewriverside.org/` (J1–J9). Keep the custom domain assigned only to its separate deployment repository.

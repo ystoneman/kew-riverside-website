@@ -145,8 +145,8 @@ test('Shared video QR: the exact upload path remains directly usable with an int
   await page.goto('/videos.html#upload');
   await expect(page).toHaveURL(/\/videos\.html#upload$/);
   await expect(page.locator('#upload')).toBeInViewport();
-  await expect(page.locator('#upload-requirements')).toContainText('Adults recording themselves only');
-  await expect(page.locator('#upload-requirements')).toContainText('No Google or Dropbox sign-in required');
+  await expect(page.locator('#recording-rule')).toContainText('Adults only. Keep children off camera.');
+  await expect(page.locator('#upload-step-two')).toContainText('No account needed');
   const link = page.locator('#video-upload-link');
   const destination = await link.getAttribute('href');
   await page.route(destination, route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><title>Fictional handoff</title><h1>Fictional video permission handoff</h1><p>No upload sent.</p>' }));
@@ -157,6 +157,6 @@ test('Shared video QR: the exact upload path remains directly usable with an int
   await page.goBack();
   await expect(page).toHaveURL(/\/videos\.html#upload$/);
   await expect(page.locator('#upload')).toBeInViewport();
-  await expect(page.locator('main a[href="letters.html"]')).toBeVisible();
+  await expect(page.locator('main a[href="letters.html#letter-form"]').last()).toBeVisible();
   await expectScrollSettled(page, 'Back to video upload');
 });

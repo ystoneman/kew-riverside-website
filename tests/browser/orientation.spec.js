@@ -82,9 +82,10 @@ test('Orientation: Back preserves a later reading position and a subsequent depa
   // Keep native fragment reapplication separate from reading-position recovery.
   // The shared QR regression independently covers the incoming #upload route.
   await page.goto('/videos.html');
+  await page.locator('#upload-help summary').click();
   const originalURL = page.url();
-  await page.evaluate(() => history.replaceState({ existingVisitorState: 'keep' }, ''));
-  const link = page.locator('a[href="https://www.youtube.com/@KewParentVoices"]');
+  await page.evaluate(() => history.replaceState({ ...history.state, existingVisitorState: 'keep' }, ''));
+  const link = page.locator('#legacy-google-upload-link');
   await link.scrollIntoViewIfNeeded();
   await expect(link).toBeInViewport();
   const departureY = await page.evaluate(() => scrollY);
@@ -98,6 +99,7 @@ test('Orientation: Back preserves a later reading position and a subsequent depa
   await page.goBack();
   await page.waitForURL(originalURL, { waitUntil: 'load' });
   await expect(page.locator('.page-name')).toHaveText('Share a video');
+  await expect(page.locator('#upload-help')).toHaveAttribute('open', '');
   await expect.poll(() => page.evaluate(y => Math.abs(scrollY - y), departureY)).toBeLessThanOrEqual(2);
   await expectScrollSettled(page, 'Back to the later video section');
   await expect(link).toBeInViewport({ ratio: 0.5 });
@@ -122,6 +124,7 @@ test('Orientation: Back preserves a later reading position and a subsequent depa
 
 test('Orientation: pending Back recovery yields to a new destination, manual recovery or user input', async ({ page }) => {
   await page.goto('/videos.html');
+  await page.locator('#upload-help summary').click();
   for (const change of ['destination', 'cleared-state', 'manual', 'pointer', 'keyboard', 'click', 'input', 'change', 'wheel', 'native-restored']) {
     const result = await page.evaluate(async change => {
       history.scrollRestoration = 'auto';
