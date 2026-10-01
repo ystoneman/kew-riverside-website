@@ -16,8 +16,8 @@ header=re.sub(r'<link rel="stylesheet" href="lessons\.css\?v=\d+">','',base[:bas
 footer=base[base.index('<footer'):]
 def page(title,body):
  h=header.replace('Timetable checked','Research checked')
- h=re.sub(r'<title>.*?</title>','<title>'+esc(title)+' | Kew Riverside</title>',h)
- h=re.sub(r'<meta name="description" content="[^"]*">','<meta name="description" content="Selected school closure reprieves and comparisons, with eight graphics, a full case catalogue and complete citations. Evidence and limits for Kew Riverside families.">',h)
+ h=re.sub(r'<title>.*?</title>','<title>'+esc(title)+' | Kew Riverside Primary School</title>',h)
+ h=re.sub(r'<meta name="description" content="[^"]*">','<meta name="description" content="Selected school closure reprieves and comparisons, with eight graphics, a full case catalogue and complete citations. Evidence and limits for Kew Riverside Primary School families.">',h)
  h=h.replace('</head>','<link rel="stylesheet" href="lessons.css?v=2026092401"><script src="lessons.js" defer></script></head>')
  return h+'<main id="main" class="lessons-page wrap">'+body+'</main>'+footer
 method=[]

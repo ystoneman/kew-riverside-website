@@ -25,7 +25,7 @@ def table(caption, headers, rows):
 def render(data):
     records = data['records']
     years = ['2022/23', '2023/24', '2024/25']
-    groups = ['Kew Riverside', 'Richmond upon Thames', 'England', 'Darell']
+    groups = ['Kew Riverside Primary School', 'Richmond upon Thames', 'England', 'Darell']
     combined = 'Reading, writing and maths'
     def result(group, year, subject=combined, source=None):
         return next(r for r in records if r['group'] == group and r['academicYear'] == year and r['subject'] == subject and (r['source'] == source if source else r['status'] == 'Final'))
@@ -36,8 +36,10 @@ def render(data):
     for gi, group in enumerate(groups[:3]):
         chart_id = 'attainment-chart' if gi == 0 else f'attainment-chart-{gi}'
         name = 'Richmond' if gi == 1 else group
+        name_lines = ['Kew Riverside', 'Primary School'] if gi == 0 else [name]
+        name_markup = ' '.join(f'<tspan x="90" y="{17+index*17}">{e(line)}</tspan>' for index,line in enumerate(name_lines))
         desc = '; '.join(f"{year}: {result(group, year)['expectedPercent']}%" for year in years)
-        charts += f'<svg id="{chart_id}" viewBox="0 0 180 208" role="img" aria-labelledby="{chart_id}-title {chart_id}-desc"><title id="{chart_id}-title">{e(name)}: combined expected-standard attainment, 2023–2025</title><desc id="{chart_id}-desc">{e(desc)}. Same zero to 100 percent scale in every chart.</desc><text class="attainment-name" x="90" y="23" text-anchor="middle">{e(name)}</text>'
+        charts += f'<svg id="{chart_id}" viewBox="0 0 180 208" role="img" aria-labelledby="{chart_id}-title {chart_id}-desc"><title id="{chart_id}-title">{e(name)}: combined expected-standard attainment, 2023–2025</title><desc id="{chart_id}-desc">{e(desc)}. Same zero to 100 percent scale in every chart.</desc><text class="attainment-name" x="90" y="23" text-anchor="middle">{name_markup}</text>'
         for yi, year in enumerate(years):
             value = result(group, year)['expectedPercent']
             x = 28 + yi * 46
@@ -52,7 +54,7 @@ def render(data):
     combined_table = table('Combined reading, writing and maths · final DfE results', ['Academic year', 'School or area', 'Expected standard', 'Higher standard', 'Eligible pupils'], combined_rows)
     subject_rows = [[subject, group] + values(result(group, '2024/25', subject)) for subject in ['Reading','Writing','Maths'] for group in groups]
     subject_table = table('Subject attainment · 2024/25 · final DfE results', ['Subject', 'School or area', 'Expected standard', 'Higher standard'], subject_rows)
-    older_rows = [[year, subject, pct(result('Kew Riverside',year,subject,'inspection')['expectedPercent'])] for year in years[:2] for subject in ['Reading','Writing','Maths']]
+    older_rows = [[year, subject, pct(result('Kew Riverside Primary School',year,subject,'inspection')['expectedPercent'])] for year in years[:2] for subject in ['Reading','Writing','Maths']]
     older_table = table('Kew earlier subject attainment · inspection report, PDF pages 9–10', ['Academic year','Subject','Expected standard'], older_rows)
     newer_rows = [[subject]+values(result('Darell','2025/26',subject,'darell-2026'))+values(result('England','2025/26',subject,'england-2026')) for subject in [combined,'Reading','Writing','Maths']]
     newer_table = table('Separate 2025/26 update · Darell school report and England provisional data', ['Subject','Darell expected','Darell higher','England expected','England higher'], newer_rows)
