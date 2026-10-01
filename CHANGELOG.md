@@ -4,6 +4,11 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Tuesday rally information
+
+- Add a shareable parent-led rally page for 6 October, with the planned York House schedule, map and tentative calendar, optional photography guidance, visible pending gathering/access arrangements and official-response reminder (J1/J2/J3/J9). Link it within the Parent action plan after the existing action shortcuts. Mark the September prep sessions and meeting as past while retaining their shared anchors.
+- Independent campaign, UX and evidence planning and implementation reviews; all actionable findings resolved. Local checks: 54 Python tests, 108 public assets, 1,936 browser checks with 49 expected skips; 159 affected checks passed after review corrections. Native iPhone 17 / iOS 26.5 Safari arrival, menu-to-plan and Back verified. Publication and live verification pending.
+
 ### Full school name: priority identity update
 
 - Use Kew Riverside Primary School in the shared brand, homepage appeal, page titles, sharing metadata and footer (J1–J9). Split the brand across two lines and allow text reflow to retain the existing participation tiles.
