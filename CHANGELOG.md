@@ -4,6 +4,11 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Rally map destination
+
+- Replace the address search with Richmond Council's exact York House Google Maps place link after a phone selected Richmond Road. Preserve the venue/assembly-point distinction and existing rally route (J2).
+- Lead-agent evidence and UX review of this bounded correction; Google Maps shows the York House building card, photo and pin on desktop and native iPhone 17 / iOS 26.5 Safari. The new intercepted handoff regression rejects the prior search link. All 20 rally browser checks, 54 Python checks and the 108-file public validation pass. Hosted checks and deployment remain pending.
+
 ### Anonymous community letter
 
 - Add one contributor-consented letter under Anonymous, preserving the original wording and using Human reviewed after explicit operator approval. Existing letters, labels, consent controls and removal routes remain unchanged (J4).
