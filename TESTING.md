@@ -1,5 +1,11 @@
 # Testing the website
 
+## Rally map destination — 2 October 2026
+
+- The original address-only Google Maps search selected Richmond Road on a real phone. Use the exact place link from [Richmond Council's York House directions](https://www.richmond.gov.uk/services/registration_services/marriage_and_civil_partnerships/marriage_venues/the_loggia_room/parking_directions_and_travel_for_york_house_ceremonies). Its venue feature is `0x48760c616adfa4c9:0x7c8748dc6e8c58b6`, at `51.447698,-0.324216`; the map still identifies the venue rather than a confirmed assembly point.
+- The new map regression fails with the previous search link and checks the specific venue feature, building coordinates, retained assembly-point note and native click/tap handoff. Google traffic is intercepted locally in automated tests. All 20 rally checks across five projects, 54 Python checks and the 108-file public validation pass.
+- Native iPhone 17 / iOS 26.5 Safari: follow the styled local rally page's map button, reject Google's cookies, choose “Go back to web”, and verify the York House building card, photo and pin. Desktop Maps shows the same building and address. No Google Maps app installation/handoff or route from a personal location was tested. Lead-agent evidence/UX review applies to this bounded correction; exact-revision hosted gates and deployment are recorded separately.
+
 ## Tuesday rally information — 1 October 2026
 
 - New rally journeys cover the Parent plan entry and Back, past-meeting follow-up destination, mobile/shared photo arrival, native menu routes, official-response and question eligibility wording, and the tentative calendar download. Automatic all-page/link/mobile/no-script coverage includes the page; calendar time is 6–6.45pm BST (17:00–17:45 UTC).

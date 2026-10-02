@@ -1,5 +1,26 @@
 const { test, expect, expectStillArrival } = require('./fixtures');
 
+test('Rally: map handoff selects the York House building rather than an address search', async ({ page, hasTouch }) => {
+  // Richmond Council's York House directions identify this venue feature and
+  // building coordinates. An address-only search can select Richmond Road.
+  await page.goto('/rally.html#when-and-where');
+  const map = page.getByRole('link', { name: 'Find York House on a map' });
+  const destination = new URL(await map.getAttribute('href'));
+  expect(destination.hostname).toBe('www.google.co.uk');
+  expect(destination.pathname).toContain('/maps/place/York+House,');
+  expect(destination.pathname).toContain('!1s0x48760c616adfa4c9:0x7c8748dc6e8c58b6');
+  expect(destination.pathname).toContain('!3d51.447698!4d-0.324216');
+  await expect(page.locator('#when-and-where')).toContainText('not a confirmed assembly point');
+  const requests = [];
+  await page.route('https://www.google.co.uk/maps/**', async route => {
+    requests.push(route.request().url());
+    await route.fulfill({ contentType: 'text/html', body: '<!doctype html><title>Local map handoff fixture</title><h1>Venue handoff intercepted locally</h1>' });
+  });
+  if (hasTouch) await map.tap(); else await map.click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Venue handoff intercepted locally');
+  expect(requests).toEqual([destination.href]);
+});
+
 test('Rally: Parent plan entry leads to the schedule and returns without losing the plan', async ({ page, hasTouch }) => {
   await page.goto('/proposal.html#parent-plan');
   const link = page.locator('#parent-plan a[href="rally.html"]');
