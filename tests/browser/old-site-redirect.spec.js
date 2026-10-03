@@ -153,7 +153,7 @@ test('no JavaScript retains useful old page and manual new-address link', async 
     await page.goto(OLD + 'letters.html?recover=draft#letter-form');
     await expect(page.locator('.cutover-link')).toBeVisible();
     await expect(page.locator('#message')).toBeVisible();
-    const endpoint = fs.readFileSync('letters.html', 'utf8').includes('xjykjyrk') ? 'xjykjyrk' : 'mwlpollw';
+    const endpoint = 'xnpnenzy';
     await expect(page.locator('#letter-form')).toHaveAttribute('action', 'https://formspree.io/f/' + endpoint);
     await expect(page.locator('#allow-public')).not.toBeChecked();
     await page.locator('.cutover-link').click();

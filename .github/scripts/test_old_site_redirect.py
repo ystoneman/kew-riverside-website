@@ -33,7 +33,7 @@ class LegacyArtifactTests(unittest.TestCase):
                     self.assertNotIn('http-equiv="refresh"', text)
         letters = (self.output / 'letters.html').read_text()
         self.assertLess(letters.index('<form id="letter-form"'), letters.index('class="cutover-notice"'))
-        self.assertIn('https://formspree.io/f/' + ('xjykjyrk' if 'xjykjyrk' in (ROOT / 'letters.html').read_text() else 'mwlpollw'), letters)
+        self.assertIn('https://formspree.io/f/xnpnenzy', letters)
         self.assertIn('id="return-clear"', letters)
         self.assertIn('id="letter-consent"', letters)
         self.assertIn('id="forget-letter"', (self.output / 'sent.html').read_text())

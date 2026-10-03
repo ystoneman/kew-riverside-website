@@ -3,7 +3,7 @@ const { readFileSync, readdirSync } = require('node:fs');
 const path = require('node:path');
 
 const root = path.resolve(__dirname, '../..');
-const origin = 'https://savekewriverside.org';
+const origin = 'https://savekewriversideprimaryschool.org';
 const prefix = '/';
 const site = origin + prefix;
 const endpoint = 'https://cloud.umami.is/api/send';
@@ -168,10 +168,40 @@ test('An old-origin objection and unfinished draft cannot transfer, so the new o
   const panel = await choices(page);
   await expect(panel.getByRole('status')).toContainText('analytics off (the default on this domain)');
   await panel.getByRole('button', { name: 'Close analytics choices' }).click();
-  const recovery = page.locator('#draft-notice').getByRole('link', { name: 'open the old letters page' });
+  const recovery = page.locator('#draft-notice').getByRole('link', { name: 'open the earlier GitHub letters page' });
   await expect(recovery).toHaveAttribute('href', 'https://ystoneman.github.io/kew-riverside-website/letters.html?recover=draft#letter-form');
   await recovery.click();
   await expect(page).toHaveURL('https://ystoneman.github.io/kew-riverside-website/letters.html?recover=draft#letter-form');
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('kr-letter-draft')).text)).toBe('Fictional unfinished letter');
+  expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)).choice, choiceKey)).toBe('deny');
+});
+
+test('A previous custom-domain objection and unfinished draft cannot transfer, so the new origin starts private', async ({ page, context }) => {
+  await page.route('https://savekewriverside.org/**', route => route.fulfill({
+    contentType: 'text/html', body: '<!doctype html><title>Old origin fixture</title>',
+  }));
+  await page.goto('https://savekewriverside.org/');
+  await page.evaluate(key => {
+    localStorage.setItem(key, JSON.stringify({ v: 1, choice: 'deny', until: Date.now() + 86_400_000 }));
+    localStorage.setItem('kr-letter-draft', JSON.stringify({ v: 1, text: 'Fictional unfinished letter', name: '', saved: Date.now() }));
+  }, choiceKey);
+  const { sent } = await virtualProduction(context);
+  await page.goto(site + 'letters.html');
+  await freezeAfterLoad(page);
+  expect(sent).toEqual([]);
+  await expect(page.locator('#message')).toHaveValue('');
+  await expect(page.locator('#draft-notice')).toContainText('Drafts saved on the old website address cannot appear here');
+  const panel = await choices(page);
+  await expect(panel.getByRole('status')).toContainText('analytics off (the default on this domain)');
+  await panel.getByRole('button', { name: 'Close analytics choices' }).click();
+  const recovery = page.locator('#draft-notice').getByRole('link', { name: 'open the previous letters page' });
+  await expect(recovery).toHaveAttribute('href', 'https://savekewriverside.org/letters.html?recover=draft#letter-form');
+  await page.goto(site + 'privacy.html#device-storage');
+  const storage = page.locator('#device-storage + p');
+  await expect(storage.getByRole('link', { name: 'open the previous letters page' })).toHaveAttribute('href', 'https://savekewriverside.org/letters.html?recover=draft#letter-form');
+  await expect(storage.getByRole('link', { name: 'open the earlier GitHub letters page' })).toHaveAttribute('href', 'https://ystoneman.github.io/kew-riverside-website/letters.html?recover=draft#letter-form');
+  await storage.getByRole('link', { name: 'open the previous letters page' }).click();
+  await expect(page).toHaveURL('https://savekewriverside.org/letters.html?recover=draft#letter-form');
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('kr-letter-draft')).text)).toBe('Fictional unfinished letter');
   expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)).choice, choiceKey)).toBe('deny');
 });
@@ -187,7 +217,7 @@ test('An explicit detailed choice sends fixed events without a cookie', async ({
   await expect.poll(() => sent.length).toBe(1);
   expect(configReads).toHaveLength(1);
   expect(sent[0].body).toEqual({ type: 'event', payload: {
-    website: fakeConfig.websiteId, hostname: 'savekewriverside.org',
+    website: fakeConfig.websiteId, hostname: 'savekewriversideprimaryschool.org',
     url: prefix, title: 'Home & evidence', referrer: '',
   } });
   expect(sent[0].headers).not.toHaveProperty('cookie');

@@ -113,7 +113,7 @@ class Page(HTMLParser):
             url = urlsplit(a.get('href', ''))
             require(url.scheme in {'', 'https', 'mailto'}, 'Unsafe link scheme.')
         if tag == 'form' and a.get('id') != 'record-filters':
-            require(a.get('action') == 'https://formspree.io/f/xjykjyrk' and a.get('method', '').lower() == 'post', 'Unexpected form destination or method.')
+            require(a.get('action') == 'https://formspree.io/f/xnpnenzy' and a.get('method', '').lower() == 'post', 'Unexpected form destination or method.')
         if tag == 'input':
             self.inputs[a.get('id', '')] = a
             if a.get('name'):

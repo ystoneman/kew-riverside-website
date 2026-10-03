@@ -552,3 +552,12 @@ Separate-domain promotion excludes maintenance/redirect tooling and preserves
 the new host's provider and analytics settings. Generated old HTML omits analytics
 without changing saved choices. Planning campaign and UX review accepted these
 conditions; implementation, hosted gates and live verification are still pending.
+
+
+## Primary School address migration — preparation, 3 October 2026
+
+The owner requests a permanent redirect only after trusted TLS and complete site readiness. The new address is prepared as a separate deployment, with a restricted form project and the latest authoritative content. Existing printed QR images and PDF links retain their previous addresses during preparation; the eventual redirect must preserve their paths and anchors. All J1–J9 routes remain available.
+
+Saved Letters drafts and unfinished provider returns belong to the origin that stored them. The new form therefore links to both `savekewriverside.org` and the earlier GitHub Letters page in the same browser. The old Letters and Sent routes must retain origin-local recovery and working restricted form endpoints. A blanket server redirect would bypass this recovery, so those routes require explicit exceptions or a tested storage-aware gateway. Privacy choices start independently on the new origin.
+
+Independent UX planning review identified these recovery and readiness requirements. Source and rendered review, complete browser tests, provider intake integration and old-domain redirect edge certificate verification remain release conditions. No redirect is enabled by this source candidate.
