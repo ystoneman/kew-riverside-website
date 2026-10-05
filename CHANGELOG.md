@@ -14,6 +14,7 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 - Prepare the separate `savekewriversideprimaryschool.org` deployment with its own restricted form endpoint, new-origin analytics gate and share URLs, retaining the latest authoritative content and all routes (J1–J9).
 - Keep explicit saved-letter recovery links for both the previous custom domain and the earlier GitHub address. No browser data transfers automatically; old origins must remain usable for draft and pending-return recovery (J4).
 - Independent UX planning review completed; actual-diff review and browser checks remain pending. Local privacy/security validation: 54 Python checks and 112 public assets passed. This candidate does not enable any old-domain redirect.
+- Add one newly consented community letter through the existing automatic screening workflow, preserving its submitted wording and Anonymous byline. Publication and three-host live verification are pending.
 
 ### Rally map destination
 
