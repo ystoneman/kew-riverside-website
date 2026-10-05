@@ -2,20 +2,20 @@
 (() => {
   const script = document.currentScript;
   const page = script && script.dataset.page;
-  const prefix = '/kew-riverside-website/';
-  if (location.hostname !== 'ystoneman.github.io' ||
-      !location.pathname.startsWith(prefix) || !page ||
+  const roots = { 'ystoneman.github.io': '/kew-riverside-website/', 'savekewriverside.org': '/' };
+  const prefix = roots[location.hostname];
+  if (!prefix || !location.pathname.startsWith(prefix) || !page ||
       !/^(?:[a-z0-9-]+\.html)$/.test(page)) return;
   const relative = location.pathname.slice(prefix.length);
   if (relative !== page && !(page === 'index.html' && relative === '')) return;
-  const destination = new URL(page === 'index.html' ? '/' : '/' + page, 'https://savekewriverside.org');
+  const destination = new URL(page === 'index.html' ? '/' : '/' + page, 'https://savekewriversideprimaryschool.org');
   destination.search = location.search;
   destination.hash = location.hash;
   // Recovery belongs to the old origin. Never copy, clear or migrate browser data.
   if (page === 'letters.html' || page === 'sent.html') {
     if (new URLSearchParams(location.search).get('recover') === 'draft') return;
     if (page === 'letters.html') {
-      try { if (new URL(document.referrer).origin === 'https://savekewriverside.org') return; }
+      try { if (['https://savekewriverside.org', 'https://savekewriversideprimaryschool.org'].includes(new URL(document.referrer).origin)) return; }
       catch { /* absent referrer */ }
     }
     try {

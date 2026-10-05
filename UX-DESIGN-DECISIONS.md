@@ -552,3 +552,7 @@ Separate-domain promotion excludes maintenance/redirect tooling and preserves
 the new host's provider and analytics settings. Generated old HTML omits analytics
 without changing saved choices. Planning campaign and UX review accepted these
 conditions; implementation, hosted gates and live verification are still pending.
+
+## Final domain redirect — 5 October 2026
+
+J1–J9: direct both previous website addresses to the matching Primary School domain page while preserving old shared links and J4 saved-letter recovery. Reuse the browser artifact transformation with replace navigation and query/fragment retention. Complete recovery and no-script pages retain their origin-specific form endpoints; downloads, JSON boards and the school visit handoff remain unchanged. Legacy artifacts omit analytics initialization. DNS migration is unnecessary for this browser redirect. Independent UX planning review requires dual-origin recovery, history and narrow-layout checks; implementation results are recorded in TESTING.md.

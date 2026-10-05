@@ -1,6 +1,10 @@
 # Website usage analytics
 
-Status (updated 28 September 2026): the operator's Umami Cloud website (EU dashboard) exists and its Website ID is configured. On the new domain, both **basic page views** and **detailed usage** start off until the visitor chooses a level. The original GitHub Pages origin continues to use both by default with its existing saved browser choices. Its saved objections cannot transfer across origins, so the new domain starts off to preserve them. Deployment and receiving-dashboard evidence are recorded in CHANGELOG.md once verified; local tests do not prove Cloud receipt. A website ID is public routing information, not an API key. Never put account passwords, API tokens, raw correspondence or private intake in this repository.
+## Current deployment — 5 October 2026
+
+The canonical website is `savekewriversideprimaryschool.org`, using the existing Umami website ID. Both analytics tiers on that domain remain off until chosen. The legacy GitHub Pages and `savekewriverside.org` forwarding/recovery artifacts omit analytics initialization.
+
+Status: the operator's Umami Cloud website (EU dashboard) exists and its public Website ID is configured. Saved browser choices cannot transfer across origins, so the canonical domain starts off until a visitor chooses a level. Local tests establish the collector contract; receiving-dashboard evidence is recorded separately. Never put account passwords, API tokens, raw correspondence or private intake in this repository.
 
 ## What the dashboard answers
 
