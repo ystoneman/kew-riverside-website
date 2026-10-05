@@ -66,7 +66,7 @@ test('Rally: shared photo arrival preserves choice and formal response at narrow
   }
   await page.goto('/rally.html#council-and-response');
   await expect(page.locator('#council-and-response')).toContainText('Coming to the rally does not submit a consultation response');
-  await expect(page.locator('#council-and-response')).toContainText('If you live or work in the borough');
+  await expect(page.locator('#council-and-response')).toContainText('question-submission deadline for the 6 October Full Council meeting has passed');
   await expect(page.locator('#council-and-response a[href^="https://docs.google.com/forms/"]')).toBeVisible();
   await expect(page.locator('#updates a[href="about.html#contact"]')).toHaveCount(1);
 });

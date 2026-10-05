@@ -12,7 +12,7 @@ import io
 EXPECTED_KEYS = {
     'schemaVersion', 'checkedOn', 'sources', 'financeHistory',
     'councilRevenueBalance', 'forecastStatements', 'unavailableBudgetBridge',
-    'pfiSchoolCharge', 'forecastCheck', 'forecastRevision',
+    'pfiSchoolCharge', 'forecastCheck', 'forecastRevision', 'indicativeBudgetForecast',
 }
 
 
@@ -75,6 +75,18 @@ def validate(data):
         for key in ('incomePence', 'expenditurePence', 'inYearResultPence', 'revenueReservePence'):
             if type(item[key]) is not int:
                 raise ValueError(f'Missing or invalid reported amount: {key}')
+    previous = 23168500
+    for entry in data['indicativeBudgetForecast']:
+        if set(entry) != {'financialYear', 'annualGapPence', 'reportedClosingPence', 'calculatedClosingPence', 'sourceId'}:
+            raise ValueError('Unexpected indicative forecast fields')
+        if any(type(entry[key]) is not int for key in ('annualGapPence', 'reportedClosingPence', 'calculatedClosingPence')):
+            raise ValueError('Indicative amounts must be integer pence')
+        if previous - entry['annualGapPence'] != entry['calculatedClosingPence']:
+            raise ValueError('Indicative reserve bridge does not reconcile')
+        if abs(entry['reportedClosingPence'] - entry['calculatedClosingPence']) > 100:
+            raise ValueError('Published rounding discrepancy exceeds one pound')
+        source(data, entry['sourceId'])
+        previous = entry['calculatedClosingPence']
     for entry in data['unavailableBudgetBridge']:
         if set(entry) != {'financialYear', 'incomePence', 'expenditurePence', 'closingRevenueReservePence'}:
             raise ValueError('Unexpected budget bridge fields')
@@ -116,7 +128,7 @@ def render_budget(data):
     sequence = table('Reported reserve and council projection · different dates and measures',
                      ['When', 'Type', 'What the source says'], [
                          ['31 March 2026', 'Actual revenue reserve', money(exact)],
-                         [f'By 31 March {exhaustion_year}', 'Council projection', 'Reserve fully used; closing amount not given'],
+                         [f'31 March {exhaustion_year}', 'FAQ Q5 indicative projection', '£19,268 remaining reserve'],
                          [f'By {statements[1]["targetFinancialYear"]}', 'Council projection', f'More than {bound} accumulated deficit'],
                      ])
     history = table('Kew Riverside Primary School reported financial actuals · years ending in March',
@@ -127,13 +139,19 @@ def render_budget(data):
                          money(item['revenueReservePence'], item['sourcePrecision'])]
                         for item in actuals
                     ])
+    indicative = table('FAQ Q5 indicative school budget · forecasts, not approved accounts',
+                       ['Financial year', 'Annual budget gap', 'Published year-end position'],
+                       [[row['financialYear'], money(row['annualGapPence']), money(row['reportedClosingPence'])]
+                        for row in data['indicativeBudgetForecast']])
     return f'''
 <section class="data-section" id="budget" aria-labelledby="budget-title"><p class="eyebrow">05 / School finances</p><h2 id="budget-title">What do the school finances show?</h2>
-<p class="section-lead">Kew Riverside Primary School had a <strong>{money(exact)} revenue reserve on 31 March 2026</strong>. The council projects that reserve will be used up by March {exhaustion_year}, with <strong>more than {bound} accumulated deficit by {e(statements[1]['targetFinancialYear'])}</strong>.</p>
+<p class="section-lead">Kew Riverside Primary School had a <strong>{money(exact)} revenue reserve on 31 March 2026</strong>. The council’s FAQ now gives a <strong>£212,417 annual gap for 2026/27</strong>, leaving a projected <strong>£19,268 reserve at March 2027</strong>. It projects an accumulated deficit of £457,702 by 2028/29.</p>
 <span class="data-date">Actual to 31 March 2026 · projection to 2028/29 · checked {e(data['checkedOn']['finance'])}</span>
-<p class="data-context">The annual budget connecting them has not been supplied in the public records we reviewed. The reserve alone does not establish financial sustainability. The projected deficit is not an annual loss, or a measured amount needed to keep the school open.</p>
-<p class="chart-footnote">Sources: {source_link(data, 'school-balances-mar-2026', 'council school balances, Kew row')} · {source_link(data, 'consultation-leaflet', 'Kew consultation leaflet')}.</p>
-<details class="data-disclosure" id="budget-actuals"><summary>See the financial timeline and five-year history</summary><div class="disclosure-body">{sequence}<p>The revenue reserve fell by {money(fall)} in 2025/26. The council reports revenue and capital balances separately. Income, spending, commitments, support and pupil assumptions are needed to connect these actuals to its projection.</p><p>Annual result means income less expenditure in that financial year. Revenue reserve is the balance carried at year end. These DfE history figures are reported at the source's displayed precision; they are not an annual forecast.</p>{history}<p>Sources: {source_link(data, 'kew-finance-income-history', 'DfE income history')}, {source_link(data, 'kew-finance-expenditure-history', 'expenditure history')} and {source_link(data, 'kew-finance-balance-history', 'balance history')}. For 2025/26 the DfE whole-pound in-year result is −£75,103; the council's precise reserve movement is −£75,103.70, rounded to −£75,104. Their displayed whole-pound figures therefore differ by £1. The bridge to the later forecast remains unavailable.</p><p><a href="case-evidence.csv" download="case-evidence.csv">Download these observations and their sources (CSV) ↓</a> · <a href="case-evidence-data.json" download="case-evidence-data.json">Structured observations (JSON)</a></p></div></details>
+<p class="data-context">These are indicative forecasts, not the approved budget or cash available today. The reserve alone does not establish financial sustainability. The accumulated deficit is not an annual loss, a fundraising target or a closure saving.</p>
+<p class="chart-footnote">Sources: {source_link(data, 'school-balances-mar-2026', 'council school balances, Kew row')} · {source_link(data, 'consultation-kew-faq', 'Kew FAQ Q5, page 4')}.</p>
+{indicative}
+<p class="data-context"><strong>Calculation:</strong> £231,685 − £212,417 = £19,268; subtracting the next two annual gaps gives −£195,909, then −£457,701. The last figure differs by £1 from the FAQ’s displayed total. The leaflet’s March 2027 exhaustion claim and FAQ Q6’s “now exhausted” wording conflict with Q5. The approved ledger, monthly commitments and forecast assumptions are needed to reconcile them.</p>
+<details class="data-disclosure" id="budget-actuals"><summary>See the financial timeline and five-year history</summary><div class="disclosure-body">{sequence}<p>The revenue reserve fell by {money(fall)} in 2025/26. The council reports revenue and capital balances separately. Income, spending, commitments, support and pupil assumptions are needed to connect these actuals to its projection.</p><p>Annual result means income less expenditure in that financial year. Revenue reserve is the balance carried at year end. These DfE history figures are reported at the source's displayed precision; they are not an annual forecast.</p>{history}<p>Sources: {source_link(data, 'kew-finance-income-history', 'DfE income history')}, {source_link(data, 'kew-finance-expenditure-history', 'expenditure history')} and {source_link(data, 'kew-finance-balance-history', 'balance history')}. For 2025/26 the DfE whole-pound in-year result is −£75,103; the council's precise reserve movement is −£75,103.70, rounded to −£75,104. Their displayed whole-pound figures therefore differ by £1. The approved underlying budget and ledger remain unavailable.</p><p><a href="case-evidence.csv" download="case-evidence.csv">Download these observations and their sources (CSV) ↓</a> · <a href="case-evidence-data.json" download="case-evidence-data.json">Structured observations (JSON)</a></p></div></details>
 <details class="data-disclosure" data-overview-detail open id="closure-costs"><summary>What would closure actually save?</summary><div class="disclosure-body"><p>The DfE records a <strong>{money(school_pfi['amountPence'], school_pfi['sourcePrecision'])}</strong> PFI charge in Kew Riverside Primary School's <strong>{e(school_pfi['financialYear'])}</strong> expenditure. That school charge is not the council's entire contract liability or a saving that would automatically follow closure. Which costs would cease, continue or transfer—and what new transition, receiving-school, support or transport costs would arise? The net comparison and Kew-specific contract terms were not in the reviewed public records. {source_link(data, school_pfi['sourceId'], 'DfE expenditure history')} · <a href="options.html#option-5">See the cost audit question</a>.</p></div></details>
 <details class="data-disclosure"><summary>A question to use in your response</summary><aside class="reading-note"><p><strong>The missing financial test:</strong> ask for the approved 2026/27 budget, monitoring and annual forecast that reconcile the dated reserve with the council's projected deficit. Also ask for a comparable net cost for each realistic alternative. <a href="proposal.html#questions">Use this in a consultation response</a>.</p></aside></details></section>'''
 
@@ -208,14 +226,22 @@ def csv_text(data):
             'Kew Riverside Primary School', statement['targetFinancialYear'], statement['measure'],
             'council projection', None if statement['valuePence'] is None else decimal_pounds(statement['valuePence']),
             comparator=statement['comparison'], unit='GBP', precision='bound or qualitative statement',
-            source_id=statement['sourceId'], qualification=statement['reportedWording'])
+            source_id=statement['sourceId'], qualification=statement['reportedWording'] + ('; earlier leaflet wording conflicts with later FAQ Q5 projected £19,268 reserve. Not an approved budget.' if statement['targetFinancialYear'] == '2026/27' else ''))
     for row in data['unavailableBudgetBridge']:
         for label, key in [('Income', 'incomePence'), ('Expenditure', 'expenditurePence'),
                            ('Closing revenue reserve', 'closingRevenueReservePence')]:
             add(f'unavailable-{row["financialYear"]}-{key}', 'missing annual budget',
                 'Kew Riverside Primary School', row['financialYear'], label, 'not available',
                 row[key], comparator='unknown', unit='GBP',
-                qualification='Annual budget bridge unavailable in reviewed public records; blank is not zero.')
+                qualification='Approved annual budget/ledger unavailable; separate FAQ indicative forecasts are published; blank is not zero.')
+    for row in data['indicativeBudgetForecast']:
+        for label, key, kind in [('Annual budget gap', 'annualGapPence', 'FAQ indicative forecast'),
+                                 ('Year-end position', 'reportedClosingPence', 'FAQ indicative forecast'),
+                                 ('Year-end position from rounded inputs', 'calculatedClosingPence', 'calculation')]:
+            add(f'faq-{row["financialYear"]}-{key}', 'indicative budget forecast',
+                'Kew Riverside Primary School', row['financialYear'], label, kind,
+                decimal_pounds(row[key]), unit='GBP', precision='whole pound', source_id=row['sourceId'],
+                qualification='FAQ Q5, not approved budget or current cash; rounded calculation differs by £1 in 2028/29.')
     pfi = data['pfiSchoolCharge']
     add('pfi-school-charge-2025-26', 'contextual amount', 'Kew Riverside Primary School',
         pfi['financialYear'], 'School PFI charge', 'reported actual', decimal_pounds(pfi['amountPence']),

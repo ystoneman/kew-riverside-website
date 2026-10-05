@@ -30,6 +30,8 @@ og-home.png og-letters.png og-ideas.png og-videos.png
 og-fundraising-trustees-v1.png og-fundraising-admin-v1.png
 '''.split())
 MAINTENANCE_FILES = frozenset('''
+tests/review-evidence/research-update-mobile.png tests/review-evidence/research-update-desktop.png
+tests/browser/research-update.spec.js
 .github/scripts/build_old_site_redirect.py .github/scripts/old_site_redirect.js .github/scripts/old_site_redirect.css .github/scripts/test_old_site_redirect.py tests/browser/old-site-redirect.spec.js
 tests/browser/fundraising-briefs.spec.js
 .github/scripts/build_navigation.py tests/browser/orientation.spec.js
