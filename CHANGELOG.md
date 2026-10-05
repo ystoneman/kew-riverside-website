@@ -9,6 +9,8 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+- Add one newly consented community letter through the existing automatic screening workflow, preserving its submitted wording and Anonymous byline. Publication and three-host live verification are pending.
+
 ### Rally map destination
 
 - Replace the address search with Richmond Council's exact York House Google Maps place link after a phone selected Richmond Road. Preserve the venue/assembly-point distinction and existing rally route (J2).
