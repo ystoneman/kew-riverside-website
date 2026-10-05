@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — final domain redirects
+
+- Forward ordinary HTML on both previous addresses directly to `savekewriversideprimaryschool.org`, preserving query strings and fragments. Saved-letter recovery, old-origin forms, downloads and the school visit handoff remain available. Legacy artifacts omit analytics initialization.
+- Browser redirects use replace navigation with a manual no-script link; no DNS migration is needed. Verification is recorded in TESTING.md.
+
 Visitor-facing changes and significant maintenance changes, newest first. The historical entries below were reconstructed from repository commits on 22 September 2026. Dates are commit dates, not independently verified publication times. A commit records a change; it does not by itself prove a successful deployment or a particular test result.
 
 ## Unreleased

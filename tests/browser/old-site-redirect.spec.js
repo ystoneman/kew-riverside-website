@@ -5,8 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const os = require('node:os');
 const { execFileSync } = require('node:child_process');
-const OLD = 'https://ystoneman.github.io/kew-riverside-website/';
-const NEW = 'https://savekewriverside.org/';
+const NEW = 'https://savekewriversideprimaryschool.org/';
 let directory, artifact;
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.pdf': 'application/pdf' };
 test.beforeAll(() => {
@@ -16,6 +15,8 @@ test.beforeAll(() => {
   execFileSync('python3', ['.github/scripts/build_old_site_redirect.py', '--source', path.join(directory, 'source'), '--output', artifact]);
 });
 test.afterAll(() => { if (directory) fs.rmSync(directory, { recursive: true }); });
+for (const OLD of ['https://ystoneman.github.io/kew-riverside-website/', 'https://savekewriverside.org/']) {
+test.describe(OLD, () => {
 async function setup(browser, options = {}, seed) {
   const project = test.info().project.use;
   const context = await browser.newContext({ viewport: project.viewport, isMobile: project.isMobile, hasTouch: project.hasTouch, deviceScaleFactor: project.deviceScaleFactor, userAgent: project.userAgent, ...options, serviceWorkers: 'block' });
@@ -24,12 +25,12 @@ async function setup(browser, options = {}, seed) {
     const request = route.request(), url = new URL(request.url());
     if (request.method() !== 'GET') { forbidden.push(request.url()); return route.abort(); }
     if (request.url().startsWith(OLD)) {
-      const relative = decodeURIComponent(url.pathname.slice('/kew-riverside-website/'.length)) || 'index.html';
+      const relative = decodeURIComponent(url.pathname.slice(new URL(OLD).pathname.length)) || 'index.html';
       const file = path.join(artifact, relative);
       if (!file.startsWith(artifact + path.sep) || !fs.existsSync(file) || !fs.statSync(file).isFile()) return route.fulfill({ status: 404, body: 'missing' });
       return route.fulfill({ contentType: types[path.extname(file)] || 'application/octet-stream', body: fs.readFileSync(file) });
     }
-    if (url.origin === 'https://savekewriverside.org' || url.origin === 'https://before.example.invalid') {
+    if (url.origin === new URL(NEW).origin || url.origin === 'https://before.example.invalid') {
       return route.fulfill({ contentType: 'text/html', body: '<!doctype html><title>Destination</title><a href="' + OLD + 'letters.html">Recover old draft</a><p>Fictional destination</p>' });
     }
     forbidden.push(request.url());
@@ -67,7 +68,7 @@ for (const text of ['abc', 'A fictional saved letter about our neighbourhood sch
     const draft = { v: 1, text, name: 'Fictional', saved: Date.now(), pending: false };
     const { context, page, forbidden } = await setup(browser);
     // Add only on initial arrival; never reseed after an explicit clear.
-    await context.addInitScript(({ draft }) => { if (location.hostname === 'ystoneman.github.io' && !sessionStorage.getItem('seeded')) { localStorage.setItem('kr-letter-draft', JSON.stringify(draft)); sessionStorage.setItem('seeded', 'yes'); } }, { draft });
+    await context.addInitScript(({ draft, origin }) => { if (location.origin === origin && !sessionStorage.getItem('seeded')) { localStorage.setItem('kr-letter-draft', JSON.stringify(draft)); sessionStorage.setItem('seeded', 'yes'); } }, { draft, origin: new URL(OLD).origin });
     try {
       await page.goto(OLD + 'letters.html#letter-form');
       await expect(page.locator('#message')).toHaveValue(text);
@@ -115,14 +116,14 @@ for (const relative of ['letters.html', 'sent.html']) {
   test('pending letter return retains old Copy and Clear controls: ' + relative, async ({ browser }, info) => {
     test.skip(info.project.name === 'iphone-no-javascript', 'Session return requires scripts');
     const { context, page } = await setup(browser);
-    await context.addInitScript(() => {
+    await context.addInitScript(origin => {
       Object.defineProperty(navigator, 'clipboard', { value: { writeText: async text => { window.__copied = text; } } });
-      if (location.hostname !== 'ystoneman.github.io' || sessionStorage.getItem('seeded')) return;
+      if (location.origin !== origin || sessionStorage.getItem('seeded')) return;
       sessionStorage.setItem('seeded', 'yes');
       sessionStorage.setItem('kr-sent-kind', JSON.stringify({ kind: 'letter', at: Date.now() }));
       sessionStorage.setItem('kr-sent-letter', JSON.stringify({ text: 'Fictional pending letter, not a receipt.', at: Date.now() }));
       localStorage.setItem('kr-letter-draft', JSON.stringify({ v: 1, text: 'Fictional pending letter, not a receipt.', saved: Date.now(), pending: true }));
-    });
+    }, new URL(OLD).origin);
     try {
       await page.goto(OLD + relative);
       await expect(page).toHaveURL(OLD + relative);
@@ -187,4 +188,7 @@ for (const width of [320, 390, 1440]) {
       expect(forbidden).toEqual([]);
     } finally { await context.close(); }
   });
+}
+
+});
 }

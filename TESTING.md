@@ -1,5 +1,12 @@
 # Testing the website
 
+## Final domain redirects — 5 October 2026
+
+- 54 Python privacy, security and artifact checks passed; 108 public source assets validated. Focused dual-origin browser suite: 342 passed, 68 intended no-script skips across five projects. Both old origins preserve matching paths, queries/fragments, Back, short saved drafts, pending Copy/Clear, blocked-storage recovery and manual no-script forms at 320/390/1440 widths. Requests were intercepted and all data fictional.
+- Legacy artifacts retain each source origin’s forms, downloads, JSON and visit handoff; omit analytics initialization; and explain disabled analytics on their privacy fallback. Existing canonical elements are replaced so each page has one final-domain canonical.
+- Independent actual-diff UX review, hosted gates and live verification are pending.
+
+
 ## Rally map destination — 2 October 2026
 
 - The original address-only Google Maps search selected Richmond Road on a real phone. Use the exact place link from [Richmond Council's York House directions](https://www.richmond.gov.uk/services/registration_services/marriage_and_civil_partnerships/marriage_venues/the_loggia_room/parking_directions_and_travel_for_york_house_ceremonies). Its venue feature is `0x48760c616adfa4c9:0x7c8748dc6e8c58b6`, at `51.447698,-0.324216`; the map still identifies the venue rather than a confirmed assembly point.
