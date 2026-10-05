@@ -1,5 +1,9 @@
 # Website usage analytics
 
+## Current deployment — 5 October 2026
+
+The canonical website is `savekewriversideprimaryschool.org`, using the existing Umami website ID. Both analytics tiers on that domain remain off until chosen. The legacy GitHub Pages and `savekewriverside.org` forwarding/recovery artifacts omit analytics initialization. The historical source configuration below describes the untransformed GitHub source, not those published legacy artifacts.
+
 Status (updated 25 September 2026): the operator's Umami Cloud website (EU dashboard) exists and its Website ID is configured. On the owner's instruction the collector has two tiers: **basic page views** and, from 26 September 2026, **detailed usage**, both on by default without a banner and each open to a simple objection. Detailed usage was opt-in from 23 to 25 September. Deployment and receiving-dashboard evidence are recorded in CHANGELOG.md once verified; local tests do not prove Cloud receipt. A website ID is public routing information, not an API key. Never put account passwords, API tokens, raw correspondence or private intake in this repository.
 
 ## What the dashboard answers

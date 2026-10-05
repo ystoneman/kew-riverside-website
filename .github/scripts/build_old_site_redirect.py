@@ -36,15 +36,27 @@ def build(source, output):
             raise ValueError('Missing reviewed security/header structure: ' + name)
         if not re.fullmatch(r'[a-z0-9-]+\.html', name):
             raise ValueError('Unreviewed HTML path: ' + name)
-        injection = ('<script src="cutover-redirect.js?v=2026093001" data-page="' + name + '"></script>'
-                     '<link rel="stylesheet" href="cutover.css?v=2026093001">')
+        injection = ('<script src="cutover-redirect.js?v=2026100501" data-page="' + name + '"></script>'
+                     '<link rel="stylesheet" href="cutover.css?v=2026100501">')
         text = text.replace(marker, marker + injection, 1)
         text = re.sub(r'<script src="analytics\.js\?v=\d+" defer></script>', '', text)
-        destination = 'https://savekewriverside.org/' + ('' if name == 'index.html' else name)
+        if name == 'privacy.html':
+            analytics_notice = ('<section id="analytics"><h2>Website analytics</h2>'
+                                '<p>Analytics is disabled on this previous website address, including '
+                                'its saved-letter recovery pages. Existing browser choices are not '
+                                'transferred or cleared. On the new website, both analytics levels '
+                                'start off until you choose one. '
+                                '<a href="https://savekewriversideprimaryschool.org/privacy.html#analytics">'
+                                'Read the current analytics information and choices</a>.</p></section>')
+            text, count = re.subn(r'<section id="analytics">.*?</section>', analytics_notice, text, count=1, flags=re.S)
+            if count != 1:
+                raise ValueError('Missing analytics privacy section.')
+        destination = 'https://savekewriversideprimaryschool.org/' + ('' if name == 'index.html' else name)
+        text = re.sub(r'<link rel="canonical" href="[^"]+">', '', text)
         text = text.replace('</head>', '<link rel="canonical" href="' + destination + '"></head>', 1)
         notice = ('<section class="cutover-notice" aria-label="Website moved">'
                   '<p><strong>New website:</strong> <a class="cutover-link" href="' +
-                  html.escape(destination, quote=True) + '">savekewriverside.org</a>.</p>')
+                  html.escape(destination, quote=True) + '">savekewriversideprimaryschool.org</a>.</p>')
         if name in {'letters.html', 'sent.html'}:
             notice += ('<p>Saved letters stay here. Copy your words below before continuing; '
                        'they do not transfer automatically.</p>')
