@@ -160,7 +160,7 @@ test('No JavaScript: homepage and Evidence expose the full report and web resear
   await page.goto('/evidence.html?q=impossible-report-search&type=Inspection#source-lessons-report');
   await expect(report).toBeVisible();
   await expect(report).toBeInViewport();
-  await expect(page.locator('.source-card:visible')).toHaveCount(57);
+  await expect(page.locator('.source-card:visible')).toHaveCount(59);
 });
 
 test('No JavaScript: budget and forecast answers, sources and optional data remain readable', async ({ page }) => {
@@ -171,7 +171,7 @@ test('No JavaScript: budget and forecast answers, sources and optional data rema
   await expect(page.locator('#forecast-checks')).toContainText(/Kew planning area/i);
   const source = page.locator('#budget a[href="evidence.html#source-school-balances-mar-2026"]');
   await expect(source).toBeVisible();
-  const detail = page.locator('#budget details').first();
+  const detail = page.locator('#budget-actuals');
   await detail.locator('summary').tap();
   await expect(detail.locator('table').last()).toBeVisible();
   await source.tap();
@@ -532,7 +532,7 @@ test('No JavaScript: old source links and council charts remain exposed after si
   await page.goto('/evidence.html#source-inspection-2026');
   await expect(page.locator('#source-library')).toHaveAttribute('open', '');
   await expect(page.locator('#source-inspection-2026')).toBeInViewport();
-  await expect(page.locator('#source-grid .source-card:visible')).toHaveCount(57);
+  await expect(page.locator('#source-grid .source-card:visible')).toHaveCount(59);
   await expect(page.locator('.school-roll-chart .source-card')).toHaveCount(0);
   await page.goto('/evidence.html#school-roll-title');
   await expect(page.locator('#school-roll-title')).toBeInViewport();
@@ -540,9 +540,11 @@ test('No JavaScript: old source links and council charts remain exposed after si
 });
 
 
-test('No JavaScript: London outcomes and their explanations precede source search', async ({ page }) => {
+test('No JavaScript: Current Kew findings retain access to London cases and source search', async ({ page }) => {
   await page.goto('/evidence.html#records');
   const findings = page.locator('#london-findings');
+  await expect(page.locator('#kew-findings-title')).toBeInViewport();
+  await page.locator('#kew-findings a[href="#london-findings"]').tap();
   await expect(findings.getByRole('heading', { name: 'Four London schools kept teaching.' })).toBeInViewport();
   await expect(findings).toContainText('Two adjudications in 2025');
   await expect(findings).toContainText('continued as an academy');
@@ -550,12 +552,52 @@ test('No JavaScript: London outcomes and their explanations precede source searc
   await expect(findings.locator('details')).toHaveCount(0);
   await findings.locator('a[href="#source-search"]').tap();
   await expect(page.locator('#record-search')).toBeInViewport();
-  await expect(page.locator('.source-card:visible')).toHaveCount(57);
+  await expect(page.locator('.source-card:visible')).toHaveCount(59);
   await page.goBack();
   await expect(page.locator('#london-findings-title')).toBeInViewport();
   await findings.locator('a[href="lessons.html#case-st-john"]').tap();
   await expect(page.locator('#case-st-john')).toBeInViewport();
   await expect(page.locator('#case-st-john')).toContainText('St John the Divine');
+});
+
+test('No JavaScript: researched demand and cost details open natively and retain their limits', async ({ page }) => {
+  await page.goto('/evidence.html#records');
+  for (const [id, fact, limit] of [
+    ['kew-demand', '598', 'not an observed forecast error'],
+    ['kew-costs', '£42.937 million', 'does not establish a PFI or land motive'],
+  ]) {
+    await page.locator(`#kew-findings a[href="#${id}"]`).tap();
+    const detail = page.locator('#' + id);
+    await expect(detail).toBeInViewport();
+    if (await detail.getAttribute('open') === null) await detail.locator('summary').tap();
+    await expect(detail).toHaveAttribute('open', '');
+    await expect(detail).toContainText(fact);
+    await expect(detail).toContainText(limit);
+    await page.goBack();
+    await expect(page).toHaveURL(/evidence\.html#records$/);
+  }
+  const invite = page.locator('#kew-findings .finding-meaning');
+  await expect(invite).toContainText('identifying child information');
+  await invite.getByRole('link', { name: 'Share one dated public record' }).tap();
+  await expect(page.locator('#feedback-form')).toBeInViewport();
+  await expect(page.locator('input[name="kind"][value="evidence"]')).toBeVisible();
+  // Without scripts, all categories and permission choices remain native.
+});
+
+test('No JavaScript: full budget forecast has a native opening route from the FAQ', async ({ page }) => {
+  await page.goto('/faq.html#deficit-meaning');
+  const answer = page.locator('#deficit-meaning');
+  if (await answer.getAttribute('open') === null) await answer.locator('summary').tap();
+  await answer.locator('a[href="understand.html#budget-forecast"]').tap();
+  const forecast = page.locator('#budget-forecast');
+  await expect(forecast.locator('summary')).toBeInViewport();
+  // Fragment auto-reveal differs between browsers; the native summary works either way.
+  if (await forecast.getAttribute('open') === null) await forecast.locator('summary').tap();
+  await expect(forecast.locator('table')).toBeVisible();
+  await expect(forecast).toContainText('£212,417');
+  await expect(forecast).toContainText('differs by £1');
+  await page.goBack();
+  await expect(page).toHaveURL(/faq\.html#deficit-meaning$/);
 });
 
 test('No JavaScript: the Parent action plan opens with its own response button in view', async ({ page }) => {
