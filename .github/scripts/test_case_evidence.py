@@ -60,11 +60,11 @@ class CaseEvidenceTests(unittest.TestCase):
         data = self.data
         build_case_evidence.validate(data)
         self.assertEqual(set(data), build_case_evidence.EXPECTED_KEYS)
-        self.assertEqual(data['checkedOn'], {'finance': '2026-09-23', 'forecasts': '2026-09-23'})
+        self.assertEqual(data['checkedOn'], {'finance': '2026-10-05', 'forecasts': '2026-09-23'})
         self.assertEqual({s['id'] for s in data['sources']}, {
             'school-balances-mar-2026', 'kew-finance-income-history',
             'kew-finance-expenditure-history', 'kew-finance-balance-history',
-            'consultation-leaflet', 'kew-area-forecast-2025',
+            'consultation-leaflet', 'consultation-kew-faq', 'kew-area-forecast-2025',
             'school-census-jan-2026', 'school-organisation-june-2026',
         })
         self.assertTrue(all(set(s) == {'id', 'url', 'locator'} for s in data['sources']))
@@ -122,6 +122,24 @@ class CaseEvidenceTests(unittest.TestCase):
                           revision['earlierPupils'], revision['laterPupils']),
                          ('2031/32', '3180007', 514, 597))
         self.assertEqual(revision['laterPupils'] - revision['earlierPupils'], 83)
+
+    def test_indicative_faq_forecast_keeps_annual_and_accumulated_values_separate(self):
+        rows = self.data['indicativeBudgetForecast']
+        self.assertEqual([(r['financialYear'], r['annualGapPence'], r['reportedClosingPence'], r['calculatedClosingPence']) for r in rows],
+                         [('2026/27', 21241700, 1926800, 1926800),
+                          ('2027/28', 21517700, -19590900, -19590900),
+                          ('2028/29', 26179200, -45770200, -45770100)])
+        altered = copy.deepcopy(self.data)
+        altered['indicativeBudgetForecast'][0]['calculatedClosingPence'] = 0
+        with self.assertRaises(ValueError):
+            build_case_evidence.validate(altered)
+        budget = build_case_evidence.render_budget(self.data)
+        self.assertIn('indicative forecasts, not the approved budget or cash available today', budget)
+        self.assertIn('£1 from the FAQ', budget)
+        csv_rows = {r['Observation ID']: r for r in csv.DictReader(io.StringIO(build_case_evidence.csv_text(self.data).lstrip('\ufeff')))}
+        self.assertEqual(csv_rows['faq-2026/27-annualGapPence']['Value'], '212417.00')
+        self.assertEqual(csv_rows['faq-2028/29-reportedClosingPence']['Value'], '-457702.00')
+        self.assertEqual(csv_rows['faq-2028/29-calculatedClosingPence']['Value'], '-457701.00')
 
     def test_unknown_values_and_lower_bound_cannot_turn_into_exact_figures(self):
         for edit in (
