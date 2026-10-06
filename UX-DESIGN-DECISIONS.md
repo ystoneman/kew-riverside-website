@@ -91,6 +91,16 @@ These choices are design judgments to verify, not measured conversion improvemen
 
 ## Selected page and interaction design
 
+### Shorter first reading layer — 6 October 2026
+
+Visitor need (J1/J6/J7): the follow-up cognitive-load audit found that the research update exposed too many figures, document discrepancies and record requests before readers chose to go deeper. The owner requested the recommended simplifications. Keep current facts and claim-changing qualifications beside the conclusions; make technical depth optional.
+
+Use the existing Evidence cards for one explanation each. Remove their three duplicate jump links while retaining all target IDs; Demand, Closure costs, historical cases and immediate source search remain discoverable. Put the detailed child-provision requests in the existing unanswered-question destination rather than add three more controls to the introduction. Original source links, private contribution routes and safeguards remain.
+
+On Numbers & results, expose the annual forecast, accumulated endpoint, indicative status and short reserve-conflict note. The native **Year-by-year forecast and calculation** disclosure at `#budget-forecast` holds the table, reserve bridge and £1 reconciliation. This adds one activation for a reader choosing technical depth, and removes that table and calculation from the default reading layer. FAQ answers explain the measures with one annual example and link directly to this disclosure; the existing script reveals incoming targets, and the native summary works without scripts. Recovery-plan depth keeps the alternative-specific tests with less repetition and plainer funding/timing language.
+
+Rejected: removing inconvenient evidence, hiding essential qualifications, adding new global navigation or new controls to every card, and shrinking type. Homepage priorities, forms, permissions and recruitment materials are unchanged. Independent UX/evidence planning and implementation review and measured/rendered verification are recorded in TESTING.md and CHANGELOG.md. These checks do not establish comprehension by unfamiliar visitors.
+
 ### Current Kew findings on the existing Evidence route — 5 October 2026
 
 Visitor need (J1/J3/J5/J6/J7): people checking the current proposal should reach the most useful Kew findings before the historical comparison collection. Keep `evidence.html#records` as the canonical arrival, labelled **Current Kew findings** in the local section menu. Three visible summaries explain money, alternatives and places; optional native disclosures hold dated demand comparisons and contract/account limits. Claim-changing qualifications and supporting source links remain beside each finding. `#kew-finance`, `#kew-alternatives`, `#kew-places`, `#kew-demand` and `#kew-costs` provide direct routes. No global menu row or homepage band is added, and the six homepage destinations retain their order.

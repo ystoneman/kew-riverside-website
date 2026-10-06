@@ -584,6 +584,22 @@ test('No JavaScript: researched demand and cost details open natively and retain
   // Without scripts, all categories and permission choices remain native.
 });
 
+test('No JavaScript: full budget forecast has a native opening route from the FAQ', async ({ page }) => {
+  await page.goto('/faq.html#deficit-meaning');
+  const answer = page.locator('#deficit-meaning');
+  if (await answer.getAttribute('open') === null) await answer.locator('summary').tap();
+  await answer.locator('a[href="understand.html#budget-forecast"]').tap();
+  const forecast = page.locator('#budget-forecast');
+  await expect(forecast.locator('summary')).toBeInViewport();
+  // Fragment auto-reveal differs between browsers; the native summary works either way.
+  if (await forecast.getAttribute('open') === null) await forecast.locator('summary').tap();
+  await expect(forecast.locator('table')).toBeVisible();
+  await expect(forecast).toContainText('£212,417');
+  await expect(forecast).toContainText('differs by £1');
+  await page.goBack();
+  await expect(page).toHaveURL(/faq\.html#deficit-meaning$/);
+});
+
 test('No JavaScript: the Parent action plan opens with its own response button in view', async ({ page }) => {
   await page.goto('/proposal.html#parent-plan');
   await expect(page.locator('#parent-plan-title')).toBeInViewport({ ratio: 1 });

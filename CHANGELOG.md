@@ -9,6 +9,12 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+### Shorter research reading layer — 6 October 2026
+
+- Shorten the three current Kew findings, remove duplicate jump choices and move detailed child-provision requests to the existing unanswered-question section. Keep supporting sources and essential forecast, feasibility and conditional-place qualifications visible (J1/J6/J7).
+- Make the three-year forecast and £1 reconciliation optional at `understand.html#budget-forecast`. Explain annual versus accumulated deficits in the FAQ with one example and link to the full forecast. Trim recovery-plan repetition and explain funding delays and review conditions plainly.
+- Preserve earlier anchors, source links, downloads and contribution safeguards. Record the accepted extra activation for technical depth in UX-DESIGN-DECISIONS.md. Independent UX and evidence reviews and completed checks are recorded in TESTING.md. Prepared as a refinement to PR #62; not merged, published or deployed.
+
 ### Current Kew research — 5 October 2026
 
 - Put a concise, directly sourced Kew summary first on the existing Evidence route (J1/J6), retaining historical cases, search, incoming anchors and downloads. Explain the annual budget gap versus accumulated balance, the conflicting reserve wording, dated pupil/forecast counts, conditional Darell offer, school-specific equality questions and limits of the PFI accounts.

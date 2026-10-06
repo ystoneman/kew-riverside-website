@@ -9,6 +9,12 @@ test('Research update: homepage evidence leads to current findings, annual table
   await page.locator('#kew-finance a[href="understand.html#budget"]').click();
   await expect(page.locator('#budget-title')).toBeInViewport();
   const table = page.getByRole('table').filter({ has: page.getByText('FAQ Q5 indicative school budget', { exact: false }) });
+  const forecast = page.locator('#budget-forecast');
+  await expect(forecast).not.toHaveAttribute('open', '');
+  await expect(table).not.toBeVisible();
+  const summary = forecast.locator(':scope > summary');
+  if (hasTouch) await summary.tap(); else await summary.click();
+  await expect(table).toBeVisible();
   await expect(table).toContainText('£212,417');
   await expect(table).toContainText('£19,268');
   await expect(table).toContainText('−£457,702');
@@ -16,6 +22,29 @@ test('Research update: homepage evidence leads to current findings, annual table
   await page.goBack();
   await expect(page).toHaveURL(/evidence\.html#records$/);
   await expect(page.locator('#kew-finance')).toBeVisible();
+});
+
+test('Research update: FAQ reaches the full forecast, keyboard disclosure and Back', async ({ page }) => {
+  await page.goto('/faq.html#deficit-meaning');
+  const answer = page.locator('#deficit-meaning');
+  await expect(answer).toHaveAttribute('open', '');
+  await answer.locator('a[href="understand.html#budget-forecast"]').click();
+  const forecast = page.locator('#budget-forecast');
+  await expect(forecast).toHaveAttribute('open', '');
+  await expect(forecast).toBeInViewport();
+  await expect(forecast.locator('table')).toBeVisible();
+  await expect(forecast).toContainText('differs by £1');
+  await forecast.locator(':scope > summary').focus();
+  await page.keyboard.press('Enter');
+  await expect(forecast).not.toHaveAttribute('open', '');
+  await page.keyboard.press('Enter');
+  await expect(forecast.locator('table')).toBeVisible();
+  await page.goBack();
+  await expect(page).toHaveURL(/faq\.html#deficit-meaning$/);
+  await expect(answer).toHaveAttribute('open', '');
+  await answer.locator('a[href="understand.html#budget-forecast"]').click();
+  await expect(forecast).toHaveAttribute('open', '');
+  await expect(forecast.locator('table')).toBeVisible();
 });
 
 test('Research update: public evidence and private follow-up question use existing categories', async ({ page }) => {
