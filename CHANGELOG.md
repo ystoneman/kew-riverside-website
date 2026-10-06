@@ -9,6 +9,8 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+- Add one newly consented community letter through the existing automatic screening workflow, preserving its submitted wording and Anonymous byline. Publication and three-host live verification are pending.
+
 ### Shorter research reading layer — 6 October 2026
 
 - Shorten the three current Kew findings, remove duplicate jump choices and move detailed child-provision requests to the existing unanswered-question section. Keep supporting sources and essential forecast, feasibility and conditional-place qualifications visible (J1/J6/J7).
