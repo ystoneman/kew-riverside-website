@@ -171,7 +171,7 @@ test('No JavaScript: budget and forecast answers, sources and optional data rema
   await expect(page.locator('#forecast-checks')).toContainText(/Kew planning area/i);
   const source = page.locator('#budget a[href="evidence.html#source-school-balances-mar-2026"]');
   await expect(source).toBeVisible();
-  const detail = page.locator('#budget details').first();
+  const detail = page.locator('#budget-actuals');
   await detail.locator('summary').tap();
   await expect(detail.locator('table').last()).toBeVisible();
   await source.tap();

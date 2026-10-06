@@ -109,7 +109,8 @@ test('Understand: financial actuals, council projection and forecast error keep 
 
 test('Understand: optional financial table opens by keyboard and has a stable direct link', async ({ page }) => {
   await page.goto('/understand.html');
-  const details = page.locator('#budget details').first();
+  // Keep this check on the historical five-year table when other details precede it.
+  const details = page.locator('#budget-actuals');
   const summary = details.locator('summary');
   await expect(summary).toBeVisible();
   await summary.focus();
