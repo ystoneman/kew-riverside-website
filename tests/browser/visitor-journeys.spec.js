@@ -115,17 +115,18 @@ test('Options ranking links to the council’s published alternatives rather tha
   );
 });
 
-test('Homepage: orientation leads to a compact meeting invitation with its date, public source and details', async ({ page, hasTouch }) => {
+test('Homepage: the retained meeting block marks the past date and leads to follow-up, source and details', async ({ page, hasTouch }) => {
   await page.clock.setFixedTime(new Date('2026-09-22T12:00:00Z'));
   await page.goto('/index.html');
   const invitation = page.locator('main #meeting-invitation');
   await expect(invitation).toBeVisible();
-  await expect(invitation.getByRole('heading', { name: 'Come and speak with the council.', exact: true })).toBeVisible();
+  await expect(invitation.getByRole('heading', { name: 'Follow up the September meeting.', exact: true })).toBeVisible();
   expect((await invitation.locator('time').innerText()).replace(/\s+/g, ' ')).toContain('Tuesday 29 September 2026');
   await expect(invitation).toContainText(/3[.:]30\s*p\.?m\.?/i);
   await expect(invitation).toContainText('Kew Riverside Primary School');
-  await expect(invitation).toContainText('Meet local authority representatives');
-  await expect(invitation).toContainText('share your views');
+  await expect(invitation).toContainText('29 September date has passed');
+  await expect(invitation).toContainText('outstanding questions in your consultation response');
+  await expect(invitation.locator('a[href="proposal.html#parent-plan"]')).toBeVisible();
   await expect(invitation.locator('blockquote, .meeting-attribution')).toHaveCount(0);
   const position = await invitation.boundingBox();
   const hero = await page.locator('#top').boundingBox();

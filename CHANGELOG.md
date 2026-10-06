@@ -11,6 +11,19 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 - Add one newly consented community letter through the existing automatic screening workflow, preserving its submitted wording and Anonymous byline. Publication and three-host live verification are pending.
 
+### Shorter research reading layer — 6 October 2026
+
+- Shorten the three current Kew findings, remove duplicate jump choices and move detailed child-provision requests to the existing unanswered-question section. Keep supporting sources and essential forecast, feasibility and conditional-place qualifications visible (J1/J6/J7).
+- Make the three-year forecast and £1 reconciliation optional at `understand.html#budget-forecast`. Explain annual versus accumulated deficits in the FAQ with one example and link to the full forecast. Trim recovery-plan repetition and explain funding delays and review conditions plainly.
+- Preserve earlier anchors, source links, downloads and contribution safeguards. Record the accepted extra activation for technical depth in UX-DESIGN-DECISIONS.md. Independent UX and evidence reviews and completed checks are recorded in TESTING.md. Prepared as a refinement to PR #62; not merged, published or deployed.
+
+### Current Kew research — 5 October 2026
+
+- Put a concise, directly sourced Kew summary first on the existing Evidence route (J1/J6), retaining historical cases, search, incoming anchors and downloads. Explain the annual budget gap versus accumulated balance, the conflicting reserve wording, dated pupil/forecast counts, conditional Darell offer, school-specific equality questions and limits of the PFI accounts.
+- Distinguish the published indicative forecast from the missing approved underlying budget. Add its three-year table and qualified CSV rows; correct the related homepage, FAQ, Proposal and printable checklist explanations. Test alternatives against funding, staffing, approvals, contracts and a costed comparison, rather than promise savings or imply a proven land motive.
+- Mark September invitations and the expired Full Council question deadline as past. Preserve the official 16 October response, Parent plan, current rally caveats and existing private contribution categories. Recruitment content and permission/provider controls are unchanged. Add two public primary-source records; the library now has 59 records. The public-file allowlist remains 108 assets; no private research artifact is included.
+- Independent campaign, evidence and UX planning and actual-implementation reviews completed; actionable findings were corrected and rechecked. Navigation rationale is in UX-DESIGN-DECISIONS.md. Completed verification and its limits are recorded in TESTING.md. Prepared for pull-request review only; not published or deployed.
+
 ### Rally map destination
 
 - Replace the address search with Richmond Council's exact York House Google Maps place link after a phone selected Richmond Road. Preserve the venue/assembly-point distinction and existing rally route (J2).

@@ -28,13 +28,13 @@ The redirect belongs to this GitHub Pages account and repository. Renaming or re
 
 ## Content and provenance
 
-- Original research cut-off: **21 September 2026**. School comparison datasets and the council proposal comparison were checked on **22 September 2026**; new case evidence was checked on **23 September 2026**. Individual source access dates are recorded.
-- 57 source entries: 53 reviewed, 2 listed in a reviewed index without individual review, and 2 routes not retrieved.
+- Original historical research cut-off: **21 September 2026**. School comparison datasets were checked on **22 September 2026**; current Kew findings, the indicative budget and selected primary records were rechecked on **5 October 2026**. Individual source access dates remain recorded; this is not a fresh check of every historical source.
+- 59 source entries: 55 reviewed, 2 listed in a reviewed index without individual review, and 2 routes not retrieved.
 - Sources: school website, Richmond Council and Schools Forum, Achieving for Children, Ofsted, Department for Education.
 - The school-specific consultation page, leaflet, general FAQ and council-linked form were retrieved. The form states a 16 October 2026 response deadline. Closure effective 1 September 2027 is proposed; November 2026 and April 2027 committee stages are planned, not completed decisions. Wording differences between timetable documents remain explicit.
 - The eight numbered approaches are editorial priorities, not probabilities or demonstrated school-specific solutions.
 - Forecasts and pupil counts keep their dates and geographical definitions.
-- `sources.csv` is the visitor download: all 57 source records, with readable column headings, source URLs and coverage caveats. It uses UTF-8 with a BOM for Excel.
+- `sources.csv` is the visitor download: all 59 source records, with readable column headings, source URLs and coverage caveats. It uses UTF-8 with a BOM for Excel.
 - `sources.json` retains the structured source index, chart values and option rankings for maintenance.
 - `applications.csv` provides the borough application series.
 - `response-checklist.pdf` is the visitor download: a two-page A4 checklist with selectable text, tick boxes and clickable links.
@@ -50,7 +50,7 @@ This collection is not exhaustive. Original documents remain with their publishe
 | supporters.html / supporters.js / supporters.json | Specific supporter statement, separate consents, manual confirmation and human-approved public names only |
 | community.css | Parent introduction, contribution routes and supporter styles |
 | index.html | Homepage with six visitor task routes and the school enquiry; works without JavaScript |
-| evidence.html | Original-source cards, research entry, evidence gaps and search; works without JavaScript |
+| evidence.html | Current Kew findings, historical cases, original-source cards, evidence gaps and search; works without JavaScript |
 | understand.html / case-evidence-data.json / case-evidence.csv | Generated explanation and reviewed aggregate case figures with a visitor CSV export |
 | proposal.html / proposal.css | Dated proposal, conditional timetable, institutional roles, factual profiles, questions and decision record; no JavaScript required |
 | corrections.html / corrections.js | Private corrections and objections, always kind=privacy, no publication option |

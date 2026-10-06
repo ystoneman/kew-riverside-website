@@ -67,7 +67,7 @@ test('Report discovery: remembered terms find the research and preserve its prov
   await expect(report).toContainText(/four closure comparisons/i);
   await expect(report).toContainText(/not an official record or a representative dataset/i);
   await expect(report).not.toHaveClass(/\bsource-card\b/);
-  await expect(page.locator('.source-card')).toHaveCount(57);
+  await expect(page.locator('.source-card')).toHaveCount(59);
   await page.reload();
   await expect(page.getByLabel('Search source records and research reports')).toHaveValue('44 page PDF');
   await expect(report).toBeVisible();
@@ -76,12 +76,12 @@ test('Report discovery: remembered terms find the research and preserve its prov
 test('Report discovery: research filters, separate counts, empty state and reset agree', async ({ page }) => {
   await page.goto('/evidence.html#records');
   const report = page.locator('#source-lessons-report');
-  await expect(page.locator('#result-count')).toHaveText('57 of 57 records');
+  await expect(page.locator('#result-count')).toHaveText('59 of 59 records');
   await expect(page.locator('#research-count')).toHaveText('1 of 1 site research reports');
   await refine(page, 'Record type', 'Site research');
   await expect(report).toBeVisible();
   await expect(page.locator('.source-card:visible')).toHaveCount(0);
-  await expect(page.locator('#result-count')).toHaveText('0 of 57 records');
+  await expect(page.locator('#result-count')).toHaveText('0 of 59 records');
   await expect(page.locator('#no-results')).toBeHidden();
   await refine(page, 'Coverage', 'Synthesis');
   await expect(report).toBeVisible();
@@ -91,8 +91,8 @@ test('Report discovery: research filters, separate counts, empty state and reset
   await expect(page.locator('#no-results')).toBeVisible();
   await page.getByRole('button', { name: 'Clear filters' }).click();
   await expect(report).toBeVisible();
-  await expect(page.locator('.source-card:visible')).toHaveCount(57);
-  await expect(page.locator('#result-count')).toHaveText('57 of 57 records');
+  await expect(page.locator('.source-card:visible')).toHaveCount(59);
+  await expect(page.locator('#result-count')).toHaveText('59 of 59 records');
   await expect(page.locator('#research-count')).toHaveText('1 of 1 site research reports');
   await expect(page.locator('#no-results')).toBeHidden();
   await expect(page.getByLabel('Search source records and research reports')).toBeFocused();
@@ -170,14 +170,17 @@ test('New source terms find the appropriate reviewed records without counting ex
   await expect(page.locator('.evidence-answer-links a').first()).toBeVisible();
   await page.locator('#no-results a[href="evidence.html#records"]').click();
   await expect(search).toHaveValue('');
-  await expect(page.locator('#result-count')).toHaveText('57 of 57 records');
+  await expect(page.locator('#result-count')).toHaveText('59 of 59 records');
   await expect(page.locator('#no-results')).toBeHidden();
 });
 
-test('Evidence arrival leads with London outcomes and reaches source search in one step', async ({ page, hasTouch }) => {
+test('Evidence arrival leads with current Kew findings and retains historical cases', async ({ page, hasTouch }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/evidence.html#records');
   const findings = page.locator('#london-findings');
+  await expect(page.locator('#kew-findings-title')).toBeInViewport();
+  const historical = page.locator('#kew-findings a[href="#london-findings"]');
+  if (hasTouch) await historical.tap(); else await historical.click();
   await expect(findings.getByRole('heading', {name:'Four London schools kept teaching.'})).toBeInViewport();
   await expect(findings.locator('.finding-outcomes')).toBeInViewport();
   await expect(findings).toContainText('Two adjudications in 2025');
@@ -347,7 +350,7 @@ test('Evidence starts with explanations and optional detail, then opens the comp
   const summary = library.locator(':scope > summary');
   if (hasTouch) await summary.tap();
   else { await summary.focus(); await page.keyboard.press('Enter'); }
-  await expect(page.locator('#source-grid .source-card:visible')).toHaveCount(57);
+  await expect(page.locator('#source-grid .source-card:visible')).toHaveCount(59);
   await expect(page.locator('.school-roll-chart .source-card')).toHaveCount(0);
   if (hasTouch) await summary.tap(); else await page.keyboard.press('Space');
   await expect(library).not.toHaveAttribute('open', '');
@@ -425,7 +428,7 @@ test('Saved Evidence searches canonicalize the search anchor while retaining fil
     await expect(page.locator('.source-card:visible h3')).toContainText('First Ofsted inspection');
     await expect(page).toHaveURL(/evidence\.html\?q=Ofsted&type=Inspection&year=2003#source-search$/);
     await page.locator('#evidence-navigation a[href="#records"]').click();
-    await expect(page.locator('#london-findings-title')).toBeInViewport();
+    await expect(page.locator('#kew-findings-title')).toBeInViewport();
     await expect(search).toHaveValue('Ofsted');
     await page.goBack();
     await expect(search).toBeInViewport();
@@ -437,7 +440,7 @@ test('Saved Evidence searches canonicalize the search anchor while retaining fil
 
 test('Non-search query parameters and invalid filters keep the findings entry', async ({ page }) => {
   await page.goto('/evidence.html?preview=insights&topic=not-a-topic#records');
-  await expect(page.locator('#london-findings-title')).toBeInViewport();
+  await expect(page.locator('#kew-findings-title')).toBeInViewport();
   await expect(page).toHaveURL(/\?preview=insights&topic=not-a-topic#records$/);
   await expect(page.locator('#topic-filter')).toHaveValue('');
   await expect(page.locator('#source-library')).not.toHaveAttribute('open', '');
