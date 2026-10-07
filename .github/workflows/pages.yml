@@ -1,98 +1,97 @@
-name: Validate and deploy Pages
+name: Validate and deploy compatibility site
+run-name: Compatibility ${{ inputs.source_sha || github.sha }}
 on:
-  push:
-    branches: [main]
   pull_request:
   workflow_dispatch:
-
+    inputs:
+      source_sha:
+        description: Exact canonical main revision
+        required: true
+      source_run:
+        description: Canonical workflow run with successful validation and deployment
+        required: true
 permissions:
   contents: read
-
 concurrency:
-  group: pages-${{ github.ref }}
+  group: compatibility-production
   cancel-in-progress: false
-
 jobs:
-  validate:
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           persist-credentials: false
-      - name: Test privacy and security guards
-        run: python3 -m unittest discover -s .github/scripts -p 'test_*.py' -v
-      - name: Check JavaScript syntax
-        run: for script in *.js .github/scripts/old_site_redirect.js; do node --check "$script"; done
-      - name: Validate and stage only public assets
-        run: python3 .github/scripts/check_site.py --stage "$RUNNER_TEMP/public-site"
-      - name: Prepare legacy-origin redirects with draft recovery
-        run: python3 .github/scripts/build_old_site_redirect.py --source "$RUNNER_TEMP/public-site" --output "$RUNNER_TEMP/legacy-site"
-      - name: Upload checked site
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
-        with:
-          path: ${{ runner.temp }}/legacy-site
-          retention-days: 1
-
-  browser-shards:
-    runs-on: ubuntu-latest
-    timeout-minutes: 40
-    strategy:
-      fail-fast: false
-      matrix:
-        project: [iphone-webkit, android-chromium, desktop-chromium, desktop-webkit, iphone-no-javascript]
-    steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
-        with:
-          node-version: '24'
-          cache: npm
-      - name: Install pinned test dependencies
-        run: npm ci --ignore-scripts
-      - name: Install browser engines
+      - name: Validate fixed deployment configuration
         run: |
-          case "${{ matrix.project }}" in
-            *webkit*|iphone-no-javascript) npx playwright install --with-deps webkit ;;
-            *) npx playwright install --with-deps chromium ;;
-          esac
-      - name: Test navigation and visitor journeys
-        run: npm test -- --project="${{ matrix.project }}"
-      - name: Save browser report and failure evidence
-        if: failure()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
-        with:
-          name: browser-test-failures-${{ matrix.project }}
-          path: |
-            playwright-report/
-            test-results/
-          retention-days: 7
-
-  browser-tests:
-    if: ${{ always() }}
-    needs: browser-shards
+          python3 - <<'PYCODE'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('deployment.json').read_text())
+          assert d['source_repository']=='ystoneman/savekewriversideprimaryschool-site'
+          assert d['origin'] in ['https://ystoneman.github.io/kew-riverside-website/','https://savekewriverside.org/']
+          assert not Path('public').exists()
+          PYCODE
+  prepare:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    needs: verify
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     steps:
-      - name: Require every browser project to pass
+      - name: Verify release provenance before executing any fetched code
         env:
-          BROWSER_RESULT: ${{ needs.browser-shards.result }}
-        run: test "$BROWSER_RESULT" = success
-
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          SOURCE_RUN: ${{ inputs.source_run }}
+        run: |
+          python3 - <<'PYCODE'
+          import json,os,re,urllib.request
+          sha=os.environ['SOURCE_SHA']; run=os.environ['SOURCE_RUN']
+          assert re.fullmatch('[0-9a-f]{40}',sha) and run.isdigit()
+          base='https://api.github.com/repos/ystoneman/savekewriversideprimaryschool-site/actions/runs/'+run
+          def read(url):
+              with urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'Kew-compatibility-bootstrap'}),timeout=30) as r:return json.load(r)
+          d=read(base)
+          assert d['head_sha']==sha and d['head_branch']=='main' and d['event']=='push' and d['path']=='.github/workflows/pages.yml'
+          jobs={j['name']:j['conclusion'] for j in read(base+'/jobs?per_page=100')['jobs']}
+          assert all(jobs.get(n)=='success' for n in ['validate','browser-tests','deploy'])
+          PYCODE
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          repository: ystoneman/savekewriversideprimaryschool-site
+          ref: ${{ inputs.source_sha }}
+          persist-credentials: false
+      - name: Generate current compatibility bundle
+        env:
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          SOURCE_RUN: ${{ inputs.source_run }}
+        run: python3 .github/scripts/compatibility_release.py prepare --sha "$SOURCE_SHA" --run-id "$SOURCE_RUN" --output "$RUNNER_TEMP/compatibility"
+      - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b
+        with:
+          path: ${{ runner.temp }}/compatibility
   deploy:
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    needs: [validate, browser-tests]
+    needs: prepare
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     permissions:
+      contents: read
       pages: write
       id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy validated artifact
-        id: deployment
-        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          repository: ystoneman/savekewriversideprimaryschool-site
+          ref: ${{ inputs.source_sha }}
+          persist-credentials: false
+      - name: Reject superseded release immediately before deployment
+        env:
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          SOURCE_RUN: ${{ inputs.source_run }}
+        run: python3 .github/scripts/compatibility_release.py guard --sha "$SOURCE_SHA" --run-id "$SOURCE_RUN"
+      - id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e
+      - name: Verify all served compatibility assets
+        env:
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          SOURCE_RUN: ${{ inputs.source_run }}
+        run: python3 .github/scripts/compatibility_release.py verify --sha "$SOURCE_SHA" --run-id "$SOURCE_RUN" --origin https://ystoneman.github.io/kew-riverside-website/
