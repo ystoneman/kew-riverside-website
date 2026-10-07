@@ -9,6 +9,8 @@ Visitor-facing changes and significant maintenance changes, newest first. The hi
 
 ## Unreleased
 
+- Add one consented community letter with the existing AI-screened label, preserving the submitted wording and chosen display name. Three-host deployment and live verification are pending.
+
 - Add one newly consented community letter through the existing automatic screening workflow, preserving its submitted wording and Anonymous byline. Publication and three-host live verification are pending.
 
 ### Shorter research reading layer — 6 October 2026
